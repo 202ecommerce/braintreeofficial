@@ -1,0 +1,23 @@
+{
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "BraintreePPBTlib\\": "vendor/ppbtlib/src/",
+            "BraintreeAddons\\": "."
+        }
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "if [ ${PPBTCLASSLIB_DEV_PATH} ]; then php ${PPBTCLASSLIB_DEV_PATH}/PPBTlib/refresh.php .; fi"
+        ]
+    },
+    "require": {
+      "paypal/sdk-core-php": "~3.4",
+      "paypal/merchant-sdk-php": "~3.12",
+      "paypal/permissions-sdk-php": "~3.9",
+      "braintree/braintree_php": "~3.40",
+      "paypal/rest-api-sdk-php": "1.*"
+    }
+}
