@@ -84,6 +84,51 @@ class Braintree extends PaymentModule
             'parent_class_name' => 'SELL',
             'visible' => true,
             'icon' => 'payment'
+        ),
+        array(
+            'name' => array(
+                'en' => 'Configuration',
+                'fr' => 'Configuration'
+            ),
+            'class_name' => 'AdminBraintreeConfiguration',
+            'parent_class_name' => 'AdminParentBraintreeConfiguration',
+            'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Setup',
+                'fr' => 'Setup'
+            ),
+            'class_name' => 'AdminBraintreeSetup',
+            'parent_class_name' => 'AdminBraintreeConfiguration',
+            'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Customize checkout experience',
+                'fr' => 'Customize checkout experience'
+            ),
+            'class_name' => 'AdminBraintreeCustomizeCheckout',
+            'parent_class_name' => 'AdminBraintreeConfiguration',
+            'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Fees',
+                'fr' => 'Fees'
+            ),
+            'class_name' => 'AdminBraintreeFees',
+            'parent_class_name' => 'AdminBraintreeConfiguration',
+            'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Help',
+                'fr' => 'Help'
+            ),
+            'class_name' => 'AdminBraintreeHelp',
+            'parent_class_name' => 'AdminBraintreeConfiguration',
+            'visible' => true,
         )
     );
 
