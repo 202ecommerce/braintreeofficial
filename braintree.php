@@ -24,6 +24,10 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 require_once(_PS_MODULE_DIR_.'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeCapture.php');
+require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeOrder.php');
+require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeVaulting.php');
+require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeCustomer.php');
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -31,6 +35,7 @@ if (!defined('_PS_VERSION_')) {
 
 use BraintreePPBTlib\Module\PaymentModule;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
+
 
 
 class Braintree extends PaymentModule
@@ -69,7 +74,12 @@ class Braintree extends PaymentModule
      * List of objectModel used in this Module
      * @var array
      */
-    public $objectModels = array();
+    public $objectModels = array(
+        'BraintreeCapture',
+        'BraintreeOrder',
+        'BraintreeVaulting',
+        'BraintreeCustomer'
+    );
 
     /**
      * List of admin tabs used in this Module
