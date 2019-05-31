@@ -35,6 +35,7 @@ if (!defined('_PS_VERSION_')) {
 
 use BraintreePPBTlib\Module\PaymentModule;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
+use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 
 
@@ -263,7 +264,22 @@ class Braintree extends PaymentModule
 
     public function hookPaymentOptions($params)
     {
+        $payments_options = array();
+        if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
+            $embeddedOption = new PaymentOption();
+            $action_text = $this->l('Pay with paypal');
+            $embeddedOption->setCallToActionText($action_text);
+            $embeddedOption->setModuleName('braintree');
+            $payments_options[] = $embeddedOption;
+        }
 
+        $embeddedOption = new PaymentOption();
+        $embeddedOption->setCallToActionText($this->l('Pay with card'))
+            ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/mini-cards.png'));
+        $embeddedOption->setModuleName('braintree');
+        $payments_options[] = $embeddedOption;
+
+        return $payments_options;
     }
 
 }
