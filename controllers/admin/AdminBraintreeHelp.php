@@ -22,9 +22,12 @@
  * @license   Commercial license
  * @version   develop
  */
+use BraintreeAddons\classes\AdminBraintreeController;
 
-
-class AdminBraintreeHelpController extends AdminController
+class AdminBraintreeHelpController extends AdminBraintreeController
 {
+    public function initContent()
+    {
 
+    }
 }

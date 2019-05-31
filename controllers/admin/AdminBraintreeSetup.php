@@ -23,8 +23,114 @@
  * @version   develop
  */
 
+use BraintreeAddons\classes\AdminBraintreeController;
 
-class AdminBraintreeSetupController extends AdminController
+class AdminBraintreeSetupController extends AdminBraintreeController
 {
+    public function initContent()
+    {
+        $this->initAccountSettingsBlock();
+        $this->initPaymentSettingsBlock();
+        $this->initStatusBlock();
 
+        $this->context->smarty->assign('form', $this->renderForm());
+        $contentController = $this->context->smarty->fetch($this->getTemplatePath() . 'setup.tpl');
+
+        $this->context->smarty->assign('contentController', $contentController);
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'configuration.tpl');
+        $this->context->smarty->assign('content', $this->content);
+        $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
+    }
+
+    public function initAccountSettingsBlock()
+    {
+        $tpl_vars = array(
+            'braintree_token_key_live' => Configuration::get('BRAINTREE_TOKEN_KEY_LIVE'),
+            'braintree_token_key_sandbox' => Configuration::get('BRAINTREE_TOKEN_KEY_SANDBOX')
+        );
+        $this->context->smarty->assign($tpl_vars);
+        $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/accountSettingsBlock.tpl');
+
+        $this->fields_form[]['form'] = array(
+            'legend' => array(
+                'title' => $this->l('Account settings'),
+                'icon' => 'icon-cogs',
+            ),
+            'input' => array(
+                array(
+                    'type' => 'html',
+                    'html_content' => $html_content,
+                    'name' => '',
+                )
+            )
+        );
+    }
+
+    public function initPaymentSettingsBlock()
+    {
+        $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
+        $this->fields_form[]['form'] = array(
+            'legend' => array(
+                'title' => $this->l('Payment settings'),
+                'icon' => 'icon-cogs',
+            ),
+            'input' => array(
+                array(
+                    'type' => 'select',
+                    'label' => $this->l('Payment action'),
+                    'name' => 'braintree_intent',
+                    'desc' => $this->l('We recommend Authoreze process only for lean manufacturers and craft products sellers.'),
+                    'options' => array(
+                        'query' => array(
+                            array(
+                                'id' => 'sale',
+                                'name' => $this->l('Sale')
+                            ),
+                            array(
+                                'id' => 'authorization',
+                                'name' => $this->l('Authorize')
+                            )
+                        ),
+                        'id' => 'id',
+                        'name' => 'name'
+                    ),
+                ),
+                array(
+                    'type' => 'switch',
+                    'label' => $this->l('Activate sandbox'),
+                    'name' => 'braintree_sandbox',
+                    'is_bool' => true,
+                    'hint' => $this->l('Set up a test environment in your Braintree account (only if you are a developer)'),
+                    'values' => array(
+                        array(
+                            'id' => 'braintree_sandbox_on',
+                            'value' => 1,
+                            'label' => $this->l('Enabled'),
+                        ),
+                        array(
+                            'id' => 'braintree_sandbox_off',
+                            'value' => 0,
+                            'label' => $this->l('Disabled'),
+                        )
+                    ),
+                ),
+            ),
+            'submit' => array(
+                'title' => $this->l('Save'),
+                'class' => 'btn btn-default pull-right button',
+            ),
+        );
+
+        $values = array(
+            'braintree_intent' => Configuration::get('BRAINTREE_INTENT'),
+            'braintree_sandbox' => (int)Configuration::get('BRAINTREE_SANDBOX')
+        );
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
+    }
+
+    public function initStatusBlock()
+    {
+        $html = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
+        $this->context->smarty->assign('statusBloc', $html);
+    }
 }

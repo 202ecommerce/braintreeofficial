@@ -177,6 +177,11 @@ class Braintree extends PaymentModule
         return true;
     }
 
+    public function getContent()
+    {
+        Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeSetup', true));
+    }
+
     public function hookActionAdminControllerSetMedia()
     {
 
