@@ -34,10 +34,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $this->initStatusBlock();
 
         $this->context->smarty->assign('form', $this->renderForm());
-        $contentController = $this->context->smarty->fetch($this->getTemplatePath() . 'setup.tpl');
-
-        $this->context->smarty->assign('contentController', $contentController);
-        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'configuration.tpl');
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'setup.tpl');
         $this->context->smarty->assign('content', $this->content);
         $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
     }

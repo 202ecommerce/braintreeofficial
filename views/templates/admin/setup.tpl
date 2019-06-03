@@ -23,6 +23,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{include './_partials/headerLogo.tpl'}
+
 <div class="col-lg-8">
     {$form nofilter}
 </div>

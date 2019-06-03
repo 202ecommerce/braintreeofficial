@@ -23,4 +23,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{include './_partials/headerLogo.tpl'}
+
 {$form nofilter}
