@@ -42,8 +42,12 @@ class AdminBraintreeSetupController extends AdminBraintreeController
     public function initAccountSettingsBlock()
     {
         $tpl_vars = array(
-            'braintree_token_key_live' => Configuration::get('BRAINTREE_TOKEN_KEY_LIVE'),
-            'braintree_token_key_sandbox' => Configuration::get('BRAINTREE_TOKEN_KEY_SANDBOX')
+            'braintree_public_key_live' => Configuration::get('BRAINTREE_PUBLIC_KEY_LIVE'),
+            'braintree_public_key_sandbox' => Configuration::get('BRAINTREE_PUBLIC_KEY_SANDBOX'),
+            'braintree_private_key_live' => Configuration::get('BRAINTREE_PRIVATE_KEY_LIVE'),
+            'braintree_private_key_sandbox' => Configuration::get('BRAINTREE_PRIVATE_KEY_SANDBOX'),
+            'braintree_merchant_id_live' => Configuration::get('BRAINTREE_MERCHANT_ID_LIVE'),
+            'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX')
         );
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/accountSettingsBlock.tpl');
