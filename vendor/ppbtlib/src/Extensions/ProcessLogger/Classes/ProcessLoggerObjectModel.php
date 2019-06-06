@@ -120,4 +120,27 @@ class ProcessLoggerObjectModel extends ObjectModel
     {
         throw new \Exception('Need to define the method ' . __FUNCTION__);
     }
+
+    public function getDateTransaction()
+    {
+        if ($this->date_transaction == '0000-00-00 00:00:00') {
+            return '';
+        }
+        $datetime1 = new \DateTime($this->date_transaction);
+        $datetime2 = new \DateTime($this->date_add);
+        $diff = $datetime2->getOffset() / 3600;
+        $interval = $datetime2->diff($datetime1);
+        if ($interval->invert == 1) {
+            $diff -= (int)$interval->format('%h');
+        } else {
+            $diff += (int)$interval->format('%h');
+        }
+        if ($diff == 0) {
+            $diff = 'GMT';
+        }
+        $dateTimeZone = new \DateTimeZone($diff);
+
+        $date = new \DateTime($this->date_transaction, $dateTimeZone);
+        return $date->format('Y-m-d H:i:s T');
+    }
 }

@@ -84,10 +84,10 @@ abstract class AbstractMethod
 
     /**
      * Generate getContent
-     * @param Paypal $module
+     * @param Braintree $module
      * @return mixed
      */
-    abstract public function getConfig(\Paypal $module);
+    abstract public function getConfig(\Braintree $module);
 
     /**
      * Void authorized transaction (cancel payment)
