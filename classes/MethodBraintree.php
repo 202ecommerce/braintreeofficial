@@ -25,12 +25,11 @@
  */
 
 
-
 /**
  * Class MethodBT
  * @see https://developers.braintreepayments.com/guides/overview BT developper documentation
  */
-class MethodBT extends AbstractMethodBraintree
+class MethodBraintree extends AbstractMethodBraintree
 {
     /** @var string token*/
     public $token;
@@ -81,7 +80,7 @@ class MethodBT extends AbstractMethodBraintree
     /**
      * @see AbstractMethodBraintree::setConfig()
      */
-    public function getConfig($params)
+    public function getConfig(\Braintree $module)
     {
 
     }
@@ -92,7 +91,16 @@ class MethodBT extends AbstractMethodBraintree
      */
     private function initConfig($order_mode = null)
     {
-
+        if ($order_mode !== null) {
+            $this->mode = $order_mode ? 'SANDBOX' : 'LIVE';
+        } else {
+            $this->mode = Configuration::get('BRAINTREE_SANDBOX') ? 'SANDBOX' : 'LIVE';
+        }
+        $this->gateway = new Braintree_Gateway(array('environment' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
+            'publicKey' => Configuration::get('BRAINTREE_PUBLIC_KEY_' . $this->mode),
+            'privateKey' => Configuration::get('BRAINTREE_PRIVATE_KEY_' . $this->mode),
+            'merchantId' => Configuration::get('BRAINTREE_MERCHANT_ID_' . $this->mode)));
+        $this->error = '';
     }
 
     /**
@@ -100,7 +108,14 @@ class MethodBT extends AbstractMethodBraintree
      */
     public function init()
     {
-
+        try {
+            $this->initConfig();
+            $clientToken = $this->gateway->clientToken()->generate();
+            return $clientToken;
+        } catch (Exception $e) {
+            \Symfony\Component\VarDumper\VarDumper::dump(array($e->getMessage(), $e->getFile(), $e->getLine())); die;
+            return array('error_code' => $e->getCode(), 'error_msg' => $e->getMessage());
+        }
     }
 
     /**

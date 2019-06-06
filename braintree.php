@@ -23,11 +23,12 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-require_once(_PS_MODULE_DIR_.'braintree/vendor/autoload.php');
-require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeCapture.php');
-require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeOrder.php');
-require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeVaulting.php');
-require_once(_PS_MODULE_DIR_.'braintree/classes/BraintreeCustomer.php');
+require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeCapture.php');
+require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeOrder.php');
+require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeVaulting.php');
+require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeCustomer.php');
+require_once(_PS_MODULE_DIR_ . 'braintree/classes/AbstractMethodBraintree.php');
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -37,7 +38,8 @@ use BraintreePPBTlib\Module\PaymentModule;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
-
+const BT_CARD_PAYMENT = 'card-braintree';
+const BT_PAYPAL_PAYMENT = 'paypal-braintree';
 
 class Braintree extends PaymentModule
 {
@@ -270,6 +272,7 @@ class Braintree extends PaymentModule
             $action_text = $this->l('Pay with paypal');
             $embeddedOption->setCallToActionText($action_text);
             $embeddedOption->setModuleName('braintree');
+            $embeddedOption->setForm($this->generateFormPaymentOption());
             $payments_options[] = $embeddedOption;
         }
 
@@ -280,6 +283,40 @@ class Braintree extends PaymentModule
         $payments_options[] = $embeddedOption;
 
         return $payments_options;
+    }
+
+    public function generateFormPaymentOption()
+    {
+        /* @var $braintree MethodBraintree*/
+        $braintree = AbstractMethodBraintree::load('Braintree');
+        $clientToken = $braintree->init();
+
+        if (isset($clientToken['error_code'])) {
+            $this->context->smarty->assign(array(
+                'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
+            ));
+        }
+
+        $this->context->smarty->assign(array(
+            'braintreeToken'=> $clientToken,
+            'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
+            'braintreeAmount'=> $this->context->cart->getOrderTotal(),
+            'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
+            'path' => $this->_path,
+            'mode' => $braintree->mode == 'SANDBOX' ? Tools::strtolower($braintree->mode) : 'production',
+            'bt_method' => BT_PAYPAL_PAYMENT,
+            'active_vaulting'=> Configuration::get('BRAINTREE_VAULTING'),
+            'currency' => $this->context->currency->iso_code,
+        ));
+
+        if (Configuration::get('BRAINTREE_VAULTING')) {
+            $payment_methods = BraintreeVaulting::getCustomerMethods($this->context->customer->id, BT_PAYPAL_PAYMENT);
+            $this->context->smarty->assign(array(
+                'payment_methods' => $payment_methods,
+            ));
+        }
+
+        return $this->context->smarty->fetch('module:braintree/views/templates/front/payment.tpl');
     }
 
 }

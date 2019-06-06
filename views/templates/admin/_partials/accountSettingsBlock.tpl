@@ -73,34 +73,82 @@
                             </li>
                         </ul>
                         <hr>
+
                         <div class="form-group">
                             <label class="control-label col-lg-3">
-                                {l s='Live' mod='braintree'}
+                                {l s='Public key' mod='braintree'}
                             </label>
                             <div class="col-lg-9">
                                 <input type="text"
-                                       name="braintree_token_key_live"
-                                       {if isset($braintree_token_key_live)}value='{$braintree_token_key_live nofilter}'{/if}>
+                                       name="braintree_public_key_live"
+                                       {if isset($braintree_public_key_live)}value='{$braintree_public_key_live nofilter}'{/if}>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-lg-3">
+                                {l s='Private key' mod='braintree'}
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text"
+                                       name="braintree_private_key_live"
+                                       {if isset($braintree_private_key_live)}value='{$braintree_private_key_live nofilter}'{/if}>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-lg-3">
+                                {l s='Merchant ID' mod='braintree'}
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text"
+                                       name="braintree_merchant_id_live"
+                                       {if isset($braintree_merchant_id_live)}value='{$braintree_merchant_id_live nofilter}'{/if}>
+                            </div>
+                        </div>
+
 
                         <hr>
+
+                        <p>
+                            {l s='To retrieve sandbox Tokenization Keys please repeat the steps by connecting to' mod='braintree'}
+                            <a href="https://sandbox.braintreegateway.com/login" target="_blank">{l s='sandbox account' mod='braintree'}</a>
+                        </p>
+
+
                         <div class="form-group">
-
-                            <p>
-                                {l s='To retrieve sandbox Tokenization Keys please repeat the steps by connecting to' mod='braintree'}
-                                <a href="https://sandbox.braintreegateway.com/login" target="_blank">{l s='sandbox account' mod='braintree'}</a>
-                            </p>
-
                             <label class="control-label col-lg-3">
-                                {l s='Sandbox' mod='braintree'}
+                                {l s='Public key' mod='braintree'}
                             </label>
                             <div class="col-lg-9">
                                 <input type="text"
-                                       name="braintree_token_key_sandbox"
-                                       {if isset($braintree_token_key_sandbox)}value='{$braintree_token_key_sandbox nofilter}'{/if}>
+                                       name="braintree_public_key_sandbox"
+                                       {if isset($braintree_public_key_sandbox)}value='{$braintree_public_key_sandbox nofilter}'{/if}>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-lg-3">
+                                {l s='Private key' mod='braintree'}
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text"
+                                       name="braintree_private_key_sandbox"
+                                       {if isset($braintree_private_key_sandbox)}value='{$braintree_private_key_sandbox nofilter}'{/if}>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-lg-3">
+                                {l s='Merchant ID' mod='braintree'}
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text"
+                                       name="braintree_merchant_id_sandbox"
+                                       {if isset($braintree_merchant_id_sandbox)}value='{$braintree_merchant_id_sandbox nofilter}'{/if}>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
