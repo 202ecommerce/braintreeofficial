@@ -23,32 +23,25 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-namespace BraintreeAddons\classes;
+
+namespace BraintreeAddons\services;
 
 use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
-use BraintreeAddons\services\ServiceBraintreeLog;
 
-/**
- * Class BraintreeLog.
- */
-class BraintreeLog extends ProcessLoggerObjectModel
+class ServiceBraintreeLog
 {
-    /* @var object object service*/
-    protected $serviceLog;
-
-    public function __construct($id = null, $id_lang = null, $id_shop = null)
+    /**
+     * @param $log ProcessLoggerObjectModel
+     * @return url
+     */
+    public function getLinkToTransaction($log)
     {
-        parent::__construct($id, $id_lang, $id_shop);
-        $this->setServiceLog(new ServiceBraintreeLog());
-    }
+        /* @var $method \MethodBraintree*/
+        if ($log->id_transaction == false || $log->id_order == false) {
+            return '';
+        }
 
-    public function setServiceLog($service)
-    {
-        $this->serviceLog = $service;
-    }
-
-    public function getLinkToTransaction()
-    {
-        return $this->serviceLog->getLinkToTransaction($this);
+        $method = \AbstractMethodBraintree::load('Braintree');
+        return $method->getLinkToTransaction($log->id_transaction, $log->sandbox);
     }
 }

@@ -43,7 +43,7 @@
                     {if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
                         <div id="bt-vault-form">
                             <p><b>{l s='Choose your PayPal account' mod='braintree'}:</b></p>
-                            <select name="vaulting_token" class="form-control">
+                            <select name="pbt_vaulting_token" class="form-control">
                                 <option value="">{l s='Choose your paypal account' mod='braintree'}</option>
                                 {foreach from=$payment_methods key=method_key  item=method}
                                     <option value="{$method.token|escape:'htmlall':'UTF-8'}">

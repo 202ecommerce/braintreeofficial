@@ -68,5 +68,60 @@ class BraintreeVaulting extends ObjectModel
         )
     );
 
+    /**
+     * Checking if vault was created already for this card/pp account
+     * @return boolean
+     */
+    public static function vaultingExist($token, $customer)
+    {
+        $db = Db::getInstance();
+        $query = new DbQuery();
+        $query->select('id_braintee_vaulting');
+        $query->from('braintee_vaulting');
+        $query->where('token = "'.pSQL($token).'" AND id_braintee_customer = '.(int)$customer);
+        $result = $db->getValue($query);
+        return $result ? true : false;
+    }
+
+    /**
+     * Get all vaulted methods (cards, accounts) for this customer
+     * @param integer $customer PrestaShop Customer ID
+     * @param string $method payment tool (card or paypal account)
+     * @return array BraintreeVaulting
+     */
+    public static function getCustomerMethods($customer, $method)
+    {
+        $db = Db::getInstance();
+        $query = new DbQuery();
+        $query->select('*');
+        $query->from('braintee_vaulting', 'bv');
+        $query->leftJoin('braintee_customer', 'bc', 'bv.id_braintee_customer = bc.id_braintee_customer');
+        $query->where('bc.id_customer = '.(int)$customer);
+        $query->where('bv.payment_tool = "'.pSQL($method).'"');
+        $query->where('bc.sandbox = ' . (int)Configuration::get('PAYPAL_SANDBOX'));
+        $result = $db->executeS($query);
+        return $result;
+    }
+
+    /**
+     * Get vaulted methods grouped by tools (card or paypal account)
+     * @param integer $customer PrestaShop Customer ID
+     * @return array BraintreeVaulting
+     */
+    public static function getCustomerGroupedMethods($customer)
+    {
+        $db = Db::getInstance();
+        $methods = array();
+        $query = new DbQuery();
+        $query->select('*');
+        $query->from('braintee_vaulting', 'bv');
+        $query->leftJoin('braintee_customer', 'bc', 'bv.id_braintee_customer = bc.id_braintee_customer');
+        $query->where('bc.id_customer = '.(int)$customer);
+        $results = $db->query($query);
+        while ($result = $db->nextRow($results)) {
+            $methods[$result['payment_tool']][] = $result;
+        }
+        return $methods;
+    }
 
 }

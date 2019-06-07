@@ -30,6 +30,8 @@ require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeVaulting.php');
 require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeCustomer.php');
 require_once(_PS_MODULE_DIR_ . 'braintree/classes/AbstractMethodBraintree.php');
 
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -38,8 +40,8 @@ use BraintreePPBTlib\Module\PaymentModule;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
-const BT_CARD_PAYMENT = 'card-braintree';
-const BT_PAYPAL_PAYMENT = 'paypal-braintree';
+const BRAINTREE_CARD_PAYMENT = 'card-braintree';
+const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
 
 class Braintree extends PaymentModule
 {
@@ -174,7 +176,7 @@ class Braintree extends PaymentModule
     public function install()
     {
         // Install default
-        if (!parent::install()) {
+        if (parent::install() == false || $this->installOrderState() == false) {
             return false;
         }
 
@@ -261,7 +263,36 @@ class Braintree extends PaymentModule
 
     public function hookHeader()
     {
+        if (Tools::getValue('controller') == "order") {
+            $active = false;
+            $modules = Hook::getHookModuleExecList('paymentOptions');
+            if (empty($modules)) {
+                return;
+            }
+            foreach ($modules as $module) {
+                if ($module['module'] == 'braintree') {
+                    $active = true;
+                }
+            }
+            if (!$active) {
+                return;
+            }
 
+            if (Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {
+                $this->context->controller->addJqueryPlugin('fancybox');
+                $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.24.0/js/client.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.24.0/js/hosted-fields.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-braintreegateway-data', 'https://js.braintreegateway.com/web/3.24.0/js/data-collector.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-braintreegateway-3ds', 'https://js.braintreegateway.com/web/3.24.0/js/three-d-secure.min.js', array('server' => 'remote'));
+                $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
+                $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
+            }
+            if (Configuration::get('PAYPAL_BY_BRAINTREE')) {
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.24.0/js/paypal-checkout.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
+            }
+        }
     }
 
     public function hookPaymentOptions($params)
@@ -271,21 +302,22 @@ class Braintree extends PaymentModule
             $embeddedOption = new PaymentOption();
             $action_text = $this->l('Pay with paypal');
             $embeddedOption->setCallToActionText($action_text);
-            $embeddedOption->setModuleName('braintree');
-            $embeddedOption->setForm($this->generateFormPaymentOption());
+            $embeddedOption->setModuleName($this->name);
+            $embeddedOption->setForm($this->generateFormPB());
             $payments_options[] = $embeddedOption;
         }
 
         $embeddedOption = new PaymentOption();
         $embeddedOption->setCallToActionText($this->l('Pay with card'))
-            ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/mini-cards.png'));
-        $embeddedOption->setModuleName('braintree');
+            ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/mini-cards.png'))
+            ->setModuleName($this->name)
+            ->setForm($this->generateFormBt());
         $payments_options[] = $embeddedOption;
 
         return $payments_options;
     }
 
-    public function generateFormPaymentOption()
+    public function generateFormPB()
     {
         /* @var $braintree MethodBraintree*/
         $braintree = AbstractMethodBraintree::load('Braintree');
@@ -304,7 +336,7 @@ class Braintree extends PaymentModule
             'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
             'path' => $this->_path,
             'mode' => $braintree->mode == 'SANDBOX' ? Tools::strtolower($braintree->mode) : 'production',
-            'bt_method' => BT_PAYPAL_PAYMENT,
+            'bt_method' => BRAINTREE_PAYPAL_PAYMENT,
             'active_vaulting'=> Configuration::get('BRAINTREE_VAULTING'),
             'currency' => $this->context->currency->iso_code,
         ));
@@ -316,7 +348,251 @@ class Braintree extends PaymentModule
             ));
         }
 
-        return $this->context->smarty->fetch('module:braintree/views/templates/front/payment.tpl');
+        return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_pbt.tpl');
     }
 
+    public function generateFormBT()
+    {
+        /* @var $braintree MethodBraintree*/
+        $braintree = AbstractMethodBraintree::load('Braintree');
+        $amount = $this->context->cart->getOrderTotal();
+        $clientToken = $braintree->init();
+
+        if (isset($clientToken['error_code'])) {
+            $this->context->smarty->assign(array(
+                'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
+            ));
+        }
+
+        $check3DS = 0;
+        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
+        if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
+            $check3DS = 1;
+        }
+
+        if (Configuration::get('BRAINTREE_VAULTING')) {
+            $payment_methods = BraintreeVaulting::getCustomerMethods($this->context->customer->id, BRAINTREE_CARD_PAYMENT);
+            if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
+                foreach ($payment_methods as $key => $method) {
+                    $nonce = $braintree->createMethodNonce($method['token']);
+                    $payment_methods[$key]['nonce'] = $nonce;
+                }
+            }
+
+            $this->context->smarty->assign(array(
+                'active_vaulting'=> true,
+                'payment_methods' => $payment_methods,
+            ));
+        }
+        $this->context->smarty->assign(array(
+            'error_msg'=> Tools::getValue('bt_error_msg'),
+            'braintreeToken'=> $clientToken,
+            'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
+            'braintreeAmount'=> $amount,
+            'check3Dsecure'=> $check3DS,
+            'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
+            'method_bt' => BRAINTREE_CARD_PAYMENT,
+        ));
+        return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_bt.tpl');
+    }
+
+    /**
+     * Check if we need convert currency
+     * @return boolean|integer currency id
+     */
+    public function needConvert()
+    {
+        $currency_mode = Currency::getPaymentCurrenciesSpecial($this->id);
+        $mode_id = $currency_mode['id_currency'];
+        if ($mode_id == -2) {
+            return (int)Configuration::get('PS_CURRENCY_DEFAULT');
+        } elseif ($mode_id == -1) {
+            return false;
+        } elseif ($mode_id != $this->context->currency->id) {
+            return (int)$mode_id;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get payment currency iso code
+     * @return string currency iso code
+     */
+    public function getPaymentCurrencyIso()
+    {
+        if ($id_currency = $this->needConvert()) {
+            $currency = new Currency((int)$id_currency);
+        } else {
+            $currency = Context::getContext()->currency;
+        }
+        return $currency->iso_code;
+    }
+
+    public function validateOrder($id_cart, $id_order_state, $amount_paid, $payment_method = 'Unknown', $message = null, $transaction = array(), $currency_special = null, $dont_touch_amount = false, $secure_key = false, Shop $shop = null)
+    {
+        if ($this->needConvert()) {
+            $amount_paid_curr = Tools::ps_round(Tools::convertPrice($amount_paid, new Currency($currency_special), true), 2);
+        } else {
+            $amount_paid_curr = Tools::ps_round($amount_paid, 2);
+        }
+        $amount_paid = Tools::ps_round($amount_paid, 2);
+
+        $cart = new Cart((int) $id_cart);
+        $total_ps = (float)$cart->getOrderTotal(true, Cart::BOTH);
+        if ($amount_paid_curr > $total_ps+0.10 || $amount_paid_curr < $total_ps-0.10) {
+            $total_ps = $amount_paid_curr;
+        }
+
+        try {
+            parent::validateOrder(
+                (int) $id_cart,
+                (int) $id_order_state,
+                (float) $total_ps,
+                $payment_method,
+                $message,
+                array('transaction_id' => isset($transaction['transaction_id']) ? $transaction['transaction_id'] : ''),
+                $currency_special,
+                $dont_touch_amount,
+                $secure_key,
+                $shop
+            );
+        } catch (Exception $e) {
+            ProcessLoggerHandler::openLogger();
+            ProcessLoggerHandler::logError(
+                'Order validation error : ' . $e->getMessage(),
+                isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
+                null,
+                (int)$id_cart,
+                $this->context->shop->id,
+                isset($transaction['payment_tool']) && $transaction['payment_tool'] ? $transaction['payment_tool'] : 'Braintree',
+                (int)Configuration::get('PAYPAL_SANDBOX'),
+                isset($transaction['date_transaction']) ? $transaction['date_transaction'] : null
+            );
+            ProcessLoggerHandler::closeLogger();
+            $msg = $this->l('Order validation error : ').$e->getMessage().'. ';
+            if (isset($transaction['transaction_id']) && $id_order_state != Configuration::get('PS_OS_ERROR')) {
+                $msg .= $this->l('Attention, your payment is made. Please, contact customer support. Your transaction ID is  : ').$transaction['transaction_id'];
+            }
+            Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'error', array('error_msg' => $msg, 'no_retry' => true)));
+        }
+        ProcessLoggerHandler::openLogger();
+        ProcessLoggerHandler::logInfo(
+            'Payment successful',
+            isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
+            $this->currentOrder,
+            (int)$id_cart,
+            $this->context->shop->id,
+            isset($transaction['payment_tool']) && $transaction['payment_tool'] ? $transaction['payment_tool'] : 'PayPal',
+            (int)Configuration::get('PAYPAL_SANDBOX'),
+            isset($transaction['date_transaction']) ? $transaction['date_transaction'] : null
+        );
+        ProcessLoggerHandler::closeLogger();
+
+        if (Tools::version_compare(_PS_VERSION_, '1.7.1.0', '>')) {
+            $order = Order::getByCartId($id_cart);
+        } else {
+            $id_order = Order::getOrderByCartId($id_cart);
+            $order = new Order($id_order);
+        }
+
+        if (isset($amount_paid_curr) && $amount_paid_curr != 0 && $order->total_paid != $amount_paid_curr && $this->isOneOrder($order->reference)) {
+            $order->total_paid = $amount_paid_curr;
+            $order->total_paid_real = $amount_paid_curr;
+            $order->total_paid_tax_incl = $amount_paid_curr;
+            $order->update();
+
+            $sql = 'UPDATE `'._DB_PREFIX_.'order_payment`
+		    SET `amount` = '.(float)$amount_paid_curr.'
+		    WHERE  `order_reference` = "'.pSQL($order->reference).'"';
+            Db::getInstance()->execute($sql);
+        }
+
+        $braintree_order = new BraintreeOrder();
+        $braintree_order->id_order = $this->currentOrder;
+        $braintree_order->id_cart = $id_cart;
+        $braintree_order->id_transaction = $transaction['transaction_id'];
+        $braintree_order->id_payment = $transaction['id_payment'];
+        $braintree_order->payment_method = $transaction['payment_method'];
+        $braintree_order->currency = $transaction['currency'];
+        $braintree_order->total_paid = (float) $amount_paid;
+        $braintree_order->payment_status = $transaction['payment_status'];
+        $braintree_order->total_prestashop = (float) $total_ps;
+        $braintree_order->payment_tool = isset($transaction['payment_tool']) ? $transaction['payment_tool'] : 'Braintree';
+        $braintree_order->sandbox = (int) Configuration::get('BRAINTREE_SANDBOX');
+        $braintree_order->save();
+
+        if ($transaction['capture']) {
+            $paypal_capture = new BraintreeCapture();
+            $paypal_capture->id_paypal_order = $braintree_order->id;
+            $paypal_capture->save();
+        }
+    }
+
+    public function isOneOrder($order_reference)
+    {
+        $query = new DBQuery();
+        $query->select('COUNT(*)');
+        $query->from('orders');
+        $query->where('reference = "' . pSQL($order_reference) . '"');
+        $countOrders = (int)DB::getInstance()->getValue($query);
+        return $countOrders == 1;
+    }
+
+    /**
+     * Create order state
+     * @return boolean
+     */
+    public function installOrderState()
+    {
+        if (!Configuration::get('BRAINTREE_OS_AWAITING')
+            || !Validate::isLoadedObject(new OrderState(Configuration::get('BRAINTREE_OS_AWAITING')))) {
+            $order_state = new OrderState();
+            $order_state->name = array();
+            foreach (Language::getLanguages() as $language) {
+                if (Tools::strtolower($language['iso_code']) == 'fr') {
+                    $order_state->name[$language['id_lang']] = 'En attente de paiement Braintree';
+                } else {
+                    $order_state->name[$language['id_lang']] = 'Awaiting for Braintree payment';
+                }
+            }
+            $order_state->send_email = false;
+            $order_state->color = '#4169E1';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = false;
+            $order_state->invoice = false;
+            if ($order_state->add()) {
+                $source = _PS_MODULE_DIR_. $this->name . '/views/img/os_braintree.png';
+                $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
+                copy($source, $destination);
+            }
+            Configuration::updateValue('BRAINTREE_OS_AWAITING', (int) $order_state->id);
+        }
+        if (!Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION')
+            || !Validate::isLoadedObject(new OrderState(Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION')))) {
+            $order_state = new OrderState();
+            $order_state->name = array();
+            foreach (Language::getLanguages() as $language) {
+                if (Tools::strtolower($language['iso_code']) == 'fr') {
+                    $order_state->name[$language['id_lang']] = 'En attente de validation Braintree';
+                } else {
+                    $order_state->name[$language['id_lang']] = 'Awaiting for Braintree validation';
+                }
+            }
+            $order_state->send_email = false;
+            $order_state->color = '#4169E1';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = false;
+            $order_state->invoice = false;
+            if ($order_state->add()) {
+                $source = _PS_MODULE_DIR_ . $this->name . '/views/img/os_braintree.png';
+                $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
+                copy($source, $destination);
+            }
+            Configuration::updateValue('BRAINTREE_OS_AWAITING_VALIDATION', (int) $order_state->id);
+        }
+        return true;
+    }
 }

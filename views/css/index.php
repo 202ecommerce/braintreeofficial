@@ -23,32 +23,13 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-namespace BraintreeAddons\classes;
-
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
-use BraintreeAddons\services\ServiceBraintreeLog;
-
-/**
- * Class BraintreeLog.
- */
-class BraintreeLog extends ProcessLoggerObjectModel
-{
-    /* @var object object service*/
-    protected $serviceLog;
-
-    public function __construct($id = null, $id_lang = null, $id_shop = null)
-    {
-        parent::__construct($id, $id_lang, $id_shop);
-        $this->setServiceLog(new ServiceBraintreeLog());
-    }
-
-    public function setServiceLog($service)
-    {
-        $this->serviceLog = $service;
-    }
-
-    public function getLinkToTransaction()
-    {
-        return $this->serviceLog->getLinkToTransaction($this);
-    }
-}
+                        
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+                        
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+                        
+header("Location: ../");
+exit;

@@ -27,5 +27,9 @@ use BraintreePPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLogg
 
 class AdminBraintreeProcessLoggerController extends AdminProcessLoggerController
 {
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->className = 'BraintreeAddons\classes\BraintreeLog';
+    }
 }

@@ -23,32 +23,40 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 namespace BraintreeAddons\classes;
 
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
-use BraintreeAddons\services\ServiceBraintreeLog;
+use Exception;
 
 /**
- * Class BraintreeLog.
+ * Class BraintreeException
+ * Custom exception with additional long message parameter
+ * @package BraintreeAddons\classes
  */
-class BraintreeLog extends ProcessLoggerObjectModel
+class BraintreeException extends Exception
 {
-    /* @var object object service*/
-    protected $serviceLog;
+    /** @var string Long detailed error message */
+    private $message_long;
 
-    public function __construct($id = null, $id_lang = null, $id_shop = null)
+    /**
+     * BraintreeException constructor.
+     * Redefine the exception construct so add long message
+     * @param int $code
+     * @param string $message not required
+     * @param string $message_long not required
+     */
+    public function __construct($code = 0, $message = '', $message_long = '')
     {
-        parent::__construct($id, $id_lang, $id_shop);
-        $this->setServiceLog(new ServiceBraintreeLog());
+        $this->message_long = $message_long;
+        // make sure everything is assigned properly
+        parent::__construct($message, $code);
     }
 
-    public function setServiceLog($service)
+    /**
+     * @return string
+     */
+    public function getMessageLong()
     {
-        $this->serviceLog = $service;
-    }
-
-    public function getLinkToTransaction()
-    {
-        return $this->serviceLog->getLinkToTransaction($this);
+        return $this->message_long;
     }
 }

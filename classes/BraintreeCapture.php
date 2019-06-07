@@ -32,8 +32,8 @@ class BraintreeCapture extends ObjectModel
     /** @var string Capture ID */
     public $id_capture;
 
-    /** @var integer PaypalOrder ID */
-    public $id_paypal_order;
+    /** @var integer BraintreeOrder ID */
+    public $id_braintree_order;
 
     /** @var float Captured amount */
     public $capture_amount;

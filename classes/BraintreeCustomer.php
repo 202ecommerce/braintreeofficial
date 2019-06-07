@@ -35,9 +35,6 @@ class BraintreeCustomer extends ObjectModel
     /** @var string Paypal customer reference number */
     public $reference;
 
-    /** @var string BT, EC, etc... */
-    public $method;
-
     /** @var bool mode of customer (sandbox or live) */
     public $sandbox;
 
@@ -57,10 +54,27 @@ class BraintreeCustomer extends ObjectModel
         'fields' => array(
             'id_customer' => array('type' => self::TYPE_INT),
             'reference' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'method' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
             'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
             'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
         )
     );
+
+    /**
+     * Load customer object by ID
+     * @param integer $id_customer PrestaShop Customer ID
+     * @param bool $sandbox mode of customer
+     * @return object BraintreeCustomer
+     */
+    public static function loadCustomerByMethod($id_customer, $sandbox)
+    {
+        $db = Db::getInstance();
+        $query = new DbQuery();
+        $query->select('id_braintree_customer');
+        $query->from('braintree_customer');
+        $query->where('id_customer = '.(int)$id_customer);
+        $query->where('sandbox = ' . (int)$sandbox);
+        $id = $db->getValue($query);
+        return new BraintreeCustomer($id);
+    }
 }
