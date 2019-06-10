@@ -79,7 +79,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 array(
                     'type' => 'select',
                     'label' => $this->l('Payment action'),
-                    'name' => 'braintree_intent',
+                    'name' => 'braintree_api_intent',
                     'desc' => $this->l('We recommend Authoreze process only for lean manufacturers and craft products sellers.'),
                     'options' => array(
                         'query' => array(
@@ -123,7 +123,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         );
 
         $values = array(
-            'braintree_intent' => Configuration::get('BRAINTREE_INTENT'),
+            'braintree_api_intent' => Configuration::get('BRAINTREE_API_INTENT'),
             'braintree_sandbox' => (int)Configuration::get('BRAINTREE_SANDBOX')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);

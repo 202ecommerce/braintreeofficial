@@ -60,4 +60,20 @@ class ServiceBraintreeCapture
         $braintreeCapture->result = pSQL($status);
         return $braintreeCapture->save();
     }
+
+    /**
+     * Get all datas from BraintreeOrder and BraintreeCapture
+     * @param integer $id_order PrestaShop order ID
+     * @return array BraintreeCapture
+     */
+    public function getByOrderId($id_order)
+    {
+        $sql = new \DbQuery();
+        $sql->select('*');
+        $sql->from('braintree_order', 'bo');
+        $sql->innerJoin('braintree_capture', 'bc', 'bo.`id_braintree_order` = bc.`id_braintree_order`');
+        $sql->where('bo.id_order = '.(int)$id_order);
+        return \Db::getInstance()->getRow($sql);
+    }
+
 }

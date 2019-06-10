@@ -233,7 +233,25 @@ class Braintree extends PaymentModule
     }
     public function hookActionOrderStatusPostUpdate(&$params)
     {
+        if ($params['newOrderStatus']->paid == 1) {
+            $capture = $this->serviceBraintreeCapture->getByOrderId($params['id_order']);
+            $ps_order = new Order($params['id_order']);
+            if ($capture['id_capture']) {
+                $this->setTransactionId($ps_order, $capture['id_capture']);
+            }
+        }
+    }
 
+    /**
+     * Get url for BT onboarding
+     * @param object $ps_order PS order object
+     * @param string $transaction_id payment transaction ID
+     */
+    public function setTransactionId($ps_order, $transaction_id)
+    {
+        Db::getInstance()->update('order_payment',
+            array('transaction_id' => pSQL($transaction_id)),
+            'order_reference = "'.pSQL($ps_order->reference).'"');
     }
 
     public function hookActionOrderStatusUpdate(&$params)
