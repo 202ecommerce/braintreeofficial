@@ -26,23 +26,17 @@
 
 namespace BraintreeAddons\services;
 
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
-use BraintreeAddons\classes\AbstractMethodBraintree;
-
-class ServiceBraintreeLog
+class ServiceBraintreeOrder
 {
     /**
-     * @param $log ProcessLoggerObjectModel
-     * @return url
+     * Load BraintreeOrder object by PrestaShop order ID
+     * @param integer $id_order Order ID
+     * @return object BraintreeOrder
      */
-    public function getLinkToTransaction($log)
+    public function loadByOrderId($id_order)
     {
-        /* @var $method \MethodBraintree*/
-        if ($log->id_transaction == false || $log->id_order == false) {
-            return '';
-        }
-
-        $method = AbstractMethodBraintree::load('Braintree');
-        return $method->getLinkToTransaction($log->id_transaction, $log->sandbox);
+        $collection = new \PrestaShopCollection('BraintreeAddons\classes\BraintreeOrder');
+        $collection->where('id_order', '=', (int)$id_order);
+        return $collection->getFirst();
     }
 }

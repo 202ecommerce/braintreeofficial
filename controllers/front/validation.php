@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once _PS_MODULE_DIR_ . 'braintree/classes/AbstractMethodBraintree.php';
+use BraintreeAddons\classes\AbstractMethodBraintree;
 require_once _PS_MODULE_DIR_ . 'braintree/controllers/front/abstract.php';
 
 /**

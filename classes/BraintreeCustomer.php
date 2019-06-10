@@ -23,11 +23,11 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
+namespace BraintreeAddons\classes;
 /**
  * Class BraintreeCustomer.
  */
-class BraintreeCustomer extends ObjectModel
+class BraintreeCustomer extends \ObjectModel
 {
     /** @var integer PrestaShop Customer ID */
     public $id_customer;
@@ -59,22 +59,4 @@ class BraintreeCustomer extends ObjectModel
             'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
         )
     );
-
-    /**
-     * Load customer object by ID
-     * @param integer $id_customer PrestaShop Customer ID
-     * @param bool $sandbox mode of customer
-     * @return object BraintreeCustomer
-     */
-    public static function loadCustomerByMethod($id_customer, $sandbox)
-    {
-        $db = Db::getInstance();
-        $query = new DbQuery();
-        $query->select('id_braintree_customer');
-        $query->from('braintree_customer');
-        $query->where('id_customer = '.(int)$id_customer);
-        $query->where('sandbox = ' . (int)$sandbox);
-        $id = $db->getValue($query);
-        return new BraintreeCustomer($id);
-    }
 }

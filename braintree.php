@@ -24,21 +24,23 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
-require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeCapture.php');
-require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeOrder.php');
-require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeVaulting.php');
-require_once(_PS_MODULE_DIR_ . 'braintree/classes/BraintreeCustomer.php');
-require_once(_PS_MODULE_DIR_ . 'braintree/classes/AbstractMethodBraintree.php');
-
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 use BraintreePPBTlib\Module\PaymentModule;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
+use BraintreeAddons\services\ServiceBraintreeOrder;
+use BraintreeAddons\services\ServiceBraintreeCapture;
+use BraintreeAddons\services\ServiceBraintreeVaulting;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
+use BraintreeAddons\classes\BraintreeOrder;
+use BraintreeAddons\classes\BraintreeCapture;
+use BraintreeAddons\classes\BraintreeCustomer;
+use BraintreeAddons\classes\BraintreeVaulting;
+use BraintreeAddons\classes\AbstractMethodBraintree;
 
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
@@ -147,6 +149,15 @@ class Braintree extends PaymentModule
         )
     );
 
+    /* @var ServiceBraintreeOrder*/
+    protected $serviceBraintreeOrder;
+
+    /* @var ServiceBraintreeCapture*/
+    protected $serviceBraintreeCapture;
+
+    /* @var ServiceBraintreeVaulting*/
+    protected $serviceBraintreeVaulting;
+
     public function __construct()
     {
         $this->name = 'braintree';
@@ -171,6 +182,9 @@ class Braintree extends PaymentModule
         $this->module_link = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
 
         $this->errors = '';
+        $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
+        $this->serviceBraintreeCapture = new ServiceBraintreeCapture();
+        $this->serviceBraintreeVaulting = new ServiceBraintreeVaulting();
     }
 
     public function install()
@@ -223,7 +237,290 @@ class Braintree extends PaymentModule
 
     public function hookActionOrderStatusUpdate(&$params)
     {
+        /**@var $orderBraintree BraintreeOrder
+         * @var $method MethodBraintree
+         * @var $braintreeCapture BraintreeCapture
+         */
+        $orderBraintree = $this->serviceBraintreeOrder->loadByOrderId($params['id_order']);
+        if (!Validate::isLoadedObject($orderBraintree)) {
+            return false;
+        }
+        $method = AbstractMethodBraintree::load('Braintree');
+        $message = '';
+        $ex_detailed_message = '';
+        if ($params['newOrderStatus']->id == Configuration::get('PS_OS_CANCELED')) {
+            $braintreeCapture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($orderBraintree->id);
+            if (Validate::isLoadedObject($braintreeCapture) && !$braintreeCapture->id_capture) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $this->l('You couldn\'t refund order, it\'s not payed yet.'),
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
+            }
 
+            try {
+                $response_void = $method->void($orderBraintree);
+            } catch (PayPal\Exception\PPConnectionException $e) {
+                $ex_detailed_message = $this->l('Error connecting to ') . $e->getUrl();
+            } catch (PayPal\Exception\PPMissingCredentialException $e) {
+                $ex_detailed_message = $e->errorMessage();
+            } catch (PayPal\Exception\PPConfigurationException $e) {
+                $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
+            }
+            if (isset($response_void) && isset($response_void['success']) && $response_void['success']) {
+                $braintreeCapture->result = 'voided';
+                $braintreeCapture->save();
+                $orderBraintree->payment_status = 'voided';
+                $orderBraintree->save();
+                foreach ($response_void as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logInfo(
+                    $message,
+                    isset($response_void['transaction_id']) ? $response_void['transaction_id'] : null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox,
+                    $response_void['date_transaction']
+                );
+                ProcessLoggerHandler::closeLogger();
+            } elseif (isset($response_void) && empty($response_void) == false) {
+                foreach ($response_void as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $message,
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    null,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&cancel_failed=1');
+            }
+
+            if ($ex_detailed_message) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $ex_detailed_message,
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+            }
+        }
+
+        if ($params['newOrderStatus']->id == Configuration::get('PS_OS_REFUND')) {
+            $braintreeCapture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($orderBraintree->id);
+            if (Validate::isLoadedObject($braintreeCapture) && !$braintreeCapture->id_capture) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $this->l('You couldn\'t refund order, it\'s not payed yet.'),
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
+            }
+            $status = $method->getTransactionStatus($orderBraintree);
+
+            if ($status == "submitted_for_settlement") {
+                try {
+                    $refund_response = $method->void($orderBraintree);
+                } catch (PayPal\Exception\PPConnectionException $e) {
+                    $ex_detailed_message = $this->l('Error connecting to ') . $e->getUrl();
+                } catch (PayPal\Exception\PPMissingCredentialException $e) {
+                    $ex_detailed_message = $e->errorMessage();
+                } catch (PayPal\Exception\PPConfigurationException $e) {
+                    $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
+                }
+                if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
+                    $braintreeCapture->result = 'voided';
+                    $orderBraintree->payment_status = 'voided';
+                    foreach ($refund_response as $key => $msg) {
+                        $message .= $key." : ".$msg.";\r";
+                    }
+                    ProcessLoggerHandler::openLogger();
+                    ProcessLoggerHandler::logInfo(
+                        $message,
+                        isset($refund_response['transaction_id']) ? $refund_response['transaction_id'] : null,
+                        $orderBraintree->id_order,
+                        $orderBraintree->id_cart,
+                        $this->context->shop->id,
+                        $orderBraintree->payment_tool,
+                        $orderBraintree->sandbox,
+                        $response_void['date_transaction']
+                    );
+                    ProcessLoggerHandler::closeLogger();
+                }
+            } else {
+                try {
+                    $refund_response = $method->refund($orderBraintree);
+                } catch (PayPal\Exception\PPConnectionException $e) {
+                    $ex_detailed_message = $this->l('Error connecting to ') . $e->getUrl();
+                } catch (PayPal\Exception\PPMissingCredentialException $e) {
+                    $ex_detailed_message = $e->errorMessage();
+                } catch (PayPal\Exception\PPConfigurationException $e) {
+                    $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
+                } catch (PayPal\Exception\PayPalConnectionException $e) {
+                    $decoded_message = Tools::jsonDecode($e->getData());
+                    $ex_detailed_message = $decoded_message->message;
+                } catch (PayPal\Exception\PayPalInvalidCredentialException $e) {
+                    $ex_detailed_message = $e->errorMessage();
+                } catch (PayPal\Exception\PayPalMissingCredentialException $e) {
+                    $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
+                } catch (Exception $e) {
+                    $ex_detailed_message = $e->errorMessage();
+                }
+
+                if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
+                    $braintreeCapture->result = 'refunded';
+                    $orderBraintree->payment_status = 'refunded';
+                    foreach ($refund_response as $key => $msg) {
+                        $message .= $key." : ".$msg.";\r";
+                    }
+                    ProcessLoggerHandler::openLogger();
+                    ProcessLoggerHandler::logInfo(
+                        $message,
+                        isset($refund_response['refund_id']) ? $refund_response['refund_id'] : null,
+                        $orderBraintree->id_order,
+                        $orderBraintree->id_cart,
+                        $this->context->shop->id,
+                        $orderBraintree->payment_tool,
+                        $orderBraintree->sandbox,
+                        $refund_response['date_transaction']
+                    );
+                    ProcessLoggerHandler::closeLogger();
+                }
+            }
+
+            if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
+                $braintreeCapture->save();
+                $orderBraintree->save();
+            }
+
+            if ($ex_detailed_message) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $ex_detailed_message,
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+            }
+
+            if (isset($refund_response) && !isset($refund_response['already_refunded']) && !isset($refund_response['success'])) {
+                foreach ($refund_response as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $message,
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&error_refund=1');
+            }
+        }
+
+        if ($params['newOrderStatus']->paid == 1) {
+            $braintreeCapture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($orderBraintree->id);
+            if (!Validate::isLoadedObject($braintreeCapture)) {
+                return false;
+            }
+
+            try {
+                $capture_response = $method->confirmCapture($orderBraintree);
+            } catch (PayPal\Exception\PPConnectionException $e) {
+                $ex_detailed_message = $this->l('Error connecting to ') . $e->getUrl();
+            } catch (PayPal\Exception\PPMissingCredentialException $e) {
+                $ex_detailed_message = $e->errorMessage();
+            } catch (PayPal\Exception\PPConfigurationException $e) {
+                $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
+            }
+
+            if (isset($capture_response['success'])) {
+                $orderBraintree->payment_status = $capture_response['status'];
+                $orderBraintree->save();
+            }
+            if ($ex_detailed_message) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $ex_detailed_message,
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+            } elseif (isset($capture_response) && isset($capture_response['success']) && $capture_response['success']) {
+                foreach ($capture_response as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logInfo(
+                    $message,
+                    isset($capture_response['authorization_id']) ? $capture_response['authorization_id'] : null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox,
+                    isset($capture_response['date_transaction']) ? $capture_response['date_transaction'] : null
+                );
+                ProcessLoggerHandler::closeLogger();
+            }
+
+            if (!isset($capture_response['already_captured']) && !isset($capture_response['success'])) {
+                foreach ($capture_response as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $message,
+                    null,
+                    $orderBraintree->id_order,
+                    $orderBraintree->id_cart,
+                    $this->context->shop->id,
+                    $orderBraintree->payment_tool,
+                    $orderBraintree->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&error_capture=1');
+            }
+        }
     }
 
     public function hookDisplayAdminCartsView($params)
@@ -342,7 +639,7 @@ class Braintree extends PaymentModule
         ));
 
         if (Configuration::get('BRAINTREE_VAULTING')) {
-            $payment_methods = BraintreeVaulting::getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
+            $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
             $this->context->smarty->assign(array(
                 'payment_methods' => $payment_methods,
             ));
@@ -371,7 +668,7 @@ class Braintree extends PaymentModule
         }
 
         if (Configuration::get('BRAINTREE_VAULTING')) {
-            $payment_methods = BraintreeVaulting::getCustomerMethods($this->context->customer->id, BRAINTREE_CARD_PAYMENT);
+            $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_CARD_PAYMENT);
             if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
                 foreach ($payment_methods as $key => $method) {
                     $nonce = $braintree->createMethodNonce($method['token']);
@@ -523,9 +820,9 @@ class Braintree extends PaymentModule
         $braintree_order->save();
 
         if ($transaction['capture']) {
-            $paypal_capture = new BraintreeCapture();
-            $paypal_capture->id_paypal_order = $braintree_order->id;
-            $paypal_capture->save();
+            $braintree_capture = new BraintreeCapture();
+            $braintree_capture->id_braintree_order = $braintree_order->id;
+            $braintree_capture->save();
         }
     }
 

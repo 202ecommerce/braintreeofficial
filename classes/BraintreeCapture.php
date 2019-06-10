@@ -23,11 +23,11 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
+namespace BraintreeAddons\classes;
 /**
  * Class BraintreeCapture.
  */
-class BraintreeCapture extends ObjectModel
+class BraintreeCapture extends \ObjectModel
 {
     /** @var string Capture ID */
     public $id_capture;

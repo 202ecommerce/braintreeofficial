@@ -23,11 +23,12 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+namespace BraintreeAddons\classes;
 
 /**
  * Class BraintreeOrder.
  */
-class BraintreeOrder extends ObjectModel
+class BraintreeOrder extends \ObjectModel
 {
     /** @var integer Prestashop Order generated ID */
     public $id_order;
@@ -91,5 +92,4 @@ class BraintreeOrder extends ObjectModel
             'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
         )
     );
-
 }
