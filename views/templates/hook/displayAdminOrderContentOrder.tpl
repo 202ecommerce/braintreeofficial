@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div class="tab-pane" id="paypal">
-    <h4 class="visible-print">{l s='PayPal' mod='PayPal'}</h4>
+<div class="tab-pane" id="braintree">
+    <h4 class="visible-print">{l s='Braintree' mod='braintree'}</h4>
     {include file='./tableLogs.tpl'}
 </div>

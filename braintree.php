@@ -41,6 +41,7 @@ use BraintreeAddons\classes\BraintreeCapture;
 use BraintreeAddons\classes\BraintreeCustomer;
 use BraintreeAddons\classes\BraintreeVaulting;
 use BraintreeAddons\classes\AbstractMethodBraintree;
+use BraintreeAddons\classes\BraintreeLog;
 
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
@@ -525,7 +526,12 @@ class Braintree extends PaymentModule
 
     public function hookDisplayAdminCartsView($params)
     {
-
+        $params['class_logger'] = BraintreeLog::class;
+        if ($result = $this->handleExtensionsHook(__FUNCTION__, $params)) {
+            if (!is_null($result)) {
+                return $result;
+            }
+        }
     }
 
     public function hookDisplayAdminOrder($params)
@@ -588,6 +594,25 @@ class Braintree extends PaymentModule
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.24.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
+            }
+        }
+    }
+
+    public function hookDisplayAdminOrderTabOrder($params)
+    {
+        if ($result = $this->handleExtensionsHook(__FUNCTION__, $params)) {
+            if (!is_null($result)) {
+                return $result;
+            }
+        }
+    }
+
+    public function hookDisplayAdminOrderContentOrder($params)
+    {
+        $params['class_logger'] = BraintreeLog::class;
+        if ($result = $this->handleExtensionsHook(__FUNCTION__, $params)) {
+            if (!is_null($result)) {
+                return $result;
             }
         }
     }
