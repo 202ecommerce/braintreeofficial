@@ -91,8 +91,9 @@
         });
     }
 
-    function BTSubmitPayment() {
+    function BraintreeSubmitPayment() {
         var bt_form = document.querySelector('#braintree-card-form');
+
         // use vaulted card
         if ($('select[name=bt_vaulting_token]').val()) {
             if (check3DS) {

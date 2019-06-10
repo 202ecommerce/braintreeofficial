@@ -119,7 +119,6 @@ class MethodBraintree extends AbstractMethodBraintree
             $clientToken = $this->gateway->clientToken()->generate();
             return $clientToken;
         } catch (Exception $e) {
-            \Symfony\Component\VarDumper\VarDumper::dump(array($e->getMessage(), $e->getFile(), $e->getLine())); die;
             return array('error_code' => $e->getCode(), 'error_msg' => $e->getMessage());
         }
     }
@@ -319,7 +318,7 @@ class MethodBraintree extends AbstractMethodBraintree
             }
 
             if ($vault_token && $braintree_customer->id) {
-                if (PaypalVaulting::vaultingExist($vault_token, $braintree_customer->id)) {
+                if (BraintreeVaulting::vaultingExist($vault_token, $braintree_customer->id)) {
                     $data['paymentMethodToken'] = $vault_token;
                 }
             } else {
@@ -332,7 +331,7 @@ class MethodBraintree extends AbstractMethodBraintree
                         ));
 
                         if (isset($payment_method->verification) && $payment_method->verification->status != 'verified') {
-                            $error_msg = $module->l('Card verification repond with status', get_class($this)).' '.$payment_method->verification->status.'. ';
+                            $error_msg = $module->l('Card verification respond with status', get_class($this)).' '.$payment_method->verification->status.'. ';
                             $error_msg .= $module->l('The reason : ', get_class($this)).' '.$payment_method->verification->processorResponseText.'. ';
                             if ($payment_method->verification->gatewayRejectionReason) {
                                 $error_msg .= $module->l('Rejection reason : ', get_class($this)).' '.$payment_method->verification->gatewayRejectionReason;
@@ -470,7 +469,7 @@ class MethodBraintree extends AbstractMethodBraintree
     public function createVaulting($result, $braintree_customer)
     {
         $vaulting = new BraintreeVaulting();
-        $vaulting->id_paypal_customer = $braintree_customer->id;
+        $vaulting->id_braintree_customer = $braintree_customer->id;
         $vaulting->payment_tool = $this->payment_method_bt;
         if ($vaulting->payment_tool == BRAINTREE_CARD_PAYMENT) {
             $vaulting->token = $result->transaction->creditCard['token'];

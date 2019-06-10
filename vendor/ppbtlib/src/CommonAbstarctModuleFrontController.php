@@ -27,7 +27,7 @@
 namespace BraintreePPBTlib;
 use \ModuleFrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
 {

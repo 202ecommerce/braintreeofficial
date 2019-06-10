@@ -310,8 +310,8 @@ class Braintree extends PaymentModule
         $embeddedOption = new PaymentOption();
         $embeddedOption->setCallToActionText($this->l('Pay with card'))
             ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/mini-cards.png'))
-            ->setModuleName($this->name)
-            ->setForm($this->generateFormBt());
+            ->setAdditionalInformation($this->generateFormBt())
+            ->setAction('javascript:BraintreeSubmitPayment();');
         $payments_options[] = $embeddedOption;
 
         return $payments_options;
@@ -342,7 +342,7 @@ class Braintree extends PaymentModule
         ));
 
         if (Configuration::get('BRAINTREE_VAULTING')) {
-            $payment_methods = BraintreeVaulting::getCustomerMethods($this->context->customer->id, BT_PAYPAL_PAYMENT);
+            $payment_methods = BraintreeVaulting::getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
             $this->context->smarty->assign(array(
                 'payment_methods' => $payment_methods,
             ));
@@ -378,7 +378,6 @@ class Braintree extends PaymentModule
                     $payment_methods[$key]['nonce'] = $nonce;
                 }
             }
-
             $this->context->smarty->assign(array(
                 'active_vaulting'=> true,
                 'payment_methods' => $payment_methods,
@@ -393,6 +392,7 @@ class Braintree extends PaymentModule
             'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
             'method_bt' => BRAINTREE_CARD_PAYMENT,
         ));
+
         return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_bt.tpl');
     }
 

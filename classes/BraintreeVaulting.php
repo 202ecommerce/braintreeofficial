@@ -76,9 +76,9 @@ class BraintreeVaulting extends ObjectModel
     {
         $db = Db::getInstance();
         $query = new DbQuery();
-        $query->select('id_braintee_vaulting');
-        $query->from('braintee_vaulting');
-        $query->where('token = "'.pSQL($token).'" AND id_braintee_customer = '.(int)$customer);
+        $query->select('id_braintree_vaulting');
+        $query->from('braintree_vaulting');
+        $query->where('token = "'.pSQL($token).'" AND id_braintree_customer = '.(int)$customer);
         $result = $db->getValue($query);
         return $result ? true : false;
     }
@@ -94,11 +94,11 @@ class BraintreeVaulting extends ObjectModel
         $db = Db::getInstance();
         $query = new DbQuery();
         $query->select('*');
-        $query->from('braintee_vaulting', 'bv');
-        $query->leftJoin('braintee_customer', 'bc', 'bv.id_braintee_customer = bc.id_braintee_customer');
+        $query->from('braintree_vaulting', 'bv');
+        $query->leftJoin('braintree_customer', 'bc', 'bv.id_braintree_customer = bc.id_braintree_customer');
         $query->where('bc.id_customer = '.(int)$customer);
         $query->where('bv.payment_tool = "'.pSQL($method).'"');
-        $query->where('bc.sandbox = ' . (int)Configuration::get('PAYPAL_SANDBOX'));
+        $query->where('bc.sandbox = ' . (int)Configuration::get('BRAINTREE_SANDBOX'));
         $result = $db->executeS($query);
         return $result;
     }
@@ -114,8 +114,8 @@ class BraintreeVaulting extends ObjectModel
         $methods = array();
         $query = new DbQuery();
         $query->select('*');
-        $query->from('braintee_vaulting', 'bv');
-        $query->leftJoin('braintee_customer', 'bc', 'bv.id_braintee_customer = bc.id_braintee_customer');
+        $query->from('braintree_vaulting', 'bv');
+        $query->leftJoin('braintree_customer', 'bc', 'bv.id_braintree_customer = bc.id_braintree_customer');
         $query->where('bc.id_customer = '.(int)$customer);
         $results = $db->query($query);
         while ($result = $db->nextRow($results)) {
