@@ -32,6 +32,7 @@ use BraintreeAddons\classes\BraintreeOrder;
 use BraintreeAddons\services\ServiceBraintreeCapture;
 use BraintreeAddons\services\ServiceBraintreeCustomer;
 use BraintreeAddons\services\ServiceBraintreeVaulting;
+use BraintreeAddons\services\ServiceBraintreeOrder;
 
 /**
  * Class MethodBT
@@ -77,11 +78,15 @@ class MethodBraintree extends AbstractMethodBraintree
     /* @var ServiceBraintreeVaulting*/
     protected $serviceBraintreeVaulting;
 
+    /* @var ServiceBraintreeOrder*/
+    protected $serviceBraintreeOrder;
+
     public function __construct()
     {
         $this->serviceBraintreeCapture = new ServiceBraintreeCapture();
         $this->serviceBraintreeCustomer = new ServiceBraintreeCustomer();
         $this->serviceBraintreeVaulting = new ServiceBraintreeVaulting();
+        $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
     }
 
     /**
@@ -268,11 +273,10 @@ class MethodBraintree extends AbstractMethodBraintree
     public function searchTransaction($braintreeOrder)
     {
         $this->initConfig($braintreeOrder->sandbox);
-        $id_transaction =  Braintree_TransactionSearch::id()->is($braintreeOrder->id_transaction);
-        $collection = $this->gateway->transaction()->search(array($id_transaction));
-        if ($collection->valid()) {
-            return $collection->firstItem();
-        } else {
+        try {
+            $transaction = $this->gateway->transaction()->find($braintreeOrder->id_transaction);
+            return $transaction;
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -337,7 +341,60 @@ class MethodBraintree extends AbstractMethodBraintree
      */
     public function partialRefund($params)
     {
+        try {
+            $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId(Tools::getValue('id_order'));
+            $this->initConfig($braintreeOrder->sandbox);
+            $capture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($braintreeOrder->id);
+            $id_transaction = Validate::isLoadedObject($capture) ? $capture->id_capture : $braintreeOrder->id_transaction;
+            $amount = 0;
+            foreach ($params['productList'] as $product) {
+                $amount += $product['amount'];
+            }
+            if (Tools::getValue('partialRefundShippingCost')) {
+                $amount += (int)Tools::getValue('partialRefundShippingCost');
+            }
+            $result = $this->gateway->transaction()->refund($id_transaction, number_format($amount, 2, ".", ''));
 
+            if ($result->success) {
+                $response =  array(
+                    'success' => true,
+                    'refundedTransactionId' => $result->transaction->refundedTransactionId,
+                    'refund_id' => $result->transaction->id,
+                    'status' => $result->transaction->status,
+                    'amount' => $result->transaction->amount,
+                    'currency' => $result->transaction->currencyIsoCode,
+                    'payment_type' => $result->transaction->payment_type,
+                    'merchantAccountId' => $result->transaction->merchantAccountId,
+                );
+                $braintreeOrder->total_paid -= $amount;
+                $capture->capture_amount = $braintreeOrder->total_paid;
+                if ($braintreeOrder->total_paid == 0) {
+                    $braintreeOrder->payment_status = 'refunded';
+                    $capture->result = 'refunded';
+                }
+                $braintreeOrder->save();
+                $capture->save();
+            } else {
+                $errors = $result->errors->deepAll();
+                foreach ($errors as $error) {
+                    $response = array(
+                        'refundedTransactionId' => $result->transaction->refundedTransactionId,
+                        'status' => 'Failure',
+                        'error_code' => $error->code,
+                        'error_message' => $error->message,
+                    );
+                    if ($error->code == Braintree_Error_Codes::TRANSACTION_HAS_ALREADY_BEEN_REFUNDED) {
+                        $response['already_refunded'] = true;
+                    }
+                }
+            }
+            return $response;
+        } catch (Exception $e) {
+            $response =  array(
+                'error_message' => $e->getCode().'=>'.$e->getMessage(),
+            );
+            return $response;
+        }
     }
 
     /**

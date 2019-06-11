@@ -32,7 +32,7 @@ class ServiceBraintreeOrder
     /**
      * Load BraintreeOrder object by PrestaShop order ID
      * @param integer $id_order Order ID
-     * @return object BraintreeOrder
+     * @return BraintreeOrder
      */
     public function loadByOrderId($id_order)
     {

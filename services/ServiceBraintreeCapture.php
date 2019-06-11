@@ -32,7 +32,7 @@ class ServiceBraintreeCapture
     /**
      * Load BraintreeCapture object by BraintreeOrder ID
      * @param integer $id_braintree_order BraintreeOrder ID
-     * @return object BraintreeCapture
+     * @return BraintreeCapture
      */
     public function loadByOrderBraintreeId($id_braintree_order)
     {

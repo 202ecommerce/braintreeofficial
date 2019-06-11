@@ -214,7 +214,13 @@ class Braintree extends PaymentModule
 
     public function hookActionAdminControllerSetMedia()
     {
-
+        if (Tools::getValue('controller') == "AdminOrders" && Tools::getValue('id_order')) {
+            $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId(Tools::getValue('id_order'));
+            if (Validate::isLoadedObject($braintreeOrder)) {
+                Media::addJsDefL('chb_braintree_refund', $this->l('Refund Braintree'));
+                $this->context->controller->addJS(_PS_MODULE_DIR_ . $this->name . '/views/js/bo_order.js');
+            }
+        }
     }
 
     public function hookActionBeforeCartUpdateQty($params)
@@ -229,8 +235,102 @@ class Braintree extends PaymentModule
 
     public function hookActionOrderSlipAdd($params)
     {
+        /* @var $method MethodBraintree*/
+        if (Tools::isSubmit('doPartialRefundBraintree')) {
+            $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId($params['order']->id);
 
+            if (Validate::isLoadedObject($braintreeOrder) == false) {
+                return false;
+            }
+
+            $method = AbstractMethodBraintree::load('Braintree');
+            $message = '';
+            $ex_detailed_message = '';
+            $capture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($braintreeOrder->id);
+            if (Validate::isLoadedObject($capture) && !$capture->id_capture) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $this->l('You couldn\'t refund order, it\'s not payed yet.'),
+                    null,
+                    $braintreeOrder->id_order,
+                    $braintreeOrder->id_cart,
+                    $this->context->shop->id,
+                    $braintreeOrder->payment_tool,
+                    $braintreeOrder->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                return true;
+            }
+            $status = $method->getTransactionStatus($braintreeOrder->id_transaction);
+
+            if ($status == "submitted_for_settlement") {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $this->l('You couldn\'t refund order, it\'s not payed yet.'),
+                    null,
+                    $braintreeOrder->id_order,
+                    $braintreeOrder->id_cart,
+                    $this->context->shop->id,
+                    $braintreeOrder->payment_tool,
+                    $braintreeOrder->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+                return true;
+            } else {
+                try {
+                    $refund_response = $method->partialRefund($params);
+                } catch (Exception $e) {
+                    $ex_detailed_message = $e->getMessage();
+                }
+            }
+
+            if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
+                foreach ($refund_response as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logInfo(
+                    $message,
+                    isset($refund_response['refund_id']) ? $refund_response['refund_id'] : null,
+                    $braintreeOrder->id_order,
+                    $braintreeOrder->id_cart,
+                    $this->context->shop->id,
+                    $braintreeOrder->payment_tool,
+                    $braintreeOrder->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+            } elseif (isset($refund_response) && empty($refund_response) == false) {
+                foreach ($refund_response as $key => $msg) {
+                    $message .= $key." : ".$msg.";\r";
+                }
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $message,
+                    null,
+                    $braintreeOrder->id_order,
+                    $braintreeOrder->id_cart,
+                    $this->context->shop->id,
+                    $braintreeOrder->payment_tool,
+                    $braintreeOrder->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+            }
+            if ($ex_detailed_message) {
+                ProcessLoggerHandler::openLogger();
+                ProcessLoggerHandler::logError(
+                    $ex_detailed_message,
+                    null,
+                    $braintreeOrder->id_order,
+                    $braintreeOrder->id_cart,
+                    $this->context->shop->id,
+                    $braintreeOrder->payment_tool,
+                    $braintreeOrder->sandbox
+                );
+                ProcessLoggerHandler::closeLogger();
+            }
+        }
     }
+
     public function hookActionOrderStatusPostUpdate(&$params)
     {
         if ($params['newOrderStatus']->paid == 1) {
