@@ -25,6 +25,7 @@
  */
 
 namespace BraintreeAddons\services;
+use BraintreeAddons\classes\BraintreeOrder;
 
 class ServiceBraintreeOrder
 {
@@ -35,8 +36,33 @@ class ServiceBraintreeOrder
      */
     public function loadByOrderId($id_order)
     {
-        $collection = new \PrestaShopCollection('BraintreeAddons\classes\BraintreeOrder');
+        $collection = new \PrestaShopCollection(BraintreeOrder::class);
         $collection->where('id_order', '=', (int)$id_order);
         return $collection->getFirst();
     }
+
+    /**
+     * Get BT records
+     * @return array all BT transaction IDs
+     */
+    public function getBraintreeOrdersForValidation()
+    {
+        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        $collection->where('payment_method', '=', 'sale');
+        $collection->where('payment_tool', '=', 'paypal_account');
+        $collection->where('payment_status', 'in', array('settling', 'submitted_for_settlement'));
+        return $collection->getResults();
+    }
+
+    /**
+     * @param string $id_transaction Transaction ID
+     * @return BraintreeOrder Order id
+     */
+    public function loadByTransactionId($id_transaction)
+    {
+        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        $collection->where('id_transaction', '=', pSQL($id_transaction));
+        return $collection->getFirst();
+    }
+
 }

@@ -559,7 +559,65 @@ class Braintree extends PaymentModule
 
     public function hookDisplayBackOfficeHeader()
     {
+        /* @var $method MethodBraintree*/
+        $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREE_CRON_TIME')));
+        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4) {
+            Configuration::updateValue('BRAINTREE_CRON_TIME', date('Y-m-d H:i:s'));
+            $bt_orders = $this->serviceBraintreeOrder->getBraintreeOrdersForValidation();
+            if ($bt_orders) {
+                $method = AbstractMethodBraintree::load('Braintree');
+                $transactions = $method->searchTransactions($bt_orders);
 
+                if (empty($transactions)) {
+                    return;
+                }
+
+                foreach ($transactions as $transaction) {
+                    $braintreeOrder = $this->serviceBraintreeOrder->loadByTransactionId($transaction->id);
+                    if (Validate::isLoadedObject($braintreeOrder) == false) {
+                        continue;
+                    }
+                    $ps_order = new Order($braintreeOrder->id_order);
+                    $paid_state  = Configuration::get('PS_OS_PAYMENT');
+                    $ps_order_details = OrderDetail::getList($braintreeOrder->id_order);
+
+                    foreach ($ps_order_details as $order_detail) {
+                        // Switch to back order if needed
+                        $product_stock = StockAvailable::getQuantityAvailableByProduct($order_detail['product_id'], $order_detail['product_attribute_id']);
+                        if (Configuration::get('PS_STOCK_MANAGEMENT') && $product_stock <= 0) {
+                            $paid_state  = Configuration::get('PS_OS_OUTOFSTOCK_PAID');
+                        }
+                    }
+
+                    switch ($transaction->status) {
+                        case 'declined':
+                            if ($braintreeOrder->payment_status != "declined") {
+                                $braintreeOrder->payment_status = $transaction->status;
+                                $braintreeOrder->update();
+                                $ps_order->setCurrentState(Configuration::get('PS_OS_ERROR'));
+                            }
+                            break;
+                        case 'settled':
+                            if ($braintreeOrder->payment_status != "settled") {
+                                $braintreeOrder->payment_status = $transaction->status;
+                                $braintreeOrder->update();
+                                $ps_order->setCurrentState($paid_state);
+                                $this->setTransactionId($ps_order, $transaction->id);
+                            }
+                            break;
+                        case 'settling': // waiting
+                            // do nothing and check later one more time
+                            break;
+                        case 'submit_for_settlement': //waiting
+                            // do nothing and check later one more time
+                            break;
+                        default:
+                            // do nothing and check later one more time
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public function hookDisplayCustomerAccount()

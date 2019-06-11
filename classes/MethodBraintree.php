@@ -245,6 +245,39 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
+     * @param array $ids
+     * @return mixed
+     */
+    public function searchTransactions($braintreeOrders)
+    {
+        $collection = array();
+        foreach ($braintreeOrders as $braintreeOrder) {
+            $transaction = $this->searchTransaction($braintreeOrder);
+            if ($transaction === false) {
+                continue;
+            }
+            $collection[] = $transaction;
+        }
+        return $collection;
+    }
+
+    /**
+     * @param BraintreeOrder $braintreeOrder
+     * @return mixed
+     */
+    public function searchTransaction($braintreeOrder)
+    {
+        $this->initConfig($braintreeOrder->sandbox);
+        $id_transaction =  Braintree_TransactionSearch::id()->is($braintreeOrder->id_transaction);
+        $collection = $this->gateway->transaction()->search(array($id_transaction));
+        if ($collection->valid()) {
+            return $collection->firstItem();
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Refund settled transaction
      * @param $orderBraintree BraintreeOrder object
      * @return mixed
