@@ -654,7 +654,58 @@ class Braintree extends PaymentModule
 
     public function hookDisplayAdminOrder($params)
     {
+        $id_order = $params['id_order'];
+        $order = new Order((int)$id_order);
+        $braintreeMessage = '';
+        $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId($id_order);
+        $braintreeCapture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($braintreeOrder->id);
 
+        if (Validate::isLoadedObject($braintreeOrder) == false) {
+            return false;
+        }
+        if ($braintreeOrder->sandbox) {
+            $this->context->controller->warnings[] = $this->l('[SANDBOX] Please pay attention that payment for this order was made via Braintree Sandbox mode.');
+        }
+        if (Tools::getValue('not_payed_capture')) {
+            $braintreeMessage .= $this->displayWarning(
+                '<p class="braintree-warning">' . $this->l('You couldn\'t refund order, it\'s not payed yet.') . '</p>'
+            );
+        }
+        if (Tools::getValue('error_refund')) {
+            $braintreeMessage .= $this->displayWarning(
+                '<p class="braintree-warning">' . $this->l('We have unexpected problem during refund operation. For more details please see the "Braintree" tab in the order details.') . '</p>'
+            );
+        }
+        if (Tools::getValue('cancel_failed')) {
+            $braintreeMessage .= $this->displayWarning(
+                '<p class="braintree-warning">' . $this->l('We have unexpected problem during cancel operation. For more details please see the "Braintree" tab in the order details.') . '</p>'
+            );
+        }
+        if ($order->current_state == Configuration::get('PS_OS_REFUND') &&  $braintreeOrder->payment_status == 'refunded') {
+            $braintreeMessage .= $this->displayWarning(
+                '<p class="braintree-warning">' . $this->l('Your order is fully refunded by Braintree.') . '</p>'
+            );
+        }
+
+        if ($order->getCurrentOrderState()->paid == 1 && Validate::isLoadedObject($braintreeCapture) && $braintreeCapture->id_capture) {
+            $braintreeMessage .= $this->displayWarning(
+                '<p class="braintree-warning">' . $this->l('Your order is fully captured by Braintree.') . '</p>'
+            );
+        }
+        if (Tools::getValue('error_capture')) {
+            $braintreeMessage .= $this->displayWarning(
+                '<p class="braintree-warning">' . $this->l('We have unexpected problem during capture operation. For more details please see the "Braintree" tab in the order details.') . '</p>'
+            );
+        }
+
+        if ($braintreeOrder->total_paid != $braintreeOrder->total_prestashop) {
+            $preferences = $this->context->link->getAdminLink('AdminPreferences', true);
+            $braintreeMessage .= $this->displayWarning('<p class="braintree-warning">'.$this->l('Product pricing has been modified as your rounding settings aren\'t compliant with Braintree.').' '.
+                $this->l('To avoid automatic rounding to customer for Braintree payments, please update your rounding settings.').' '.
+                '<a target="_blank" href="'.$preferences.'">'.$this->l('Reed more.').'</a></p>');
+        }
+
+        return $braintreeMessage . $this->display(__FILE__, 'views/templates/hook/braintree_order.tpl');
     }
 
     public function hookDisplayBackOfficeHeader()
