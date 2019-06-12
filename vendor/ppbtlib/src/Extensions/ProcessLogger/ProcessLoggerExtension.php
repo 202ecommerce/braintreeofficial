@@ -38,8 +38,8 @@ class ProcessLoggerExtension extends AbstractModuleExtension
     public $extensionAdminControllers = array(
         array(
             'name' => array(
-                'en' => 'Logger Braintree',
-                'fr' => 'Logger Braintree',
+                'en' => 'Logger',
+                'fr' => 'Logger',
             ),
             'class_name' => 'AdminBraintreeProcessLogger',
             'parent_class_name' => 'AdminParentBraintreeConfiguration',
