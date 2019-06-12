@@ -76,6 +76,7 @@ class ServiceBraintreeVaulting
         $query->from('braintree_vaulting', 'bv');
         $query->leftJoin('braintree_customer', 'bc', 'bv.id_braintree_customer = bc.id_braintree_customer');
         $query->where('bc.id_customer = '.(int)$customer);
+        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREE_SANDBOX'));
         $results = $db->query($query);
         while ($result = $db->nextRow($results)) {
             $methods[$result['payment_tool']][] = $result;
