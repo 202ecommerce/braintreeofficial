@@ -790,14 +790,11 @@ class Braintree extends PaymentModule
         }
     }
 
-    public function hookDisplayInvoiceLegalFreeText($params)
-    {
-
-    }
-
     public function hookDisplayMyAccountBlock()
     {
-
+        if (Configuration::get('BRAINTREE_VAULTING')) {
+            return $this->display(__FILE__, 'displayMyAccountBlock.tpl');
+        }
     }
 
     public function hookDisplayOrderConfirmation($params)
