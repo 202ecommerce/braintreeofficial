@@ -30,7 +30,7 @@
 </div>
 
 <div class="col-lg-4">
-    <div class="panel">
-        {$statusBloc}
+    <div class="panel status-block-container">
+        {$statusBlock nofilter}
     </div>
 </div>

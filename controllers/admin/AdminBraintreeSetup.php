@@ -132,6 +132,45 @@ class AdminBraintreeSetupController extends AdminBraintreeController
     public function initStatusBlock()
     {
         $html = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
-        $this->context->smarty->assign('statusBloc', $html);
+        $this->context->smarty->assign('statusBlock', $html);
+    }
+
+    /**
+     * Check TLS version 1.2 compability : CURL request to server
+     */
+    private function _checkTLSVersion()
+    {
+        $return = array(
+            'status' => false,
+            'error_message' => ''
+        );
+        if (defined('CURL_SSLVERSION_TLSv1_2')) {
+            $tls_server = $this->context->link->getModuleLink($this->module->name, 'tlscurltestserver');
+            $curl = curl_init($tls_server);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+            $response = curl_exec($curl);
+            if ($response != 'ok') {
+                $return['status'] = false;
+                $curl_info = curl_getinfo($curl);
+                if ($curl_info['http_code'] == 401) {
+                    $return['error_message'] = $this->l('401 Unauthorized. Please note that the TLS verification can not be done if you have an htaccess password protection enabled on your web site.');
+                } else {
+                    $return['error_message'] = curl_error($curl);
+                }
+            } else {
+                $return['status'] = true;
+            }
+        } else {
+            $return['status'] = false;
+            if (version_compare(curl_version()['version'], '7.34.0', '<')) {
+                $return['error_message'] = $this->l(' You are using an old version of cURL. Please update your cURL extension to version 7.34.0 or higher.');
+            } else {
+                $return['error_message'] = $this->l('TLS version is not compatible');
+            }
+        }
+        return $return;
     }
 }
