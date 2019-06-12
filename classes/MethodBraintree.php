@@ -322,6 +322,16 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
+     * Deleted vaulted method from BT
+     * @param $payment_method BraintreeVaulting
+     */
+    public function deleteVaultedMethod($payment_method)
+    {
+        $this->initConfig();
+        $this->gateway->paymentMethod()->delete($payment_method->token);
+    }
+
+    /**
      * Refund settled transaction
      * @param $orderBraintree BraintreeOrder object
      * @return mixed

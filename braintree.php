@@ -785,22 +785,31 @@ class Braintree extends PaymentModule
 
     public function hookDisplayCustomerAccount()
     {
-
-    }
-
-    public function hookDisplayInvoiceLegalFreeText($params)
-    {
-
+        if (Configuration::get('BRAINTREE_VAULTING')) {
+            return $this->display(__FILE__, 'displayCustomerAccount.tpl');
+        }
     }
 
     public function hookDisplayMyAccountBlock()
     {
-
+        if (Configuration::get('BRAINTREE_VAULTING')) {
+            return $this->display(__FILE__, 'displayMyAccountBlock.tpl');
+        }
     }
 
     public function hookDisplayOrderConfirmation($params)
     {
+        $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId($params['order']->id);
+        if (Validate::isLoadedObject($braintreeOrder) == false) {
+            return;
+        }
 
+        $this->context->smarty->assign(array(
+            'transaction_id' => $braintreeOrder->id_transaction,
+        ));
+
+        $this->context->controller->registerJavascript($this->name.'-order_confirmation_js', 'modules/' . $this->name . '/views/js/order_confirmation.js');
+        return $this->context->smarty->fetch('module:braintree/views/templates/hook/displayOrderConfirmation.tpl');
     }
 
     public function hookHeader()
