@@ -164,27 +164,29 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
 
     public function initMerchantAccountForm()
     {
+        $inputs = array();
+        foreach (Currency::getCurrencies() as $currency) {
+            $inputs[] = array(
+                'type' => 'text',
+                'label' => $this->l('Merchant account Id for ') . $currency['iso_code'],
+                'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']))
+            );
+        }
         $this->fields_form[]['form'] = array(
             'legend' => array(
                 'title' => $this->l('Braintree Merchant Accounts'),
                 'icon' => 'icon-cogs',
             ),
-            'input' => array(
-                array(
-                    'type' => 'text',
-                    'label' => $this->l('Merchant account Id for ') . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code'],
-                    'name' => 'braintree_merchant_account_id_' . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code'],
-                )
-            ),
+            'input' => $inputs,
             'submit' => array(
                 'title' => $this->l('Save'),
                 'class' => 'btn btn-default pull-right button',
             ),
         );
 
-        $values = array(
-            'braintree_merchant_account_id_' . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code'] => Configuration::get(Tools::strtoupper('braintree_merchant_account_id_' . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code']))
-        );
+        foreach ($inputs as $input) {
+            $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
+        }
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 }

@@ -282,6 +282,46 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
+     * Create new BT account for currency added on PS
+     * @param string $currency iso code
+     * @return array [curr_iso_code => account_id]
+     */
+    public function createForCurrency($currency = null)
+    {
+        $this->initConfig();
+        $result = array();
+
+        if ($currency) {
+            try {
+                $response = $this->gateway->merchantAccount()->createForCurrency(array(
+                    'currency' => $currency,
+                ));
+                if ($response->success) {
+                    $result[$response->merchantAccount->currencyIsoCode] = $response->merchantAccount->id;
+                }
+            } catch (Exception $e) {
+
+            }
+        } else {
+            $currencies = Currency::getCurrencies();
+            foreach ($currencies as $curr) {
+                try {
+                    $response = $this->gateway->merchantAccount()->createForCurrency(array(
+                        'currency' => $curr['iso_code'],
+                    ));
+                    if ($response->success) {
+                        $result[$response->merchantAccount->currencyIsoCode] = $response->merchantAccount->id;
+                    }
+                } catch (Exception $e) {
+
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Refund settled transaction
      * @param $orderBraintree BraintreeOrder object
      * @return mixed
@@ -521,7 +561,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
         $data = array(
             'amount'                => $amount,
-            'merchantAccountId'     => Configuration::get('BRAINTREE_MERCHANT_ACCOUNT_ID_' . Tools::strtoupper($currency)),
+            'merchantAccountId'     => Configuration::get($module->getNameMerchantAccountForCurrency($currency)),
             'orderId'               => $this->getOrderId($cart),
             'channel'               => (getenv('PLATEFORM') == 'PSREAD')?'PrestaShop_Cart_Ready_Braintree':'PrestaShop_Cart_Braintree',
             'billing' => array(

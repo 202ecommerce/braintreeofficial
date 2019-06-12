@@ -60,7 +60,6 @@ class Braintree extends PaymentModule
         'header',
         'actionObjectCurrencyAddAfter',
         'displayBackOfficeHeader',
-        'actionBeforeCartUpdateQty',
         'displayInvoiceLegalFreeText',
         'actionAdminControllerSetMedia',
         'displayMyAccountBlock',
@@ -223,14 +222,27 @@ class Braintree extends PaymentModule
         }
     }
 
-    public function hookActionBeforeCartUpdateQty($params)
-    {
-
-    }
-
     public function hookActionObjectCurrencyAddAfter($params)
     {
+        /* @var $method MethodBraintree*/
+        $method = AbstractMethodBraintree::load('Braintree');
+        $merchant_account = $method->createForCurrency($params['object']->iso_code);
+        if ($merchant_account) {
+            Configuration::updateValue($this->getNameMerchantAccountForCurrency($params['object']->iso_code), $merchant_account[$params['object']->iso_code]);
+        }
+    }
 
+    /**
+     * @param string $currency iso of currency
+     * @param bool $mode true if mode Sandbox and false if mode Live
+     * @return string name of merchant account id for currency
+     */
+    public function getNameMerchantAccountForCurrency($currency, $mode = null)
+    {
+        if ($mode === null) {
+            $mode = Configuration::get('BRAINTREE_SANDBOX');
+        }
+        return Tools::strtoupper('braintree_merchant_account_id_' . $currency . '_' . ((int)$mode ? 'sandbox' : 'live'));
     }
 
     public function hookActionOrderSlipAdd($params)

@@ -52,7 +52,6 @@ class AdminBraintreeController extends \ModuleAdminController
 
     public function postProcess()
     {
-        //VarDumper::dump(\Tools::getAllValues()); die;
         if (\Tools::isSubmit($this->controller_name . '_config')) {
             $this->saveForm();
         }
