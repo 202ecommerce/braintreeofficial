@@ -208,7 +208,7 @@ class ProcessLoggerHandler
             return Db::getInstance()->delete(
                 'braintree_processlogger',
                 sprintf(
-                    'date_add <= NOW() - INTERVAL %d DAY AND id_order = 0',
+                    'date_add <= NOW() - INTERVAL %d DAY AND id_order IS NULL',
                     self::getAutoErasingDelayInDays()
                 )
             );

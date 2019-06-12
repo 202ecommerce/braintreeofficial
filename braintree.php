@@ -82,10 +82,10 @@ class Braintree extends PaymentModule
      * @var array
      */
     public $objectModels = array(
-        'BraintreeCapture',
-        'BraintreeOrder',
-        'BraintreeVaulting',
-        'BraintreeCustomer'
+        BraintreeCapture::class,
+        BraintreeOrder::class,
+        BraintreeVaulting::class,
+        BraintreeCustomer::class
     );
 
     /**

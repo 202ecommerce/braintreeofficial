@@ -27,12 +27,12 @@
 namespace BraintreePPBTlib;
 use \ModuleFrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use PaypalPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
 {
     /** @var string module name */
-    public $name = 'braintree';
+    public $name = 'paypal';
 
     /** @var  array Contain ajax response. */
     public $jsonValues;

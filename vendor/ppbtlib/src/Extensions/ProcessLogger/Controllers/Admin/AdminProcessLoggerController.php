@@ -123,7 +123,6 @@ class AdminProcessLoggerController extends \ModuleAdminController
             ),
             'date_transaction' => array(
                 'title' => $this->module->l('Transaction date', 'AdminProcessLoggerController'),
-                'callback' => 'getDateTransaction',
             ),
         );
 
@@ -135,7 +134,6 @@ class AdminProcessLoggerController extends \ModuleAdminController
                     'Here you can change the default configuration for this Process Logger',
                     'AdminProcessLoggerController'
                 ),
-                'info' => \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/admin/_partials/helperOptionInfo.tpl'),
                 'fields'      => array(
                     'BRAINTREE_EXTLOGS_ERASING_DISABLED' => array(
                         'title'        => $this->module->l(
@@ -162,7 +160,7 @@ class AdminProcessLoggerController extends \ModuleAdminController
                         'validation'   => 'isInt',
                         'cast'         => 'intval',
                         'type'         => 'text',
-                        'defaultValue' => 90,
+                        'defaultValue' => 5,
                     ),
                 ),
                 'submit'      => array(
@@ -183,27 +181,13 @@ class AdminProcessLoggerController extends \ModuleAdminController
         return empty($echo) ? '' : $echo;
     }
 
-    public function getDateTransaction($date_transaction, $tr)
-    {
-        if ((int)$tr['id_braintree_processlogger'] == false) {
-            return '';
-        }
-        $collectionLogs = new \PrestaShopCollection($this->className);
-        $collectionLogs->where('id_braintree_processlogger', '=', (int)$tr['id_braintree_processlogger']);
-        $log = $collectionLogs->getFirst();
-        if (\Validate::isLoadedObject($log) == false) {
-            return '';
-        }
-        return $log->getDateTransaction();
-    }
-
     public function getLinkToTransaction($id_transaction, $tr)
     {
         if ($id_transaction == false || (int)$tr['id_braintree_processlogger'] == false) {
             return '';
         }
         $collectionLogs = new \PrestaShopCollection($this->className);
-        $collectionLogs->where('id_braintree_processlogger', '=', (int)$tr['id_braintree_processlogger']);
+        $collectionLogs->where('id_paypal_processlogger', '=', (int)$tr['id_paypal_processlogger']);
         $log = $collectionLogs->getFirst();
         if (\Validate::isLoadedObject($log) == false) {
             return '';
