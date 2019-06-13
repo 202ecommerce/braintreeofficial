@@ -29,7 +29,6 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
     public function initContent()
     {
         $this->initBehaviorForm();
-        $this->initMerchantAccountForm();
 
         $this->context->smarty->assign('form', $this->renderForm());
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'customizeCheckout.tpl');
@@ -160,33 +159,5 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
 
-    }
-
-    public function initMerchantAccountForm()
-    {
-        $inputs = array();
-        foreach (Currency::getCurrencies() as $currency) {
-            $inputs[] = array(
-                'type' => 'text',
-                'label' => $this->l('Merchant account Id for ') . $currency['iso_code'],
-                'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']))
-            );
-        }
-        $this->fields_form[]['form'] = array(
-            'legend' => array(
-                'title' => $this->l('Braintree Merchant Accounts'),
-                'icon' => 'icon-cogs',
-            ),
-            'input' => $inputs,
-            'submit' => array(
-                'title' => $this->l('Save'),
-                'class' => 'btn btn-default pull-right button',
-            ),
-        );
-
-        foreach ($inputs as $input) {
-            $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
-        }
-        $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 }

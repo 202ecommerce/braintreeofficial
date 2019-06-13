@@ -34,8 +34,11 @@ class AdminBraintreeController extends \ModuleAdminController
         $this->bootstrap = true;
     }
 
-    public function renderForm()
+    public function renderForm($fields_form = null)
     {
+        if ($fields_form === null) {
+            $fields_form = $this->fields_form;
+        }
         $helper = new \HelperForm();
         $helper->token = \Tools::getAdminTokenLite($this->controller_name);
         $helper->currentIndex = \AdminController::$currentIndex;
@@ -47,7 +50,7 @@ class AdminBraintreeController extends \ModuleAdminController
             'fields_value' => $this->tpl_form_vars,
             'id_language' => $this->context->language->id,
         );
-        return $helper->generateForm($this->fields_form);
+        return $helper->generateForm($fields_form);
     }
 
     public function postProcess()
@@ -65,5 +68,11 @@ class AdminBraintreeController extends \ModuleAdminController
                 \Configuration::updateValue(\Tools::strtoupper($fieldName), pSQL($fieldValue), false, null, $this->context->shop->id);
             }
         }
+    }
+
+    public function clearFieldsForm()
+    {
+        $this->fields_form = array();
+        $this->tpl_form_vars = array();
     }
 }

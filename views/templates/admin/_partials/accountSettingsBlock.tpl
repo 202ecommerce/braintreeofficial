@@ -34,6 +34,9 @@
 
     <p>
         <span class="btn btn-default" data-toggle="modal" data-target="#credentialBlock">
+            {if isset($accountConfigured) && $accountConfigured}
+                {l s='Connected account' mod='braintree'}
+            {/if}
             {l s='Connect or create Braintree account' mod='braintree'}
         </span>
     </p>

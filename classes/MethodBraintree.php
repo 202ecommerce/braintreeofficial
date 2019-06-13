@@ -150,6 +150,18 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
+    * @return bool True if account is configured
+    */
+    public function isConfigured()
+    {
+        $initialModule = $this->init();
+        if (isset($initialModule['error_code'])) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @see AbstractMethodBraintree::validation()
      */
     public function validation()

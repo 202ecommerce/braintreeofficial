@@ -24,31 +24,43 @@
 *}
 
 <div>
+    <p>
+        {l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'utf':'htmlall'}</b>
+    </p>
+
+    <p>
+        {l s='To  modify country:' mod='braintree'} <i>{l s='International > Localization' mod='braintree'}</i>
+    </p>
+
+    <p>
+        <span class="btn btn-default">{l s='Check requirements' mod='braintree'}</span>
+    </p>
+
     <ul class="list-unstyled">
         <li>
-            <i class="icon-check" style="color: green"></i>
-            {l s='PHP cURL extension must be enabled on your server' mod='braintree'}
+            {if isset($tlsVersion) && $tlsVersion['status']}
+                <i class="icon-check" style="color: green"></i>
+                {l s='PHP cURL extension must be enabled on your server' mod='braintree'}
+            {elseif isset($tlsVersion) && $tlsVersion['status'] == false}
+                <i class="icon-remove" style="color: red"></i>
+                {l s='PHP cURL extension must be enabled on your server' mod='braintree'}. {$tlsVersion['error_message']}
+            {/if}
+
         </li>
 
         <li>
-            <i class="icon-check" style="color: green"></i>
-            {l s='Your server must run PHP 5.3 or greater' mod='braintree'}
-        </li>
-
-        <li>
-            <i class="icon-check" style="color: green"></i>
-            {l s='OpenSSL 1.0.1 or later' mod='braintree'}
-        </li>
-
-        <li>
-            <i class="icon-remove" style="color: red"></i>
+            {if isset($accountConfigured) && $accountConfigured}
+                <i class="icon-check" style="color: green"></i>
+            {else}
+                <i class="icon-remove" style="color: red"></i>
+            {/if}
             {l s='You must connect your Braintree account' mod='braintree'}
         </li>
     </ul>
 </div>
 
 <div>
-    <button class="btn btn-default">{l s='Check' mod='braintree'}</button>
+    <span class="btn btn-default">{l s='Check' mod='braintree'}</span>
 </div>
 
 

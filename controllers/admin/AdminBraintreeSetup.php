@@ -24,16 +24,41 @@
  */
 
 use BraintreeAddons\classes\AdminBraintreeController;
+use BraintreeAddons\classes\AbstractMethodBraintree;
 
 class AdminBraintreeSetupController extends AdminBraintreeController
 {
     public function initContent()
     {
         $this->initAccountSettingsBlock();
-        $this->initPaymentSettingsBlock();
-        $this->initStatusBlock();
+        $formAccountSettings = $this->renderForm();
+        $this->clearFieldsForm();
 
-        $this->context->smarty->assign('form', $this->renderForm());
+        $this->initPaymentSettingsBlock();
+        $formPaymentSettings = $this->renderForm();
+        $this->clearFieldsForm();
+
+        $this->initMerchantAccountForm();
+        $formMerchantAccounts = $this->renderForm();
+        $this->clearFieldsForm();
+
+        $this->initEnvironmentSettings();
+        $formEnvironmentSettings = $this->renderForm();
+        $this->clearFieldsForm();
+
+        $this->initStatusBlock();
+        $formStatus = $this->renderForm();
+        $this->clearFieldsForm();
+
+        $tpl_vars = array(
+            'formAccountSettings' => $formAccountSettings,
+            'formPaymentSettings' => $formPaymentSettings,
+            'formMerchantAccounts' => $formMerchantAccounts,
+            'formEnvironmentSettings' => $formEnvironmentSettings,
+            'formStatus' => $formStatus
+
+        );
+        $this->context->smarty->assign($tpl_vars);
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'setup.tpl');
         $this->context->smarty->assign('content', $this->content);
         $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
@@ -41,6 +66,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function initAccountSettingsBlock()
     {
+        /* @var $methodBraintree MethodBraintree*/
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
         $tpl_vars = array(
             'braintree_public_key_live' => Configuration::get('BRAINTREE_PUBLIC_KEY_LIVE'),
             'braintree_public_key_sandbox' => Configuration::get('BRAINTREE_PUBLIC_KEY_SANDBOX'),
@@ -62,6 +89,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
+                    'accountConfigured' => $methodBraintree->isConfigured()
                 )
             )
         );
@@ -69,7 +97,6 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function initPaymentSettingsBlock()
     {
-        $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
         $this->fields_form[]['form'] = array(
             'legend' => array(
                 'title' => $this->l('Payment settings'),
@@ -96,25 +123,6 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                         'name' => 'name'
                     ),
                 ),
-                array(
-                    'type' => 'switch',
-                    'label' => $this->l('Activate sandbox'),
-                    'name' => 'braintree_sandbox',
-                    'is_bool' => true,
-                    'hint' => $this->l('Set up a test environment in your Braintree account (only if you are a developer)'),
-                    'values' => array(
-                        array(
-                            'id' => 'braintree_sandbox_on',
-                            'value' => 1,
-                            'label' => $this->l('Enabled'),
-                        ),
-                        array(
-                            'id' => 'braintree_sandbox_off',
-                            'value' => 0,
-                            'label' => $this->l('Disabled'),
-                        )
-                    ),
-                ),
             ),
             'submit' => array(
                 'title' => $this->l('Save'),
@@ -129,10 +137,87 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
+    public function initEnvironmentSettings()
+    {
+        $this->context->smarty->assign('sandbox', (int)\Configuration::get('BRAINTREE_SANDBOX'));
+        $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
+        $this->fields_form[]['form'] = array(
+            'legend' => array(
+                'title' => $this->l('Environment Settings'),
+                'icon' => 'icon-cogs',
+            ),
+            'input' => array(
+                array(
+                    'type' => 'html',
+                    'html_content' => $html_content,
+                    'name' => '',
+                ),
+                array(
+                    'type' => 'hidden',
+                    'name' => 'braintree_sandbox',
+                )
+            )
+        );
+        $values = array(
+            'braintree_sandbox' => !(int)Configuration::get('BRAINTREE_SANDBOX')
+        );
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
+    }
+
     public function initStatusBlock()
     {
-        $html = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
-        $this->context->smarty->assign('statusBlock', $html);
+        /* @var $methodBraintree MethodBraintree*/
+        $countryDefault = new \Country((int)\Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+
+        $tpl_vars = array(
+            'merchantCountry' => $countryDefault->name,
+            'tlsVersion' => $this->_checkTLSVersion(),
+            'accountConfigured' => $methodBraintree->isConfigured()
+        );
+        $this->context->smarty->assign($tpl_vars);
+        $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
+        $this->fields_form[]['form'] = array(
+            'legend' => array(
+                'title' => $this->l('Status'),
+                'icon' => 'icon-cogs',
+            ),
+            'input' => array(
+                array(
+                    'type' => 'html',
+                    'html_content' => $html_content,
+                    'name' => '',
+                )
+            )
+        );
+    }
+
+    public function initMerchantAccountForm()
+    {
+        $inputs = array();
+        foreach (Currency::getCurrencies() as $currency) {
+            $inputs[] = array(
+                'type' => 'text',
+                'label' => $this->l('Merchant account Id for ') . $currency['iso_code'],
+                'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']))
+            );
+        }
+        $this->fields_form[]['form'] = array(
+            'legend' => array(
+                'title' => $this->l('Braintree Merchant Accounts'),
+                'icon' => 'icon-cogs',
+            ),
+            'input' => $inputs,
+            'submit' => array(
+                'title' => $this->l('Save'),
+                'class' => 'btn btn-default pull-right button',
+            ),
+        );
+
+        foreach ($inputs as $input) {
+            $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
+        }
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     /**

@@ -25,12 +25,31 @@
 
 {include './_partials/headerLogo.tpl'}
 
-<div class="col-lg-8">
-    {$form nofilter}
+<div class="row">
+    <div class="col-lg-8">
+        {if isset($formAccountSettings)}
+            {$formAccountSettings nofilter}
+        {/if}
+
+        {if isset($formPaymentSettings)}
+            {$formPaymentSettings nofilter}
+        {/if}
+
+        {if isset($formMerchantAccounts)}
+            {$formMerchantAccounts nofilter}
+        {/if}
+    </div>
+
+    <div class="col-lg-4">
+        {if isset($formEnvironmentSettings)}
+            {$formEnvironmentSettings nofilter}
+        {/if}
+
+        {if isset($formStatus)}
+            {$formStatus nofilter}
+        {/if}
+    </div>
+
 </div>
 
-<div class="col-lg-4">
-    <div class="panel status-block-container">
-        {$statusBlock nofilter}
-    </div>
-</div>
+
