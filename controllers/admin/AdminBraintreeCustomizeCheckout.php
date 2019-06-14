@@ -33,6 +33,7 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         $this->context->smarty->assign('form', $this->renderForm());
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'customizeCheckout.tpl');
         $this->context->smarty->assign('content', $this->content);
+        $this->addJS('modules/' . $this->module->name . '/views/js/customizeCheckoutAdmin.js');
     }
 
     public function initBehaviorForm()
@@ -126,17 +127,17 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 ),
                 array(
                     'type' => 'switch',
-                    'label' => $this->l('Show Braintree & PayPal logo on your footer pages'),
-                    'name' => 'braintree_show_logo_footer',
+                    'label' => $this->l('Show PayPal benefits to your customers'),
+                    'name' => 'braintree_show_paypal_benefits',
                     'is_bool' => true,
                     'values' => array(
                         array(
-                            'id' => 'braintree_show_logo_footer_on',
+                            'id' => 'braintree_show_paypal_benefits_on',
                             'value' => 1,
                             'label' => $this->l('Enabled'),
                         ),
                         array(
-                            'id' => 'braintree_show_logo_footer_off',
+                            'id' => 'braintree_show_paypal_benefits_off',
                             'value' => 0,
                             'label' => $this->l('Disabled'),
                         )
@@ -155,7 +156,7 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
             'braintree_card_verification' => (int)Configuration::get('BRAINTREE_CARD_VERIFICATION'),
             'braintree_3DSecure' => (int)Configuration::get('BRAINTREE_3DSECURE'),
             'braintree_3DSecure_amount' => (float)Configuration::get('BRAINTREE_3DSECURE_AMOUNT'),
-            'braintree_show_logo_footer' => (int)Configuration::get('BRAINTREE_SHOW_LOGO_FOOTER')
+            'braintree_show_paypal_benefits' => (int)Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
 
