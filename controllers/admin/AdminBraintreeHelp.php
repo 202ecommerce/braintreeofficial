@@ -23,11 +23,32 @@
  * @version   develop
  */
 use BraintreeAddons\classes\AdminBraintreeController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdminBraintreeHelpController extends AdminBraintreeController
 {
+    /**
+     * @throws Exception
+     * @throws SmartyException
+     */
     public function initContent()
     {
+        $need_rounding = (Configuration::get('PS_ROUND_TYPE') != Order::ROUND_ITEM) || (Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_DOWN);
+        $tpl_vars = array(
+            'need_rounding' => $need_rounding,
+        );
+        $this->context->smarty->assign($tpl_vars);
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'help.tpl');
+        $this->context->smarty->assign('content', $this->content);
+        Media::addJsDef(array(
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
+        ));
+        $this->addJS('modules/' . $this->module->name . '/views/js/helpAdmin.js');
+    }
 
+    public function displayAjaxCheckCredentials()
+    {
+        $response = new JsonResponse($this->_checkRequirements());
+        return $response->send();
     }
 }

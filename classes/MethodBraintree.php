@@ -611,7 +611,7 @@ class MethodBraintree extends AbstractMethodBraintree
         );
 
         $braintree_customer = $this->serviceBraintreeCustomer->loadCustomerByMethod(Context::getContext()->customer->id,  (int)Configuration::get('BRAINTREE_SANDBOX'));
-        if (!$braintree_customer->id) {
+        if (Validate::isLoadedObject($braintree_customer) == false) {
             $braintree_customer = $this->createCustomer();
         } else {
             $this->updateCustomer($braintree_customer);

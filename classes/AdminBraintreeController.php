@@ -81,4 +81,65 @@ class AdminBraintreeController extends \ModuleAdminController
         parent::setMedia($isNewTheme);
         $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/admin.css');
     }
+
+    protected function _checkRequirements()
+    {
+        $response = array(
+            'success' => true,
+            'message' => array()
+        );
+        if ((int)\Configuration::get('PS_COUNTRY_DEFAULT') == false) {
+            $response['success'] = false;
+            $response['message'][] = $this->l('To activate a payment solution, please select your default country.');
+
+        }
+        $tls_check = $this->_checkTLSVersion();
+        if ($tls_check['status'] == false) {
+            $response['success'] = false;
+            $response['message'][] = $this->l('Tls verification failed.').' '.$tls_check['error_message'];
+        }
+        if ($response['success']) {
+            $response['message'][] = $this->l('Your shop configuration is OK. You can start to configure the Braintree module.');
+        }
+        return $response;
+    }
+
+    /**
+     * Check TLS version 1.2 compability : CURL request to server
+     */
+    protected function _checkTLSVersion()
+    {
+        $return = array(
+            'status' => false,
+            'error_message' => ''
+        );
+        if (defined('CURL_SSLVERSION_TLSv1_2')) {
+            $tls_server = $this->context->link->getModuleLink($this->module->name, 'tlscurltestserver');
+            $curl = curl_init($tls_server);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+            $response = curl_exec($curl);
+            if ($response != 'ok') {
+                $return['status'] = false;
+                $curl_info = curl_getinfo($curl);
+                if ($curl_info['http_code'] == 401) {
+                    $return['error_message'] = $this->l('401 Unauthorized. Please note that the TLS verification can not be done if you have an htaccess password protection enabled on your web site.');
+                } else {
+                    $return['error_message'] = curl_error($curl);
+                }
+            } else {
+                $return['status'] = true;
+            }
+        } else {
+            $return['status'] = false;
+            if (version_compare(curl_version()['version'], '7.34.0', '<')) {
+                $return['error_message'] = $this->l(' You are using an old version of cURL. Please update your cURL extension to version 7.34.0 or higher.');
+            } else {
+                $return['error_message'] = $this->l('TLS version is not compatible');
+            }
+        }
+        return $return;
+    }
 }

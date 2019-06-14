@@ -29,7 +29,11 @@
     </p>
 
     <p>
-        {l s='To  modify country:' mod='braintree'} <i>{l s='International > Localization' mod='braintree'}</i>
+        {l s='To  modify country:' mod='braintree'}
+        <a href="{$link->getAdminLink('AdminLocalization', true)}"
+           target="_blank">
+            {l s='International > Localization' mod='braintree'}
+        </a>
     </p>
 
     <p>

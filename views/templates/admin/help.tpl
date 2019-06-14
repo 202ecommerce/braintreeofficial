@@ -22,41 +22,64 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
+{include './_partials/headerLogo.tpl'}
+
+{if isset($need_rounding) && $need_rounding}
+    {include file="./_partials/block_info.tpl"}
+{/if}
 
 <div class="panel help">
     <ul class="tick">
-        <li class="paypal-bold li-padding">{l s='Discover module ducumentation before configuration' mod='paypal'}</li>
-        <div class="btn-padding form-group"">
-        <a target="_blank" href="https://addons.prestashop.com/documentation/e582dd0854d8994e815d6c0e8886e703bfdf7713" class="btn btn-default">
-            {l s='Access user documentation for module configuration.' mod='paypal'}
-        </a>
-</div>
-<li class="paypal-bold li-padding">{l s='Check requirements before installation' mod='paypal'}</li>
-{l s='Are you using the required TLS version? Did you select a default country? Click on the button below and check if all requirements are completed!' mod='paypal'}
-<div class="btn-padding form-group"">
-<button  name="submit-ckeck_requirements"  class="btn btn-default" id="ckeck_requirements">{l s='Check requirements' mod='paypal'}</button>
-<br><br>
-<div class="action_response"></div>
+        <li>
+            <p class="h4">
+                {l s='Discover module ducumentation before configuration' mod='braintree'}
+            </p>
+            <p>
+                <a target="_blank"
+                   href="https://addons.prestashop.com/documentation/e582dd0854d8994e815d6c0e8886e703bfdf7713"
+                   class="btn btn-default">
+                    {l s='Access user documentation for module configuration.' mod='braintree'}
+                </a>
+            </p>
+        </li>
+
+
+        <li>
+            <p class="h4">
+                {l s='Check requirements before installation' mod='braintree'}
+            </p>
+            <p>
+                {l s='Are you using the required TLS version? Did you select a default country? Click on the button below and check if all requirements are completed!' mod='braintree'}
+            </p>
+            <p>
+                <button  name="submit-ckeck_requirements"  class="btn btn-default" id="ckeck_requirements">
+                    {l s='Check requirements' mod='braintree'}
+                </button>
+
+                <p class="action_response"></p>
+            </p>
+        </li>
+
+        <li>
+            <p class="h4">
+                {l s='Do you still have any questions?' mod='braintree'}
+            </p>
+            <p>
+                {l s='Contact us! We will be happy to help!' mod='braintree'}
+            </p>
+            <p>
+                <a target="_blank"
+                   href="https://www.paypal.com/fr/webapps/mpp/contact-us"
+                   class="btn btn-default">
+                    {l s='Contact our product team for any functional questions' mod='braintree'}
+                </a>
+            </p>
+            <p>
+                <a target="_blank" href="https://addons.prestashop.com/fr/contactez-nous?id_product=1748" class="btn btn-default">
+                    {l s='Contact our technical support' mod='braintree'}
+                </a>
+            </p>
+        </li>
+    </ul>
 </div>
 
-<li class="paypal-bold li-padding">{l s='Check your transactions history log and potential errors.' mod='paypal'}</li>
-<div class="btn-padding form-group"">
-<a href="{$AdminPaypalProcessLogger_link|addslashes}"
-   class="btn btn-default"
-   target="_blank">{l s='Transaction log' mod='paypal'}</a>
-</div>
-
-<li class="paypal-bold li-padding">{l s='Do you still have any questions?' mod='paypal'}</li>
-{l s='Contact us! We will be happy to help!' mod='paypal'}
-<div class="btn-padding form-group"">
-<a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/contact-us" class="btn btn-default">
-    {l s='Contact our product team for any functional questions' mod='paypal'}
-</a>
-</div>
-<div class="btn-padding form-group">
-    <a target="_blank" href="https://addons.prestashop.com/fr/contactez-nous?id_product=1748" class="btn btn-default">
-        {l s='Contact our technical support' mod='paypal'}
-    </a>
-</div>
-</ul>
-</div>
