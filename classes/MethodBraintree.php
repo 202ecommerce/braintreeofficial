@@ -580,7 +580,6 @@ class MethodBraintree extends AbstractMethodBraintree
             $iso_state = $state->iso_code;
         }
 
-
         $data = array(
             'amount'                => $amount,
             'merchantAccountId'     => Configuration::get($module->getNameMerchantAccountForCurrency($currency)),

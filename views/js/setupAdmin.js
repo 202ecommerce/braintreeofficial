@@ -13,8 +13,26 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+
+
+var SetupAdmin = {
+    init: function() {
+        $('#confirmCredentials').click(function () {
+            $('#configuration_form').submit();
+        });
+
+        $('#logoutAccount').click(function () {
+            SetupAdmin.logoutAccount(this);
+        });
+    },
+
+    logoutAccount: function (element) {
+        var form = $(element).closest('form');
+        form.find('div.current-account input').val('');
+        form.submit();
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-    $('#confirmCredentials').click(function () {
-        $('#configuration_form').submit();
-    });
+    SetupAdmin.init();
 });

@@ -74,7 +74,9 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             'braintree_private_key_live' => Configuration::get('BRAINTREE_PRIVATE_KEY_LIVE'),
             'braintree_private_key_sandbox' => Configuration::get('BRAINTREE_PRIVATE_KEY_SANDBOX'),
             'braintree_merchant_id_live' => Configuration::get('BRAINTREE_MERCHANT_ID_LIVE'),
-            'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX')
+            'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX'),
+            'accountConfigured' => $methodBraintree->isConfigured(),
+            'sandboxEnvironment' => (int)Configuration::get('BRAINTREE_SANDBOX')
         );
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/accountSettingsBlock.tpl');
@@ -89,7 +91,6 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
-                    'accountConfigured' => $methodBraintree->isConfigured()
                 )
             )
         );

@@ -75,4 +75,10 @@ class AdminBraintreeController extends \ModuleAdminController
         $this->fields_form = array();
         $this->tpl_form_vars = array();
     }
+
+    public function setMedia($isNewTheme = false)
+    {
+        parent::setMedia($isNewTheme);
+        $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/admin.css');
+    }
 }

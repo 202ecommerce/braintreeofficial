@@ -26,30 +26,34 @@
 {include './_partials/headerLogo.tpl'}
 
 <div class="row">
-    <div class="col-lg-8">
-        {if isset($formAccountSettings)}
-            {$formAccountSettings nofilter}
-        {/if}
+    <div class="row flex">
+        <div class="col-lg-8 stretchHeightForm">
+            {if isset($formAccountSettings)}
+                {$formAccountSettings nofilter}
+            {/if}
 
-        {if isset($formPaymentSettings)}
-            {$formPaymentSettings nofilter}
-        {/if}
-
-        {if isset($formMerchantAccounts)}
-            {$formMerchantAccounts nofilter}
-        {/if}
+        </div>
+        <div class="col-lg-4">
+            {if isset($formEnvironmentSettings)}
+                {$formEnvironmentSettings nofilter}
+            {/if}
+        </div>
     </div>
 
-    <div class="col-lg-4">
-        {if isset($formEnvironmentSettings)}
-            {$formEnvironmentSettings nofilter}
-        {/if}
+    <div class="row flex">
+        <div class="col-lg-8">
+            {if isset($formPaymentSettings)}
+                {$formPaymentSettings nofilter}
+            {/if}
 
-        {if isset($formStatus)}
-            {$formStatus nofilter}
-        {/if}
+            {if isset($formMerchantAccounts)}
+                {$formMerchantAccounts nofilter}
+            {/if}
+        </div>
+        <div class="col-lg-4 stretchHeightForm">
+            {if isset($formStatus)}
+                {$formStatus nofilter}
+            {/if}
+        </div>
     </div>
-
 </div>
-
-
