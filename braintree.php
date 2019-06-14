@@ -137,6 +137,24 @@ class Braintree extends PaymentModule
             'class_name' => 'AdminBraintreeHelp',
             'parent_class_name' => 'AdminBraintreeConfiguration',
             'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Logs',
+                'fr' => 'Logs'
+            ),
+            'class_name' => 'AdminBraintreeLogs',
+            'parent_class_name' => 'AdminBraintreeConfiguration',
+            'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Report',
+                'fr' => 'Rapport'
+            ),
+            'class_name' => 'AdminBraintreeStats',
+            'parent_class_name' => 'AdminParentBraintreeConfiguration',
+            'visible' => true,
         )
     );
 
@@ -184,7 +202,7 @@ class Braintree extends PaymentModule
         if (parent::install() == false || $this->installOrderState() == false) {
             return false;
         }
-
+        $this->checkBraintreeStats();
         return true;
     }
 
@@ -1153,5 +1171,22 @@ class Braintree extends PaymentModule
             Configuration::updateValue('BRAINTREE_OS_AWAITING_VALIDATION', (int) $order_state->id);
         }
         return true;
+    }
+
+    public function checkBraintreeStats()
+    {
+        /* @var $methodBraintree MethodBraintree*/
+        $tab = Tab::getInstanceFromClassName('AdminBraintreeStats');
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+        $accountConfigured = $methodBraintree->isConfigured();
+        if (Validate::isLoadedObject($tab)) {
+            if ($tab->active && $accountConfigured == false) {
+                $tab->active = false;
+                $tab->save();
+            } elseif ($tab->active == false && $accountConfigured) {
+                $tab->active = true;
+                $tab->save();
+            }
+        }
     }
 }

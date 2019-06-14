@@ -220,4 +220,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         }
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
+
+    public function saveForm()
+    {
+        parent::saveForm();
+        $this->module->checkBraintreeStats();
+    }
 }
