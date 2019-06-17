@@ -50,7 +50,7 @@
                 {$formMerchantAccounts nofilter}
             {/if}
         </div>
-        <div class="col-lg-4 stretchHeightForm">
+        <div class="col-lg-4 stretchHeightForm" id="status-block">
             {if isset($formStatus)}
                 {$formStatus nofilter}
             {/if}

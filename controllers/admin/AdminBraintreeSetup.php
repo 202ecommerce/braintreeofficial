@@ -25,6 +25,7 @@
 
 use BraintreeAddons\classes\AdminBraintreeController;
 use BraintreeAddons\classes\AbstractMethodBraintree;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdminBraintreeSetupController extends AdminBraintreeController
 {
@@ -61,6 +62,9 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $this->context->smarty->assign($tpl_vars);
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'setup.tpl');
         $this->context->smarty->assign('content', $this->content);
+        Media::addJsDef(array(
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
+        ));
         $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
     }
 
@@ -192,6 +196,13 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             )
         );
     }
+    public function displayAjaxCheckCredentials()
+    {
+        $this->initStatusBlock();
+        $response = new JsonResponse($this->renderForm());
+        return $response->send();
+    }
+
 
     public function initMerchantAccountForm()
     {

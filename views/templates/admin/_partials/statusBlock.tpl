@@ -37,7 +37,7 @@
     </p>
 
     <p>
-        <span class="btn btn-default">{l s='Check requirements' mod='braintree'}</span>
+        <span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='braintree'}</span>
     </p>
 
     <ul class="list-unstyled">
@@ -63,8 +63,5 @@
     </ul>
 </div>
 
-<div>
-    <span class="btn btn-default">{l s='Check' mod='braintree'}</span>
-</div>
 
 

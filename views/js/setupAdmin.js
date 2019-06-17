@@ -24,12 +24,30 @@ var SetupAdmin = {
         $('#logoutAccount').click(function () {
             SetupAdmin.logoutAccount(this);
         });
+
+        $(document).on('click', '#btn-check-requirements', function () {
+            SetupAdmin.checkRequirements();
+        })
     },
 
     logoutAccount: function (element) {
         var form = $(element).closest('form');
         form.find('div.current-account input').val('');
         form.submit();
+    },
+
+    checkRequirements: function () {
+        $.ajax({
+            url: controllerUrl,
+            type: 'POST',
+            data: {
+                ajax: true,
+                action: 'CheckCredentials'
+            },
+            success: function (response) {
+                $('#status-block').html(response);
+            }
+        })
     }
 }
 
