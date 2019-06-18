@@ -1,42 +1,48 @@
 .braintree-row-payment {
   padding: 5px 5px 5px 10px;
   margin: 0 0 10px;
-  border-radius: 4px; }
+  border-radius: 4px;
+}
 
 .braintree-row-payment .block_field {
   display: block;
   float: left;
   width: 46%;
   margin-top: 10px;
-  margin-right: 1%; }
+  margin-right: 1%;
+}
 
 .braintree-row-payment .block_field.half_block_field {
   width: 20%;
-  margin-right: 1%; }
+  margin-right: 1%;
+}
+
 
 .braintree-row-payment .half_block_field .hosted_field {
-  width: 100%; }
+  width: 100%;
+}
 
 .braintree-row-payment .hosted_field {
   float: left;
+
   /* width: 250px; */
   height: 34px;
   padding: 6px 12px;
   border: 1px solid #ccc;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0 1px 1px 0 inset;
-  box-shadow: rgba(0, 0, 0, 0.0745098) 0 1px 1px 0 inset;
+  -webkit-box-shadow: rgba(0, 0, 0, .0745098) 0 1px 1px 0 inset;
+  box-shadow: rgba(0, 0, 0, .0745098) 0 1px 1px 0 inset;
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s; }
+}
 
 .braintree-row-payment .braintree-hosted-fields-focused {
   border-color: #66afe9;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+}
 
 .braintree-row-payment #braintree_submit {
   width: 250px;
@@ -61,23 +67,27 @@
   background-color: #337ab7;
   background-image: none;
   border: 1px solid #2e6da4;
-  border-radius: 4px; }
-
+  border-radius: 4px;
+}
 .braintree_clear {
-  clear: both; }
+  clear: both;
+}
 
 .braintree_logo {
-  vertical-align: bottom; }
+  vertical-align: bottom;
+}
 
 .braintree_title_bo {
-  color: #000; }
+  color: #000;
+}
 
 .braintree_error {
   padding: 5px;
   color: white;
   background-color: #f11;
   border: solid 3px red;
-  opacity: .5; }
+  opacity: .5;
+}
 
 #paypal-wrapper .bo_paypal_help {
   display: inline-block;
@@ -87,14 +97,15 @@
   text-align: center;
   text-decoration: none;
   border: 2px solid #036;
-  border-radius: 50%; }
+  border-radius: 50%;
+}
 
 #paypal-wrapper .braintree_link {
-  text-decoration: none; }
-
+  text-decoration: none;
+}
 .braintree-error {
-  display: none; }
-
+  display: none;
+}
 .braintree-card #card-image {
   position: absolute;
   top: 0;
@@ -105,75 +116,77 @@
   background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/346994/card_sprite.png);
   background-repeat: no-repeat;
   background-position: -100px 0;
-  background-size: 86px 458px; }
-
+  background-size: 86px 458px;
+}
 .braintree-card #card-image.visa {
-  background-position: 0 -398px; }
-
+  background-position: 0 -398px;
+}
 .braintree-card #card-image.master-card {
-  background-position: 0 -281px; }
-
+  background-position: 0 -281px;
+}
 .braintree-card #card-image.american-express {
-  background-position: 0 -370px; }
-
+  background-position: 0 -370px;
+}
 .braintree-card #card-image.discover {
-  background-position: 0 -163px; }
-
+  background-position: 0 -163px;
+}
 .braintree-card #card-image.maestro {
-  background-position: 0 -251px; }
-
+  background-position: 0 -251px;
+}
 .braintree-card #card-image.jcb {
-  background-position: 0 -221px; }
-
+  background-position: 0 -221px;
+}
 .braintree-card #card-image.diners-club {
-  background-position: 0 -133px; }
-
+  background-position: 0 -133px;
+}
 .braintree-row-payment #card-number {
-  position: relative; }
-
+  position: relative;
+}
 #paypal-vault-info {
   display: none;
-  margin-bottom: 20px; }
-
+  margin-bottom: 20px;
+}
 #bt-card-error-msg,
 #braintree-error-msg {
   display: none;
-  margin-top: 10px; }
-
+  margin-top: 10px;
+}
 #braintree-error-msg {
-  margin-bottom: 10px; }
-
+  margin-bottom: 10px;
+}
 #logo_braintree_by_paypal {
-  margin-top: 15px; }
+  margin-top: 15px;
+}
 
 /* ------------------VAULT------------- */
 #bt-vault-form {
   margin-top: 10px;
-  margin-bottom: 15px; }
+  margin-bottom: 15px;
+}
 
 #bt-vault-form .form-control {
   padding: .4rem 1rem;
   color: #7a7a7a;
   background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 5px; }
-
+  border: 1px solid rgba(0, 0, 0, .25);
+  border-radius: 5px;
+}
 .save-in-vault {
   margin-top: 10px;
-  margin-bottom: 10px; }
-
+  margin-bottom: 10px;
+}
 label[for="save_card_in_vault"],
 label[for="save_account_in_vault"] {
   display: inline-block !important;
   padding-left: 5px;
-  vertical-align: text-top; }
-
+  vertical-align: text-top;
+}
 @media only screen and (max-width: 500px) {
   .braintree-row-payment .block_field {
-    width: 81%; }
+    width: 81%;
+  }
   .braintree-row-payment .block_field.half_block_field {
     width: 40%;
-    margin-right: 1%; } }
-
-
-/*# sourceMappingURL=braintree.css.map*/
+    margin-right: 1%;
+  }
+}

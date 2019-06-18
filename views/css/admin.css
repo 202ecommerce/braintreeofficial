@@ -1,15 +1,17 @@
 .flex {
-    display: flex;
-}
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
 
 .stretchHeightForm form {
-    height: 100%;
-}
+  height: 100%; }
 
 .stretchHeightForm .panel {
-    height: 100%;
-}
+  height: 100%; }
 
 .stretchHeightForm {
-    padding-bottom: 20px;
-}
+  padding-bottom: 20px; }
+
+
+/*# sourceMappingURL=admin.css.map*/

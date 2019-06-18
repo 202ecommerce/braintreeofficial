@@ -3,3 +3,4 @@ composer.lock
 vendor/*
 !vendor/ppbtlib
 config.xml
+node_modules/
