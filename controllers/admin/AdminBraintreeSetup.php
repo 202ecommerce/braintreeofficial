@@ -112,7 +112,6 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'select',
                     'label' => $this->l('Payment action'),
                     'name' => 'braintree_api_intent',
-                    'desc' => $this->l('We recommend Authoreze process only for lean manufacturers and craft products sellers.'),
                     'options' => array(
                         'query' => array(
                             array(
@@ -128,6 +127,11 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                         'name' => 'name'
                     ),
                 ),
+                array(
+                    'type' => 'html',
+                    'name' => '',
+                    'html_content' => $this->module->displayInformation($this->l('We recommend Authoreze process only for lean manufacturers and craft products sellers.'))
+                )
             ),
             'submit' => array(
                 'title' => $this->l('Save'),
@@ -196,13 +200,13 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             )
         );
     }
+
     public function displayAjaxCheckCredentials()
     {
         $this->initStatusBlock();
         $response = new JsonResponse($this->renderForm());
         return $response->send();
     }
-
 
     public function initMerchantAccountForm()
     {
