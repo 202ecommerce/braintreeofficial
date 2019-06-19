@@ -5,3 +5,5 @@ vendor/*
 config.xml
 node_modules/
 package-lock.json
+views/js/*
+views/css/*
