@@ -84,4 +84,33 @@ class ServiceBraintreeVaulting
         return $methods;
     }
 
+    /**
+     *   Migration of the vaulting from the module "paypal" to the module "braintree"
+     */
+    public function doMigration()
+    {
+        if (\Module::isInstalled('paypal')) {
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalVaulting.php';
+            $collection = new \PrestaShopCollection('PaypalVaulting');
+
+            if ($collection->count() == 0) {
+                return;
+            }
+
+            /* @var $paypalVaulting \PaypalVaulting*/
+            foreach ($collection->getResults() as $paypalVaulting) {
+                $braintreeVaulting = new BraintreeVaulting();
+                $braintreeVaulting->id = $paypalVaulting->id;
+                $braintreeVaulting->token = $paypalVaulting->token;
+                $braintreeVaulting->id_braintree_customer = $paypalVaulting->id_paypal_customer;
+                $braintreeVaulting->payment_tool = $paypalVaulting->payment_tool;
+                $braintreeVaulting->name = $paypalVaulting->name;
+                $braintreeVaulting->info = $paypalVaulting->info;
+                $braintreeVaulting->date_add = $paypalVaulting->date_add;
+                $braintreeVaulting->date_upd = $paypalVaulting->date_upd;
+                //$braintreeVaulting->save();
+            }
+        }
+    }
+
 }

@@ -26,6 +26,7 @@
 
 namespace BraintreeAddons\services;
 use BraintreeAddons\classes\BraintreeCapture;
+use Symfony\Component\VarDumper\VarDumper;
 
 class ServiceBraintreeCapture
 {
@@ -74,6 +75,58 @@ class ServiceBraintreeCapture
         $sql->innerJoin('braintree_capture', 'bc', 'bo.`id_braintree_order` = bc.`id_braintree_order`');
         $sql->where('bo.id_order = '.(int)$id_order);
         return \Db::getInstance()->getRow($sql);
+    }
+
+    /**
+     *   Migration of the captures from the module "paypal" to the module "braintree"
+     */
+    public function doMigration()
+    {
+        if (\Module::isInstalled('paypal')) {
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalCapture.php';
+            $collection = new \PrestaShopCollection('PaypalCapture');
+            $collection->where('id_paypal_order', 'in', $this->getPayPalOrderBtId());
+
+            if ($collection->count() == 0) {
+                return;
+            }
+
+            /* @var $paypalCapture \PaypalCapture*/
+            foreach ($collection->getResults() as $paypalCapture) {
+                $braintreeCapture = new BraintreeCapture();
+                $braintreeCapture->id = $paypalCapture->id;
+                $braintreeCapture->id_capture = $paypalCapture->id_capture;
+                $braintreeCapture->capture_amount = $paypalCapture->capture_amount;
+                $braintreeCapture->id_braintree_order = $paypalCapture->id_paypal_order;
+                $braintreeCapture->result = $paypalCapture->result;
+                $braintreeCapture->date_add = $paypalCapture->date_add;
+                $braintreeCapture->date_upd = $paypalCapture->date_upd;
+                //$braintreeCapture->save();
+            }
+        }
+    }
+
+    /**
+     * @return array id PaypalOrder
+     */
+    public function getPayPalOrderBtId()
+    {
+        $query = new \DbQuery();
+        $query->select('id_paypal_order');
+        $query->from('paypal_order');
+        $query->where('method="BT"');
+
+        $result = \DB::getInstance()->executeS($query);
+        $paypalOrderBtIds = array();
+        if (empty($result)) {
+            return $paypalOrderBtIds;
+        }
+
+        foreach ($result as $row) {
+            $paypalOrderBtIds[] = $row['id_paypal_order'];
+        }
+
+        return $paypalOrderBtIds;
     }
 
 }

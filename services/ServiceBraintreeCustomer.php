@@ -27,6 +27,7 @@
 namespace BraintreeAddons\services;
 
 use BraintreeAddons\classes\BraintreeCustomer;
+use Symfony\Component\VarDumper\VarDumper;
 
 class ServiceBraintreeCustomer
 {
@@ -42,5 +43,33 @@ class ServiceBraintreeCustomer
         $collection->where('id_customer', '=', (int)$id_customer);
         $collection->where('sandbox', '=', (int)$sandbox);
         return $collection->getFirst();
+    }
+
+    /**
+    *   Migration of the customers from the module "paypal" to the module "braintree"
+    */
+    public function doMigration()
+    {
+        if (\Module::isInstalled('paypal')) {
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalCustomer.php';
+            $collection = new \PrestaShopCollection('PaypalCustomer');
+            $collection->where('method', '=', 'BT');
+
+            if ($collection->count() == 0) {
+                return;
+            }
+
+            /* @var $paypalCustomer \PaypalCustomer*/
+            foreach ($collection->getResults() as $paypalCustomer) {
+                $braintreeCustomer = new BraintreeCustomer();
+                $braintreeCustomer->id = $paypalCustomer->id;
+                $braintreeCustomer->reference = $paypalCustomer->reference;
+                $braintreeCustomer->id_customer = $paypalCustomer->id_customer;
+                $braintreeCustomer->sandbox = isset($paypalCustomer->sandbox) ? $paypalCustomer->sandbox : null;
+                $braintreeCustomer->date_add = $paypalCustomer->date_add;
+                $braintreeCustomer->date_upd = $paypalCustomer->date_upd;
+                //$braintreeCustomer->save();
+            }
+        }
     }
 }

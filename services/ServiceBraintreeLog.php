@@ -26,13 +26,14 @@
 
 namespace BraintreeAddons\services;
 
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
+use BraintreeAddons\classes\BraintreeLog;
 use BraintreeAddons\classes\AbstractMethodBraintree;
+use Symfony\Component\VarDumper\VarDumper;
 
 class ServiceBraintreeLog
 {
     /**
-     * @param $log ProcessLoggerObjectModel
+     * @param $log BraintreeLog
      * @return url
      */
     public function getLinkToTransaction($log)
@@ -44,5 +45,60 @@ class ServiceBraintreeLog
 
         $method = AbstractMethodBraintree::load('Braintree');
         return $method->getLinkToTransaction($log->id_transaction, $log->sandbox);
+    }
+
+    /**
+     *   Migration of the logs from the module "paypal" to the module "braintree"
+     */
+    public function doMigration()
+    {
+        if (\Module::isInstalled('paypal') && file_exists(_PS_MODULE_DIR_ . 'paypal/classes/PaypalLog.php')) {
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalLog.php';
+            $collection = new \PrestaShopCollection('PaypalLog');
+            $collection->where('id_cart', 'in', $this->getCartBtId());
+
+            if ($collection->count() == 0) {
+                return;
+            }
+
+            /* @var $paypalLog \PaypalLog*/
+            foreach ($collection->getResults() as $paypalLog) {
+                $braintreeLog = new BraintreeLog();
+                $braintreeLog->id_cart = $paypalLog->id_cart;
+                $braintreeLog->id_order = $paypalLog->id_order;
+                $braintreeLog->id_transaction = $paypalLog->id_transaction;
+                $braintreeLog->sandbox = $paypalLog->sandbox;
+                $braintreeLog->date_transaction = $paypalLog->date_transaction;
+                $braintreeLog->date_add = $paypalLog->date_add;
+                $braintreeLog->tools = $paypalLog->tools;
+                $braintreeLog->status = $paypalLog->status;
+                $braintreeLog->id_shop = $paypalLog->id_shop;
+                $braintreeLog->log = $paypalLog->log;
+                //$braintreeOrder->save();
+            }
+        }
+    }
+
+    /**
+     * @return array id cart
+     */
+    public function getCartBtId()
+    {
+        $query = new \DbQuery();
+        $query->select('id_cart');
+        $query->from('paypal_order');
+        $query->where('method="BT"');
+
+        $result = \DB::getInstance()->executeS($query);
+        $cartBtIds = array();
+        if (empty($result)) {
+            return $cartBtIds;
+        }
+
+        foreach ($result as $row) {
+            $cartBtIds[] = $row['id_cart'];
+        }
+
+        return $cartBtIds;
     }
 }

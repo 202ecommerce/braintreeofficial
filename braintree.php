@@ -155,6 +155,15 @@ class Braintree extends PaymentModule
             'class_name' => 'AdminBraintreeStats',
             'parent_class_name' => 'AdminParentBraintreeConfiguration',
             'visible' => true,
+        ),
+        array(
+            'name' => array(
+                'en' => 'Migration',
+                'fr' => 'Migration'
+            ),
+            'class_name' => 'AdminBraintreeMigration',
+            'parent_class_name' => 'AdminParentBraintreeConfiguration',
+            'visible' => false,
         )
     );
 

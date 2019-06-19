@@ -31,6 +31,9 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 {
     public function initContent()
     {
+        if (Configuration::get('BRAINTREE_MIGRATION_DONE') != '1') {
+            return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeMigration', true));
+        }
         $this->initAccountSettingsBlock();
         $formAccountSettings = $this->renderForm();
         $this->clearFieldsForm();
@@ -241,4 +244,5 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         parent::saveForm();
         $this->module->checkBraintreeStats();
     }
+
 }

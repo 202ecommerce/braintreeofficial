@@ -65,4 +65,39 @@ class ServiceBraintreeOrder
         return $collection->getFirst();
     }
 
+    /**
+     *   Migration of the orders from the module "paypal" to the module "braintree"
+     */
+    public function doMigration()
+    {
+        if (\Module::isInstalled('paypal')) {
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalOrder.php';
+            $collection = new \PrestaShopCollection('PaypalOrder');
+            $collection->where('method', '=', 'BT');
+
+            if ($collection->count() == 0) {
+                return;
+            }
+
+            /* @var $paypalOrder \PaypalOrder*/
+            foreach ($collection->getResults() as $paypalOrder) {
+                $braintreeOrder = new BraintreeOrder();
+                $braintreeOrder->id = $paypalOrder->id;
+                $braintreeOrder->id_order = $paypalOrder->id_order;
+                $braintreeOrder->payment_tool = $paypalOrder->payment_tool;
+                $braintreeOrder->id_cart = $paypalOrder->id_cart;
+                $braintreeOrder->id_payment = $paypalOrder->id_payment;
+                $braintreeOrder->id_transaction = $paypalOrder->id_transaction;
+                $braintreeOrder->sandbox = isset($paypalOrder->sandbox) ? $paypalOrder->sandbox : null;
+                $braintreeOrder->currency = $paypalOrder->currency;
+                $braintreeOrder->payment_status = $paypalOrder->payment_status;
+                $braintreeOrder->total_paid = $paypalOrder->total_paid;
+                $braintreeOrder->total_prestashop = $paypalOrder->total_prestashop;
+                $braintreeOrder->date_add = $paypalOrder->date_add;
+                $braintreeOrder->date_upd = $paypalOrder->date_upd;
+                //$braintreeOrder->save();
+            }
+        }
+    }
+
 }
