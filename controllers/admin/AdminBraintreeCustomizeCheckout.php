@@ -64,6 +64,25 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 ),
                 array(
                     'type' => 'switch',
+                    'label' => $this->l('Show PayPal benefits to your customers'),
+                    'name' => 'braintree_show_paypal_benefits',
+                    'hint' => $this->l('You can increase your conversion rate by presenting PayPal benefits to your customers on payment methods selection page.'),
+                    'is_bool' => true,
+                    'values' => array(
+                        array(
+                            'id' => 'braintree_show_paypal_benefits_on',
+                            'value' => 1,
+                            'label' => $this->l('Enabled'),
+                        ),
+                        array(
+                            'id' => 'braintree_show_paypal_benefits_off',
+                            'value' => 0,
+                            'label' => $this->l('Disabled'),
+                        )
+                    ),
+                ),
+                array(
+                    'type' => 'switch',
                     'label' => $this->l('Enable Vault'),
                     'name' => 'braintree_vaulting',
                     'is_bool' => true,
@@ -123,24 +142,6 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                     'label' => $this->l('Amount for 3DS in ') . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code'],
                     'name' => 'braintree_3DSecure_amount',
                     'hint' => $this->l('Activate 3D Secure only for orders which total is bigger that this amount in your context currency'),
-                ),
-                array(
-                    'type' => 'switch',
-                    'label' => $this->l('Show PayPal benefits to your customers'),
-                    'name' => 'braintree_show_paypal_benefits',
-                    'is_bool' => true,
-                    'values' => array(
-                        array(
-                            'id' => 'braintree_show_paypal_benefits_on',
-                            'value' => 1,
-                            'label' => $this->l('Enabled'),
-                        ),
-                        array(
-                            'id' => 'braintree_show_paypal_benefits_off',
-                            'value' => 0,
-                            'label' => $this->l('Disabled'),
-                        )
-                    ),
                 ),
             ),
             'submit' => array(

@@ -26,24 +26,26 @@ var CustomizeCheckout = {
     const usePayPal = $('input[name="braintree_activate_paypal"]');
     const enable3DSecure = $('input[name="braintree_3DSecure"]');
     const enableCardVerification = $('input[name="braintree_card_verification"]');
+    const enableVault = $('input[name="braintree_vaulting"]');
+    const showPayPalBenefits = $('input[name="braintree_show_paypal_benefits"]');
+    const Amount3DSecure = $('input[name="braintree_3DSecure_amount"]');
 
     if (usePayPal.prop('checked') == false) {
-      this.hideConfiguration('braintree_show_paypal_benefits');
+      this.hideConfiguration(showPayPalBenefits.attr('name'));
     } else {
-      this.showConfiguration('braintree_show_paypal_benefits');
+      this.showConfiguration(showPayPalBenefits.attr('name'));
     }
 
-    if (enableCardVerification.prop('checked') == false) {
-      this.hideConfiguration('braintree_3DSecure');
-      this.hideConfiguration('braintree_3DSecure_amount');
+    if (enableVault.prop('checked') == false) {
+      this.hideConfiguration(enableCardVerification.attr('name'));
     } else {
-      this.showConfiguration('braintree_3DSecure');
+        this.showConfiguration(enableCardVerification.attr('name'));
     }
 
     if (enable3DSecure.prop('checked') == false) {
-      this.hideConfiguration('braintree_3DSecure_amount');
+      this.hideConfiguration(Amount3DSecure.attr('name'));
     } else {
-      this.showConfiguration('braintree_3DSecure_amount');
+      this.showConfiguration(Amount3DSecure.attr('name'));
     }
   },
 
@@ -68,6 +70,11 @@ var CustomizeCheckout = {
     $(`input#${name}_on`).prop('checked', false);
     $(`input#${name}_off`).prop('checked', true);
   },
+
+  enableConfiguration(name) {
+      $(`input#${name}_on`).prop('checked', true);
+      $(`input#${name}_off`).prop('checked', false);
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
