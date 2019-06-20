@@ -101,7 +101,7 @@ class ServiceBraintreeCapture
                 $braintreeCapture->result = $paypalCapture->result;
                 $braintreeCapture->date_add = $paypalCapture->date_add;
                 $braintreeCapture->date_upd = $paypalCapture->date_upd;
-                //$braintreeCapture->save();
+                $braintreeCapture->save();
             }
         }
     }

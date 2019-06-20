@@ -108,7 +108,7 @@ class ServiceBraintreeVaulting
                 $braintreeVaulting->info = $paypalVaulting->info;
                 $braintreeVaulting->date_add = $paypalVaulting->date_add;
                 $braintreeVaulting->date_upd = $paypalVaulting->date_upd;
-                //$braintreeVaulting->save();
+                $braintreeVaulting->save();
             }
         }
     }

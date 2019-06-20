@@ -34,6 +34,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         if (Configuration::get('BRAINTREE_MIGRATION_DONE') != '1') {
             return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeMigration', true));
         }
+
         $this->initAccountSettingsBlock();
         $formAccountSettings = $this->renderForm();
         $this->clearFieldsForm();
@@ -73,18 +74,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function initAccountSettingsBlock()
     {
-        /* @var $methodBraintree MethodBraintree*/
-        $methodBraintree = AbstractMethodBraintree::load('Braintree');
-        $tpl_vars = array(
-            'braintree_public_key_live' => Configuration::get('BRAINTREE_PUBLIC_KEY_LIVE'),
-            'braintree_public_key_sandbox' => Configuration::get('BRAINTREE_PUBLIC_KEY_SANDBOX'),
-            'braintree_private_key_live' => Configuration::get('BRAINTREE_PRIVATE_KEY_LIVE'),
-            'braintree_private_key_sandbox' => Configuration::get('BRAINTREE_PRIVATE_KEY_SANDBOX'),
-            'braintree_merchant_id_live' => Configuration::get('BRAINTREE_MERCHANT_ID_LIVE'),
-            'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX'),
-            'accountConfigured' => $methodBraintree->isConfigured(),
-            'sandboxEnvironment' => (int)Configuration::get('BRAINTREE_SANDBOX')
-        );
+        $tpl_vars = $this->getCredentialsTplVars();
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/accountSettingsBlock.tpl');
 
@@ -101,6 +91,23 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 )
             )
         );
+    }
+
+    public function getCredentialsTplVars()
+    {
+        /* @var $methodBraintree MethodBraintree*/
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+        $tpl_vars = array(
+            'braintree_public_key_live' => Configuration::get('BRAINTREE_PUBLIC_KEY_LIVE'),
+            'braintree_public_key_sandbox' => Configuration::get('BRAINTREE_PUBLIC_KEY_SANDBOX'),
+            'braintree_private_key_live' => Configuration::get('BRAINTREE_PRIVATE_KEY_LIVE'),
+            'braintree_private_key_sandbox' => Configuration::get('BRAINTREE_PRIVATE_KEY_SANDBOX'),
+            'braintree_merchant_id_live' => Configuration::get('BRAINTREE_MERCHANT_ID_LIVE'),
+            'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX'),
+            'accountConfigured' => $methodBraintree->isConfigured(),
+            'sandboxEnvironment' => (int)Configuration::get('BRAINTREE_SANDBOX')
+        );
+        return $tpl_vars;
     }
 
     public function initPaymentSettingsBlock()

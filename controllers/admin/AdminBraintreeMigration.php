@@ -23,7 +23,7 @@
  * @version   develop
  */
 
-use BraintreeAddons\classes\AdminBraintreeController;
+require_once _PS_MODULE_DIR_ . 'braintree/controllers/admin/AdminBraintreeSetup.php';
 use BraintreeAddons\classes\AbstractMethodBraintree;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BraintreeAddons\services\ServiceBraintreeCustomer;
@@ -32,16 +32,33 @@ use BraintreeAddons\services\ServiceBraintreeOrder;
 use BraintreeAddons\services\ServiceBraintreeCapture;
 use BraintreeAddons\services\ServiceBraintreeLog;
 
-class AdminBraintreeMigrationController extends AdminBraintreeController
+class AdminBraintreeMigrationController extends AdminBraintreeSetupController
 {
     public function initContent()
     {
-
+        $this->content = $this->getStepOne();
         $this->context->smarty->assign('content', $this->content);
         Media::addJsDef(array(
             'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
         ));
-        $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
+        $this->addJS('modules/' . $this->module->name . '/views/js/migrationAdmin.js');
+    }
+
+    public function getStepOne()
+    {
+        return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/migrationStepOne.tpl');
+    }
+
+    public function getStepTwo()
+    {
+        $tpl_vars = $this->getCredentialsTplVars();
+        $this->context->smarty->assign($tpl_vars);
+        return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/migrationStepTwo.tpl');
+    }
+
+    public function getStepThree()
+    {
+        return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/migrationStepThree.tpl');
     }
 
     protected function doMigration()
@@ -56,13 +73,13 @@ class AdminBraintreeMigrationController extends AdminBraintreeController
         $serviceBraintreeVaulting->doMigration();
         $serviceBraintreeOrder->doMigration();
         $serviceBraintreeCapture->doMigration();
-        $serviceBraintreeLog->doMigration();
+        //$serviceBraintreeLog->doMigration();
 
         Configuration::updateValue('BRAINTREE_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID'));
         Configuration::updateValue('BRAINTREE_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID'));
         Configuration::updateValue('BRAINTREE_API_INTENT', Configuration::get('PAYPAL_API_INTENT'));
         Configuration::updateValue('BRAINTREE_SANDBOX', Configuration::get('PAYPAL_SANDBOX'));
-        Configuration::updateValue('BRAINTREE_ACTIVE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE'));
+        Configuration::updateValue('BRAINTREE_ACTIVATE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE'));
         Configuration::updateValue('BRAINTREE_SHOW_PAYPAL_BENEFITS', Configuration::get('PAYPAL_API_ADVANTAGES'));
         Configuration::updateValue('BRAINTREE_VAULTING', Configuration::get('PAYPAL_VAULTING'));
         Configuration::updateValue('BRAINTREE_CARD_VERIFICATION', Configuration::get('PAYPAL_BT_CARD_VERIFICATION'));
@@ -92,8 +109,36 @@ class AdminBraintreeMigrationController extends AdminBraintreeController
         }
     }
 
-    public function ajaxDisplayMigration()
+    public function displayAjaxStartMigration()
     {
         $this->doMigration();
+        $content = Tools::jsonEncode(array(
+            'status' => true,
+            'content' => $this->getStepTwo(),
+        ));
+        $response = new JsonResponse();
+        $response->setContent($content);
+        return $response->send();
+    }
+
+    public function displayAjaxSaveAccount()
+    {
+        /* @var $method MethodBraintree*/
+        $this->saveForm();
+        $method = AbstractMethodBraintree::load('Braintree');
+        $isConfigured = $method->isConfigured();
+
+        if ($isConfigured) {
+            Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1);
+        }
+
+        $content = Tools::jsonEncode(array(
+            'status' => $isConfigured,
+            'content' => $isConfigured == false ? $this->l('An error occurred while creating your web experience. Check your credentials.') : $this->getStepThree(),
+        ));
+
+        $response = new JsonResponse();
+        $response->setContent($content);
+        return $response->send();
     }
 }

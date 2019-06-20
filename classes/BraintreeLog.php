@@ -33,7 +33,7 @@ use BraintreeAddons\services\ServiceBraintreeLog;
  */
 class BraintreeLog extends ProcessLoggerObjectModel
 {
-    /* @var object object service*/
+    /* @var ServiceBraintreeLog object service*/
     protected $serviceLog;
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)

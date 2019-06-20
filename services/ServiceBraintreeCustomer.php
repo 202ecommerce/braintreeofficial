@@ -68,7 +68,7 @@ class ServiceBraintreeCustomer
                 $braintreeCustomer->sandbox = isset($paypalCustomer->sandbox) ? $paypalCustomer->sandbox : null;
                 $braintreeCustomer->date_add = $paypalCustomer->date_add;
                 $braintreeCustomer->date_upd = $paypalCustomer->date_upd;
-                //$braintreeCustomer->save();
+                $braintreeCustomer->save();
             }
         }
     }

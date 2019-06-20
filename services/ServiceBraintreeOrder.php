@@ -95,7 +95,7 @@ class ServiceBraintreeOrder
                 $braintreeOrder->total_prestashop = $paypalOrder->total_prestashop;
                 $braintreeOrder->date_add = $paypalOrder->date_add;
                 $braintreeOrder->date_upd = $paypalOrder->date_upd;
-                //$braintreeOrder->save();
+                $braintreeOrder->save();
             }
         }
     }

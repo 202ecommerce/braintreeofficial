@@ -1,5 +1,5 @@
 .flex {
-  display: flex;
+  display: flex !important;
 }
 
 .stretchHeightForm form {
@@ -13,3 +13,33 @@
 .stretchHeightForm {
   padding-bottom: 20px;
 }
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.direction-column {
+  flex-direction: column;
+}
+
+.font-italic {
+  font-style: italic;
+}
+
+.migration-page {
+  .form-account {
+    display:none;
+  }
+  .form-account.current-account {
+    display: block;
+  }
+}
+

@@ -74,7 +74,8 @@ class ServiceBraintreeLog
                 $braintreeLog->status = $paypalLog->status;
                 $braintreeLog->id_shop = $paypalLog->id_shop;
                 $braintreeLog->log = $paypalLog->log;
-                //$braintreeOrder->save();
+                $braintreeLog->save();
+
             }
         }
     }
