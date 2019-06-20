@@ -22,12 +22,12 @@ $(document).ready(() => {
 let bt_hosted_fileds;
 let bt_client_instance;
 
-function initBraintreeCard() {
+const initBraintreeCard = () => {
   braintree.client.create({
     authorization,
   }, (clientErr, clientInstance) => {
     if (clientErr) {
-      $('#bt-card-error-msg').show().text(bt_translations.client);
+      $('[data-bt-card-error-msg]').show().text(bt_translations.client);
       return;
     }
 
@@ -36,9 +36,11 @@ function initBraintreeCard() {
       styles: {
         input: {
           color: '#999999',
+          'background': '#fff',
+          'height': '20px',
           'font-size': '14px',
           'font-family': 'PayPal Forward, sans-serif',
-        },
+        }
       },
       fields: {
         number: {
@@ -47,7 +49,7 @@ function initBraintreeCard() {
         },
         cvv: {
           selector: '#cvv',
-          placeholder: bt_translations.cvc,
+          placeholder: '123',
         },
         expirationDate: {
           selector: '#expiration-date',
@@ -56,7 +58,7 @@ function initBraintreeCard() {
       },
     }, (hostedFieldsErr, hostedFieldsInstance) => {
       if (hostedFieldsErr) {
-        $('#bt-card-error-msg').show().text(bt_translations.hosted);
+        $('[data-bt-card-error-msg]').show().text(bt_translations.hosted);
         return;
       }
 
@@ -65,34 +67,61 @@ function initBraintreeCard() {
       });
 
       hostedFieldsInstance.on('cardTypeChange', (event) => {
+
         // Change card bg depending on card type
         if (event.cards.length === 1) {
           $('.braintree-card #card-image').removeClass().addClass(event.cards[0].type);
         }
+
+        // Change placeholder value for CVV depending on card type
+        if (event.cards[0].code.size === 4) {          
+          hostedFieldsInstance.setAttribute({
+            field: 'cvv',
+            attribute: 'placeholder',
+            value: '1234'
+          });
+        }
+
       });
 
-      hostedFieldsInstance.on('blur', (event) => {
-        let popup_message = '';
+      hostedFieldsInstance.on('blur', (event) => {        
         const blur_field_info = event.fields[event.emittedBy];
-        if (blur_field_info.isEmpty) {
-          popup_message = `${bt_translations[event.emittedBy]} ${bt_translations.empty_field}`;
-        } else if (!blur_field_info.isValid) {
-          popup_message = `${bt_translations.invalid} ${bt_translations[event.emittedBy]}`;
-        }
-        if (popup_message) {
-          $('#bt-card-error-msg').show().text(popup_message);
-        } else {
-          $('#bt-card-error-msg').hide();
-        }
+        setErrorMsg(event.emittedBy, blur_field_info);      
       });
+
+      hostedFieldsInstance.on('focus', (event) => {
+        const focused_field_info = event.fields[event.emittedBy];
+        const $el = $(`#${focused_field_info.container.id}`);
+        $el.parent().find('[data-bt-error-msg]').hide();        
+      });
+
       bt_hosted_fileds = hostedFieldsInstance;
       bt_client_instance = clientInstance;
     });
   });
 }
 
-function BraintreeSubmitPayment() {
-  const bt_form = document.querySelector('#braintree-card-form');
+const setErrorMsg = (el, field) => {
+  let popup_message = '';
+  const $el = $(`#${field.container.id}`);
+  const $msgBlock = $el.parent().find('[data-bt-error-msg]');
+  if (field.isEmpty) {          
+    popup_message = `${bt_translations[el]} ${field.container.id !== 'cvv' ? `${bt_translations.empty_field}` : ''}`;
+  } else if (!field.isValid) {
+    popup_message = `${bt_translations[el]} ${bt_translations.invalid}`;
+  }
+  if (popup_message) {  
+    $el.addClass('braintree-hosted-fields-invalid'); 
+    $msgBlock.show();       
+    $msgBlock.html(popup_message);
+  } else {             
+    $el.removeClass('braintree-hosted-fields-invalid'); 
+    $msgBlock.hide();
+  }
+}
+
+const BraintreeSubmitPayment = () => {
+  const bt_form = $('[data-braintree-card-form]');
 
   // use vaulted card
   if ($('select[name=bt_vaulting_token]').val()) {
@@ -108,7 +137,7 @@ function BraintreeSubmitPayment() {
             default:
               popup_message = bt_translations.load_3d;
           }
-          $('#bt-card-error-msg').show().text(popup_message);
+          $('[data-bt-card-error-msg]').show().text(popup_message);
           return false;
         }
         threeDSecure.verifyCard({
@@ -136,7 +165,7 @@ function BraintreeSubmitPayment() {
               default:
                 popup_message = bt_translations.failed_3d;
             }
-            $('#bt-card-error-msg').show().text(popup_message);
+            $('[data-bt-card-error-msg]').show().text(popup_message);
             return false;
           }
           bt_form.submit();
@@ -147,25 +176,25 @@ function BraintreeSubmitPayment() {
     }
   } else {
     bt_hosted_fileds.tokenize((tokenizeErr, payload) => {
-      if (tokenizeErr) {
+      if (tokenizeErr) {        
+        Object.entries(bt_hosted_fileds._state.fields).forEach(entry => {
+          setErrorMsg(entry[0], entry[1]);
+        });       
+      
         var popup_message = '';
-        switch (tokenizeErr.code) {
-          case 'HOSTED_FIELDS_FIELDS_EMPTY':
-            popup_message = bt_translations.empty;
-            break;
-          case 'HOSTED_FIELDS_FIELDS_INVALID':
-            popup_message = bt_translations.invalid + tokenizeErr.details.invalidFieldKeys;
-            break;
-          case 'HOSTED_FIELDS_FAILED_TOKENIZATION':
-            popup_message = bt_translations.token;
-            break;
-          case 'HOSTED_FIELDS_TOKENIZATION_NETWORK_ERROR':
-            popup_message = bt_translations.network;
-            break;
-          default:
-            popup_message = bt_translations.tkn_failed;
+        if (tokenizeErr.code !== 'HOSTED_FIELDS_FIELDS_EMPTY' && tokenizeErr.code !== 'HOSTED_FIELDS_FIELDS_INVALID') {      
+          switch (tokenizeErr.code) {
+            case 'HOSTED_FIELDS_FAILED_TOKENIZATION':
+              popup_message = bt_translations.token;
+              break;
+            case 'HOSTED_FIELDS_TOKENIZATION_NETWORK_ERROR':
+              popup_message = bt_translations.network;
+              break;
+            default:
+              popup_message = bt_translations.tkn_failed;
+          }
+          $('[data-bt-card-error-msg]').show().text(popup_message);
         }
-        $('#bt-card-error-msg').show().text(popup_message);
         return false;
       }
       if (check3DS) {
@@ -180,7 +209,7 @@ function BraintreeSubmitPayment() {
               default:
                 popup_message = bt_translations.load_3d;
             }
-            $('#bt-card-error-msg').show().text(popup_message);
+            $('[data-bt-card-error-msg]').show().text(popup_message);
             return false;
           }
           threeDSecure.verifyCard({
@@ -208,19 +237,22 @@ function BraintreeSubmitPayment() {
                 default:
                   popup_message = bt_translations.failed_3d;
               }
-              $('#bt-card-error-msg').show().text(popup_message);
+              $('[data-bt-card-error-msg]').show().text(popup_message);
               return false;
             }
 
-            document.querySelector('#braintree-card-form #payment_method_nonce').value = three_d_secure_response.nonce;
-            document.querySelector('#braintree-card-form #braintree_card_type').value = payload.details.cardType;
+            $('[data-bt-payment-method-nonce]').val(three_d_secure_response.nonce);
+            $('[data-bt-card-type]').val(payload.details.cardType);
             bt_form.submit();
           });
         });
       } else {
-        document.querySelector('#braintree-card-form #payment_method_nonce').value = payload.nonce;
+        $('[data-bt-payment-method-nonce]').val(payload.nonce);
         bt_form.submit();
       }
     });
   }
 }
+
+// Make function BraintreeSubmitPayment global for call in main module file
+window.BraintreeSubmitPayment = BraintreeSubmitPayment;

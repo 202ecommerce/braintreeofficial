@@ -26,80 +26,85 @@
 
 {*Displaying a button or the iframe*}
 <div class="row">
-    <div class="col-xs-12 col-md-10">
-        <div class="braintree-row-payment">
-            <div class="payment_module braintree-card">
-                <form action="{$braintreeSubmitUrl}" id="braintree-card-form" method="post">
-                {if isset($init_error)}
-                    <div class="alert alert-danger">{$init_error|escape:'htmlall':'UTF-8'}</div>
-                    <div id="logo_braintree_by_paypal"><img src="https://s3-us-west-1.amazonaws.com/bt-partner-assets/paypal-braintree.png" height="20px"></div>
-                {else}
+	<div class="col-xs-12 col-md-10">
+		<div class="bt braintree-row-payment bt__p-1 bt__pl-2 bt__mb-2">
+			<div class="bt__mb-2">
+				<i class="material-icons mi-lock">lock</i>
+				<b>{l s='Pay securely using your credit card.' mod='braintree'}</b>
+    		<img style="width: 120px" class="bt__ml-2" src="/modules/braintree/views/img/braintree-paypal.png">
+			</div>	
+			<div class="payment_module braintree-card">
+				<form action="{$braintreeSubmitUrl}" data-braintree-card-form method="post">
+					{if !isset($init_error)}
+						{if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
+								<div id="bt-vault-form">
+									<p><b>{l s='Choose your card' mod='braintree'}:</b></p>
+									<select name="bt_vaulting_token" class="form-control">
+										<option value="">{l s='Choose your card' mod='braintree'}</option>
+										{foreach from=$payment_methods key=method_key  item=method}
+											<option value="{$method.token|escape:'htmlall':'UTF-8'}" {if $check3Dsecure} data-nonce="{$method.nonce}"{/if}>
+												{if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
+												{$method.info|escape:'htmlall':'UTF-8'}
+											</option>
+										{/foreach}
+									</select>
+								</div>
+							{/if}
+							
+							<div id="block-card-number" class="form-group">
+								<label for="card-number" class="bt__form-label">{l s='Card number' mod='braintree'}</label>
+								<div id="card-number" class="form-control bt__form-control"><div id="card-image"></div></div>
+								<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
+							</div>
+							<div class="bt__form-row">
+								<div id="block-expiration-date" class="form-group col-md-6">
+									<label for="expiration-date" class="bt__form-label">{l s='Expiration Date' mod='braintree'}
+										<span class="text-muted">{l s='(MM/YY)' mod='braintree'}</span>
+									</label>
+									<div id="expiration-date" class="form-control bt__form-control"></div>
+									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
+								</div>
 
-                        {if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
-                            <div id="bt-vault-form">
-                                <p><b>{l s='Choose your card' mod='braintree'}:</b></p>
-                                <select name="bt_vaulting_token" class="form-control">
-                                    <option value="">{l s='Choose your card' mod='braintree'}</option>
-                                    {foreach from=$payment_methods key=method_key  item=method}
-                                        <option value="{$method.token|escape:'htmlall':'UTF-8'}" {if $check3Dsecure} data-nonce="{$method.nonce}"{/if}>
-                                            {if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
-                                            {$method.info|escape:'htmlall':'UTF-8'}
-                                        </option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        {/if}
+								<div id="block-cvv" class="form-group col-md-6" data-bt-card-cvv>
+									<label for="cvv" class="bt__form-label">{l s='CVV' mod='braintree'}</label>
+									<div id="cvv" class="form-control bt__form-control"></div>
+									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
+								</div>
+							</div>
 
-                        <div id="block-card-number" class="block_field">
-                            <div id="card-number" class="hosted_field"><div id="card-image"></div></div>
-
-                        </div>
-
-                        <div id="block-expiration-date" class="block_field half_block_field">
-                            <div id="expiration-date" class="hosted_field"></div>
-                        </div>
-
-                        <div id="block-cvv" class="block_field half_block_field">
-                            <div id="cvv" class="hosted_field"></div>
-                        </div>
-
-                        <input type="hidden" name="deviceData" id="deviceData"/>
-                        <input type="hidden" name="client_token" value="{$braintreeToken|escape:'htmlall':'UTF-8'}">
-                        <input type="hidden" name="liabilityShifted" id="liabilityShifted"/>
-                        <input type="hidden" name="liabilityShiftPossible" id="liabilityShiftPossible"/>
-                        <input type="hidden" name="payment_method_nonce" id="payment_method_nonce"/>
-                        <input type="hidden" name="card_type" id="braintree_card_type"/>
-                        <input type="hidden" name="payment_method_bt" value="{$method_bt|escape:'htmlall':'UTF-8'}"/>
-                        <div class="braintree_clear"></div>
-                        <div id="bt-card-error-msg" class="alert alert-danger"></div>
-                        {if isset($active_vaulting) && $active_vaulting}
-                            <div class="save-in-vault">
-                                <input type="checkbox" name="save_card_in_vault" id="save_card_in_vault"/> <label for="save_card_in_vault"> {l s='Memorize my card' mod='braintree'}</label>
-                            </div>
-                        {/if}
-                        <div id="logo_braintree_by_paypal"><img src="https://s3-us-west-1.amazonaws.com/bt-partner-assets/paypal-braintree.png" height="20px"></div>
-
-                {/if}
-                </form>
-            </div>
-        </div>
-    </div>
+							<input type="hidden" name="deviceData" id="deviceData"/>
+							<input type="hidden" name="client_token" value="{$braintreeToken|escape:'htmlall':'UTF-8'}">
+							<input type="hidden" name="liabilityShifted" id="liabilityShifted"/>
+							<input type="hidden" name="liabilityShiftPossible" id="liabilityShiftPossible"/>
+							<input type="hidden" name="payment_method_nonce" data-bt-payment-method-nonce />
+							<input type="hidden" name="card_type" data-bt-card-type />
+							<input type="hidden" name="payment_method_bt" value="{$method_bt|escape:'htmlall':'UTF-8'}"/>
+							<div class="braintree_clear"></div>
+							<div data-bt-card-error-msg class="alert alert-danger bt__hidden"></div>
+							{if isset($active_vaulting) && $active_vaulting}
+								<div class="save-in-vault">
+									<input type="checkbox" name="save_card_in_vault" id="save_card_in_vault"/> <label for="save_card_in_vault"> {l s='Memorize my card' mod='braintree'}</label>
+								</div>
+							{/if}
+					{else}
+						<div class="alert alert-danger">{$init_error|escape:'htmlall':'UTF-8'}</div>
+					{/if}
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 
-
 <script>
-
     var authorization = '{$braintreeToken|escape:'htmlall':'UTF-8'}';
     var bt_amount = {$braintreeAmount|escape:'htmlall':'UTF-8'};
     var check3DS = {$check3Dsecure|escape:'htmlall':'UTF-8'};
     var bt_translations = {
         client:"{l s='Error create Client' mod='braintree'}",
         card_nmb:"{l s='Card number' mod='braintree'}",
-        cvc:"{l s='CVC' mod='braintree'}",
         date:"{l s='MM/YY' mod='braintree'}",
         hosted:"{l s='Error create Hosted fields' mod='braintree'}",
-        empty:"{l s='All fields are empty! Please fill out the form.' mod='braintree'}",
-        invalid:"{l s='Some fields are invalid :' mod='braintree'}",
+        invalid:"{l s='is invalid.' mod='braintree'}",
         token:"{l s='Tokenization failed server side. Is the card valid?' mod='braintree'}",
         network:"{l s='Network error occurred when tokenizing.' mod='braintree'}",
         tkn_failed:"{l s='Tokenize failed' mod='braintree'}",
@@ -108,11 +113,10 @@
         request_problem:"{l s='There was a problem with your request.' mod='braintree'}",
         failed_3d:"{l s='3D Secure Failed' mod='braintree'}",
         empty_field:"{l s='is empty.' mod='braintree'}",
-        expirationDate:"{l s='Expiration Date' mod='braintree'}",
-        number:"{l s='card number' mod='braintree'}",
-        cvv:"{l s='CVV' mod='braintree'}",
+        expirationDate:"{l s='This expiration date ' mod='braintree'}",
+        number:"{l s='This card number ' mod='braintree'}",
+        cvv:"{l s='Please fill out a CVV.' mod='braintree'}",
     };
-
 </script>
 
 
