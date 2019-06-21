@@ -888,6 +888,7 @@ class Braintree extends PaymentModule
             $embeddedOption = new PaymentOption();
             $action_text = $this->l('Pay with paypal');
             $embeddedOption->setCallToActionText($action_text);
+            $embeddedOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/paypal.png'));
             $embeddedOption->setModuleName($this->name);
             $embeddedOption->setForm($this->generateFormPB());
             $payments_options[] = $embeddedOption;
@@ -925,6 +926,7 @@ class Braintree extends PaymentModule
             'bt_method' => BRAINTREE_PAYPAL_PAYMENT,
             'active_vaulting'=> Configuration::get('BRAINTREE_VAULTING'),
             'currency' => $this->context->currency->iso_code,
+            'show_paypal_benefits' => Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
         ));
 
         if (Configuration::get('BRAINTREE_VAULTING')) {

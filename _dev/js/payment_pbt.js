@@ -17,17 +17,38 @@ $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     initPaypalBraintree('checkout');
   }
-  $(document).on('change', 'input[name=save_account_in_vault]', function () {
-    $('#braintree-button').html('');
-    if ($(this).is(':checked')) {
+  $(document).on('change', 'input[name=save_account_in_vault]', (e) => {
+    if (e.target.checked === true) {
       initPaypalBraintree('vault');
     } else {
       initPaypalBraintree('checkout');
     }
   });
+
+  // Insert paypal info block after option name 
+  $('.js-payment-option-form').each((i) => {    
+    if ($(`#pay-with-payment-option-${i}-form .payment_module`).hasClass('paypal-braintree')) {
+      $('[data-bt-paypal-info]').insertAfter($(`#payment-option-${i}-container label`));      
+    }    
+  });
+  $('[data-bt-paypal-info-popover]').popover(); 
 });
 
-function initPaypalBraintree(flow) {
+
+$('[data-bt-paypal-info-popover] i').on('mouseover', (e) => {
+  e.target.innerText = 'cancel';
+  $('body').addClass('pp-popover'); 
+})
+
+$('[data-bt-paypal-info-popover] i').on('mouseout', (e) => {
+  e.target.innerText = 'info';
+  if (!$('[data-pp-info]').is(':visible')) {
+    $('body').removeClass('pp-popover');      
+  }
+})
+
+const initPaypalBraintree = (flow) => {
+  
   braintree.client.create({
     authorization: paypal_braintree.authorization,
   }, (clientErr, clientInstance) => {
@@ -50,9 +71,13 @@ function initPaypalBraintree(flow) {
         $('#bt-paypal-error-msg').show().text(paypalCheckoutErr);
         return;
       }
-
+      
+      $('[data-braintree-button]').html('');
       paypal.Button.render({
         env: paypal_braintree.mode, // 'production' or 'sandbox'
+        style: {
+          tagline: false
+        },
 
         payment() {
           return paypalCheckoutInstance.createPayment({
@@ -70,33 +95,29 @@ function initPaypalBraintree(flow) {
             .then((payload) => {
               // Submit `payload.nonce` to your server.
               document.querySelector('input#braintree_payment_method_nonce').value = payload.nonce;
-              $('#braintree-button').hide();
+              $('[data-braintree-button]').hide();
               $('#braintree-error-msg').hide();
               $('#braintree-vault-info').show().append(`${payload.details.firstName} ${payload.details.lastName} ${payload.details.email}`);
             });
         },
-
-        onCancel(data) {
-          // $('#bt-paypal-error-msg').show().text('checkout.js payment cancelled'+JSON.stringify(data, 0, 2)+'');
-        },
-
         onError(err) {
           $('#braintree-error-msg').show().text(err);
         },
-      }, '#braintree-button').then((e) => {
+      }, '[data-braintree-button]').then((e) => {
 
-      });
-      $('#payment-confirmation button').click((event) => {
-        payment_selected = $('input[name=payment-option]:checked').attr('id');
-        if (!$(`#pay-with-${payment_selected}-form .payment_module`).hasClass('paypal-braintree')) {
-          return true;
-        }
-        if (!document.querySelector('input#braintree_payment_method_nonce').value && !$('select[name=braintree_vaulting_token]').val()) {
-          event.preventDefault();
-          event.stopPropagation();
-          $('#braintree-error-msg').show().text(paypal_braintree.translations.empty_nonce);
-        }
       });
     });
   });
 }
+
+$('#payment-confirmation button').on('click', (event) => {
+  selectedOption = $('input[name=payment-option]:checked').attr('id');
+  if ($(`#pay-with-${selectedOption}-form .payment_module`).hasClass('paypal-braintree')) {
+    return true;
+  }
+  if (!document.querySelector('input#braintree_payment_method_nonce').value && !$('select[name=braintree_vaulting_token]').val()) {
+    event.preventDefault();
+    event.stopPropagation();
+    $('#braintree-error-msg').show().text(paypal_braintree.translations.empty_nonce);
+  }
+});

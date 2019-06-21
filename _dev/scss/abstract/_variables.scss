@@ -5,6 +5,12 @@ $danger: #ff4c4c !default;
 $success: #8bdda8 !default;
 $secondary: #ccc !default;
 
+$colors: (
+  'primary' : $primary,
+  'danger' : $danger,
+  'success' : $success,
+  'secondary':  $secondary
+);
 
 // Fonts
 

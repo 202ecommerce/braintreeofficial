@@ -8,4 +8,14 @@
 		display: none;
 	}
 
+	&__d-table-cell {
+		display: table-cell;
+	}
+
+}
+
+@each $color, $value in $colors {
+	.bt__text-#{$color} {
+		color: $value !important;
+	}
 }
