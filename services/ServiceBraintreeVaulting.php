@@ -27,6 +27,7 @@
 namespace BraintreeAddons\services;
 
 use BraintreeAddons\classes\BraintreeVaulting;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeVaulting
 {
@@ -97,6 +98,7 @@ class ServiceBraintreeVaulting
                 return;
             }
 
+            ProcessLoggerHandler::openLogger();
             /* @var $paypalVaulting \PaypalVaulting*/
             foreach ($collection->getResults() as $paypalVaulting) {
                 $braintreeVaulting = new BraintreeVaulting();
@@ -108,8 +110,17 @@ class ServiceBraintreeVaulting
                 $braintreeVaulting->info = $paypalVaulting->info;
                 $braintreeVaulting->date_add = $paypalVaulting->date_add;
                 $braintreeVaulting->date_upd = $paypalVaulting->date_upd;
-                $braintreeVaulting->save();
+                try {
+                    $braintreeVaulting->add();
+                } catch (\Exception $e) {
+                    $message = 'Error while migration paypal vaulting. ';
+                    $message .= 'File: ' . $e->getFile() . '. ';
+                    $message .= 'Line: ' . $e->getLine() . '. ';
+                    $message .= 'Message: ' . $e->getMessage() . '.';
+                    ProcessLoggerHandler::logError($message);
+                }
             }
+            ProcessLoggerHandler::closeLogger();
         }
     }
 

@@ -16,7 +16,6 @@
 
 var MigrationAdmin = {
   init() {
-    console.log('test');
     $(document).on('click', '#start-migration', function() {
       MigrationAdmin.startMigration();
     });
@@ -52,7 +51,20 @@ var MigrationAdmin = {
   },
 
     skipMigration() {
-        console.log('skip migration');
+        $.ajax({
+            url: controllerUrl,
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                ajax: true,
+                action: 'SkipMigration',
+            },
+            success(response) {
+                if (response.status) {
+                    document.location = response.urlRedirect;
+                }
+            },
+        });
     },
 
     saveAccount() {
@@ -64,15 +76,21 @@ var MigrationAdmin = {
                 ajax: true,
                 action: 'SaveAccount',
             },
+            beforeSend: function () {
+                $("#save-account").button('loading');
+            },
             success(response) {
-                console.log(response.status == false);
-
                 if(response.status == true) {
                     $('.migration-page').parent().html(response.content);
                 } else {
                     var statusMigration = $('.status-migration');
+                    var icon = $(".status-migration-icon");
+
+                    icon.html("report_problem");
+                    icon.addClass('text-danger');
                     statusMigration.html(response.content);
                     statusMigration.addClass('text-danger');
+                    $("#save-account").button('reset');
                 }
             },
         });

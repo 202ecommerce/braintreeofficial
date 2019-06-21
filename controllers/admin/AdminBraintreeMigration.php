@@ -41,6 +41,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         Media::addJsDef(array(
             'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
         ));
+        $this->addCSS('https://fonts.googleapis.com/icon?family=Material+Icons');
         $this->addJS('modules/' . $this->module->name . '/views/js/migrationAdmin.js');
     }
 
@@ -73,7 +74,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         $serviceBraintreeVaulting->doMigration();
         $serviceBraintreeOrder->doMigration();
         $serviceBraintreeCapture->doMigration();
-        //$serviceBraintreeLog->doMigration();
+        $serviceBraintreeLog->doMigration();
 
         Configuration::updateValue('BRAINTREE_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID'));
         Configuration::updateValue('BRAINTREE_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID'));
@@ -115,6 +116,17 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         $content = Tools::jsonEncode(array(
             'status' => true,
             'content' => $this->getStepTwo(),
+        ));
+        $response = new JsonResponse();
+        $response->setContent($content);
+        return $response->send();
+    }
+
+    public function displayAjaxSkipMigration()
+    {
+        $content = Tools::jsonEncode(array(
+            'status' => Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1),
+            'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeSetup', true),
         ));
         $response = new JsonResponse();
         $response->setContent($content);

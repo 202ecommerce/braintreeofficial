@@ -34,12 +34,22 @@
   font-style: italic;
 }
 
-.migration-page {
+#content .panel.migration-page {
   .form-account {
     display:none;
   }
   .form-account.current-account {
     display: block;
   }
+
+  .mb-20 {
+    margin-bottom: 20px;
+  }
+
+  li {
+    margin-bottom: 20px;
+  }
+
+  padding: 60px;
 }
 

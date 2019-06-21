@@ -29,6 +29,7 @@ namespace BraintreeAddons\services;
 use BraintreeAddons\classes\BraintreeLog;
 use BraintreeAddons\classes\AbstractMethodBraintree;
 use Symfony\Component\VarDumper\VarDumper;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeLog
 {
@@ -61,6 +62,7 @@ class ServiceBraintreeLog
                 return;
             }
 
+            ProcessLoggerHandler::openLogger();
             /* @var $paypalLog \PaypalLog*/
             foreach ($collection->getResults() as $paypalLog) {
                 $braintreeLog = new BraintreeLog();
@@ -68,15 +70,23 @@ class ServiceBraintreeLog
                 $braintreeLog->id_order = $paypalLog->id_order;
                 $braintreeLog->id_transaction = $paypalLog->id_transaction;
                 $braintreeLog->sandbox = $paypalLog->sandbox;
-                $braintreeLog->date_transaction = $paypalLog->date_transaction;
+                $braintreeLog->date_transaction = $paypalLog->date_transaction == '0000-00-00 00:00:00' ? null : $paypalLog->date_transaction;
                 $braintreeLog->date_add = $paypalLog->date_add;
                 $braintreeLog->tools = $paypalLog->tools;
                 $braintreeLog->status = $paypalLog->status;
                 $braintreeLog->id_shop = $paypalLog->id_shop;
                 $braintreeLog->log = $paypalLog->log;
-                $braintreeLog->save();
-
+                try {
+                    $braintreeLog->save();
+                } catch (\Exception $e) {
+                    $message = 'Error while migration paypal log. ';
+                    $message .= 'File: ' . $e->getFile() . '. ';
+                    $message .= 'Line: ' . $e->getLine() . '. ';
+                    $message .= 'Message: ' . $e->getMessage() . '.';
+                    ProcessLoggerHandler::logError($message);
+                }
             }
+            ProcessLoggerHandler::closeLogger();
         }
     }
 

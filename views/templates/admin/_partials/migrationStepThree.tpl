@@ -24,13 +24,18 @@
 *}
 
 <div class="panel migration-page">
-   <h2 class="text-center">
+    <div class="text-center">
+        <i class="material-icons" style="font-size: 60px">
+            check_circle
+        </i>
+    </div>
+   <h2 class="text-center mb-20">
        {l s="Perfect! Your Braintree settings were migrated successfully!" mod="braintree"}
    </h2>
-    <p class="text-center">
+    <p class="text-center mb-20">
         {l s="Please check again all settings and disable the maintenance mode in your shop." mod="braintree"}
     </p>
-    <p class="text-center text-danger">
+    <p class="text-center text-danger mb-20">
         {l s="Please uninstall the PayPal module once you finished all verifications." mod="braintree"}
     </p>
     <p class="text-center">

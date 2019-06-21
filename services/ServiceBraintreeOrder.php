@@ -26,6 +26,8 @@
 
 namespace BraintreeAddons\services;
 use BraintreeAddons\classes\BraintreeOrder;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use Symfony\Component\VarDumper\VarDumper;
 
 class ServiceBraintreeOrder
 {
@@ -79,12 +81,14 @@ class ServiceBraintreeOrder
                 return;
             }
 
+            ProcessLoggerHandler::openLogger();
             /* @var $paypalOrder \PaypalOrder*/
             foreach ($collection->getResults() as $paypalOrder) {
                 $braintreeOrder = new BraintreeOrder();
                 $braintreeOrder->id = $paypalOrder->id;
                 $braintreeOrder->id_order = $paypalOrder->id_order;
                 $braintreeOrder->payment_tool = $paypalOrder->payment_tool;
+                $braintreeOrder->payment_method = $paypalOrder->payment_method;
                 $braintreeOrder->id_cart = $paypalOrder->id_cart;
                 $braintreeOrder->id_payment = $paypalOrder->id_payment;
                 $braintreeOrder->id_transaction = $paypalOrder->id_transaction;
@@ -95,8 +99,17 @@ class ServiceBraintreeOrder
                 $braintreeOrder->total_prestashop = $paypalOrder->total_prestashop;
                 $braintreeOrder->date_add = $paypalOrder->date_add;
                 $braintreeOrder->date_upd = $paypalOrder->date_upd;
-                $braintreeOrder->save();
+                try {
+                    $braintreeOrder->add();
+                } catch (\Exception $e) {
+                    $message = 'Error while migration paypal order. ';
+                    $message .= 'File: ' . $e->getFile() . '. ';
+                    $message .= 'Line: ' . $e->getLine() . '. ';
+                    $message .= 'Message: ' . $e->getMessage() . '.';
+                    ProcessLoggerHandler::logError($message);
+                }
             }
+            ProcessLoggerHandler::closeLogger();
         }
     }
 

@@ -27,6 +27,7 @@
 namespace BraintreeAddons\services;
 use BraintreeAddons\classes\BraintreeCapture;
 use Symfony\Component\VarDumper\VarDumper;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeCapture
 {
@@ -91,6 +92,7 @@ class ServiceBraintreeCapture
                 return;
             }
 
+            ProcessLoggerHandler::openLogger();
             /* @var $paypalCapture \PaypalCapture*/
             foreach ($collection->getResults() as $paypalCapture) {
                 $braintreeCapture = new BraintreeCapture();
@@ -102,7 +104,17 @@ class ServiceBraintreeCapture
                 $braintreeCapture->date_add = $paypalCapture->date_add;
                 $braintreeCapture->date_upd = $paypalCapture->date_upd;
                 $braintreeCapture->save();
+                try {
+                    $braintreeCapture->add();
+                } catch (\Exception $e) {
+                    $message = 'Error while migration paypal capture. ';
+                    $message .= 'File: ' . $e->getFile() . '. ';
+                    $message .= 'Line: ' . $e->getLine() . '. ';
+                    $message .= 'Message: ' . $e->getMessage() . '.';
+                    ProcessLoggerHandler::logError($message);
+                }
             }
+            ProcessLoggerHandler::closeLogger();
         }
     }
 

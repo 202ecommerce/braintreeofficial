@@ -25,6 +25,11 @@
 
 <div class="panel migration-page flex justify-content-center">
    <div>
+       <div class="text-center">
+           <i class="material-icons status-migration-icon" style="font-size: 60px">
+               check_circle
+           </i>
+       </div>
        <div class="h2 status-migration">
            {l s='Perfect! Your Braintree settings were migrated successfully!' mod='braintree'}
        </div>
@@ -38,7 +43,9 @@
            {l s='PayPal module will be disabled once the process is finished.' mod='braintree'}
        </p>
        <div class="text-center">
-           <button class="btn btn-default" id="save-account">
+           <button class="btn btn-default"
+                   id="save-account"
+                   data-loading-text="{l s='Saving' mod='braintree'}">
                {l s='Save Account Settings' mod='braintree'}
            </button>
        </div>

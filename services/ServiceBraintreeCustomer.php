@@ -26,8 +26,10 @@
 
 namespace BraintreeAddons\services;
 
+use Braintree\Exception;
 use BraintreeAddons\classes\BraintreeCustomer;
 use Symfony\Component\VarDumper\VarDumper;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeCustomer
 {
@@ -59,6 +61,7 @@ class ServiceBraintreeCustomer
                 return;
             }
 
+            ProcessLoggerHandler::openLogger();
             /* @var $paypalCustomer \PaypalCustomer*/
             foreach ($collection->getResults() as $paypalCustomer) {
                 $braintreeCustomer = new BraintreeCustomer();
@@ -68,8 +71,17 @@ class ServiceBraintreeCustomer
                 $braintreeCustomer->sandbox = isset($paypalCustomer->sandbox) ? $paypalCustomer->sandbox : null;
                 $braintreeCustomer->date_add = $paypalCustomer->date_add;
                 $braintreeCustomer->date_upd = $paypalCustomer->date_upd;
-                $braintreeCustomer->save();
+                try {
+                    $braintreeCustomer->add();
+                } catch (\Exception $e) {
+                    $message = 'Error while migration paypal log. ';
+                    $message .= 'File: ' . $e->getFile() . '. ';
+                    $message .= 'Line: ' . $e->getLine() . '. ';
+                    $message .= 'Message: ' . $e->getMessage() . '.';
+                    ProcessLoggerHandler::logError($message);
+                }
             }
+            ProcessLoggerHandler::closeLogger();
         }
     }
 }

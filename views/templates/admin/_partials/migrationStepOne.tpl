@@ -27,7 +27,7 @@
    <div id="section-one">
        <div class="h3 text-center">{l s='Hello!' mod='braintree'}</div>
        <div>{l s='Welcome to the new Braintree module. ' mod='braintree'}</div>
-       <div>
+       <div class="mb-20">
            {l s='Starting July 1st, 2019, Braintree payment solution is separated from the PayPal module.
 You are currently using Braintree via the PayPal module. You can quickly migrate your Braintree configurations by
 clicking on the "Import Settings" button below. We can migrate all your current configurations but you will need to add
@@ -62,9 +62,22 @@ your Public Key and Private Key for finishing your account setup.' mod='braintre
            </li>
        </ul>
 
-       <div>
+       <div class="mb-20">
            {l s='If you do not want to migrate your Braintree settings automatically please click on
            the button "No, thank you". Pay attention that PayPal module will be disabled.' mod='braintree'}
+       </div>
+
+       <div class="flex space-between">
+           <div class="btn btn-success flex direction-column space-around" id="start-migration">
+               <span class="h4">{l s='Start now' mod='braintree'}</span>
+               <span>{l s='Import Braintree Settings' mod='braintree'}</span>
+           </div>
+
+           <div class="btn btn-warning flex direction-column space-around" id="skip-migration">
+               <span class="h4">{l s='No, thank you' mod='braintree'}</span>
+               <span>{l s='Start Braintree' mod='braintree'}</span>
+               <span>{l s='Configurations' mod='braintree'}</span>
+           </div>
        </div>
    </div>
 
@@ -81,19 +94,6 @@ your Public Key and Private Key for finishing your account setup.' mod='braintre
                     {l s='our support team.' mod='braintree'}
                 </a>
             </div>
-        </div>
-    </div>
-
-    <div class="flex space-between">
-        <div class="btn btn-default flex direction-column space-around" id="start-migration">
-            <span class="h4">{l s='Start now' mod='braintree'}</span>
-            <span>{l s='Import Braintree Settings' mod='braintree'}</span>
-        </div>
-
-        <div class="btn btn-default flex direction-column space-around" id="skip-migration">
-            <span class="h4">{l s='No, thank you' mod='braintree'}</span>
-            <span>{l s='Start Braintree' mod='braintree'}</span>
-            <span>{l s='Configurations' mod='braintree'}</span>
         </div>
     </div>
 </div>
