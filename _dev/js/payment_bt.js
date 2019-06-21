@@ -35,11 +35,14 @@ const initBraintreeCard = () => {
       client: clientInstance,
       styles: {
         input: {
-          color: '#999999',
+          'color': '#000',
           'background': '#fff',
           'height': '20px',
           'font-size': '14px',
           'font-family': 'PayPal Forward, sans-serif',
+        },
+        '.valid': {
+          'color': '#8bdda8'
         }
       },
       fields: {
@@ -81,24 +84,51 @@ const initBraintreeCard = () => {
             value: '1234'
           });
         }
-
+        
       });
 
       hostedFieldsInstance.on('blur', (event) => {        
         const blur_field_info = event.fields[event.emittedBy];
-        setErrorMsg(event.emittedBy, blur_field_info);      
+        if (blur_field_info.isEmpty || !blur_field_info.isValid) {
+          setErrorMsg(event.emittedBy, blur_field_info);   
+        }
       });
 
       hostedFieldsInstance.on('focus', (event) => {
         const focused_field_info = event.fields[event.emittedBy];
-        const $el = $(`#${focused_field_info.container.id}`);
-        $el.parent().find('[data-bt-error-msg]').hide();        
+        removeErrorMsg($(`#${focused_field_info.container.id}`));
+      });
+
+      hostedFieldsInstance.on('validityChange', (event) => {
+        const field = event.fields[event.emittedBy];
+        if (field.isValid) {
+          removeErrorMsg($(`#${field.container.id}`));
+          switch (event.emittedBy) {
+            case 'number':
+              hostedFieldsInstance.focus('expirationDate');                         
+              break;
+            case 'expirationDate':
+              hostedFieldsInstance.focus('cvv');  
+            case 'cvv':
+                $(`#${field.container.id}`).removeClass('braintree-hosted-fields-focused');
+              break; 
+          }
+        } else if (field.isPotentiallyValid) {
+          removeErrorMsg($(`#${field.container.id}`));
+        } else {          
+          setErrorMsg(event.emittedBy, field);
+        }
       });
 
       bt_hosted_fileds = hostedFieldsInstance;
       bt_client_instance = clientInstance;
     });
   });
+}
+
+const removeErrorMsg = (el) => {
+  el.removeClass('braintree-hosted-fields-valid');
+  el.parent().find('[data-bt-error-msg]').hide();  
 }
 
 const setErrorMsg = (el, field) => {
@@ -121,6 +151,7 @@ const setErrorMsg = (el, field) => {
 }
 
 const BraintreeSubmitPayment = () => {
+  
   const bt_form = $('[data-braintree-card-form]');
 
   // use vaulted card

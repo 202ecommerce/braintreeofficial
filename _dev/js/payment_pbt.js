@@ -109,13 +109,12 @@ const initPaypalBraintree = (flow) => {
     });
   });
 }
-
 $('#payment-confirmation button').on('click', (event) => {
-  selectedOption = $('input[name=payment-option]:checked').attr('id');
+  let selectedOption = $('input[name=payment-option]:checked').attr('id');
   if ($(`#pay-with-${selectedOption}-form .payment_module`).hasClass('paypal-braintree')) {
     return true;
   }
-  if (!document.querySelector('input#braintree_payment_method_nonce').value && !$('select[name=braintree_vaulting_token]').val()) {
+  if (!$('#braintree_payment_method_nonce').val() && !$('select[name=braintree_vaulting_token]').val()) {
     event.preventDefault();
     event.stopPropagation();
     $('#braintree-error-msg').show().text(paypal_braintree.translations.empty_nonce);

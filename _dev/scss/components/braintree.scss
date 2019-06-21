@@ -1,13 +1,24 @@
 .bt {
   
   .braintree-hosted-fields-focused {
-    border-color: $primary;
+    border-color: $success;
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 4px $success;
   }
 
   .braintree-hosted-fields-valid {
     border: 1px solid $success;
+
+    &::before {
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: rgba(255, 255, 255, 0.3);
+      top: 0;
+      left: 0;
+      border-radius: 4px;
+    }
   }
 
   .braintree-hosted-fields-invalid {
