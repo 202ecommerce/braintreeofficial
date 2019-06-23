@@ -244,9 +244,13 @@ class Braintree extends PaymentModule
     {
         /* @var $method MethodBraintree*/
         $method = AbstractMethodBraintree::load('Braintree');
-        $merchant_account = $method->createForCurrency($params['object']->iso_code);
-        if ($merchant_account) {
-            Configuration::updateValue($this->getNameMerchantAccountForCurrency($params['object']->iso_code), $merchant_account[$params['object']->iso_code]);
+        $method->createForCurrency($params['object']->iso_code);
+        $allCurrency = $method->getAllCurrency();
+        if (empty($allCurrency)) {
+            return;
+        }
+        foreach ($allCurrency as $currency => $merchantAccountForCurrency) {
+            Configuration::updateValue($this->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
         }
     }
 

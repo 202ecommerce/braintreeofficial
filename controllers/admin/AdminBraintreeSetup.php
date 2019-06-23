@@ -31,7 +31,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 {
     public function initContent()
     {
-        if (Configuration::get('BRAINTREE_MIGRATION_DONE') != '1') {
+        if ($this->offreMigration()) {
             return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeMigration', true));
         }
 
@@ -70,6 +70,14 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
         ));
         $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
+    }
+
+    public function offreMigration()
+    {
+        $offerMigration = Configuration::get('BRAINTREE_MIGRATION_DONE') != '1';
+        $offerMigration &= Module::isInstalled('paypal');
+        $offerMigration &= Configuration::get('PAYPAL_BRAINTREE_ENABLED') == '1';
+        return $offerMigration;
     }
 
     public function initAccountSettingsBlock()
@@ -249,7 +257,23 @@ class AdminBraintreeSetupController extends AdminBraintreeController
     public function saveForm()
     {
         parent::saveForm();
+        if (Tools::isSubmit('braintree_merchant_id_sandbox') || Tools::isSubmit('braintree_merchant_id_live')) {
+            $this->importMerchantAccountForCurrency();
+        }
         $this->module->checkBraintreeStats();
+    }
+
+    public function importMerchantAccountForCurrency()
+    {
+        /* @var $method MethodBraintree*/
+        $method = AbstractMethodBraintree::load('Braintree');
+        $allCurrency = $method->getAllCurrency();
+        if (empty($allCurrency)) {
+            return;
+        }
+        foreach ($allCurrency as $currency => $merchantAccountForCurrency) {
+            Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
+        }
     }
 
 }

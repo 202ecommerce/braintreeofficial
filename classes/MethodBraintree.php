@@ -117,6 +117,21 @@ class MethodBraintree extends AbstractMethodBraintree
 
     }
 
+    public function getAllCurrency()
+    {
+        $this->initConfig();
+        $result = array();
+        try {
+            $response = $this->gateway->merchantAccount()->all();
+            foreach ($response as $account) {
+                $result[$account->currencyIsoCode] = $account->id;
+            }
+        } catch (Exception $e) {
+
+        }
+        return $result;
+    }
+
 
     /**
      * Init class configurations
