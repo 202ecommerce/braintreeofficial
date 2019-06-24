@@ -31,6 +31,20 @@ const initBraintreeCard = () => {
       return;
     }
 
+    let cardSelect = $('[data-bt-vaulting-token]');    
+    let cardForm = $('[data-form-new-card]');
+    
+    if (cardSelect) {
+      cardSelect.on('change', (e) => {
+        let index = e.target.selectedIndex;
+        if (index == 0) {
+          cardForm.show();
+        } else {
+          cardForm.hide();
+        }   
+      })
+    }
+
     braintree.hostedFields.create({
       client: clientInstance,
       styles: {
