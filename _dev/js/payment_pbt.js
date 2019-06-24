@@ -111,10 +111,11 @@ const initPaypalBraintree = (flow) => {
 }
 $('#payment-confirmation button').on('click', (event) => {
   let selectedOption = $('input[name=payment-option]:checked').attr('id');
-  if ($(`#pay-with-${selectedOption}-form .payment_module`).hasClass('paypal-braintree')) {
+  
+  if ($(`#pay-with-${selectedOption}-form .payment_module`).hasClass('braintree-card')) {
     return true;
   }
-  if (!$('#braintree_payment_method_nonce').val() && !$('select[name=braintree_vaulting_token]').val()) {
+  if (!$('#braintree_payment_method_nonce').val() && !$('[data-bt-vaulting-token]').val() && $('[data-bt-vaulting-token]').prop('selectedIndex') !== 0) {
     event.preventDefault();
     event.stopPropagation();
     $('#braintree-error-msg').show().text(paypal_braintree.translations.empty_nonce);
