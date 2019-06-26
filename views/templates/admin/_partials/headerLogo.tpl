@@ -24,16 +24,28 @@
 *}
 
 <div class="panel active-panel">
-    <img style="width: 135px" src="/modules/braintree/views/img/braintree-paypal.png">
-    <p>
-        {l s='Accept PayPal, debit and credit card payments via Braintree (a PayPal service)' mod='paypal'}.
-    </p>
-    <p><ul>
-        <li>{l s='Get the best of PayPal & Braintree in a single solution' mod='paypal'}</li>
-        <li>{l s='Benefit of PayPal\'s OneTouch' mod='paypal'}&trade; {l s='conversion rate improvements, in-context payments & Seller Protection Program' mod='paypal'}</li>
-        <li>{l s='Offer debit and credit card payments with all major global card networks' mod='paypal'}</li>
-        <li>{l s='No monthly or setup fee - check PayPal\'s & Braintree\'s pricing' mod='paypal'}</li>
-        <li>{l s='Protect your payments with 3D Secure & PCI DSS v3.0 SAQ-A compliance' mod='paypal'}</li>
-    </ul></p>
-    <p><a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/hosted">{l s='More Information' mod='paypal'}</a></p>
+	<img style="width: 135px" src="/modules/braintree/views/img/braintree-paypal.png">
+	<p>
+		{l s='Activate the Braintree module to start converting better on mobile and all platforms in 45+ countries' mod='braintree'}.
+	</p>
+	{if $page_header_toolbar_title !== 'Help' && $page_header_toolbar_title != 'Logs'}
+		<p>{l s='Activate in three easy steps' mod='braintree'}: </p>
+		<p>
+			<ul class="list-unstyled">
+				<li>
+					<a href="#bt_config_account" data-bt-link-settings>1) {l s='Connect below your existing Braintree account or create a new one' mod='braintree'}.</a>
+				</li>
+				<li>
+					<a href="#subtab-AdminBraintreeCustomizeCheckout" data-bt-link-settings>2) {l s='Enable Credit Card and/or PayPal wallet as payment methods' mod='braintree'}.</a>
+				</li>
+				<li>
+					<a href="#bt_config_payment" data-bt-link-settings>3) {l s='Adjust your Payment setting to either capture payments instantly (Capture), or after you confirm the order (Authorization)' mod='braintree'}.</a>
+				</li>
+				<li>
+					<a href="#bt_config_environment" data-bt-link-settings>4) {l s='Make sure the module is set to Production mode' mod='braintree'}.</a>
+				</li>
+			</ul>
+		</p>
+		<p><a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/hosted">{l s='More Information' mod='braintree'}</a></p>
+	{/if}
 </div>

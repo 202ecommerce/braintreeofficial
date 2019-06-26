@@ -26,5 +26,9 @@ require_once _PS_MODULE_DIR_ . 'braintree/controllers/admin/AdminBraintreeProces
 
 class AdminBraintreeLogsController extends AdminBraintreeProcessLoggerController
 {
-
+    public function initContent()
+    {
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'logs.tpl');
+        $this->context->smarty->assign('content', $this->content);
+    }
 }

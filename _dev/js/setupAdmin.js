@@ -16,16 +16,24 @@
 
 var SetupAdmin = {
   init() {
-    $('#confirmCredentials').click(() => {
-      $('#configuration_form').submit();
+    $('[data-confirm-credentials]').click(() => {
+      $('#bt_config_account').submit();
     });
 
-    $('#logoutAccount').click(function () {
-      SetupAdmin.logoutAccount(this);
+    $('[data-bt-logout]').click((e) => {
+      SetupAdmin.logoutAccount(e.target);
     });
 
     $(document).on('click', '#btn-check-requirements', () => {
       SetupAdmin.checkRequirements();
+    });
+
+    $('[data-bt-link-settings]').on('click', (e) => {
+      hoverConfig($(e.target.attributes.href.value));
+    });
+
+    $('.defaultForm').on('mouseleave', (e) => {
+      $(e.currentTarget).removeClass('bt-settings-link-on');
     });
   },
 
@@ -50,6 +58,17 @@ var SetupAdmin = {
   },
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  SetupAdmin.init();
-});
+$(document).ready(() => SetupAdmin.init());
+
+const hoverConfig = (el) => {
+  $('.defaultForm').removeClass('bt-settings-link-on');
+  el.addClass('bt-settings-link-on');
+  if (el.is('#subtab-AdminBraintreeCustomizeCheckout')) {
+    el.addClass('bt__border-b-primary');
+  } else {
+    $('#subtab-AdminBraintreeCustomizeCheckout').removeClass('bt-settings-link-on bt__border-b-primary');
+  }
+  $('html, body').animate({
+    scrollTop: el.offset().top - 200 + "px"
+  }, 900);
+}

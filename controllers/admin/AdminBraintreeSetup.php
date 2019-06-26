@@ -86,7 +86,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/accountSettingsBlock.tpl');
 
-        $this->fields_form[]['form'] = array(
+        $this->fields_form['form']['form'] = array(
             'legend' => array(
                 'title' => $this->l('Account settings'),
                 'icon' => 'icon-cogs',
@@ -97,7 +97,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'html_content' => $html_content,
                     'name' => '',
                 )
-            )
+            ),
+            'id_form' => 'bt_config_account'
         );
     }
 
@@ -120,7 +121,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function initPaymentSettingsBlock()
     {
-        $this->fields_form[]['form'] = array(
+        $this->fields_form['form']['form'] = array(
             'legend' => array(
                 'title' => $this->l('Payment settings'),
                 'icon' => 'icon-cogs',
@@ -155,6 +156,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 'title' => $this->l('Save'),
                 'class' => 'btn btn-default pull-right button',
             ),
+            'id_form' => 'bt_config_payment'
         );
 
         $values = array(
@@ -168,7 +170,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
     {
         $this->context->smarty->assign('sandbox', (int)\Configuration::get('BRAINTREE_SANDBOX'));
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
-        $this->fields_form[]['form'] = array(
+        $this->fields_form['form']['form'] = array(
             'legend' => array(
                 'title' => $this->l('Environment Settings'),
                 'icon' => 'icon-cogs',
@@ -183,7 +185,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'hidden',
                     'name' => 'braintree_sandbox',
                 )
-            )
+            ),
+            'id_form' => 'bt_config_environment'
         );
         $values = array(
             'braintree_sandbox' => !(int)Configuration::get('BRAINTREE_SANDBOX')

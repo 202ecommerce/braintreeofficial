@@ -20,7 +20,7 @@ const config = {
 		'js/order_confirmation': './_dev/js/order_confirmation.js',
 		'js/payment_bt': './_dev/js/payment_bt.js',
 		'js/payment_pbt': './_dev/js/payment_pbt.js',
-		'css/admin': './_dev/scss/admin.scss',
+		'css/bt_admin': './_dev/scss/bt_admin.scss',
 		'css/braintree': './_dev/scss/bt_main.scss',
 		'js/migrationAdmin': './_dev/js/migrationAdmin.js'
 	},

@@ -1,17 +1,22 @@
 // Colors
 
-$primary: #66afe9 !default;
+$primary: #3ed2f0 !default;
 $danger: #ff4c4c !default;
 $success: #8bdda8 !default;
 $secondary: #ccc !default;
+$default: #ecf6fb !default;
 
 $colors: (
   'primary' : $primary,
   'danger' : $danger,
   'success' : $success,
-  'secondary':  $secondary
+  'secondary':  $secondary,
+  'default':  $default
 );
 
 // Fonts
+
+// Borders
+$border-width: 3px;
 
 

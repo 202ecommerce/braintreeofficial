@@ -1,3 +1,12 @@
+// Utils
+@import "abstract/variables";
+
+// Helpers
+@import "helpers/form";
+@import "helpers/spacing";
+@import "helpers/borders";
+@import "helpers/typography";
+
 .flex {
   display: flex !important;
 }
@@ -51,5 +60,18 @@
   }
 
   padding: 60px;
+}
+
+.bt-settings-link-on {
+  background: $default !important;
+  color: #000 !important;
+
+  .panel, .panel-footer {
+    background: $default !important;
+  }
+}
+
+.bt-settings-tab-on {
+  border-bottom: 3px solid #3ed2f0;
 }
 

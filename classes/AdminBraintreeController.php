@@ -79,7 +79,7 @@ class AdminBraintreeController extends \ModuleAdminController
     public function setMedia($isNewTheme = false)
     {
         parent::setMedia($isNewTheme);
-        $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/admin.css');
+        $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/bt_admin.css');
     }
 
     protected function _checkRequirements()
