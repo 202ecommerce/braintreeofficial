@@ -13,6 +13,8 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+import * as functions from './functions.js'; 
+
 $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     initPaypalBraintree('checkout');
@@ -94,10 +96,11 @@ const initPaypalBraintree = (flow) => {
           return paypalCheckoutInstance.tokenizePayment(data)
             .then((payload) => {
               // Submit `payload.nonce` to your server.
-              $('[data-bt-payment-method-nonce]').val(payload.nonce);
+              $('[data-payment-method-nonce="pbt"]').val(payload.nonce);
               $('[data-braintree-button]').hide();
               $('[data-bt-pp-error-msg]').hide();
-              $('#braintree-vault-info').show().append(`${payload.details.firstName} ${payload.details.lastName} ${payload.details.email}`);
+              $('[data-bt-save-account]').hide();
+              $('[data-bt-vault-info]').show().append(`${payload.details.firstName} ${payload.details.lastName} ${payload.details.email}`);
             });
         },
         onError(err) {
@@ -114,14 +117,12 @@ const BraintreePaypalSubmitPayment = (e) => {
   let selectedOption = $('input[name=payment-option]:checked').attr('id');
   if (!$('[data-bt-payment-method-nonce]').val() && !$('[data-bt-vaulting-token="pbt"]').val()) {
     $('[data-bt-pp-error-msg]').show().text(empty_nonce);
-    console.log(555);
-    
     return false;
   }
+
   if ($(`#${selectedOption}-additional-information .payment_module`).hasClass('paypal-braintree')) {
     $('[data-braintree-paypal-form]').submit();
   }
-  
 }
 
 window.BraintreePaypalSubmitPayment = BraintreePaypalSubmitPayment;

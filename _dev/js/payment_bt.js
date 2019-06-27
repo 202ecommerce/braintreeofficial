@@ -13,6 +13,8 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+import * as functions from './functions.js'; 
+
 $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
@@ -31,19 +33,12 @@ const initBraintreeCard = () => {
       return;
     }
 
-    let cardSelect = $('[data-bt-vaulting-token]');    
+    let cardSelect = $('[data-bt-vaulting-token="bt"]');    
     let cardForm = $('[data-form-new-card]');
-    
     if (cardSelect) {
-      cardSelect.on('change', (e) => {
-        let index = e.target.selectedIndex;
-        if (index == 0) {
-          cardForm.show();
-        } else {
-          cardForm.hide();
-        }   
-      })
+      functions.selectOption(cardSelect, cardForm);
     }
+
 
     braintree.hostedFields.create({
       client: clientInstance,
@@ -169,7 +164,7 @@ const BraintreeSubmitPayment = () => {
   const bt_form = $('[data-braintree-card-form]');
 
   // use vaulted card
-  if ($('select[name=bt_vaulting_token]').val()) {
+  if ($('[data-bt-vaulting-token="bt"]').val()) {
     if (check3DS) {
       braintree.threeDSecure.create({
         client: bt_client_instance,
@@ -187,7 +182,7 @@ const BraintreeSubmitPayment = () => {
         }
         threeDSecure.verifyCard({
           amount: bt_amount,
-          nonce: $('select[name=bt_vaulting_token] option:checked').data('nonce'),
+          nonce: $('[data-bt-vaulting-token="bt"] option:checked').data('nonce'),
           addFrame(err, iframe) {
             $.fancybox.open([
               {
@@ -286,13 +281,13 @@ const BraintreeSubmitPayment = () => {
               return false;
             }
 
-            $('[data-bt-payment-method-nonce]').val(three_d_secure_response.nonce);
+            $('[data-payment-method-nonce="bt"]').val(three_d_secure_response.nonce);
             $('[data-bt-card-type]').val(payload.details.cardType);
             bt_form.submit();
           });
         });
       } else {
-        $('[data-bt-payment-method-nonce]').val(payload.nonce);
+        $('[data-payment-method-nonce="bt"]').val(payload.nonce);
         bt_form.submit();
       }
     });

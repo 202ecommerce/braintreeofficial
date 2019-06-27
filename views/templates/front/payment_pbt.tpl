@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{if $show_paypal_benefits}
+{if isset($show_paypal_benefits) && $show_paypal_benefits}
 	{include file='module:braintree/views/templates/front/paypal_info.tpl'}
 {/if}
 
@@ -31,20 +31,19 @@
 	<div class="col-xs-12 col-md-10">
 		<div class="braintree-braintree-row-payment">
 			<div class="payment_module paypal-braintree">
-				<form action="{$braintreeSubmitUrl}" id="braintree-form" method="post">
+				<form action="{$braintreeSubmitUrl}" data-braintree-paypal-form method="post">
 					{if !isset($init_error)}
-						<input type="hidden" name="payment_method_nonce" id="braintree_payment_method_nonce"/>
-							<input type="hidden" name="payment_method_bt" value="{$bt_method|escape:'htmlall':'UTF-8'}"/>
-							<div data-braintree-button id="braintree-button"></div>
-							{if isset($active_vaulting) && $active_vaulting}
-								<div class="save-in-vault">
-									<input type="checkbox" name="save_account_in_vault" id="save_account_in_vault"/> <label for="save_account_in_vault"> {l s='Memorize my PayPal account' mod='braintree'}</label>
-								</div>
-							{/if}
-							{if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
-								<div id="bt-vault-form">
+						<input type="hidden" name="payment_method_nonce" data-payment-method-nonce="pbt"/>
+						<input type="hidden" name="payment_method_bt" value="{$bt_method|escape:'htmlall':'UTF-8'}"/>
+						{if isset($active_vaulting) && $active_vaulting}
+							<div class="bt__mb-4" data-bt-save-account>
+								<input type="checkbox" name="save_account_in_vault" id="save_account_in_vault"/> 
+								<label for="save_account_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my PayPal account' mod='braintree'}</label>
+							</div>
+							{if isset($payment_methods) && !empty($payment_methods)}
+								<div id="bt-vault-form" class="bt__mt-2 bt__mb-3">
 									<p><b>{l s='Choose your PayPal account' mod='braintree'}:</b></p>
-									<select name="pbt_vaulting_token" class="form-control">
+									<select name="pbt_vaulting_token" data-bt-vaulting-token="pbt" class="form-control bt__form-control">
 										<option value="">{l s='Choose your paypal account' mod='braintree'}</option>
 										{foreach from=$payment_methods key=method_key  item=method}
 											<option value="{$method.token|escape:'htmlall':'UTF-8'}">
@@ -55,26 +54,17 @@
 									</select>
 								</div>
 							{/if}
+						{/if}
+						<div data-bt-vault-info class="bt__hidden bt__mb-4">
+							<p>{l s='You have to finish your payment done with your account PayPal:' mod='braintree'}</p>
+						</div>
+						<div data-braintree-button id="braintree-button" class="bt__mb-4"></div>
 					{else}
 						<div class="alert alert-danger">{$init_error}</div>
 					{/if}
 				</form>
-				<div id="braintree-error-msg" class="alert alert-danger"></div>
+				<div data-bt-pp-error-msg class="bt__hidden alert alert-danger"></div>
 			</div>
 		</div>
 	</div>
 </div>
-
-<script>
-    var paypal_braintree = {
-        authorization : '{$braintreeToken|escape:'htmlall':'UTF-8'}',
-        amount : {$braintreeAmount|escape:'htmlall':'UTF-8'},
-        mode : '{$mode|escape:'htmlall':'UTF-8'}',
-        currency : '{$currency|escape:'htmlall':'UTF-8'}'
-    };
-    paypal_braintree.translations = {
-        empty_nonce:"{l s='Click paypal button first' mod='braintree'}"
-    };
-
-
-</script>

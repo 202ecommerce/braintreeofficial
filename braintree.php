@@ -861,6 +861,8 @@ class Braintree extends PaymentModule
             if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.24.0/js/paypal-checkout.min.js', array('server' => 'remote'));
+                Media::addJsDefL('empty_nonce', $this->l('Click paypal button first'));
+                $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
         }
@@ -894,7 +896,8 @@ class Braintree extends PaymentModule
             $embeddedOption->setCallToActionText($action_text);
             $embeddedOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/paypal.png'));
             $embeddedOption->setModuleName($this->name);
-            $embeddedOption->setForm($this->generateFormPB());
+            $embeddedOption->setAdditionalInformation($this->generateFormPB());
+            $embeddedOption->setAction('javascript:BraintreePaypalSubmitPayment();');
             $payments_options[] = $embeddedOption;
         }
 
@@ -910,6 +913,31 @@ class Braintree extends PaymentModule
 
     public function generateFormPB()
     {
+ 
+        $this->context->smarty->assign(array(
+            'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
+            'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
+            'path' => $this->_path,
+            'bt_method' => BRAINTREE_PAYPAL_PAYMENT,
+            'active_vaulting'=> Configuration::get('BRAINTREE_VAULTING'),
+            'show_paypal_benefits' => Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
+        ));
+
+
+
+        if (Configuration::get('BRAINTREE_VAULTING')) {
+            $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
+            $this->context->smarty->assign(array(
+                'payment_methods' => $payment_methods,
+            ));
+        }
+       
+
+        return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_pbt.tpl');
+    }
+
+    public function addJsVarsPB() 
+    {
         /* @var $braintree MethodBraintree*/
         $braintree = AbstractMethodBraintree::load('Braintree');
         $clientToken = $braintree->init();
@@ -918,29 +946,17 @@ class Braintree extends PaymentModule
             $this->context->smarty->assign(array(
                 'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
             ));
+            $clientToken = "";
         }
-
-        $this->context->smarty->assign(array(
-            'braintreeToken'=> $clientToken,
-            'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
-            'braintreeAmount'=> $this->context->cart->getOrderTotal(),
-            'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
-            'path' => $this->_path,
-            'mode' => $braintree->mode == 'SANDBOX' ? Tools::strtolower($braintree->mode) : 'production',
-            'bt_method' => BRAINTREE_PAYPAL_PAYMENT,
-            'active_vaulting'=> Configuration::get('BRAINTREE_VAULTING'),
-            'currency' => $this->context->currency->iso_code,
-            'show_paypal_benefits' => Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
+        
+        Media::addJsDef(array(
+            'paypal_braintree_authorization' => $clientToken,
+            'paypal_braintree_amount' => $this->context->cart->getOrderTotal(),
+            'paypal_braintree_mode' => $braintree->mode == 'SANDBOX' ? Tools::strtolower($braintree->mode) : 'production',
+            'paypal_braintree_currency' => $this->context->currency->iso_code,
         ));
+    
 
-        if (Configuration::get('BRAINTREE_VAULTING')) {
-            $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
-            $this->context->smarty->assign(array(
-                'payment_methods' => $payment_methods,
-            ));
-        }
-
-        return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_pbt.tpl');
     }
 
     public function generateFormBT()
@@ -954,6 +970,7 @@ class Braintree extends PaymentModule
             $this->context->smarty->assign(array(
                 'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
             ));
+            $clientToken = '';
         }
 
         $check3DS = 0;

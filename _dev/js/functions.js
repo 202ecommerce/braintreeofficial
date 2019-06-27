@@ -19,3 +19,16 @@ export const hoverTabConfig = () => {
 		scrollTop: $('#head_tabs').offset().top - 200 + "px"
 	}, 900);
 }
+
+export const selectOption = (select, el) => {
+	if (select) {
+		select.on('change', (e) => {
+			let index = e.target.selectedIndex;
+			if (index == 0) {
+				el.show();
+			} else {
+				el.hide();
+			}   
+		})
+	}
+}
