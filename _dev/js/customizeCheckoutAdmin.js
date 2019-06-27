@@ -13,6 +13,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+import * as functions from './functions.js'; 
 
 var CustomizeCheckout = {
   init() {
@@ -20,6 +21,19 @@ var CustomizeCheckout = {
       CustomizeCheckout.checkConfigurations();
     });
     this.checkConfigurations();
+
+    $('[data-bt-link-settings]').on('click', (e) => {
+      let el = $(e.target.attributes.href.value);
+      if (el.length) {
+        functions.hoverConfig(el);
+      } else {
+        functions.hoverTabConfig();
+      }
+    });
+
+    $('.defaultForm').on('mouseleave', (e) => {
+      $(e.currentTarget).removeClass('bt-settings-link-on');
+    });
   },
 
   checkConfigurations() {
@@ -77,6 +91,4 @@ var CustomizeCheckout = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  CustomizeCheckout.init();
-});
+$(document).ready(() => CustomizeCheckout.init());

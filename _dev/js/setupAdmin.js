@@ -13,6 +13,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+import * as functions from './functions.js'; 
 
 var SetupAdmin = {
   init() {
@@ -29,7 +30,12 @@ var SetupAdmin = {
     });
 
     $('[data-bt-link-settings]').on('click', (e) => {
-      hoverConfig($(e.target.attributes.href.value));
+      let el = $(e.target.attributes.href.value);
+      if (el.length) {
+        functions.hoverConfig(el);
+      } else {
+        functions.hoverTabConfig();
+      }
     });
 
     $('.defaultForm').on('mouseleave', (e) => {
@@ -59,16 +65,3 @@ var SetupAdmin = {
 };
 
 $(document).ready(() => SetupAdmin.init());
-
-const hoverConfig = (el) => {
-  $('.defaultForm').removeClass('bt-settings-link-on');
-  el.addClass('bt-settings-link-on');
-  if (el.is('#subtab-AdminBraintreeCustomizeCheckout')) {
-    el.addClass('bt__border-b-primary');
-  } else {
-    $('#subtab-AdminBraintreeCustomizeCheckout').removeClass('bt-settings-link-on bt__border-b-primary');
-  }
-  $('html, body').animate({
-    scrollTop: el.offset().top - 200 + "px"
-  }, 900);
-}

@@ -23,29 +23,33 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div class="panel active-panel">
-	<img style="width: 135px" src="/modules/braintree/views/img/braintree-paypal.png">
-	<p>
-		{l s='Activate the Braintree module to start converting better on mobile and all platforms in 45+ countries' mod='braintree'}.
-	</p>
-	{if $page_header_toolbar_title !== 'Help' && $page_header_toolbar_title != 'Logs'}
-		<p>{l s='Activate in three easy steps' mod='braintree'}: </p>
+<div class="panel active-panel bt__flex bt__align-items-center">
+	<div class="bt__pr-4">
+		<img style="width: 135px" src="/modules/braintree/views/img/braintree-paypal.png">
+	</div>
+	<div class="bt__pl-5">
 		<p>
-			<ul class="list-unstyled">
-				<li>
-					<a href="#bt_config_account" data-bt-link-settings>1) {l s='Connect below your existing Braintree account or create a new one' mod='braintree'}.</a>
-				</li>
-				<li>
-					<a href="#subtab-AdminBraintreeCustomizeCheckout" data-bt-link-settings>2) {l s='Enable Credit Card and/or PayPal wallet as payment methods' mod='braintree'}.</a>
-				</li>
-				<li>
-					<a href="#bt_config_payment" data-bt-link-settings>3) {l s='Adjust your Payment setting to either capture payments instantly (Capture), or after you confirm the order (Authorization)' mod='braintree'}.</a>
-				</li>
-				<li>
-					<a href="#bt_config_environment" data-bt-link-settings>4) {l s='Make sure the module is set to Production mode' mod='braintree'}.</a>
-				</li>
-			</ul>
+			{l s='Activate the Braintree module to start converting better on mobile and all platforms in 45+ countries' mod='braintree'}.
 		</p>
-		<p><a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/hosted">{l s='More Information' mod='braintree'}</a></p>
-	{/if}
+		{if $page_header_toolbar_title !== 'Help' && $page_header_toolbar_title !== 'Logs'}
+			<p>{l s='Activate in three easy steps' mod='braintree'}: </p>
+			<p>
+				<ul class="list-unstyled">
+					<li>
+						<a href="#bt_config_account" data-bt-link-settings>1) {l s='Connect below your existing Braintree account or create a new one' mod='braintree'}.</a>
+					</li>
+					<li>
+						<a href="#bt_config_behavior" data-bt-link-settings>2) {l s='Enable Credit Card and/or PayPal wallet as payment methods' mod='braintree'}.</a>
+					</li>
+					<li>
+						<a href="#bt_config_payment" data-bt-link-settings>3) {l s='Adjust your Payment setting to either capture payments instantly (Capture), or after you confirm the order (Authorization)' mod='braintree'}.</a>
+					</li>
+					<li>
+						<a href="#bt_config_environment" data-bt-link-settings>4) {l s='Make sure the module is set to Production mode' mod='braintree'}.</a>
+					</li>
+				</ul>
+			</p>
+			<p><a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/hosted">{l s='More Information' mod='braintree'}</a></p>
+		{/if}
+	</div>
 </div>

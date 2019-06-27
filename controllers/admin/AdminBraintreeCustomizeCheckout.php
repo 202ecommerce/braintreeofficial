@@ -33,11 +33,12 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'customizeCheckout.tpl');
         $this->context->smarty->assign('content', $this->content);
         $this->addJS('modules/' . $this->module->name . '/views/js/customizeCheckoutAdmin.js');
+        
     }
 
     public function initBehaviorForm()
     {
-        $this->fields_form[]['form'] = array(
+        $this->fields_form['form']['form'] = array(
             'legend' => array(
                 'title' => $this->l('Behavior'),
                 'icon' => 'icon-cogs',
@@ -148,6 +149,7 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 'title' => $this->l('Save'),
                 'class' => 'btn btn-default pull-right button',
             ),
+            'id_form' => 'bt_config_behavior'
         );
 
         $values = array(
