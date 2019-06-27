@@ -4,14 +4,6 @@
 		color: $danger;
 	}
 
-	&__hidden {
-		display: none;
-	}
-
-	&__d-table-cell {
-		display: table-cell;
-	}
-
 }
 
 @each $color, $value in $colors {

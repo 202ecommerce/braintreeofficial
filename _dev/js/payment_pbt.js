@@ -27,7 +27,7 @@ $(document).ready(() => {
 
   // Insert paypal info block after option name 
   $('.js-payment-option-form').each((i) => {    
-    if ($(`#pay-with-payment-option-${i}-form .payment_module`).hasClass('paypal-braintree')) {
+    if ($(`#payment-option-${i}-additional-information .payment_module`).hasClass('paypal-braintree')) {
       $('[data-bt-paypal-info]').insertAfter($(`#payment-option-${i}-container label`));      
     }    
   });
@@ -50,7 +50,7 @@ $('[data-bt-paypal-info-popover] i').on('mouseout', (e) => {
 const initPaypalBraintree = (flow) => {
   
   braintree.client.create({
-    authorization: paypal_braintree.authorization,
+    authorization: paypal_braintree_authorization,
   }, (clientErr, clientInstance) => {
     // Stop if there was a problem creating the client.
     // This could happen if there is a network error or if the authorization
@@ -68,13 +68,13 @@ const initPaypalBraintree = (flow) => {
       // This could happen if there was a network error or if it's incorrectly
       // configured.
       if (paypalCheckoutErr) {
-        $('#bt-paypal-error-msg').show().text(paypalCheckoutErr);
+        $('[data-bt-pp-error-msg]').show().text(paypalCheckoutErr);
         return;
       }
       
       $('[data-braintree-button]').html('');
       paypal.Button.render({
-        env: paypal_braintree.mode, // 'production' or 'sandbox'
+        env: paypal_braintree_mode, // 'production' or 'sandbox'
         style: {
           tagline: false
         },
@@ -82,8 +82,8 @@ const initPaypalBraintree = (flow) => {
         payment() {
           return paypalCheckoutInstance.createPayment({
             flow,
-            amount: paypal_braintree.amount,
-            currency: paypal_braintree.currency,
+            amount: paypal_braintree_amount,
+            currency: paypal_braintree_currency,
             billingAgreementDescription: '',
             enableShippingAddress: false,
             shippingAddressEditable: false,
@@ -94,14 +94,14 @@ const initPaypalBraintree = (flow) => {
           return paypalCheckoutInstance.tokenizePayment(data)
             .then((payload) => {
               // Submit `payload.nonce` to your server.
-              document.querySelector('input#braintree_payment_method_nonce').value = payload.nonce;
+              $('[data-bt-payment-method-nonce]').val(payload.nonce);
               $('[data-braintree-button]').hide();
-              $('#braintree-error-msg').hide();
+              $('[data-bt-pp-error-msg]').hide();
               $('#braintree-vault-info').show().append(`${payload.details.firstName} ${payload.details.lastName} ${payload.details.email}`);
             });
         },
         onError(err) {
-          $('#braintree-error-msg').show().text(err);
+          $('[data-bt-pp-error-msg]').show().text(err);
         },
       }, '[data-braintree-button]').then((e) => {
 
@@ -109,15 +109,20 @@ const initPaypalBraintree = (flow) => {
     });
   });
 }
-$('#payment-confirmation button').on('click', (event) => {
+
+const BraintreePaypalSubmitPayment = (e) => {
   let selectedOption = $('input[name=payment-option]:checked').attr('id');
+  if (!$('[data-bt-payment-method-nonce]').val() && !$('[data-bt-vaulting-token="pbt"]').val()) {
+    $('[data-bt-pp-error-msg]').show().text(empty_nonce);
+    console.log(555);
+    
+    return false;
+  }
+  if ($(`#${selectedOption}-additional-information .payment_module`).hasClass('paypal-braintree')) {
+    $('[data-braintree-paypal-form]').submit();
+  }
   
-  if ($(`#pay-with-${selectedOption}-form .payment_module`).hasClass('braintree-card')) {
-    return true;
-  }
-  if (!$('#braintree_payment_method_nonce').val() && !$('[data-bt-vaulting-token]').val() && $('[data-bt-vaulting-token]').prop('selectedIndex') !== 0) {
-    event.preventDefault();
-    event.stopPropagation();
-    $('#braintree-error-msg').show().text(paypal_braintree.translations.empty_nonce);
-  }
-});
+}
+
+window.BraintreePaypalSubmitPayment = BraintreePaypalSubmitPayment;
+
