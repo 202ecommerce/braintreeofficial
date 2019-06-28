@@ -857,6 +857,8 @@ class Braintree extends PaymentModule
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-data', 'https://js.braintreegateway.com/web/3.24.0/js/data-collector.min.js', array('server' => 'remote'));
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-3ds', 'https://js.braintreegateway.com/web/3.24.0/js/three-d-secure.min.js', array('server' => 'remote'));
             $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
+            $this->addJsVarsLangBT();
+            $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
             if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
@@ -866,6 +868,26 @@ class Braintree extends PaymentModule
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
         }
+    }
+
+    public function addJsVarsLangBT()
+    {
+        Media::addJsDefL('bt_translations_client', $this->l('Error create Client'));
+        Media::addJsDefL('bt_translations_card_nmb', $this->l('Card number'));
+        Media::addJsDefL('bt_translations_date', $this->l('MM/YY'));
+        Media::addJsDefL('bt_translations_hosted', $this->l('Error create Hosted fields'));
+        Media::addJsDefL('bt_translations_invalid', $this->l('is invalid.'));
+        Media::addJsDefL('bt_translations_token', $this->l('Tokenization failed server side. Is the card valid?'));
+        Media::addJsDefL('bt_translations_network', $this->l('Network error occurred when tokenizing.'));
+        Media::addJsDefL('bt_translations_tkn_failed', $this->l('Tokenize failed'));
+        Media::addJsDefL('bt_translations_https', $this->l('3D Secure requires HTTPS.'));
+        Media::addJsDefL('bt_translations_load_3d', $this->l('Load 3D Secure Failed'));
+        Media::addJsDefL('bt_translations_request_problem', $this->l('There was a problem with your request.'));
+        Media::addJsDefL('bt_translations_failed_3d', $this->l('3D Secure Failed'));
+        Media::addJsDefL('bt_translations_empty_field', $this->l('is empty.'));
+        Media::addJsDefL('bt_translations_expirationDate', $this->l('This expiration date '));
+        Media::addJsDefL('bt_translations_number', $this->l('This card number '));
+        Media::addJsDefL('bt_translations_cvv', $this->l('Please fill out a CVV.'));
     }
 
     public function hookDisplayAdminOrderTabOrder($params)
@@ -893,11 +915,11 @@ class Braintree extends PaymentModule
         if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
             $embeddedOption = new PaymentOption();
             $action_text = $this->l('Pay with paypal');
-            $embeddedOption->setCallToActionText($action_text);
-            $embeddedOption->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/paypal.png'));
-            $embeddedOption->setModuleName($this->name);
-            $embeddedOption->setAdditionalInformation($this->generateFormPB());
-            $embeddedOption->setAction('javascript:BraintreePaypalSubmitPayment();');
+            $embeddedOption->setCallToActionText($action_text)
+                ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/paypal.png'))
+                ->setModuleName($this->name)
+                ->setAdditionalInformation($this->generateFormPB())
+                ->setAction('javascript:BraintreePaypalSubmitPayment();');
             $payments_options[] = $embeddedOption;
         }
 
@@ -913,7 +935,14 @@ class Braintree extends PaymentModule
 
     public function generateFormPB()
     {
- 
+        /* @var $braintree MethodBraintree*/
+        $braintree = AbstractMethodBraintree::load('Braintree');
+        $clientToken = $braintree->init();
+        if (isset($clientToken['error_code'])) {
+            $this->context->smarty->assign(array(
+                'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
+            ));
+        }
         $this->context->smarty->assign(array(
             'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
             'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
@@ -922,16 +951,12 @@ class Braintree extends PaymentModule
             'active_vaulting'=> Configuration::get('BRAINTREE_VAULTING'),
             'show_paypal_benefits' => Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
         ));
-
-
-
         if (Configuration::get('BRAINTREE_VAULTING')) {
             $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
             $this->context->smarty->assign(array(
                 'payment_methods' => $payment_methods,
             ));
-        }
-       
+        }       
 
         return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_pbt.tpl');
     }
@@ -941,22 +966,12 @@ class Braintree extends PaymentModule
         /* @var $braintree MethodBraintree*/
         $braintree = AbstractMethodBraintree::load('Braintree');
         $clientToken = $braintree->init();
-
-        if (isset($clientToken['error_code'])) {
-            $this->context->smarty->assign(array(
-                'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
-            ));
-            $clientToken = "";
-        }
-        
         Media::addJsDef(array(
             'paypal_braintree_authorization' => $clientToken,
             'paypal_braintree_amount' => $this->context->cart->getOrderTotal(),
             'paypal_braintree_mode' => $braintree->mode == 'SANDBOX' ? Tools::strtolower($braintree->mode) : 'production',
             'paypal_braintree_currency' => $this->context->currency->iso_code,
         ));
-    
-
     }
 
     public function generateFormBT()
@@ -965,20 +980,17 @@ class Braintree extends PaymentModule
         $braintree = AbstractMethodBraintree::load('Braintree');
         $amount = $this->context->cart->getOrderTotal();
         $clientToken = $braintree->init();
-
-        if (isset($clientToken['error_code'])) {
-            $this->context->smarty->assign(array(
-                'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
-            ));
-            $clientToken = '';
-        }
-
         $check3DS = 0;
         $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
         if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
             $check3DS = 1;
         }
-
+        if (isset($clientToken['error_code'])) {
+            $this->context->smarty->assign(array(
+                'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
+            ));
+        }
+        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
         if (Configuration::get('BRAINTREE_VAULTING')) {
             $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_CARD_PAYMENT);
             if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
@@ -1003,6 +1015,24 @@ class Braintree extends PaymentModule
         ));
 
         return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_bt.tpl');
+    }
+
+    public function addJsVarsBT()
+    {
+        /* @var $braintree MethodBraintree*/
+        $braintree = AbstractMethodBraintree::load('Braintree');
+        $amount = $this->context->cart->getOrderTotal();
+        $clientToken = $braintree->init();
+        $check3DS = 0;
+        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
+        if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
+            $check3DS = 1;
+        }
+        Media::addJsDef(array(
+            'authorization' => $clientToken,
+            'bt_amount' => $amount,
+            'check3DS' => $check3DS,
+        ));        
     }
 
     /**

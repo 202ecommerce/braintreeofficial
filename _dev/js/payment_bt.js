@@ -29,7 +29,7 @@ const initBraintreeCard = () => {
     authorization,
   }, (clientErr, clientInstance) => {
     if (clientErr) {
-      $('[data-bt-card-error-msg]').show().text(bt_translations.client);
+      $('[data-bt-card-error-msg]').show().text( bt_translations_client);
       return;
     }
 
@@ -57,7 +57,7 @@ const initBraintreeCard = () => {
       fields: {
         number: {
           selector: '#card-number',
-          placeholder: bt_translations.card_nmb,
+          placeholder:  bt_translations_card_nmb,
         },
         cvv: {
           selector: '#cvv',
@@ -65,12 +65,12 @@ const initBraintreeCard = () => {
         },
         expirationDate: {
           selector: '#expiration-date',
-          placeholder: bt_translations.date,
+          placeholder:  bt_translations_date,
         },
       },
     }, (hostedFieldsErr, hostedFieldsInstance) => {
       if (hostedFieldsErr) {
-        $('[data-bt-card-error-msg]').show().text(bt_translations.hosted);
+        $('[data-bt-card-error-msg]').show().text( bt_translations_hosted);
         return;
       }
 
@@ -144,10 +144,10 @@ const setErrorMsg = (el, field) => {
   let popup_message = '';
   const $el = $(`#${field.container.id}`);
   const $msgBlock = $el.parent().find('[data-bt-error-msg]');
-  if (field.isEmpty) {          
-    popup_message = `${bt_translations[el]} ${field.container.id !== 'cvv' ? `${bt_translations.empty_field}` : ''}`;
+  if (field.isEmpty) { 
+    popup_message = `${eval(`bt_translations_${el}`)} ${field.container.id !== 'cvv' ? `${ bt_translations_empty_field}` : ''}`;
   } else if (!field.isValid) {
-    popup_message = `${bt_translations[el]} ${bt_translations.invalid}`;
+    popup_message = `${eval(`bt_translations_${el}`)} ${ bt_translations_invalid}`;
   }
   if (popup_message) {  
     $el.addClass('braintree-hosted-fields-invalid'); 
@@ -172,10 +172,10 @@ const BraintreeSubmitPayment = () => {
         if (ThreeDSecureerror) {
           switch (ThreeDSecureerror.code) {
             case 'THREEDS_HTTPS_REQUIRED':
-              popup_message = bt_translations.https;
+              popup_message =  bt_translations_https;
               break;
             default:
-              popup_message = bt_translations.load_3d;
+              popup_message =  bt_translations_load_3d;
           }
           $('[data-bt-card-error-msg]').show().text(popup_message);
           return false;
@@ -200,10 +200,10 @@ const BraintreeSubmitPayment = () => {
             let popup_message = '';
             switch (err.code) {
               case 'CLIENT_REQUEST_ERROR':
-                popup_message = bt_translations.request_problem;
+                popup_message =  bt_translations_request_problem;
                 break;
               default:
-                popup_message = bt_translations.failed_3d;
+                popup_message =  bt_translations_failed_3d;
             }
             $('[data-bt-card-error-msg]').show().text(popup_message);
             return false;
@@ -225,13 +225,13 @@ const BraintreeSubmitPayment = () => {
         if (tokenizeErr.code !== 'HOSTED_FIELDS_FIELDS_EMPTY' && tokenizeErr.code !== 'HOSTED_FIELDS_FIELDS_INVALID') {      
           switch (tokenizeErr.code) {
             case 'HOSTED_FIELDS_FAILED_TOKENIZATION':
-              popup_message = bt_translations.token;
+              popup_message =  bt_translations_token;
               break;
             case 'HOSTED_FIELDS_TOKENIZATION_NETWORK_ERROR':
-              popup_message = bt_translations.network;
+              popup_message =  bt_translations_network;
               break;
             default:
-              popup_message = bt_translations.tkn_failed;
+              popup_message =  bt_translations_tkn_failed;
           }
           $('[data-bt-card-error-msg]').show().text(popup_message);
         }
@@ -244,10 +244,10 @@ const BraintreeSubmitPayment = () => {
           if (ThreeDSecureerror) {
             switch (ThreeDSecureerror.code) {
               case 'THREEDS_HTTPS_REQUIRED':
-                popup_message = bt_translations.https;
+                popup_message = bt_translations_https;
                 break;
               default:
-                popup_message = bt_translations.load_3d;
+                popup_message = bt_translations_load_3d;
             }
             $('[data-bt-card-error-msg]').show().text(popup_message);
             return false;
@@ -272,10 +272,10 @@ const BraintreeSubmitPayment = () => {
               let popup_message = '';
               switch (err.code) {
                 case 'CLIENT_REQUEST_ERROR':
-                  popup_message = bt_translations.request_problem;
+                  popup_message =  bt_translations_request_problem;
                   break;
                 default:
-                  popup_message = bt_translations.failed_3d;
+                  popup_message =  bt_translations_failed_3d;
               }
               $('[data-bt-card-error-msg]').show().text(popup_message);
               return false;

@@ -97,29 +97,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-    var authorization = '{$braintreeToken|escape:'htmlall':'UTF-8'}';
-    var bt_amount = {$braintreeAmount|escape:'htmlall':'UTF-8'};
-    var check3DS = {$check3Dsecure|escape:'htmlall':'UTF-8'};
-    var bt_translations = {
-        client:"{l s='Error create Client' mod='braintree'}",
-        card_nmb:"{l s='Card number' mod='braintree'}",
-        date:"{l s='MM/YY' mod='braintree'}",
-        hosted:"{l s='Error create Hosted fields' mod='braintree'}",
-        invalid:"{l s='is invalid.' mod='braintree'}",
-        token:"{l s='Tokenization failed server side. Is the card valid?' mod='braintree'}",
-        network:"{l s='Network error occurred when tokenizing.' mod='braintree'}",
-        tkn_failed:"{l s='Tokenize failed' mod='braintree'}",
-        https:"{l s='3D Secure requires HTTPS.' mod='braintree'}",
-        load_3d:"{l s='Load 3D Secure Failed' mod='braintree'}",
-        request_problem:"{l s='There was a problem with your request.' mod='braintree'}",
-        failed_3d:"{l s='3D Secure Failed' mod='braintree'}",
-        empty_field:"{l s='is empty.' mod='braintree'}",
-        expirationDate:"{l s='This expiration date ' mod='braintree'}",
-        number:"{l s='This card number ' mod='braintree'}",
-        cvv:"{l s='Please fill out a CVV.' mod='braintree'}",
-    };
-</script>
-
-
