@@ -24,6 +24,6 @@
 *}
 
 <li id="braintree_transaction_id">
-    {l s='Braintree transaction id :' mod='braintree'}
-    {$transaction_id|escape:'htmlall':'UTF-8'}
+	{l s='Braintree transaction id :' mod='braintree'}
+	{$transaction_id|escape:'htmlall':'UTF-8'}
 </li>

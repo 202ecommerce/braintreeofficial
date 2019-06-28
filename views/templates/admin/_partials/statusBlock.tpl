@@ -24,44 +24,36 @@
 *}
 
 <div>
-    <p>
-        {l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'utf':'htmlall'}</b>
-    </p>
-
-    <p>
-        {l s='To  modify country:' mod='braintree'}
-        <a href="{$link->getAdminLink('AdminLocalization', true)}"
-           target="_blank">
-            {l s='International > Localization' mod='braintree'}
-        </a>
-    </p>
-
-    <p>
-        <span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='braintree'}</span>
-    </p>
-
-    <ul class="list-unstyled">
-        <li>
-            {if isset($tlsVersion) && $tlsVersion['status']}
-                <i class="icon-check" style="color: green"></i>
-                {l s='PHP cURL extension must be enabled on your server' mod='braintree'}
-            {elseif isset($tlsVersion) && $tlsVersion['status'] == false}
-                <i class="icon-remove" style="color: red"></i>
-                {l s='PHP cURL extension must be enabled on your server' mod='braintree'}. {$tlsVersion['error_message']}
-            {/if}
-
-        </li>
-
-        <li>
-            {if isset($accountConfigured) && $accountConfigured}
-                <i class="icon-check" style="color: green"></i>
-            {else}
-                <i class="icon-remove" style="color: red"></i>
-            {/if}
-            {l s='You must connect your Braintree account' mod='braintree'}
-        </li>
-    </ul>
+	<p>
+		{l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'utf':'htmlall'}</b>
+	</p>
+	<p>
+		{l s='To  modify country:' mod='braintree'}
+		<a href="{$link->getAdminLink('AdminLocalization', true)}"
+			target="_blank">
+			{l s='International > Localization' mod='braintree'}
+		</a>
+	</p>
+	<p>
+		<span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='braintree'}</span>
+	</p>
+	<ul class="list-unstyled">
+		<li>
+			{if isset($tlsVersion) && $tlsVersion['status']}
+				<i class="icon-check text-success"></i>
+				{l s='PHP cURL extension must be enabled on your server' mod='braintree'}
+			{elseif isset($tlsVersion) && $tlsVersion['status'] == false}
+				<i class="icon-remove text-danger"></i>
+				{l s='PHP cURL extension must be enabled on your server' mod='braintree'}. {$tlsVersion['error_message']}
+			{/if}
+		</li>
+		<li>
+			{if isset($accountConfigured) && $accountConfigured}
+				<i class="icon-check text-success"></i>
+			{else}
+				<i class="icon-remove text-danger"></i>
+			{/if}
+			{l s='You must connect your Braintree account' mod='braintree'}
+		</li>
+	</ul>
 </div>
-
-
-

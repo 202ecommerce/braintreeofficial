@@ -29,6 +29,7 @@ const initBraintreeCard = () => {
     authorization,
   }, (clientErr, clientInstance) => {
     if (clientErr) {
+      $('[data-braintree-card-form]').hide();
       $('[data-bt-card-error-msg]').show().text( bt_translations_client);
       return;
     }
@@ -38,7 +39,6 @@ const initBraintreeCard = () => {
     if (cardSelect) {
       selectOption(cardSelect, cardForm);
     }
-
 
     braintree.hostedFields.create({
       client: clientInstance,

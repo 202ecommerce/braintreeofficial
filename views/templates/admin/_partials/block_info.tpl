@@ -23,12 +23,14 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <div class="panel">
-    <div>
-        <p>{l s='If you encounter rounding issues with your orders, please change PrestaShop round mode in:' mod='braintree'} <a target="_blank" href="{$link->getAdminLink('AdminPreferences', true)}" target="_blank">{l s='Preferences > General' mod='braintree'}</a> {l s='then change for:' mod='paypal'}</p>
-        <ul>
-            <li class="h4">{l s='Round mode: "Round up away from zero, when it is half way there (recommended) "' mod='braintree'}</li>
-            <li class="h4">{l s='Round type: "Round on each item"' mod='braintree'}</li>
-        </ul>
-
-    </div>
+	<div>
+		<p>{l s='If you encounter rounding issues with your orders, please change PrestaShop round mode in:' mod='braintree'} 
+			<a target="_blank" href="{$link->getAdminLink('AdminPreferences', true)}" target="_blank">{l s='Preferences > General' mod='braintree'}</a> 
+			{l s='then change for:' mod='braintree'}
+		</p>
+		<ul>
+			<li class="h4">{l s='Round mode: "Round up away from zero, when it is half way there (recommended) "' mod='braintree'}</li>
+			<li class="h4">{l s='Round type: "Round on each item"' mod='braintree'}</li>
+		</ul>
+	</div>
 </div>

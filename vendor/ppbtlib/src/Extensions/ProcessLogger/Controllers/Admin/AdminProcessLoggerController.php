@@ -135,7 +135,9 @@ class AdminProcessLoggerController extends \ModuleAdminController
                     'Here you can change the default configuration for this Process Logger',
                     'AdminProcessLoggerController'
                 ),
-                'info' => \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/admin/_partials/helperOptionInfo.tpl'),
+                'info' => $this->module->displayWarning(
+                    'Logs with order ID will not be erased.'
+                ),
                 'fields'      => array(
                     'BRAINTREE_EXTLOGS_ERASING_DISABLED' => array(
                         'title'        => $this->module->l(

@@ -739,7 +739,7 @@ class Braintree extends PaymentModule
                 '<a target="_blank" href="'.$preferences.'">'.$this->l('Reed more.').'</a></p>');
         }
 
-        return $braintreeMessage . $this->display(__FILE__, 'views/templates/hook/braintree_order.tpl');
+        return $braintreeMessage;
     }
 
     public function hookDisplayBackOfficeHeader()

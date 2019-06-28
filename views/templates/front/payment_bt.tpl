@@ -34,8 +34,8 @@
 			<img style="width: 120px" class="bt__ml-2" src="/modules/braintree/views/img/braintree-paypal.png">
 			</div>	
 			<div class="payment_module braintree-card">
-				<form action="{$braintreeSubmitUrl}" data-braintree-card-form method="post">
-					{if !isset($init_error)}
+				{if !isset($init_error)}
+					<form action="{$braintreeSubmitUrl}" data-braintree-card-form method="post">
 						{if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
 							<div id="bt-vault-form" class="bt__mt-2 bt__mb-3">
 								<p><b>{l s='Choose your card' mod='braintree'}:</b></p>
@@ -54,7 +54,7 @@
 						<div data-form-new-card>							
 							<div id="block-card-number" class="form-group">
 								<label for="card-number" class="bt__form-label">{l s='Card number' mod='braintree'}</label>
-								<div id="card-number" class="form-control bt__form-control"><div id="card-image"></div></div>
+								<div id="card-number" class="form-control bt__form-control bt__position-relative"><div id="card-image"></div></div>
 								<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 							</div>
 							<div class="bt__form-row">
@@ -81,7 +81,6 @@
 							<input type="hidden" name="card_type" data-bt-card-type />
 							<input type="hidden" name="payment_method_bt" value="{$method_bt|escape:'htmlall':'UTF-8'}"/>
 							<div class="clearfix"></div>
-							<div data-bt-card-error-msg class="alert alert-danger bt__hidden"></div>
 							{if isset($active_vaulting) && $active_vaulting}
 								<div class="bt__my-2">
 									<input type="checkbox" name="save_card_in_vault" id="save_card_in_vault"/> 
@@ -89,10 +88,11 @@
 								</div>
 							{/if}
 						</div>
-					{else}
-						<div class="alert alert-danger">{$init_error|escape:'htmlall':'UTF-8'}</div>
-					{/if}
-				</form>
+					</form>
+					<div data-bt-card-error-msg class="alert alert-danger bt__hidden"></div>
+				{else}
+					<div class="alert alert-danger">{$init_error|escape:'htmlall':'UTF-8'}</div>
+				{/if}
 			</div>
 		</div>
 	</div>

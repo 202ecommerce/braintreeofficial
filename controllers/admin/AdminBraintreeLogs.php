@@ -28,7 +28,8 @@ class AdminBraintreeLogsController extends AdminBraintreeProcessLoggerController
 {
     public function initContent()
     {
-        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'logs.tpl');
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
+        $this->content .= parent::initContent();
         $this->context->smarty->assign('content', $this->content);
     }
 

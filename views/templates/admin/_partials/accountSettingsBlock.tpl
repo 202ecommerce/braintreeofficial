@@ -27,11 +27,9 @@
 	<p>
 		{l s='Braintree Account' mod='braintree'}.
 	</p>
-
 	<p>
 		{l s='In order to activate the module, you must connect your existing Braintree account or create a new one.' mod='braintree'}
 	</p>
-
 	<p>
 		{if isset($accountConfigured) && $accountConfigured}
 			<span class="btn btn-default" data-bt-logout>
@@ -44,9 +42,6 @@
 		{/if}
 	</p>
 </div>
-
-
-
 <div class="modal fade" id="credentialBlock" role="dialog" aria-labelledby="credentialBlock" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">

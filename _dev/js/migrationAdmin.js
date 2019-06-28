@@ -15,88 +15,78 @@
 
 
 var MigrationAdmin = {
-  init() {
-    $(document).on('click', '#start-migration', function() {
-      MigrationAdmin.startMigration();
-    });
+	init() {
+		$(document).on('click', '#start-migration', () => MigrationAdmin.startMigration());
+		$(document).on('click', '#skip-migration', () => MigrationAdmin.skipMigration());
+		$(document).on('click', '#save-account', () => MigrationAdmin.saveAccount());
+	},
 
-      $(document).on('click', '#skip-migration', function() {
-          MigrationAdmin.skipMigration();
-      });
+	startMigration() {
+		$.ajax({
+			url: controllerUrl,
+			type: 'POST',
+			dataType: 'JSON',
+			data: {
+				ajax: true,
+				action: 'StartMigration',
+			},
+			beforeSend: () => {
+				$('#section-one').hide();
+				$('#section-two').show();
+			},
+			success(response) {
+				if (response.status) {
+					$('.migration-page').parent().html(response.content);
+				}
+			},
+		});
+	},
 
-      $(document).on('click', '#save-account', function () {
-          MigrationAdmin.saveAccount();
-      });
-  },
+	skipMigration() {
+		$.ajax({
+			url: controllerUrl,
+			type: 'POST',
+			dataType: 'JSON',
+			data: {
+				ajax: true,
+				action: 'SkipMigration',
+			},
+			success(response) {
+				if (response.status) {
+					document.location = response.urlRedirect;
+				}
+			},
+		});
+	},
 
-  startMigration() {
-      $.ajax({
-          url: controllerUrl,
-          type: 'POST',
-          dataType: 'JSON',
-          data: {
-              ajax: true,
-              action: 'StartMigration',
-          },
-          beforeSend: function () {
-              $('#section-one').hide();
-              $('#section-two').show();
-          },
-          success(response) {
-              if (response.status) {
-                  $('.migration-page').parent().html(response.content);
-              }
-          },
-      });
-  },
+	saveAccount() {
+		$.ajax({
+			url: controllerUrl + "&" + $('#form-account').serialize(),
+			type: 'POST',
+			dataType: 'JSON',
+			data: {
+				ajax: true,
+				action: 'SaveAccount',
+			},
+			beforeSend: () => {
+				$("#save-account").button('loading');
+			},
+			success(response) {
+				if (response.status == true) {
+					$('.migration-page').parent().html(response.content);
+				} else {
+					const statusMigration = $('.status-migration'),
+								icon = $(".status-migration-icon");
 
-    skipMigration() {
-        $.ajax({
-            url: controllerUrl,
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                ajax: true,
-                action: 'SkipMigration',
-            },
-            success(response) {
-                if (response.status) {
-                    document.location = response.urlRedirect;
-                }
-            },
-        });
-    },
-
-    saveAccount() {
-        $.ajax({
-            url: controllerUrl + "&" + $('#form-account').serialize(),
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                ajax: true,
-                action: 'SaveAccount',
-            },
-            beforeSend: function () {
-                $("#save-account").button('loading');
-            },
-            success(response) {
-                if(response.status == true) {
-                    $('.migration-page').parent().html(response.content);
-                } else {
-                    var statusMigration = $('.status-migration');
-                    var icon = $(".status-migration-icon");
-
-                    icon.html("report_problem");
-                    icon.addClass('text-danger');
-                    statusMigration.html(response.content);
-                    statusMigration.addClass('text-danger');
-                    $("#save-account").button('reset');
-                }
-            },
-        });
-    }
+					icon.html("report_problem");
+					icon.addClass('text-danger');
+					statusMigration.html(response.content);
+					statusMigration.addClass('text-danger');
+					$("#save-account").button('reset');
+				}
+			},
+		});
+	}
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    MigrationAdmin.init();
-});
+$(document).ready(() => MigrationAdmin.init());

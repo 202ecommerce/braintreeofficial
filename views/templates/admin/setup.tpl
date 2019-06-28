@@ -17,43 +17,41 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2019 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*}
+* @author PrestaShop SA <contact@prestashop.com>
+	* @copyright 2007-2019 PrestaShop SA
+	* @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+	* International Registered Trademark & Property of PrestaShop SA
+	*}
 
 {include './_partials/headerLogo.tpl'}
 
-<div class="row">
-    <div class="row flex">
-        <div class="col-lg-8 stretchHeightForm">
-            {if isset($formAccountSettings)}
-                {$formAccountSettings nofilter}
-            {/if}
+<div class="container-fluid bt__p-0">
+	<div class="row flex">
+		<div class="col-lg-8 stretchHeightForm">
+			{if isset($formAccountSettings)}
+				{$formAccountSettings nofilter}
+			{/if}
+		</div>
+		<div class="col-lg-4">
+			{if isset($formEnvironmentSettings)}
+				{$formEnvironmentSettings nofilter}
+			{/if}
+		</div>
+	</div>
 
-        </div>
-        <div class="col-lg-4">
-            {if isset($formEnvironmentSettings)}
-                {$formEnvironmentSettings nofilter}
-            {/if}
-        </div>
-    </div>
-
-    <div class="row flex">
-        <div class="col-lg-8">
-            {if isset($formPaymentSettings)}
-                {$formPaymentSettings nofilter}
-            {/if}
-
-            {if isset($formMerchantAccounts)}
-                {$formMerchantAccounts nofilter}
-            {/if}
-        </div>
-        <div class="col-lg-4 stretchHeightForm" id="status-block">
-            {if isset($formStatus)}
-                {$formStatus nofilter}
-            {/if}
-        </div>
-    </div>
+	<div class="row flex">
+		<div class="col-lg-8">
+			{if isset($formPaymentSettings)}
+				{$formPaymentSettings nofilter}
+			{/if}
+			{if isset($formMerchantAccounts)}
+				{$formMerchantAccounts nofilter}
+			{/if}
+		</div>
+		<div class="col-lg-4 stretchHeightForm" id="status-block">
+			{if isset($formStatus)}
+				{$formStatus nofilter}
+			{/if}
+		</div>
+	</div>
 </div>

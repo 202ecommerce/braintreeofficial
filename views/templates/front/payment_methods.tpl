@@ -34,7 +34,7 @@
     {if $payment_methods}
         <form action="{$link->getModuleLink('braintree', 'account', ['process' => 'save'])}" method="post">
         {foreach from=$payment_methods key=method_key  item=payment_method}
-            {if $method_key == 'card-braintree'}<h3>{l s='Your cards' mod='paypal'}</h3>{/if}
+            {if $method_key == 'card-braintree'}<h3>{l s='Your cards' mod='braintree'}</h3>{/if}
             {if $method_key == 'paypal-braintree'}<h3>{l s='Your paypal accounts' mod='braintree'}</h3>{/if}
             {foreach from=$payment_method key=key  item=method}
                 <p class="method">

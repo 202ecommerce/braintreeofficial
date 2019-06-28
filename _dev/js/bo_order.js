@@ -14,12 +14,12 @@
  */
 
 // init in-context
-document.addEventListener('DOMContentLoaded', () => {
+$(document).ready(() => {
   $(document).on('click', '#desc-order-partial_refund', () => {
     if ($('#doPartialRefundBraintree').length == 0) {
-      let p; let label; let
-        input;
-
+      let p,
+          label,
+          input;
       p = document.createElement('p');
       p.className = 'checkbox';
 
