@@ -29,36 +29,38 @@
 
 <div class="row">
 	<div class="col-xs-12 col-md-10">
-		<div class="braintree-braintree-row-payment">
+		<div class="braintree-braintree-row-payment bt__pb-3">
 			<div class="payment_module paypal-braintree">
 				<form action="{$braintreeSubmitUrl}" data-braintree-paypal-form method="post">
 					{if !isset($init_error)}
-						<input type="hidden" name="payment_method_nonce" data-payment-method-nonce="pbt"/>
-						<input type="hidden" name="payment_method_bt" value="{$bt_method|escape:'htmlall':'UTF-8'}"/>
-						{if isset($active_vaulting) && $active_vaulting}
-							<div class="bt__mb-4" data-bt-save-account>
-								<input type="checkbox" name="save_account_in_vault" id="save_account_in_vault"/> 
-								<label for="save_account_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my PayPal account' mod='braintree'}</label>
+						{if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
+							<div id="bt-vault-form" class="bt__mt-2 bt__mb-3">
+								<p><b>{l s='Choose your PayPal account' mod='braintree'}:</b></p>
+								<select name="pbt_vaulting_token" data-bt-vaulting-token="pbt" class="form-control bt__form-control">
+									<option value="">{l s='Use a new paypal account' mod='braintree'}</option>
+									{foreach from=$payment_methods key=method_key  item=method}
+										<option value="{$method.token|escape:'htmlall':'UTF-8'}">
+											{if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
+											{$method.info|escape:'htmlall':'UTF-8'}
+										</option>
+									{/foreach}
+								</select>
 							</div>
-							{if isset($payment_methods) && !empty($payment_methods)}
-								<div id="bt-vault-form" class="bt__mt-2 bt__mb-3">
-									<p><b>{l s='Choose your PayPal account' mod='braintree'}:</b></p>
-									<select name="pbt_vaulting_token" data-bt-vaulting-token="pbt" class="form-control bt__form-control">
-										<option value="">{l s='Choose your paypal account' mod='braintree'}</option>
-										{foreach from=$payment_methods key=method_key  item=method}
-											<option value="{$method.token|escape:'htmlall':'UTF-8'}">
-												{if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
-												{$method.info|escape:'htmlall':'UTF-8'}
-											</option>
-										{/foreach}
-									</select>
-								</div>
-							{/if}
 						{/if}
-						<div data-bt-vault-info class="bt__hidden bt__mb-4">
-							<p>{l s='You have to finish your payment done with your account PayPal:' mod='braintree'}</p>
+						<div data-form-new-account>
+							<input type="hidden" name="payment_method_nonce" data-payment-method-nonce="pbt"/>
+							<input type="hidden" name="payment_method_bt" value="{$bt_method|escape:'htmlall':'UTF-8'}"/>
+							{if isset($active_vaulting) && $active_vaulting}
+								<div class="bt__mb-4" data-bt-save-account>
+									<input type="checkbox" name="save_account_in_vault" id="save_account_in_vault"/> 
+									<label for="save_account_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my PayPal account' mod='braintree'}</label>
+								</div>						
+							{/if}
+							<div data-bt-vault-info class="bt__hidden bt__mb-4">
+								<p>{l s='You have to finish your payment done with your account PayPal:' mod='braintree'}</p>
+							</div>
+							<div data-braintree-button id="braintree-button" class="bt__mb-4"></div>
 						</div>
-						<div data-braintree-button id="braintree-button" class="bt__mb-4"></div>
 					{else}
 						<div class="alert alert-danger">{$init_error}</div>
 					{/if}

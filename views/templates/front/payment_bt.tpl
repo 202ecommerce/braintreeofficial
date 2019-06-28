@@ -27,7 +27,7 @@
 {*Displaying a button or the iframe*}
 <div class="row">
 	<div class="col-xs-12 col-md-10">
-		<div class="bt braintree-row-payment bt__p-1 bt__pl-2 bt__mb-2">
+		<div class="bt braintree-row-payment bt__pb-3">
 			<div class="bt__mb-2">
 				<i class="material-icons mi-lock">lock</i>
 				<b>{l s='Pay securely using your credit card.' mod='braintree'}</b>

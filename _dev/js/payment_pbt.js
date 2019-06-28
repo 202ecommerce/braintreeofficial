@@ -13,7 +13,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-import * as functions from './functions.js'; 
+import {selectOption} from './functions.js'; 
 
 $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
@@ -34,6 +34,12 @@ $(document).ready(() => {
     }    
   });
   $('[data-bt-paypal-info-popover]').popover(); 
+
+  let accountSelect = $('[data-bt-vaulting-token="pbt"]');    
+  let accountForm = $('[data-form-new-account]');
+  if (accountSelect) {
+    selectOption(accountSelect, accountForm);
+  }
 });
 
 
@@ -114,13 +120,10 @@ const initPaypalBraintree = (flow) => {
 }
 
 const BraintreePaypalSubmitPayment = (e) => {
-  let selectedOption = $('input[name=payment-option]:checked').attr('id');
-  if (!$('[data-bt-payment-method-nonce]').val() && !$('[data-bt-vaulting-token="pbt"]').val()) {
+  if (!$('[data-payment-method-nonce="pbt"]').val() && !$('[data-bt-vaulting-token="pbt"]').val()) {
     $('[data-bt-pp-error-msg]').show().text(empty_nonce);
     return false;
-  }
-
-  if ($(`#${selectedOption}-additional-information .payment_module`).hasClass('paypal-braintree')) {
+  } else {
     $('[data-braintree-paypal-form]').submit();
   }
 }

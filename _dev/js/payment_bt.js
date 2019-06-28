@@ -13,7 +13,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-import * as functions from './functions.js'; 
+import {selectOption} from './functions.js'; 
 
 $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
@@ -36,7 +36,7 @@ const initBraintreeCard = () => {
     let cardSelect = $('[data-bt-vaulting-token="bt"]');    
     let cardForm = $('[data-form-new-card]');
     if (cardSelect) {
-      functions.selectOption(cardSelect, cardForm);
+      selectOption(cardSelect, cardForm);
     }
 
 

@@ -13,7 +13,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-import * as functions from './functions.js'; 
+import {hoverConfig, hoverTabConfig} from './functions.js'; 
 
 var CustomizeCheckout = {
   init() {
@@ -25,9 +25,9 @@ var CustomizeCheckout = {
     $('[data-bt-link-settings]').on('click', (e) => {
       let el = $(e.target.attributes.href.value);
       if (el.length) {
-        functions.hoverConfig(el);
+        hoverConfig(el);
       } else {
-        functions.hoverTabConfig();
+        hoverTabConfig();
       }
     });
 
