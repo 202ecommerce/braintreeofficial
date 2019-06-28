@@ -188,6 +188,7 @@ class MethodBraintree extends AbstractMethodBraintree
         if (!$transaction) {
             throw new Exception('Error during transaction validation', '00000');
         }
+
         $this->setDetailsTransaction($transaction);
         if (Configuration::get('BRAINTREE_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
             $order_state = Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION');
@@ -444,13 +445,15 @@ class MethodBraintree extends AbstractMethodBraintree
                     'merchantAccountId' => $result->transaction->merchantAccountId,
                 );
                 $braintreeOrder->total_paid -= $amount;
-                $capture->capture_amount = $braintreeOrder->total_paid;
                 if ($braintreeOrder->total_paid == 0) {
                     $braintreeOrder->payment_status = 'refunded';
-                    $capture->result = 'refunded';
                 }
                 $braintreeOrder->save();
-                $capture->save();
+                if (Validate::isLoadedObject($capture)) {
+                    $capture->capture_amount = $braintreeOrder->total_paid;
+                    $capture->result = $braintreeOrder->payment_status;
+                    $capture->save();
+                }
             } else {
                 $errors = $result->errors->deepAll();
                 foreach ($errors as $error) {

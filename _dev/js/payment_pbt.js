@@ -119,6 +119,7 @@ const initPaypalBraintree = (flow) => {
   });
 }
 
+
 const BraintreePaypalSubmitPayment = (e) => {
   if (!$('[data-payment-method-nonce="pbt"]').val() && !$('[data-bt-vaulting-token="pbt"]').val()) {
     $('[data-bt-pp-error-msg]').show().text(empty_nonce);

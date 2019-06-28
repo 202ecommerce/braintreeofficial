@@ -428,8 +428,11 @@ class Braintree extends PaymentModule
                 $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
             }
             if (isset($response_void) && isset($response_void['success']) && $response_void['success']) {
-                $braintreeCapture->result = 'voided';
-                $braintreeCapture->save();
+                if (Validate::isLoadedObject($braintreeCapture)) {
+                    $braintreeCapture->result = 'voided';
+                    $braintreeCapture->save();
+                }
+
                 $orderBraintree->payment_status = 'voided';
                 $orderBraintree->save();
                 foreach ($response_void as $key => $msg) {
@@ -509,7 +512,9 @@ class Braintree extends PaymentModule
                     $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
                 }
                 if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
-                    $braintreeCapture->result = 'voided';
+                    if (Validate::isLoadedObject($braintreeCapture)) {
+                        $braintreeCapture->result = 'voided';
+                    }
                     $orderBraintree->payment_status = 'voided';
                     foreach ($refund_response as $key => $msg) {
                         $message .= $key." : ".$msg.";\r";
@@ -548,7 +553,10 @@ class Braintree extends PaymentModule
                 }
 
                 if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
-                    $braintreeCapture->result = 'refunded';
+                    if (Validate::isLoadedObject($braintreeCapture)) {
+                        $braintreeCapture->result = 'refunded';
+                    }
+
                     $orderBraintree->payment_status = 'refunded';
                     foreach ($refund_response as $key => $msg) {
                         $message .= $key." : ".$msg.";\r";
@@ -569,7 +577,10 @@ class Braintree extends PaymentModule
             }
 
             if (isset($refund_response) && isset($refund_response['success']) && $refund_response['success']) {
-                $braintreeCapture->save();
+                if (Validate::isLoadedObject($braintreeCapture)) {
+                    $braintreeCapture->save();
+                }
+
                 $orderBraintree->save();
             }
 
