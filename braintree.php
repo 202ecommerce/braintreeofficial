@@ -195,7 +195,7 @@ class Braintree extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('Braintree');
-        $this->description = $this->l('Benefit from Braintree’s complete payments platform and grow your business online, on mobile and internationally. Accept credit cards, debit cards and PayPal payments.');
+        $this->description = $this->l('Boost revenue with the mobile native Braintree module, driving more conversion in 45+ countries and accepting the latest payment methods.');
         $this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
         $this->module_link = $this->context->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
 
