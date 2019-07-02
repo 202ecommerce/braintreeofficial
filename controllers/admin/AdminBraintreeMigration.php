@@ -125,7 +125,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
     public function displayAjaxSkipMigration()
     {
         $content = Tools::jsonEncode(array(
-            'status' => Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1),
+            'status' => Configuration::updateValue('BRAINTREE_MIGRATION_SKIP', 1),
             'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeSetup', true),
         ));
         $response = new JsonResponse();

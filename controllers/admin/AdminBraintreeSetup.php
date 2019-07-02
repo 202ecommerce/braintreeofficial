@@ -26,12 +26,21 @@
 use BraintreeAddons\classes\AdminBraintreeController;
 use BraintreeAddons\classes\AbstractMethodBraintree;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use BraintreeAddons\services\ServiceBraintreeOrder;
 
 class AdminBraintreeSetupController extends AdminBraintreeController
 {
+    protected $serviceBraintreeOrder;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
+    }
+
     public function initContent()
     {
-        if ($this->offreMigration()) {
+        if ($this->offreMigration() && Configuration::get('BRAINTREE_MIGRATION_SKIP') != '1') {
             return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeMigration', true));
         }
 
@@ -77,6 +86,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $offerMigration = Configuration::get('BRAINTREE_MIGRATION_DONE') != '1';
         $offerMigration &= Module::isInstalled('paypal');
         $offerMigration &= Configuration::get('PAYPAL_BRAINTREE_ENABLED') == '1';
+        $offerMigration &= $this->serviceBraintreeOrder->getCountOrders() == 0;
         return $offerMigration;
     }
 
@@ -114,7 +124,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             'braintree_merchant_id_live' => Configuration::get('BRAINTREE_MERCHANT_ID_LIVE'),
             'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX'),
             'accountConfigured' => $methodBraintree->isConfigured(),
-            'sandboxEnvironment' => (int)Configuration::get('BRAINTREE_SANDBOX')
+            'sandboxEnvironment' => (int)Configuration::get('BRAINTREE_SANDBOX'),
+            'showMigrationBtn' => $this->offreMigration()
         );
         return $tpl_vars;
     }

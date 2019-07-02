@@ -40,6 +40,14 @@
 				{l s='Connect or create Braintree account' mod='braintree'}
 			</span>
 		{/if}
+
+		{if isset($showMigrationBtn) && $showMigrationBtn}
+			<div>
+				<a class="btn btn-default" href="{$link->getAdminLink('AdminBraintreeMigration', true)}">
+					{l s='Migrate your settings from PayPal module' mod='braintree'}
+				</a>
+			</div>
+		{/if}
 	</p>
 </div>
 <div class="modal fade" id="credentialBlock" role="dialog" aria-labelledby="credentialBlock" aria-hidden="true">

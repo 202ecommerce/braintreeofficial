@@ -113,4 +113,13 @@ class ServiceBraintreeOrder
         }
     }
 
+    /**
+     * @return int
+     */
+    public function getCountOrders()
+    {
+        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        return $collection->count();
+    }
+
 }
