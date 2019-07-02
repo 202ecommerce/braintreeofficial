@@ -31,6 +31,7 @@ use BraintreeAddons\services\ServiceBraintreeVaulting;
 use BraintreeAddons\services\ServiceBraintreeOrder;
 use BraintreeAddons\services\ServiceBraintreeCapture;
 use BraintreeAddons\services\ServiceBraintreeLog;
+use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class AdminBraintreeMigrationController extends AdminBraintreeSetupController
 {
@@ -69,12 +70,21 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         $serviceBraintreeOrder = new ServiceBraintreeOrder();
         $serviceBraintreeCapture = new ServiceBraintreeCapture();
         $serviceBraintreeLog = new ServiceBraintreeLog();
+        $tablesForBackup = array(
+            'paypal_order',
+            'paypal_customer',
+            'paypal_capture',
+            'paypal_processlogger',
+            'paypal_vaulting'
+        );
+        $this->doBackupTables($tablesForBackup);
 
         $serviceBraintreeCustomer->doMigration();
         $serviceBraintreeVaulting->doMigration();
         $serviceBraintreeOrder->doMigration();
         $serviceBraintreeCapture->doMigration();
         $serviceBraintreeLog->doMigration();
+        $serviceBraintreeOrder->deleteBtOrderFromPayPal();
 
         Configuration::updateValue('BRAINTREE_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID'));
         Configuration::updateValue('BRAINTREE_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID'));
@@ -97,6 +107,34 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         if ($merchant_account_id_currency_live) {
             $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_live, 0);
         }
+    }
+
+    /**
+     *  @param array $tables the names of tables
+     * */
+    protected function doBackupTables($tables)
+    {
+        if (is_array($tables) == false || empty($tables)) {
+            return;
+        }
+        ProcessLoggerHandler::openLogger();
+        foreach ($tables as $table) {
+            $nameTableCurrent = _DB_PREFIX_ . $table;
+            $nameTableBackup = $nameTableCurrent . '_old';
+            $queryCreatingTableBackup = "CREATE TABLE %s LIKE %s;";
+            $queryFillingTableBackup = "INSERT %s SELECT * FROM %s;";
+            try {
+                DB::getInstance()->execute(sprintf($queryCreatingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
+                DB::getInstance()->execute(sprintf($queryFillingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
+            } catch (Exception $e) {
+                $message = 'Error while do backup of the tables. ';
+                $message .= 'File: ' . $e->getFile() . '. ';
+                $message .= 'Line: ' . $e->getLine() . '. ';
+                $message .= 'Message: ' . $e->getMessage() . '.';
+                ProcessLoggerHandler::logError($message);
+            }
+        }
+        ProcessLoggerHandler::closeLogger();
     }
 
     protected function doMigrateMerchantAccountIdCurrency($merchantAccountIdCurrency, $sandbox)

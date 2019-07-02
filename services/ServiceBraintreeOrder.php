@@ -122,4 +122,37 @@ class ServiceBraintreeOrder
         return $collection->count();
     }
 
+    public function deleteBtOrderFromPayPal()
+    {
+        if (\Module::isInstalled('paypal')) {
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalOrder.php';
+            require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalCapture.php';
+            $collection = new \PrestaShopCollection(BraintreeOrder::class);
+
+            if ($collection->count() == 0) {
+                return;
+            }
+
+            ProcessLoggerHandler::openLogger();
+            /* @var $braintreeOrder BraintreeOrder
+             * @var $paypalOrder \PaypalOrder
+             * @var $paypalCapture \PaypalCapture
+             */
+            foreach ($collection->getResults() as $braintreeOrder) {
+                try {
+                    $paypalOrder = \PaypalOrder::loadByOrderId($braintreeOrder->id_order);
+                    $paypalCapture = \PaypalCapture::loadByOrderPayPalId($paypalOrder->id);
+                    $paypalOrder->delete();
+                    $paypalCapture->delete();
+                } catch (\Exception $e) {
+                    $message = 'Error while deleting paypal order. ';
+                    $message .= 'File: ' . $e->getFile() . '. ';
+                    $message .= 'Line: ' . $e->getLine() . '. ';
+                    $message .= 'Message: ' . $e->getMessage() . '.';
+                    ProcessLoggerHandler::logError($message);
+                }
+            }
+            ProcessLoggerHandler::closeLogger();
+        }
+    }
 }
