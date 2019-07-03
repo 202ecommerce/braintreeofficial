@@ -25,4 +25,7 @@
 
 {include './_partials/headerLogo.tpl'}
 
-{$form nofilter}
+{if isset($form)}
+    {$form nofilter}   {*can not escape a variable. Variable contains html code*}
+{/if}
+

@@ -123,5 +123,4 @@ class ServiceBraintreeVaulting
             ProcessLoggerHandler::closeLogger();
         }
     }
-
 }

@@ -22,6 +22,7 @@
  * @license   Commercial license
  * @version   develop
  */
+
 namespace BraintreeAddons\classes;
 
 use Symfony\Component\VarDumper\VarDumper;
@@ -64,7 +65,7 @@ class AdminBraintreeController extends \ModuleAdminController
     public function saveForm()
     {
         foreach (\Tools::getAllValues() as $fieldName => $fieldValue) {
-            if (strpos($fieldName,'braintree') === 0 ) {
+            if (strpos($fieldName, 'braintree') === 0) {
                 \Configuration::updateValue(\Tools::strtoupper($fieldName), pSQL($fieldValue), false, null, $this->context->shop->id);
             }
         }
@@ -91,7 +92,6 @@ class AdminBraintreeController extends \ModuleAdminController
         if ((int)\Configuration::get('PS_COUNTRY_DEFAULT') == false) {
             $response['success'] = false;
             $response['message'][] = $this->l('To activate a payment solution, please select your default country.');
-
         }
         $tls_check = $this->_checkTLSVersion();
         if ($tls_check['status'] == false) {

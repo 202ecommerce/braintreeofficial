@@ -22,6 +22,7 @@
  * @license   Commercial license
  * @version   develop
  */
+
 require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
 
 use BraintreeAddons\classes\AdminBraintreeController;
@@ -35,7 +36,6 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'customizeCheckout.tpl');
         $this->context->smarty->assign('content', $this->content);
         $this->addJS('modules/' . $this->module->name . '/views/js/customizeCheckoutAdmin.js');
-        
     }
 
     public function initBehaviorForm()
@@ -163,6 +163,5 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
             'braintree_show_paypal_benefits' => (int)Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
-
     }
 }

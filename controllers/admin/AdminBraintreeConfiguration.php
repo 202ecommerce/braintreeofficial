@@ -23,7 +23,6 @@
  * @version   develop
  */
 
-
 class AdminBraintreeConfigurationController extends AdminController
 {
 

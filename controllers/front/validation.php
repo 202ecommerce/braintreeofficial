@@ -25,6 +25,7 @@
  */
 
 use BraintreeAddons\classes\AbstractMethodBraintree;
+
 require_once _PS_MODULE_DIR_ . 'braintree/controllers/front/abstract.php';
 
 /**

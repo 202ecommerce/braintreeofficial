@@ -58,7 +58,7 @@
 		<div class="col-lg-9">
 			<input type="text"
 							name="braintree_public_key_live"
-							{if isset($braintree_public_key_live)}value='{$braintree_public_key_live nofilter}'{/if}>
+							{if isset($braintree_public_key_live)}value='{$braintree_public_key_live|escape:'htmlall':'utf-8'}'{/if}>
 		</div>
 	</div>
 
@@ -69,7 +69,7 @@
 		<div class="col-lg-9">
 			<input type="text"
 							name="braintree_private_key_live"
-							{if isset($braintree_private_key_live)}value='{$braintree_private_key_live nofilter}'{/if}>
+							{if isset($braintree_private_key_live)}value='{$braintree_private_key_live|escape:'htmlall':'utf-8'}'{/if}>
 		</div>
 	</div>
 
@@ -80,7 +80,7 @@
 		<div class="col-lg-9">
 			<input type="text"
 							name="braintree_merchant_id_live"
-							{if isset($braintree_merchant_id_live)}value='{$braintree_merchant_id_live nofilter}'{/if}>
+							{if isset($braintree_merchant_id_live)}value='{$braintree_merchant_id_live|escape:'htmlall':'utf-8'}'{/if}>
 		</div>
 	</div>
 </div>
@@ -101,7 +101,7 @@
 		<div class="col-lg-9">
 			<input type="text"
 							name="braintree_public_key_sandbox"
-							{if isset($braintree_public_key_sandbox)}value='{$braintree_public_key_sandbox nofilter}'{/if}>
+							{if isset($braintree_public_key_sandbox)}value='{$braintree_public_key_sandbox|escape:'htmlall':'utf-8'}'{/if}>
 		</div>
 	</div>
 
@@ -112,7 +112,7 @@
 		<div class="col-lg-9">
 			<input type="text"
 							name="braintree_private_key_sandbox"
-							{if isset($braintree_private_key_sandbox)}value='{$braintree_private_key_sandbox nofilter}'{/if}>
+							{if isset($braintree_private_key_sandbox)}value='{$braintree_private_key_sandbox|escape:'htmlall':'utf-8'}'{/if}>
 		</div>
 	</div>
 
@@ -123,7 +123,7 @@
 		<div class="col-lg-9">
 				<input type="text"
 								name="braintree_merchant_id_sandbox"
-								{if isset($braintree_merchant_id_sandbox)}value='{$braintree_merchant_id_sandbox nofilter}'{/if}>
+								{if isset($braintree_merchant_id_sandbox)}value='{$braintree_merchant_id_sandbox|escape:'htmlall':'utf-8'}'{/if}>
 		</div>
 	</div>
 </div>

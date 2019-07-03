@@ -22,6 +22,7 @@
  * @license   Commercial license
  * @version   develop
  */
+
 require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
 
 use BraintreeAddons\classes\AdminBraintreeController;
@@ -263,6 +264,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             ),
         );
 
+        $values =  array();
         foreach ($inputs as $input) {
             $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
         }
@@ -290,5 +292,4 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
         }
     }
-
 }

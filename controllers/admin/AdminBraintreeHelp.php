@@ -22,6 +22,7 @@
  * @license   Commercial license
  * @version   develop
  */
+
 require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
 
 use BraintreeAddons\classes\AdminBraintreeController;

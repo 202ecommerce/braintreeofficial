@@ -25,7 +25,7 @@
 
 <div>
 	<p>
-		{l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'utf':'htmlall'}</b>
+		{l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'htmlall':'utf-8'}</b>
 	</p>
 	<p>
 		{l s='To  modify country:' mod='braintree'}

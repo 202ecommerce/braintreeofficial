@@ -23,6 +23,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
 
 if (!defined('_PS_VERSION_')) {
@@ -383,9 +384,11 @@ class Braintree extends PaymentModule
      */
     public function setTransactionId($ps_order, $transaction_id)
     {
-        Db::getInstance()->update('order_payment',
+        Db::getInstance()->update(
+            'order_payment',
             array('transaction_id' => pSQL($transaction_id)),
-            'order_reference = "'.pSQL($ps_order->reference).'"');
+            'order_reference = "'.pSQL($ps_order->reference).'"'
+        );
     }
 
     public function hookActionOrderStatusUpdate(&$params)
@@ -967,12 +970,12 @@ class Braintree extends PaymentModule
             $this->context->smarty->assign(array(
                 'payment_methods' => $payment_methods,
             ));
-        }       
+        }
 
         return $this->context->smarty->fetch('module:braintree/views/templates/front/payment_pbt.tpl');
     }
 
-    public function addJsVarsPB() 
+    public function addJsVarsPB()
     {
         /* @var $braintree MethodBraintree*/
         $braintree = AbstractMethodBraintree::load('Braintree');
@@ -1043,7 +1046,7 @@ class Braintree extends PaymentModule
             'authorization' => $clientToken,
             'bt_amount' => $amount,
             'check3DS' => $check3DS,
-        ));        
+        ));
     }
 
     /**

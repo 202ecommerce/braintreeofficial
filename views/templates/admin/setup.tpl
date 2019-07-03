@@ -29,12 +29,12 @@
 	<div class="row flex">
 		<div class="col-lg-8 stretchHeightForm">
 			{if isset($formAccountSettings)}
-				{$formAccountSettings nofilter}
+				{$formAccountSettings nofilter} {*can not escape a variable. Variable contains html code*}
 			{/if}
 		</div>
 		<div class="col-lg-4">
 			{if isset($formEnvironmentSettings)}
-				{$formEnvironmentSettings nofilter}
+				{$formEnvironmentSettings nofilter} {*can not escape a variable. Variable contains html code*}
 			{/if}
 		</div>
 	</div>
@@ -42,15 +42,15 @@
 	<div class="row flex">
 		<div class="col-lg-8">
 			{if isset($formPaymentSettings)}
-				{$formPaymentSettings nofilter}
+				{$formPaymentSettings nofilter} {*can not escape a variable. Variable contains html code*}
 			{/if}
 			{if isset($formMerchantAccounts)}
-				{$formMerchantAccounts nofilter}
+				{$formMerchantAccounts nofilter} {*can not escape a variable. Variable contains html code*}
 			{/if}
 		</div>
 		<div class="col-lg-4 stretchHeightForm" id="status-block">
 			{if isset($formStatus)}
-				{$formStatus nofilter}
+				{$formStatus nofilter} {*can not escape a variable. Variable contains html code*}
 			{/if}
 		</div>
 	</div>

@@ -32,7 +32,7 @@
 			<b>{l s='Production' mod='braintree'}</b>
 		{/if}
 	</p>
-	<p>{l s='Production mode is the Live environment where you\'ll be able to collect your real payments'}</p>
+	<p>{l s='Production mode is the Live environment where you\'ll be able to collect your real payments' mod='braintree'}</p>
 	<p>
 		<button class="btn btn-default" id="switchEnvironmentMode">
 			{l s='Switch to' mod='braintree'}

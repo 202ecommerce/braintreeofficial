@@ -106,7 +106,6 @@ class MethodBraintree extends AbstractMethodBraintree
      */
     public function setConfig($params)
     {
-
     }
 
     /**
@@ -114,7 +113,6 @@ class MethodBraintree extends AbstractMethodBraintree
      */
     public function getConfig(\Braintree $module)
     {
-
     }
 
     public function getAllCurrency()
@@ -127,7 +125,6 @@ class MethodBraintree extends AbstractMethodBraintree
                 $result[$account->currencyIsoCode] = $account->id;
             }
         } catch (Exception $e) {
-
         }
         return $result;
     }
@@ -198,7 +195,8 @@ class MethodBraintree extends AbstractMethodBraintree
         } else {
             $order_state = Configuration::get('BRAINTREE_OS_AWAITING');
         }
-        $module->validateOrder(context::getContext()->cart->id,
+        $module->validateOrder(
+            context::getContext()->cart->id,
             $order_state,
             $transaction->amount,
             $this->getPaymentMethod(),
@@ -206,7 +204,8 @@ class MethodBraintree extends AbstractMethodBraintree
             $this->getDetailsTransaction(),
             context::getContext()->cart->id_currency,
             false,
-            context::getContext()->customer->secure_key);
+            context::getContext()->customer->secure_key
+        );
     }
 
     public function setDetailsTransaction($transaction)
@@ -328,7 +327,6 @@ class MethodBraintree extends AbstractMethodBraintree
                     $result[$response->merchantAccount->currencyIsoCode] = $response->merchantAccount->id;
                 }
             } catch (Exception $e) {
-
             }
         } else {
             $currencies = Currency::getCurrencies();
@@ -341,7 +339,6 @@ class MethodBraintree extends AbstractMethodBraintree
                         $result[$response->merchantAccount->currencyIsoCode] = $response->merchantAccount->id;
                     }
                 } catch (Exception $e) {
-
                 }
             }
         }
@@ -628,7 +625,7 @@ class MethodBraintree extends AbstractMethodBraintree
             "deviceData"            => '',
         );
 
-        $braintree_customer = $this->serviceBraintreeCustomer->loadCustomerByMethod(Context::getContext()->customer->id,  (int)Configuration::get('BRAINTREE_SANDBOX'));
+        $braintree_customer = $this->serviceBraintreeCustomer->loadCustomerByMethod(Context::getContext()->customer->id, (int)Configuration::get('BRAINTREE_SANDBOX'));
         if (Validate::isLoadedObject($braintree_customer) == false) {
             $braintree_customer = $this->createCustomer();
         } else {
@@ -810,5 +807,4 @@ class MethodBraintree extends AbstractMethodBraintree
         }
         $vaulting->save();
     }
-
 }
