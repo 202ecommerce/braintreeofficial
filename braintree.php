@@ -925,7 +925,7 @@ class Braintree extends PaymentModule
         $payments_options = array();
         if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
             $embeddedOption = new PaymentOption();
-            $action_text = $this->l('Pay with paypal');
+            $action_text = $this->l('Pay with PayPal');
             $embeddedOption->setCallToActionText($action_text)
                 ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/views/img/paypal.png'))
                 ->setModuleName($this->name)

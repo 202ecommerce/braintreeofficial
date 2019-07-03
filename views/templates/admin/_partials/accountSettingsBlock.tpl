@@ -58,10 +58,10 @@
 					<div>
 						<p class="h3">{l s='API Credentials' mod='braintree'}</p>
 						<p>
-							{l s='In order to accept Braintreee payments, please fill your API Keys.' mod='braintree'}
+							{l s='In order to accept Braintree payments, please fill your API Keys.' mod='braintree'}
 						</p>
 						<p>
-							{l s='If you do not have a Braintreee account, you can create by following this' mod='braintree'}
+							{l s='If you do not have a Braintree account, you can create by following this' mod='braintree'}
 							<a href="">{l s='link' mod='braintree'}</a>
 						</p>
 						{include './formAccount.tpl'}
