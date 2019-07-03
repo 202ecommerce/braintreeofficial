@@ -1262,4 +1262,10 @@ class Braintree extends PaymentModule
             }
         }
     }
+
+    public function displayInformation($message)
+    {
+        $this->context->smarty->assign('message', $message);
+        return $this->context->smarty->fetch(_PS_MODULE_DIR_ . $this->name . '/views/templates/admin/_partials/alertInfo.tpl');
+    }
 }
