@@ -114,12 +114,13 @@ const initBraintreeCard = () => {
           removeErrorMsg($(`#${field.container.id}`));
           switch (event.emittedBy) {
             case 'number':
-              hostedFieldsInstance.focus('expirationDate');                         
+              hostedFieldsInstance.focus('expirationDate');  
               break;
             case 'expirationDate':
               hostedFieldsInstance.focus('cvv');  
+              break;
             case 'cvv':
-                $(`#${field.container.id}`).removeClass('braintree-hosted-fields-focused');
+              $(`#${field.container.id}`).removeClass('braintree-hosted-fields-focused');
               break; 
           }
         } else if (field.isPotentiallyValid) {
@@ -129,11 +130,17 @@ const initBraintreeCard = () => {
         }
       });
 
+      $('[data-bt-field]').on('click', (e) => {
+        hostedFieldsInstance.focus(e.currentTarget.dataset.btField); 
+      });
+
       bt_hosted_fileds = hostedFieldsInstance;
       bt_client_instance = clientInstance;
     });
   });
 }
+
+
 
 const removeErrorMsg = (el) => {
   el.removeClass('braintree-hosted-fields-valid');

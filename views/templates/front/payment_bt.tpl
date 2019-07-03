@@ -54,7 +54,9 @@
 						<div data-form-new-card>							
 							<div id="block-card-number" class="form-group">
 								<label for="card-number" class="bt__form-label">{l s='Card number' mod='braintree'}</label>
-								<div id="card-number" class="form-control bt__form-control bt__position-relative"><div id="card-image"></div></div>
+								<div id="card-number" class="form-control bt__form-control bt__position-relative" data-bt-field="number">
+									<div id="card-image"></div>
+								</div>
 								<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 							</div>
 							<div class="bt__form-row">
@@ -62,13 +64,13 @@
 									<label for="expiration-date" class="bt__form-label">{l s='Expiration Date' mod='braintree'}
 										<span class="text-muted">{l s='(MM/YY)' mod='braintree'}</span>
 									</label>
-									<div id="expiration-date" class="form-control bt__form-control"></div>
+									<div id="expiration-date" class="form-control bt__form-control" data-bt-field="expirationDate"></div>
 									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 								</div>
 
 								<div id="block-cvv" class="form-group col-md-6" data-bt-card-cvv>
 									<label for="cvv" class="bt__form-label">{l s='CVV' mod='braintree'}</label>
-									<div id="cvv" class="form-control bt__form-control"></div>
+									<div id="cvv" class="form-control bt__form-control" data-bt-field="cvv"></div>
 									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 								</div>
 							</div>
