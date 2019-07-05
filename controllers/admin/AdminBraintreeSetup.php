@@ -108,6 +108,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
+                    'col' => 12,
+                    'label' => '',
                 )
             ),
             'id_form' => 'bt_config_account'
@@ -193,10 +195,14 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
+                    'col' => 12,
+                    'label' => '',
                 ),
                 array(
                     'type' => 'hidden',
                     'name' => 'braintree_sandbox',
+                    'col' => 12,
+                    'label' => '',
                 )
             ),
             'id_form' => 'bt_config_environment'
@@ -230,6 +236,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
+                    'col' => 12,
+                    'label' => '',
                 )
             )
         );
