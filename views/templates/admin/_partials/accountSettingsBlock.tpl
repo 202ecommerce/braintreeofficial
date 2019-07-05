@@ -32,7 +32,19 @@
 	</p>
 	<p>
 		{if isset($accountConfigured) && $accountConfigured}
-			<span class="btn btn-default" data-bt-logout>
+			<span class="mr-20">
+				{l s='Connected Merchand ID' mod='braintree'}
+			</span>
+
+			<strong>
+				{if isset($sandboxEnvironment) && $sandboxEnvironment && isset($braintree_merchant_id_sandbox)}
+					{$braintree_merchant_id_sandbox|escape:'htmlall':'utf-8'}
+				{elseif isset($braintree_merchant_id_live)}
+					{$braintree_merchant_id_live|escape:'htmlall':'utf-8'}
+				{/if}
+			</strong>
+
+			<span class="btn btn-default ml-20" data-bt-logout>
 				{l s='Logout' mod='braintree'}
 			</span>
 		{else}
