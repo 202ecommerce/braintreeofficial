@@ -222,7 +222,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $tpl_vars = array(
             'merchantCountry' => $countryDefault->name,
             'tlsVersion' => $this->_checkTLSVersion(),
-            'accountConfigured' => $methodBraintree->isConfigured()
+            'accountConfigured' => $methodBraintree->isConfigured(),
+            'sslActivated' => $this->module->isSslActive()
         );
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');

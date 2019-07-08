@@ -39,6 +39,16 @@
 	</p>
 	<ul class="list-unstyled">
 		<li>
+            {if isset($sslActivated) && $sslActivated}
+				<i class="icon-check" style="color: green"></i>
+                {l s='SSL enabled.' mod='braintree'}
+            {else}
+				<i class="icon-remove" style="color: red"></i>
+                {l s='SSL should be enabled on your web site.' mod='braintree'}
+            {/if}
+		</li>
+
+		<li>
 			{if isset($tlsVersion) && $tlsVersion['status']}
 				<i class="icon-check text-success"></i>
 				{l s='PHP cURL extension must be enabled on your server' mod='braintree'}

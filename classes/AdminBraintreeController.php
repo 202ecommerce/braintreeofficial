@@ -93,6 +93,12 @@ class AdminBraintreeController extends \ModuleAdminController
             $response['success'] = false;
             $response['message'][] = $this->l('To activate a payment solution, please select your default country.');
         }
+
+        if ($this->module->isSslActive() == false) {
+            $response['success'] = false;
+            $response['message'][] = $this->l('SSL should be enabled on your web site.');
+        }
+
         $tls_check = $this->_checkTLSVersion();
         if ($tls_check['status'] == false) {
             $response['success'] = false;
