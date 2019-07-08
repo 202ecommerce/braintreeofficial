@@ -212,6 +212,9 @@ class Braintree extends PaymentModule
         if (parent::install() == false || $this->installOrderState() == false) {
             return false;
         }
+
+        Configuration::updateValue('BRAINTREE_API_INTENT', 'sale');
+
         $this->checkBraintreeStats();
         return true;
     }
