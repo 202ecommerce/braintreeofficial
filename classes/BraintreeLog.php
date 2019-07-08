@@ -52,4 +52,15 @@ class BraintreeLog extends ProcessLoggerObjectModel
     {
         return $this->serviceLog->getLinkToTransaction($this);
     }
+
+    public function getDateTransaction()
+    {
+        if ($this->date_transaction == '0000-00-00 00:00:00') {
+            return '';
+        }
+
+        $dateTimeZone = new \DateTimeZone('GMT');
+        $date = new \DateTime($this->date_transaction, $dateTimeZone);
+        return $date->format('Y-m-d H:i:s T');
+    }
 }
