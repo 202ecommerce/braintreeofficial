@@ -180,6 +180,8 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
 
         if ($isConfigured) {
             Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1);
+            $paypalModule = Module::getInstanceByName('paypal');
+            $paypalModule->disable();
         }
 
         $content = Tools::jsonEncode(array(
