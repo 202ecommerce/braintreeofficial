@@ -79,7 +79,7 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
                 \Context::getContext()->cart->id,
                 \Context::getContext()->shop->id,
                 isset($this->transaction_detail['transaction_id']) ? $this->transaction_detail['transaction_id'] : null,
-                (int)\Configuration::get('PAYPAL_SANDBOX'),
+                (int)\Configuration::get('BRAINTREE_SANDBOX'),
                 isset($this->transaction_detail['date_transaction']) ? $this->transaction_detail['date_transaction'] : null
             );
             ProcessLoggerHandler::closeLogger();

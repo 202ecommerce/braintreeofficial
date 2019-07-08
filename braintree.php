@@ -1119,7 +1119,7 @@ class Braintree extends PaymentModule
                 (int)$id_cart,
                 $this->context->shop->id,
                 isset($transaction['payment_tool']) && $transaction['payment_tool'] ? $transaction['payment_tool'] : 'Braintree',
-                (int)Configuration::get('PAYPAL_SANDBOX'),
+                (int)Configuration::get('BRAINTREE_SANDBOX'),
                 isset($transaction['date_transaction']) ? $transaction['date_transaction'] : null
             );
             ProcessLoggerHandler::closeLogger();
@@ -1137,7 +1137,7 @@ class Braintree extends PaymentModule
             (int)$id_cart,
             $this->context->shop->id,
             isset($transaction['payment_tool']) && $transaction['payment_tool'] ? $transaction['payment_tool'] : 'PayPal',
-            (int)Configuration::get('PAYPAL_SANDBOX'),
+            (int)Configuration::get('BRAINTREE_SANDBOX'),
             isset($transaction['date_transaction']) ? $transaction['date_transaction'] : null
         );
         ProcessLoggerHandler::closeLogger();

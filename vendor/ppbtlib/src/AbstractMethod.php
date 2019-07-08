@@ -42,7 +42,7 @@ abstract class AbstractMethod
     /** @return string*/
     protected function getPaymentMethod()
     {
-        if ((int)\Configuration::get('PAYPAL_SANDBOX')) {
+        if ((int)\Configuration::get('BRAINTREE_SANDBOX')) {
             return $this->payment_method . ' - SANDBOX';
         } else {
             return $this->payment_method;
