@@ -34,13 +34,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		{foreach from=$logs item=$log}
+		{foreach from=$logs item=log}
 			<tr>
 				<td>
 					{$log->date_add|escape:'html':'utf-8'}
 				</td>
 				<td>
-					{$log->date_transaction|escape:'html':'utf-8'}
+					{$log->getDateTransaction()|escape:'html':'utf-8'}
 				</td>
 				<td>
 					<a href="{$log->getLinkToTransaction()|addslashes}"
