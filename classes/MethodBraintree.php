@@ -663,7 +663,6 @@ class MethodBraintree extends AbstractMethodBraintree
                         $paymentMethodToken = $payment_method->paymentMethod->token;
                     }
                     $options['storeInVaultOnSuccess'] = true;
-                    $data['customerId'] = $braintree_customer->reference;
                 }
                 if (isset($paymentMethodToken)) {
                     $data['paymentMethodToken'] = $paymentMethodToken;
@@ -676,6 +675,7 @@ class MethodBraintree extends AbstractMethodBraintree
         }
 
         $data['options'] = $options;
+        $data['customerId'] = $braintree_customer->reference;
 
         try {
             $result = $this->gateway->transaction()->sale($data);
