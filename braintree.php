@@ -1228,8 +1228,16 @@ class Braintree extends PaymentModule
     public function installOrderState()
     {
         if (!Configuration::get('BRAINTREE_OS_AWAITING')
-            || !Validate::isLoadedObject(new OrderState(Configuration::get('BRAINTREE_OS_AWAITING')))) {
-            $order_state = new OrderState();
+            || !Validate::isLoadedObject(new OrderState((int)Configuration::get('BRAINTREE_OS_AWAITING')))
+        ) {
+            if (Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING')
+                || Validate::isLoadedObject(new OrderState((int)Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING')))
+            ) {
+                $order_state = new OrderState((int)Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING'));
+            } else {
+                $order_state = new OrderState();
+            }
+
             $order_state->name = array();
             foreach (Language::getLanguages() as $language) {
                 if (Tools::strtolower($language['iso_code']) == 'fr') {
@@ -1245,16 +1253,26 @@ class Braintree extends PaymentModule
             $order_state->logable = false;
             $order_state->invoice = false;
             $order_state->module_name = $this->name;
-            if ($order_state->add()) {
+            if ($order_state->id) {
+                $order_state->update();
+            } elseif ($order_state->add()) {
                 $source = _PS_MODULE_DIR_. $this->name . '/views/img/os_braintree.png';
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
                 copy($source, $destination);
             }
             Configuration::updateValue('BRAINTREE_OS_AWAITING', (int) $order_state->id);
         }
+
         if (!Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION')
-            || !Validate::isLoadedObject(new OrderState(Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION')))) {
-            $order_state = new OrderState();
+            || !Validate::isLoadedObject(new OrderState((int)Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION')))
+        ) {
+            if (Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION')
+                || Validate::isLoadedObject(new OrderState((int)Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION')))
+            ) {
+                $order_state = new OrderState((int)Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION'));
+            } else {
+                $order_state = new OrderState();
+            }
             $order_state->name = array();
             foreach (Language::getLanguages() as $language) {
                 if (Tools::strtolower($language['iso_code']) == 'fr') {
@@ -1270,7 +1288,9 @@ class Braintree extends PaymentModule
             $order_state->logable = false;
             $order_state->invoice = false;
             $order_state->module_name = $this->name;
-            if ($order_state->add()) {
+            if ($order_state->id && $order_state->update()) {
+                $order_state->update();
+            } elseif ($order_state->add()) {
                 $source = _PS_MODULE_DIR_ . $this->name . '/views/img/os_braintree.png';
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
                 copy($source, $destination);
