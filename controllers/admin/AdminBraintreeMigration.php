@@ -121,7 +121,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         foreach ($tables as $table) {
             $nameTableCurrent = _DB_PREFIX_ . $table;
             $nameTableBackup = $nameTableCurrent . '_old';
-            $queryCreatingTableBackup = "CREATE TABLE %s LIKE %s;";
+            $queryCreatingTableBackup = "CREATE TABLE IF NOT EXISTS %s LIKE %s;";
             $queryFillingTableBackup = "INSERT %s SELECT * FROM %s;";
             try {
                 DB::getInstance()->execute(sprintf($queryCreatingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));

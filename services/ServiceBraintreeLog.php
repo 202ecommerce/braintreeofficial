@@ -55,8 +55,14 @@ class ServiceBraintreeLog
     {
         if (\Module::isInstalled('paypal') && file_exists(_PS_MODULE_DIR_ . 'paypal/classes/PaypalLog.php')) {
             require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalLog.php';
+            $cartBtIds = $this->getCartBtId();
+
+            if (empty($cartBtIds)) {
+                return;
+            }
+
             $collection = new \PrestaShopCollection('PaypalLog');
-            $collection->where('id_cart', 'in', $this->getCartBtId());
+            $collection->where('id_cart', 'in', $cartBtIds);
 
             if ($collection->count() == 0) {
                 return;

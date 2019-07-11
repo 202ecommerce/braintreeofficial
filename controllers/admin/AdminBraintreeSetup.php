@@ -88,6 +88,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $offerMigration = Configuration::get('BRAINTREE_MIGRATION_DONE') != '1';
         $offerMigration &= Module::isInstalled('paypal');
         $offerMigration &= Configuration::get('PAYPAL_BRAINTREE_ENABLED') == '1';
+        $offerMigration &= Configuration::get('PAYPAL_METHOD') == 'BT';
         $offerMigration &= $this->serviceBraintreeOrder->getCountOrders() == 0;
         return $offerMigration;
     }

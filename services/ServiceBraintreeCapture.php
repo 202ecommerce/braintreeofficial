@@ -86,8 +86,14 @@ class ServiceBraintreeCapture
     {
         if (\Module::isInstalled('paypal')) {
             require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalCapture.php';
+            $paypalOrderBtIds = $this->getPayPalOrderBtId();
+
+            if (empty($paypalOrderBtIds)) {
+                return;
+            }
+
             $collection = new \PrestaShopCollection('PaypalCapture');
-            $collection->where('id_paypal_order', 'in', $this->getPayPalOrderBtId());
+            $collection->where('id_paypal_order', 'in', $paypalOrderBtIds);
 
             if ($collection->count() == 0) {
                 return;
