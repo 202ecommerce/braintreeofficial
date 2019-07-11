@@ -197,6 +197,7 @@ class Braintree extends PaymentModule
         $this->currencies_mode = 'radio';
 
         parent::__construct();
+        require_once realpath(dirname(__FILE__) .'/smarty/plugins') . '/modifier.totlreplace.php';
 
         $this->displayName = $this->l('Braintree');
         $this->description = $this->l('Boost revenue with the mobile native Braintree module, driving more conversion in 45+ countries and accepting the latest payment methods.');

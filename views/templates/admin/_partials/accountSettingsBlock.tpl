@@ -73,8 +73,7 @@
 							{l s='In order to accept Braintree payments, please fill your API Keys.' mod='braintree'}
 						</p>
 						<p>
-							{l s='If you do not have a Braintree account, you can create by following this' mod='braintree'}
-							<a href="">{l s='link' mod='braintree'}</a>
+							{{l s='If you do not have a Braintree account, you can create by following this [a @href1@]link[/a]' mod='braintree'}|totlreplace:['@href1@' => {''}, '@target@' => {'target="blank"'}]}
 						</p>
 						{include './formAccount.tpl'}
 					</div>

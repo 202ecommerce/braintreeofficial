@@ -28,8 +28,7 @@
 </p>
 <ul>
 	<li>
-		{l s='Log into your' mod='braintree'}
-		<a href="https://www.braintreegateway.com/login" target="_blank">{l s='account' mod='braintree'}</a>
+		{{l s='Log into your [a @href1@]account[/a]' mod='braintree'}|totlreplace:['@href1@' => {'https://www.braintreegateway.com/login'}, '@target@' => {'target="blank"'}]}
 	</li>
 	<li>
 		{l s='Click the working wheel (logo)' mod='braintree'}
@@ -89,10 +88,7 @@
 	<div class="h3">{l s='Sandbox' mod='braintree'}</div>
 	<hr>
 	<p>
-		{l s='To retrieve sandbox API Keys please repeat the steps by connecting to' mod='braintree'}
-		<a href="https://sandbox.braintreegateway.com/login" target="_blank">{l s='sandbox account' mod='braintree'}</a>
-		{l s='or creating a new' mod='braintree'}
-		<a href="https://www.braintreepayments.com/sandbox" target="_blank">{l s='one' mod='braintree'}</a>
+		{{l s='To retrieve sandbox API Keys please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]' mod='braintree'}|totlreplace:['@href1@' => {'https://sandbox.braintreegateway.com/login'}, '@href2@' => {'https://www.braintreepayments.com/sandbox'},  '@target@' => {'target="blank"'}]}
 	</p>
 	<div class="form-group">
 		<label class="control-label col-lg-3">
