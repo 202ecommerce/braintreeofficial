@@ -19,6 +19,15 @@ $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
   }
+  
+  $('.js-payment-option-form').each((i) => {
+    let index = i+1,   
+        option_label = $(`label[for="payment-option-${index}"]`);     
+    if ($(`#payment-option-${index}-additional-information .payment_module`).hasClass('braintree-card')) {
+      option_label.addClass('bt__text-left');  
+      option_label.find('img').css('width', '100%');
+    }    
+  });
 });
 
 let bt_hosted_fileds;
