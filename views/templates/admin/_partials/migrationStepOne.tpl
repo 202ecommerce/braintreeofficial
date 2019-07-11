@@ -89,10 +89,7 @@ your Public Key and Private Key for finishing your account setup.' mod='braintre
                 <img src="/modules/braintree/views/img/loading.gif" style="width: 100px">
             </div>
             <div class="text-center">
-                {l s='The migration will take about 5 minutes. If it is not finished after 10 minutes please contact' mod='braintree'}
-                <a href="https://addons.prestashop.com/fr/contactez-nous?id_product=1748" target="_blank">
-                    {l s='our support team.' mod='braintree'}
-                </a>
+							{{l s='The migration will take about 5 minutes. If it is not finished after 10 minutes please contact [a @href1@]our support team.[/a]' mod='braintree'}|totlreplace:['@href1@' => {'https://addons.prestashop.com/fr/contactez-nous?id_product=1748'}, '@target@' => {'target="blank"'}]}
             </div>
         </div>
     </div>
