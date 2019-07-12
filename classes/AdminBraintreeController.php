@@ -35,6 +35,19 @@ class AdminBraintreeController extends \ModuleAdminController
         $this->bootstrap = true;
     }
 
+    public function init()
+    {
+        parent::init();
+
+        if ((int)\Configuration::get('BRAINTREE_MIGRATION_FAILED') == 1) {
+            $message = $this->l('The migration of your settings from PayPal module has been completed with errors.');
+            $message .= $this->l('Please contact our');
+            $message .= " <a href='https://addons.prestashop.com/fr/contactez-nous?id_product=1748' target='_blank'>";
+            $message .= $this->l('support team.') . "</a>";
+            $this->warnings[] = $message;
+        }
+    }
+
     public function renderForm($fields_form = null)
     {
         if ($fields_form === null) {
