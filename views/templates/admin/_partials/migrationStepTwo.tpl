@@ -49,6 +49,18 @@
                {l s='Save Account Settings' mod='braintree'}
            </button>
        </div>
+
+       <div class="bt__mt-4 bt__mb-1">
+            <div class="text-center text-danger">{l s='If needed you can add your API keys later (not recommended).' mod='braintree'}</div>
+            <div class="text-center text-danger">{l s='In this case, the payment by Braintree will not be available for your customers until you add your account information.' mod='braintree'}</div>
+       </div>
+       <div class="text-center">
+           <a class="btn btn-default"
+              href="{$link->getAdminLink('AdminBraintreeSetup', true)|addslashes}"
+           >
+               {l s='Add API keys later' mod='braintree'}
+           </a>
+       </div>
    </div>
 </div>
 
