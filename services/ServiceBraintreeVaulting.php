@@ -113,6 +113,7 @@ class ServiceBraintreeVaulting
                 try {
                     $braintreeVaulting->add();
                 } catch (\Exception $e) {
+                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal vaulting. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';

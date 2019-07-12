@@ -114,6 +114,7 @@ class ServiceBraintreeCapture
                 try {
                     $braintreeCapture->add();
                 } catch (\Exception $e) {
+                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal capture. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';

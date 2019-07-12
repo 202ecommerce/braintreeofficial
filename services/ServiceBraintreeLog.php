@@ -85,6 +85,7 @@ class ServiceBraintreeLog
                 try {
                     $braintreeLog->save();
                 } catch (\Exception $e) {
+                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal log. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';

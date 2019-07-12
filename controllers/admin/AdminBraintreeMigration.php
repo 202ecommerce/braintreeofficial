@@ -65,6 +65,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
 
     protected function doMigration()
     {
+        Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1);
         $serviceBraintreeCustomer = new ServiceBraintreeCustomer();
         $serviceBraintreeVaulting = new ServiceBraintreeVaulting();
         $serviceBraintreeOrder = new ServiceBraintreeOrder();
@@ -122,11 +123,12 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
             $nameTableCurrent = _DB_PREFIX_ . $table;
             $nameTableBackup = $nameTableCurrent . '_old';
             $queryCreatingTableBackup = "CREATE TABLE IF NOT EXISTS %s LIKE %s;";
-            $queryFillingTableBackup = "INSERT %s SELECT * FROM %s;";
+            $queryFillingTableBackup = "REPLACE %s SELECT * FROM %s;";
             try {
                 DB::getInstance()->execute(sprintf($queryCreatingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
                 DB::getInstance()->execute(sprintf($queryFillingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
             } catch (Exception $e) {
+                \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
                 $message = 'Error while do backup of the tables. ';
                 $message .= 'File: ' . $e->getFile() . '. ';
                 $message .= 'Line: ' . $e->getLine() . '. ';
@@ -179,7 +181,6 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         $isConfigured = $method->isConfigured();
 
         if ($isConfigured) {
-            Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1);
             $paypalModule = Module::getInstanceByName('paypal');
             $paypalModule->disable();
         }

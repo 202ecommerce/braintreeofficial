@@ -103,6 +103,7 @@ class ServiceBraintreeOrder
                 try {
                     $braintreeOrder->add();
                 } catch (\Exception $e) {
+                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal order. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';
@@ -146,6 +147,7 @@ class ServiceBraintreeOrder
                     $paypalOrder->delete();
                     $paypalCapture->delete();
                 } catch (\Exception $e) {
+                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
                     $message = 'Error while deleting paypal order. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';
