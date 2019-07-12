@@ -736,6 +736,11 @@ class Braintree extends PaymentModule
         $id_order = $params['id_order'];
         $order = new Order((int)$id_order);
         $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId($id_order);
+
+        if (Validate::isLoadedObject($braintreeOrder) == false) {
+            return;
+        }
+
         $braintreeCapture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($braintreeOrder->id);
 
         if (Validate::isLoadedObject($braintreeOrder) == false) {
