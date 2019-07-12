@@ -47,7 +47,7 @@
 	</li>
 </ul>
 
-<div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment == false}current-account{/if}">
+<div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment == false}current-account{/if} {if isset($braintree_merchant_id_live) && $braintree_merchant_id_live} visible{/if}">
 	<div class="h3">{l s='Live' mod='braintree'}</div>
 	<hr>
 	<div class="form-group">
@@ -84,7 +84,7 @@
 	</div>
 </div>
 
-<div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment}current-account{/if}">
+<div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment}current-account{/if} {if isset($braintree_merchant_id_sandbox) && $braintree_merchant_id_sandbox} visible{/if}">
 	<div class="h3">{l s='Sandbox' mod='braintree'}</div>
 	<hr>
 	<p>
