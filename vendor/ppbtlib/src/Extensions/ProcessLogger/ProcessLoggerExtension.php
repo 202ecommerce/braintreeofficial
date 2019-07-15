@@ -85,7 +85,7 @@ class ProcessLoggerExtension extends AbstractModuleExtension
         /** @var $cart Cart */
         $cart = $params['cart'];
         $order = new \Order((int)\Order::getIdByCartId($cart->id));
-        if ($order->module != 'braintree') {
+        if (\Validate::isLoadedObject($order) && $order->module != 'braintree') {
             return;
         }
         if (isset($params['class_logger']) && is_subclass_of($params['class_logger'], ProcessLoggerObjectModel::class)) {
@@ -95,6 +95,11 @@ class ProcessLoggerExtension extends AbstractModuleExtension
         }
         $collectionLogs = new \PrestaShopCollection($class_logger);
         $collectionLogs->where('id_cart', '=', $params['cart']->id);
+
+        if ($collectionLogs->count() == 0) {
+            return;
+        }
+
         \Context::getContext()->smarty->assign('logs', $collectionLogs->getResults());
         return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/hook/displayAdminCartsView.tpl');
     }
