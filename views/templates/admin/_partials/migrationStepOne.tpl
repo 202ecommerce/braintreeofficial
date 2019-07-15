@@ -28,7 +28,7 @@
        <div class="h3 text-center">{l s='Hello!' mod='braintree'}</div>
        <div>{l s='Welcome to the new Braintree module. ' mod='braintree'}</div>
        <div class="mb-20">
-           {l s='Starting July 1st, 2019, Braintree payment solution is separated from the PayPal module.
+           {l s='Starting July 2019, Braintree payment solution is separated from the PayPal module.
 You are currently using Braintree via the PayPal module. You can quickly migrate your Braintree configurations by
 clicking on the "Import Settings" button below. We can migrate all your current configurations but you will need to add
 your Public Key and Private Key for finishing your account setup.' mod='braintree'}
