@@ -121,6 +121,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
     {
         /* @var $methodBraintree MethodBraintree*/
         $methodBraintree = AbstractMethodBraintree::load('Braintree');
+
         $tpl_vars = array(
             'braintree_public_key_live' => Configuration::get('BRAINTREE_PUBLIC_KEY_LIVE'),
             'braintree_public_key_sandbox' => Configuration::get('BRAINTREE_PUBLIC_KEY_SANDBOX'),
@@ -288,6 +289,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             $this->importMerchantAccountForCurrency();
         }
         $this->module->checkBraintreeStats();
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+        if ($methodBraintree->isConfigured() == false) {
+            $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
+        }
     }
 
     public function importMerchantAccountForCurrency()
