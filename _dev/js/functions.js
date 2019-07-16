@@ -14,10 +14,8 @@
  */
 
 export const hoverConfig = (el) => {
-
 	$('.defaultForm').removeClass('bt-settings-link-on');
-	$('#subtab-AdminBraintreeCustomizeCheckout').removeClass('bt-settings-link-on bt__border-b-primary');
-	$('#subtab-AdminBraintreeSetup').removeClass('bt-settings-link-on bt__border-b-primary');
+	$('.page-head-tabs a').removeClass('bt-settings-link-on bt__border-b-primary');
 	el.addClass('bt-settings-link-on');
 	$('html, body').animate({
 		scrollTop: el.offset().top - 200 + "px"
@@ -25,13 +23,19 @@ export const hoverConfig = (el) => {
 }
 
 export const hoverTabConfig = () => {
-	if ($('#subtab-AdminBraintreeCustomizeCheckout').hasClass('current')) {
-		$('#subtab-AdminBraintreeSetup').addClass('bt-settings-link-on bt__border-b-primary');
-	} else if ($('#subtab-AdminBraintreeSetup').hasClass('current')) {
-		$('#subtab-AdminBraintreeCustomizeCheckout').addClass('bt-settings-link-on bt__border-b-primary');
-	}
+	let tabs = document.querySelectorAll('.page-head-tabs a'),
+		currentTab = $('.page-head-tabs a.current');
+	tabs.forEach( el => {
+		let checkoutTab = $(el).attr('href').includes('AdminBraintreeCustomizeCheckout'),
+		 	setupTab = $(el).attr('href').includes('AdminBraintreeSetup');
+		if ((currentTab.attr('href').includes('AdminBraintreeCustomizeCheckout') && setupTab)
+			|| (currentTab.attr('href').includes('AdminBraintreeSetup') && checkoutTab)) {
+			$(el).addClass('bt-settings-link-on bt__border-b-primary');
+		} 
+	})
+
 	$('html, body').animate({
-		scrollTop: $('#head_tabs').offset().top - 200 + "px"
+		scrollTop: $('.page-head-tabs').offset().top - 200 + "px"
 	}, 900);
 }
 
