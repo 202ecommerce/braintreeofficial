@@ -36,10 +36,10 @@
 	<ul class="list-unstyled">
 		<li>
             {if isset($sslActivated) && $sslActivated}
-				<i class="icon-check" style="color: green"></i>
+				<i class="icon-check text-success"></i>
                 {l s='SSL enabled.' mod='braintree'}
             {else}
-				<i class="icon-remove" style="color: red"></i>
+				<i class="icon-remove text-danger"></i>
                 {l s='SSL should be enabled on your web site.' mod='braintree'}
             {/if}
 		</li>
