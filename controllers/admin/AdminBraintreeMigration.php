@@ -168,6 +168,8 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
             'status' => Configuration::updateValue('BRAINTREE_MIGRATION_SKIP', 1),
             'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeSetup', true),
         ));
+        $paypalModule = Module::getInstanceByName('paypal');
+        $paypalModule->disable();
         $response = new JsonResponse();
         $response->setContent($content);
         return $response->send();
