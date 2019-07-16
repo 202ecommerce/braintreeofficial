@@ -780,9 +780,10 @@ class Braintree extends PaymentModule
     public function hookDisplayBackOfficeHeader()
     {
         $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREE_CRON_TIME')));
-        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4) {
+        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4 || Configuration::get('BRAINTREE_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREE_CRON_TIME', date('Y-m-d H:i:s'));
             $bt_orders = $this->serviceBraintreeOrder->getBraintreeOrdersForValidation();
+            
             if ($bt_orders) {
                 $transactions = $this->methodBraintree->searchTransactions($bt_orders);
 
@@ -792,9 +793,11 @@ class Braintree extends PaymentModule
 
                 foreach ($transactions as $transaction) {
                     $braintreeOrder = $this->serviceBraintreeOrder->loadByTransactionId($transaction->id);
+
                     if (Validate::isLoadedObject($braintreeOrder) == false) {
                         continue;
                     }
+
                     $ps_order = new Order($braintreeOrder->id_order);
                     $paid_state  = Configuration::get('PS_OS_PAYMENT');
                     $ps_order_details = OrderDetail::getList($braintreeOrder->id_order);
