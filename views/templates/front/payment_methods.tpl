@@ -48,7 +48,7 @@
                 </p>
             {/foreach}
         {/foreach}
-            <p><button class="btn btn-default" type="submit">{l s='Save' mod='braintree'} <i class="material-icons">save</i></button></p>
+            <p><button class="btn btn-primary" type="submit">{l s='Save' mod='braintree'}</button></p>
         </form>
     {else}
         {l s='You don\'t have saved payment methods from Braintree' mod='braintree'}
