@@ -42,7 +42,7 @@
 						<a href="#bt_config_behavior" data-bt-link-settings>2) {l s='Enable Credit Card and/or PayPal wallet as payment methods' mod='braintree'}.</a>
 					</li>
 					<li>
-						<a href="#bt_config_payment" data-bt-link-settings>3) {l s='Adjust your Payment setting to either capture payments instantly (Capture), or after you confirm the order (Authorization)' mod='braintree'}.</a>
+						<a href="#bt_config_payment" data-bt-link-settings>3) {l s='Adjust your Payment setting to either capture payments instantly (Sale), or after you confirm the order (Authorize)' mod='braintree'}.</a>
 					</li>
 					<li>
 						<a href="#bt_config_environment" data-bt-link-settings>4) {l s='Make sure the module is set to Production mode' mod='braintree'}.</a>
