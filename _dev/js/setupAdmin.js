@@ -13,24 +13,28 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-import {hoverConfig, hoverTabConfig} from './functions.js'; 
+/* globals controllerUrl */
 
-var SetupAdmin = {
+import {hoverConfig, hoverTabConfig} from './functions.js';
+
+const setupAdmin = {
   init() {
     $('[data-confirm-credentials]').click(() => {
       $('#bt_config_account').submit();
     });
 
     $('[data-bt-logout]').click((e) => {
-      SetupAdmin.logoutAccount(e.target);
+      setupAdmin.logoutAccount(e.target);
     });
 
     $(document).on('click', '#btn-check-requirements', () => {
-      SetupAdmin.checkRequirements();
+      setupAdmin.checkRequirements();
     });
 
     $('[data-bt-link-settings]').on('click', (e) => {
-      let el = $(e.target.attributes.href.value);
+      e.preventDefault();
+      const el = $(e.target.attributes.href.value);
+
       if (el.length) {
         hoverConfig(el);
       } else {
@@ -64,4 +68,4 @@ var SetupAdmin = {
   },
 };
 
-$(document).ready(() => SetupAdmin.init());
+$(document).ready(() => setupAdmin.init());
