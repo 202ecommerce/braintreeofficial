@@ -680,7 +680,7 @@ class MethodBraintree extends AbstractMethodBraintree
         try {
             $result = $this->gateway->transaction()->sale($data);
         } catch (Braintree\Exception\Authorization $e) {
-            throw new Exception('Braintree Authorization exception', '00000');
+            throw new Exception('Authorization exception: please try to pay again or contact customer support', '00000');
         }
 
         if (($result instanceof Braintree_Result_Successful) && $result->success && $this->isValidStatus($result->transaction->status)) {
