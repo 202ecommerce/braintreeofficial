@@ -60,7 +60,7 @@ const initBraintreeCard = () => {
           'font-family': 'PayPal Forward, sans-serif',
         },
         '.valid': {
-          'color': '#8bdda8'
+          'color': '#349840'
         }
       },
       fields: {
