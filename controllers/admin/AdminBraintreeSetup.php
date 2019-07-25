@@ -46,6 +46,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeMigration', true));
         }
 
+        if ($this->showWarningCurrency()) {
+            $this->warnings[] = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/warningCurrency.tpl');
+        }
+
         $this->initAccountSettingsBlock();
         $formAccountSettings = $this->renderForm();
         $this->clearFieldsForm();
@@ -225,7 +229,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             'merchantCountry' => $countryDefault->name,
             'tlsVersion' => $this->_checkTLSVersion(),
             'accountConfigured' => $methodBraintree->isConfigured(),
-            'sslActivated' => $this->module->isSslActive()
+            'sslActivated' => $this->module->isSslActive(),
+            'merchantAccountIdConfigured' => $this->showWarningCurrency() == false
         );
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
@@ -263,11 +268,13 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']))
             );
         }
+
         $this->fields_form[]['form'] = array(
             'legend' => array(
                 'title' => $this->l('Braintree Merchant Accounts'),
                 'icon' => 'icon-cogs',
             ),
+            'description' => $this->context->smarty->fetch($this->getTemplatePath() . '_partials/infoForMerchantAccount.tpl'),
             'input' => $inputs,
             'submit' => array(
                 'title' => $this->l('Save'),
@@ -306,5 +313,34 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         foreach ($allCurrency as $currency => $merchantAccountForCurrency) {
             Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
         }
+    }
+
+    public function showWarningCurrency()
+    {
+        $currency_mode = Currency::getPaymentCurrenciesSpecial($this->module->id);
+        $mode_id = $currency_mode['id_currency'];
+
+        return $mode_id == -1 && $this->merchantAccountForCurrencyConfigured() == false;
+    }
+
+    /**
+     * Check if all merchant account ids for currency are configured
+     * @return bool
+     */
+    public function merchantAccountForCurrencyConfigured()
+    {
+        $allCurrency = Currency::getCurrenciesByIdShop($this->context->shop->id);
+
+        if (empty($allCurrency)) {
+            return;
+        }
+
+        $result = true;
+
+        foreach ($allCurrency as $currency) {
+            $result &= (bool)Configuration::get($this->module->getNameMerchantAccountForCurrency($currency['iso_code']));
+        }
+
+        return $result;
     }
 }

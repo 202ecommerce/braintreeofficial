@@ -61,5 +61,14 @@
 			{/if}
 			{l s='You must connect your Braintree account' mod='braintree'}
 		</li>
+
+		<li>
+            {if isset($merchantAccountIdConfigured) && $merchantAccountIdConfigured}
+				<i class="icon-check text-success"></i>
+            {else}
+				<i class="icon-remove text-danger"></i>
+            {/if}
+            {l s='You must add your merchant account ID for each currency' mod='braintree'}
+		</li>
 	</ul>
 </div>
