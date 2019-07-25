@@ -307,9 +307,11 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         /* @var $method MethodBraintree*/
         $method = AbstractMethodBraintree::load('Braintree');
         $allCurrency = $method->getAllCurrency();
+
         if (empty($allCurrency)) {
             return;
         }
+
         foreach ($allCurrency as $currency => $merchantAccountForCurrency) {
             Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
         }
@@ -317,30 +319,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function showWarningCurrency()
     {
-        $currency_mode = Currency::getPaymentCurrenciesSpecial($this->module->id);
-        $mode_id = $currency_mode['id_currency'];
-
-        return $mode_id == -1 && $this->merchantAccountForCurrencyConfigured() == false;
-    }
-
-    /**
-     * Check if all merchant account ids for currency are configured
-     * @return bool
-     */
-    public function merchantAccountForCurrencyConfigured()
-    {
-        $allCurrency = Currency::getCurrenciesByIdShop($this->context->shop->id);
-
-        if (empty($allCurrency)) {
-            return;
-        }
-
-        $result = true;
-
-        foreach ($allCurrency as $currency) {
-            $result &= (bool)Configuration::get($this->module->getNameMerchantAccountForCurrency($currency['iso_code']));
-        }
-
-        return $result;
+        return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
+            $this->module->merchantAccountForCurrencyConfigured() == false;
     }
 }

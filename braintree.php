@@ -49,6 +49,7 @@ use BraintreePPBTlib\Extensions\AbstractModuleExtension;
 
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
+const BRAINTREE_PAYMENT_CUSTOMER_CURRENCY = -1;
 
 class Braintree extends \PaymentModule
 {
@@ -300,6 +301,7 @@ class Braintree extends \PaymentModule
         if (empty($allCurrency)) {
             return;
         }
+
         foreach ($allCurrency as $currency => $merchantAccountForCurrency) {
             Configuration::updateValue($this->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
         }
@@ -965,7 +967,15 @@ class Braintree extends \PaymentModule
 
     public function hookPaymentOptions($params)
     {
+        /* for avoiding the connection exception need to verify if module configured correct*/
         if ($this->methodBraintree->isConfigured() == false) {
+            return;
+        }
+
+        /* for avoiding the exception of authorization need to verify mode of payment currency and merchant account*/
+        if ($this->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
+            $this->merchantAccountForCurrencyConfigured() == false
+        ) {
             return;
         }
         $payments_options = array();
@@ -1465,6 +1475,42 @@ class Braintree extends \PaymentModule
 
         $tabParent->active = true;
         $result &=  $tabParent->save();
+        return $result;
+    }
+
+    /**
+     * Return choosed mode of currency restriction
+     * @return int|null
+     */
+    public function getCurrentModePaymentCurrency()
+    {
+        $currency_mode = Currency::getPaymentCurrenciesSpecial($this->id);
+
+        if (isset($currency_mode['id_currency']))  {
+            return (int)$currency_mode['id_currency'];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Check if all merchant account ids for currency are configured
+     * @return bool
+     */
+    public function merchantAccountForCurrencyConfigured()
+    {
+        $allCurrency = Currency::getCurrenciesByIdShop($this->context->shop->id);
+
+        if (empty($allCurrency)) {
+            return;
+        }
+
+        $result = true;
+
+        foreach ($allCurrency as $currency) {
+            $result &= (bool)Configuration::get($this->getNameMerchantAccountForCurrency($currency['iso_code']));
+        }
+
         return $result;
     }
 }
