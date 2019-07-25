@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use BraintreePPBTlib\Module\PaymentModule;
+
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use BraintreeAddons\services\ServiceBraintreeOrder;
 use BraintreeAddons\services\ServiceBraintreeCapture;
@@ -43,11 +43,14 @@ use BraintreeAddons\classes\BraintreeCustomer;
 use BraintreeAddons\classes\BraintreeVaulting;
 use BraintreeAddons\classes\AbstractMethodBraintree;
 use BraintreeAddons\classes\BraintreeLog;
+use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
+use BraintreePPBTlib\Install\ModuleInstaller;
+use BraintreePPBTlib\Extensions\AbstractModuleExtension;
 
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
 
-class Braintree extends PaymentModule
+class Braintree extends \PaymentModule
 {
     /**
      * List of hooks used in this Module
@@ -213,8 +216,20 @@ class Braintree extends PaymentModule
 
     public function install()
     {
-        // Install default
-        if (parent::install() == false || $this->installOrderState() == false) {
+        $installer = new ModuleInstaller($this);
+
+        $isPhpVersionCompliant = false;
+        try {
+            $isPhpVersionCompliant = $installer->checkPhpVersion();
+        } catch (\Exception $e) {
+            $this->_errors[] = Tools::displayError($e->getMessage());
+        }
+
+        if (($isPhpVersionCompliant && parent::install() && $installer->install()) == false) {
+            return false;
+        }
+
+        if ($this->installOrderState() == false) {
             return false;
         }
 
@@ -226,13 +241,16 @@ class Braintree extends PaymentModule
 
     public function uninstall()
     {
-        // Uninstall default
-        if (!parent::uninstall()) {
+        $installer = new ModuleInstaller($this);
+
+        if ((parent::uninstall() && $installer->uninstall()) == false) {
             return false;
         }
+
         if ($this->uninstallOrderStates() == false) {
             return false;
         }
+
         return true;
     }
 
@@ -1312,5 +1330,141 @@ class Braintree extends PaymentModule
     public function isSslActive()
     {
         return \Configuration::get('PS_SSL_ENABLED') && \Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+    }
+
+    /**
+     * TODO
+     * Reset Module only if merchant choose to keep data on modal
+     *
+     * @return bool
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    public function reset()
+    {
+        $installer = new ModuleInstaller($this);
+
+        return $installer->reset($this);
+    }
+
+    public function handleExtensionsHook($hookName, $params)
+    {
+        if (!isset($this->extensions) || empty($this->extensions)) {
+            return false;
+        }
+        $result = false;
+        foreach ($this->extensions as $extension) {
+            /** @var AbstractModuleExtension $extension */
+            $extension = new $extension();
+            $extension->setModule($this);
+            if (is_callable(array($extension, $hookName))) {
+                $hookResult = $extension->{$hookName}($params);
+                if ($result === false) {
+                    $result = $hookResult;
+                } elseif (is_array($hookResult) && $result !== false) {
+                    $result = array_merge($result, $hookResult);
+                } else {
+                    $result .= $hookResult;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Handle module widget call
+     * @param $action
+     * @param $method
+     * @param $hookName
+     * @param $configuration
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public function handleWidget($action, $method, $hookName, $configuration)
+    {
+        if (!isset($this->extensions) || empty($this->extensions)) {
+            return false;
+        }
+
+        foreach ($this->extensions as $extension) {
+            /** @var AbstractModuleExtension $extension */
+            $extension = new $extension();
+            if (!($extension instanceof WidgetInterface)) {
+                continue;
+            }
+            $extensionClass = (new ReflectionClass($extension))->getShortName();
+            if ($extensionClass != $action) {
+                continue;
+            }
+            $extension->setModule($this);
+            if (is_callable(array($extension, $method))) {
+                return $extension->{$method}($hookName, $configuration);
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Add checkbox carrier restrictions for a module.
+     *
+     * @param array $shops
+     *
+     * @return bool
+     */
+    public function addCheckboxCarrierRestrictionsForModule(array $shops = array())
+    {
+        if (!$shops) {
+            $shops = \Shop::getShops(true, null, true);
+        }
+
+        $carriers = \Carrier::getCarriers($this->context->language->id, false, false, false, null, \Carrier::ALL_CARRIERS);
+        $carrier_ids = array();
+        foreach ($carriers as $carrier) {
+            $carrier_ids[] = $carrier['id_reference'];
+        }
+
+        foreach ($shops as $s) {
+            foreach ($carrier_ids as $id_carrier) {
+                if (!\Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'module_carrier` (`id_module`, `id_shop`, `id_reference`)
+				VALUES (' . (int) $this->id . ', "' . (int) $s . '", ' . (int) $id_carrier . ')')) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function disable($force_all = false)
+    {
+        $result = true;
+        $result &= parent::disable($force_all);
+        $tabParent = \Tab::getInstanceFromClassName('AdminParentBraintreeConfiguration');
+
+        if (\Validate::isLoadedObject($tabParent) == false) {
+            return $result;
+        }
+
+        $tabParent->active = false;
+        $result &=  $tabParent->save();
+        return $result;
+    }
+
+    public function enable($force_all = false)
+    {
+        $result = true;
+        $result &= parent::enable($force_all);
+        $tabParent = \Tab::getInstanceFromClassName('AdminParentBraintreeConfiguration');
+
+        if (\Validate::isLoadedObject($tabParent) == false) {
+            return $result;
+        }
+
+        $tabParent->active = true;
+        $result &=  $tabParent->save();
+        return $result;
     }
 }
