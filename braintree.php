@@ -773,10 +773,10 @@ class Braintree extends \PaymentModule
             $this->context->controller->errors[] = $this->l('You couldn\'t refund order, it\'s not payed yet.');
         }
         if (Tools::getValue('error_refund')) {
-            $this->context->controller->errors[] = $this->l('We have unexpected problem during refund operation. For more details please see the \'Braintree\' tab in the order details.');
+            $this->context->controller->errors[] = $this->l('We have an unexpected problem during refund operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
         }
         if (Tools::getValue('cancel_failed')) {
-            $this->context->controller->errors[] = $this->l('We have unexpected problem during cancel operation. For more details please see the \'Braintree\' tab in the order details.');
+            $this->context->controller->errors[] = $this->l('We have an unexpected problem during cancel operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
         }
         if ($order->current_state == Configuration::get('PS_OS_REFUND') &&  $braintreeOrder->payment_status == 'refunded') {
             $this->adminDisplayInformation($this->l('Your order is fully refunded by Braintree.'));
@@ -786,7 +786,7 @@ class Braintree extends \PaymentModule
             $this->adminDisplayInformation($this->l('Your order is fully captured by Braintree.'));
         }
         if (Tools::getValue('error_capture')) {
-            $this->context->controller->errors[] = $this->l('We have unexpected problem during capture operation. For more details please see the \'Braintree\' tab in the order details.');
+            $this->context->controller->errors[] = $this->l('We have an unexpected problem during capture operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
         }
 
         if ($braintreeOrder->total_paid != $braintreeOrder->total_prestashop) {
