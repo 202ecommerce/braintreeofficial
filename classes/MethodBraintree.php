@@ -572,7 +572,7 @@ class MethodBraintree extends AbstractMethodBraintree
             $options = array(
                 'submitForSettlement' => Configuration::get('BRAINTREE_API_INTENT') == "sale" ? true : false,
                 'threeDSecure' => array(
-                    'required' => Configuration::get('BRAINTREE_USE_3D_SECURE')
+                    'required' => Configuration::get('BRAINTREE_3DSECURE')
                 )
             );
         } else {

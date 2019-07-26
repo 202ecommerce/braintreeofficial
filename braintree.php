@@ -1042,8 +1042,8 @@ class Braintree extends \PaymentModule
         $amount = $this->context->cart->getOrderTotal();
         $clientToken = $this->methodBraintree->init();
         $check3DS = 0;
-        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
-        if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
+        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3DSECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
+        if (Configuration::get('BRAINTREE_3DSECURE') && $amount > $required_3ds_amount) {
             $check3DS = 1;
         }
         if (isset($clientToken['error_code'])) {
@@ -1051,10 +1051,10 @@ class Braintree extends \PaymentModule
                 'init_error'=> $this->l('Error Braintree initialization ').$clientToken['error_code'].' : '.$clientToken['error_msg'],
             ));
         }
-        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
+        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3DSECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
         if (Configuration::get('BRAINTREE_VAULTING')) {
             $payment_methods = $this->serviceBraintreeVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_CARD_PAYMENT);
-            if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
+            if (Configuration::get('BRAINTREE_3DSECURE') && $amount > $required_3ds_amount) {
                 foreach ($payment_methods as $key => $method) {
                     $nonce = $this->methodBraintree->createMethodNonce($method['token']);
                     $payment_methods[$key]['nonce'] = $nonce;
@@ -1083,8 +1083,8 @@ class Braintree extends \PaymentModule
         $amount = $this->context->cart->getOrderTotal();
         $clientToken = $this->methodBraintree->init();
         $check3DS = 0;
-        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3D_SECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
-        if (Configuration::get('BRAINTREE_USE_3D_SECURE') && $amount > $required_3ds_amount) {
+        $required_3ds_amount = Tools::convertPrice(Configuration::get('BRAINTREE_3DSECURE_AMOUNT'), Currency::getCurrencyInstance((int)$this->context->currency->id));
+        if (Configuration::get('BRAINTREE_3DSECURE') && $amount > $required_3ds_amount) {
             $check3DS = 1;
         }
         Media::addJsDef(array(
