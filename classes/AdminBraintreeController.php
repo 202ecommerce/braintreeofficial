@@ -77,18 +77,25 @@ class AdminBraintreeController extends \ModuleAdminController
     public function postProcess()
     {
         if (\Tools::isSubmit($this->controller_name . '_config')) {
-            $this->saveForm();
+            $result = $this->saveForm();
+            if ($result) {
+                $this->confirmations[] = $this->l('Successful update.');
+            }
         }
         parent::postProcess();
     }
 
     public function saveForm()
     {
+        $result = true;
+
         foreach (\Tools::getAllValues() as $fieldName => $fieldValue) {
             if (strpos($fieldName, 'braintree') === 0) {
-                \Configuration::updateValue(\Tools::strtoupper($fieldName), pSQL($fieldValue));
+                $result &= \Configuration::updateValue(\Tools::strtoupper($fieldName), pSQL($fieldValue));
             }
         }
+
+        return $result;
     }
 
     public function clearFieldsForm()

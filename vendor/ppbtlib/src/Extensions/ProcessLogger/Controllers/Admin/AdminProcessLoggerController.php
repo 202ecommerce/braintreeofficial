@@ -304,7 +304,7 @@ class AdminProcessLoggerController extends \ModuleAdminController
         $result = Db::getInstance()->delete($this->table);
 
         if ($result) {
-            $this->confirmations[] = $this->module->l('All logs has been erased', 'AdminProcessLoggerController');
+            $this->confirmations[] = $this->module->l('All logs have been erased', 'AdminProcessLoggerController');
         }
 
         return $result;
@@ -348,7 +348,7 @@ class AdminProcessLoggerController extends \ModuleAdminController
                     $shop['id_shop']
                 );
                 $this->confirmations[] = $this->module->l(
-                    'Log parameters are successfully updated!',
+                    'Successful update.',
                     'AdminProcessLoggerController'
                 );
             }

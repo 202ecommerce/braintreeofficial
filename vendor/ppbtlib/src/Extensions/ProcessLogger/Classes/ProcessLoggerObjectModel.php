@@ -123,7 +123,7 @@ class ProcessLoggerObjectModel extends ObjectModel
 
     public function getDateTransaction()
     {
-        if ($this->date_transaction == '0000-00-00 00:00:00') {
+        if ($this->date_transaction == '0000-00-00 00:00:00' || $this->date_transaction == false) {
             return '';
         }
         $datetime1 = new \DateTime($this->date_transaction);

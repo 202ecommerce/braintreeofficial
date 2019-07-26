@@ -64,7 +64,7 @@ class ProcessLoggerExtension extends AbstractModuleExtension
             $class_logger = ProcessLoggerObjectModel::class;
         }
         $collectionLogs = new \PrestaShopCollection($class_logger);
-        $collectionLogs->where('id_order', '=', $params['order']->id);
+        $collectionLogs->where('id_cart', '=', $params['order']->id_cart);
         \Context::getContext()->smarty->assign('logs', $collectionLogs->getResults());
         return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/hook/displayAdminOrderContentOrder.tpl');
     }

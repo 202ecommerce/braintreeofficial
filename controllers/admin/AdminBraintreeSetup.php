@@ -291,15 +291,20 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function saveForm()
     {
-        parent::saveForm();
+        $result = parent::saveForm();
+
         if (Tools::isSubmit('braintree_merchant_id_sandbox') || Tools::isSubmit('braintree_merchant_id_live')) {
             $this->importMerchantAccountForCurrency();
         }
+
         $this->module->checkBraintreeStats();
         $methodBraintree = AbstractMethodBraintree::load('Braintree');
+
         if ($methodBraintree->isConfigured() == false) {
             $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
         }
+
+        return $result;
     }
 
     public function importMerchantAccountForCurrency()
