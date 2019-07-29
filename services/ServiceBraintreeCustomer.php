@@ -28,7 +28,6 @@ namespace BraintreeAddons\services;
 
 use Braintree\Exception;
 use BraintreeAddons\classes\BraintreeCustomer;
-use Symfony\Component\VarDumper\VarDumper;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeCustomer

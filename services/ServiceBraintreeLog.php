@@ -28,7 +28,6 @@ namespace BraintreeAddons\services;
 
 use BraintreeAddons\classes\BraintreeLog;
 use BraintreeAddons\classes\AbstractMethodBraintree;
-use Symfony\Component\VarDumper\VarDumper;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeLog
@@ -55,6 +54,8 @@ class ServiceBraintreeLog
     {
         if (\Module::isInstalled('paypal') && file_exists(_PS_MODULE_DIR_ . 'paypal/classes/PaypalLog.php')) {
             require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalLog.php';
+
+            // Need to import only the logs related to brainree. So at first we get id of cart related to braintree for filtering below
             $cartBtIds = $this->getCartBtId();
 
             if (empty($cartBtIds)) {

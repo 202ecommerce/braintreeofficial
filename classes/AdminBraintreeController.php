@@ -25,8 +25,6 @@
 
 namespace BraintreeAddons\classes;
 
-use Symfony\Component\VarDumper\VarDumper;
-
 class AdminBraintreeController extends \ModuleAdminController
 {
     public function __construct()

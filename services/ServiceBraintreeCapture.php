@@ -27,7 +27,6 @@
 namespace BraintreeAddons\services;
 
 use BraintreeAddons\classes\BraintreeCapture;
-use Symfony\Component\VarDumper\VarDumper;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeCapture
