@@ -582,7 +582,7 @@ class Braintree extends \PaymentModule
                         $this->context->shop->id,
                         $orderBraintree->payment_tool,
                         $orderBraintree->sandbox,
-                        $response_void['date_transaction']
+                        $refund_response['date_transaction']
                     );
                     ProcessLoggerHandler::closeLogger();
                 }
