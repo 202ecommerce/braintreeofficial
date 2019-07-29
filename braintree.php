@@ -1499,7 +1499,7 @@ class Braintree extends \PaymentModule
      */
     public function merchantAccountForCurrencyConfigured()
     {
-        $allCurrency = Currency::getCurrenciesByIdShop($this->context->shop->id);
+        $allCurrency = Currency::getCurrencies();
 
         if (empty($allCurrency)) {
             return;
