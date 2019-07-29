@@ -15,11 +15,14 @@
 
 // init in-context
 $(document).ready(() => {
+  // Make partial order refund in Order page in BO
   $(document).on('click', '#desc-order-partial_refund', () => {
     if ($('#doPartialRefundBraintree').length == 0) {
       let p,
           label,
           input;
+      
+      // Create checkbox for Braintree refund 
       p = document.createElement('p');
       p.className = 'checkbox';
 
@@ -31,6 +34,7 @@ $(document).ready(() => {
       input.id = 'doPartialRefundBraintree';
       input.name = 'doPartialRefundBraintree';
 
+      // insert checkbox 
       label.appendChild(input);
       label.appendChild(document.createTextNode(chb_braintree_refund));
       p.appendChild(label);

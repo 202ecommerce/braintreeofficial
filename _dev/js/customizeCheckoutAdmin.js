@@ -13,15 +13,18 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+// Import functions for scrolling effect to necessary block on click
 import {hoverConfig, hoverTabConfig} from './functions.js'; 
 
 var CustomizeCheckout = {
   init() {
+    // Check configuration while changing values of switch config buttons
     $('input').change(() => {
       CustomizeCheckout.checkConfigurations();
     });
     this.checkConfigurations();
 
+    // Scroll to necessary block
     $('[data-bt-link-settings]').on('click', (e) => {
       let el = $(e.target.attributes.href.value);
       if (el.length) {
@@ -31,6 +34,7 @@ var CustomizeCheckout = {
       }
     });
 
+    // Remove effect after leaving cursor from the block
     $('.defaultForm').on('mouseleave', (e) => {
       $(e.currentTarget).removeClass('bt-settings-link-on');
     });
@@ -44,18 +48,21 @@ var CustomizeCheckout = {
     const showPayPalBenefits = $('input[name="braintree_show_paypal_benefits"]');
     const Amount3DSecure = $('input[name="braintree_3DSecure_amount"]');
 
+    // Activate paypal payment method and add additional config for it (Display block with paypal benefits)
     if (usePayPal.prop('checked') == false) {
       this.hideConfiguration(showPayPalBenefits.attr('name'));
     } else {
       this.showConfiguration(showPayPalBenefits.attr('name'));
     }
 
+    // Activate vaulting (saving cards/paypal account for next payments)
     if (enableVault.prop('checked') == false) {
       this.hideConfiguration(enableCardVerification.attr('name'));
     } else {
-        this.showConfiguration(enableCardVerification.attr('name'));
+      this.showConfiguration(enableCardVerification.attr('name'));
     }
 
+    // Activate card verification for existence and validity
     if (enable3DSecure.prop('checked') == false) {
       this.hideConfiguration(Amount3DSecure.attr('name'));
     } else {
@@ -63,6 +70,7 @@ var CustomizeCheckout = {
     }
   },
 
+  // Hide block while switch inactive
   hideConfiguration(name) {
     const selector = `input[name="${name}"]`;
     const configuration = $(selector);
@@ -73,6 +81,7 @@ var CustomizeCheckout = {
     formGroup.hide();
   },
 
+  // Show block while switch is active
   showConfiguration(name) {
     const selector = `input[name="${name}"]`;
     const configuration = $(selector);
@@ -80,15 +89,11 @@ var CustomizeCheckout = {
     formGroup.show();
   },
 
+  // Disable configuration for depending settings
   disableConfiguration(name) {
-    $(`input#${name}_on`).prop('checked', false);
-    $(`input#${name}_off`).prop('checked', true);
+    $(`input#${name}_on`).prop('checked', '');
+    $(`input#${name}_off`).prop('checked', 'checked');
   },
-
-  enableConfiguration(name) {
-      $(`input#${name}_on`).prop('checked', true);
-      $(`input#${name}_off`).prop('checked', false);
-  }
 };
 
 $(document).ready(() => CustomizeCheckout.init());

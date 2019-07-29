@@ -12,6 +12,8 @@
  * @license   http://addons.prestashop.com/en/content/12-terms-and-conditions-of-use
  * International Registered Trademark & Property of PrestaShop SA
  */
+
+//  Add transaction id in order detail's list 
 $(document).ready(() => {
   $('.page-order-confirmation #order-details ul').append($('#braintree_transaction_id'));
 });

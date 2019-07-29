@@ -16,6 +16,8 @@
 
 var HelpAdmin = {
   init() {
+
+    // Check credentials (TLS version, country, enabling SSL)
     $('#ckeck_requirements').click(() => {
       HelpAdmin.checkCredentials();
     });
@@ -33,6 +35,8 @@ var HelpAdmin = {
       success(response) {
         let alert; let
           typeAlert;
+
+        // Remove error messages
         $('.action_response').html('');
         if (response.success == true) {
           typeAlert = 'success';
@@ -47,6 +51,7 @@ var HelpAdmin = {
     });
   },
 
+  // Show error message
   getAlert(message, typeAlert) {
     const alert = document.createElement('div');
     alert.className = `alert alert-${typeAlert}`;
@@ -55,6 +60,4 @@ var HelpAdmin = {
   },
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  HelpAdmin.init();
-});
+$(document).ready(() => HelpAdmin.init());

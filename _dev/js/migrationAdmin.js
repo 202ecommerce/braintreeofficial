@@ -15,12 +15,14 @@
 
 
 var MigrationAdmin = {
+	// Init migration
 	init() {
 		$(document).on('click', '#start-migration', () => MigrationAdmin.startMigration());
 		$(document).on('click', '#skip-migration', () => MigrationAdmin.skipMigration());
 		$(document).on('click', '#save-account', () => MigrationAdmin.saveAccount());
 	},
 
+	// Do migration and show step 2
 	startMigration() {
 		$.ajax({
 			url: controllerUrl,
@@ -42,6 +44,7 @@ var MigrationAdmin = {
 		});
 	},
 
+	// Skip migration, disable paypal module
 	skipMigration() {
 		$.ajax({
 			url: controllerUrl,
@@ -59,6 +62,7 @@ var MigrationAdmin = {
 		});
 	},
 
+	// Save aacount info, disable paypal module
 	saveAccount() {
 		$.ajax({
 			url: controllerUrl + "&" + $('#form-account').serialize(),

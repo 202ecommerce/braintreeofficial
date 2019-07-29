@@ -13,15 +13,23 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+//  Highlighting necessary block while click on link in header
 export const hoverConfig = (el) => {
+
+  // Remove highlighting from all blocks
   $('.defaultForm').removeClass('bt-settings-link-on');
   $('.page-head-tabs a').removeClass('bt-settings-link-on bt__border-b-primary');
+
+  // Add highlighting for current block
   el.addClass('bt-settings-link-on');
+
+  // Scroll to current block 
   $('html, body').animate({
     scrollTop: `${el.offset().top - 200}px`,
   }, 900);
 };
 
+//  Highlighting necessary tab while click on link in header
 export const hoverTabConfig = () => {
   const tabs = document.querySelectorAll('.page-head-tabs a');
   const currentTab = $('.page-head-tabs a.current');
@@ -30,17 +38,20 @@ export const hoverTabConfig = () => {
     const checkoutTab = $(el).attr('href').includes('AdminBraintreeCustomizeCheckout');
     const setupTab = $(el).attr('href').includes('AdminBraintreeSetup');
 
+    // Add highlighting for current tab
     if ((currentTab.attr('href').includes('AdminBraintreeCustomizeCheckout') && setupTab)
       || (currentTab.attr('href').includes('AdminBraintreeSetup') && checkoutTab)) {
       $(el).addClass('bt-settings-link-on bt__border-b-primary');
     }
   });
 
+  // Scroll to current tab 
   $('html, body').animate({
     scrollTop: `${$('.page-head-tabs').offset().top - 200}px`,
   }, 900);
 };
 
+// Show a block while choosing first option in current select, hide it while choosing others options   
 export const selectOption = (select, el) => {
   if (select) {
     select.on('change', (e) => {

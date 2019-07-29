@@ -43,6 +43,7 @@ const initBraintreeCard = () => {
       return;
     }
 
+    // Show card form while choosing 'Add a new card'
     let cardSelect = $('[data-bt-vaulting-token="bt"]');    
     let cardForm = $('[data-form-new-card]');
     if (cardSelect) {
