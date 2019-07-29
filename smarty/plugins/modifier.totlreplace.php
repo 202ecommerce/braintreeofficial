@@ -74,4 +74,3 @@ if (!function_exists('smarty_modifier_totlreplace')) {
         return $string;
     }
 }
-

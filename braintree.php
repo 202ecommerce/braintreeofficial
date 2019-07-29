@@ -1414,7 +1414,6 @@ class Braintree extends \PaymentModule
         }
 
         return false;
-
     }
 
     /**
@@ -1486,7 +1485,7 @@ class Braintree extends \PaymentModule
     {
         $currency_mode = Currency::getPaymentCurrenciesSpecial($this->id);
 
-        if (isset($currency_mode['id_currency']))  {
+        if (isset($currency_mode['id_currency'])) {
             return (int)$currency_mode['id_currency'];
         } else {
             return null;
