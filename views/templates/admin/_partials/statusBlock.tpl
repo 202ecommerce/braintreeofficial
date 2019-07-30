@@ -28,7 +28,7 @@
 		{l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'htmlall':'utf-8'}</b>
 	</p>
 	<p>
-    {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='braintree'}|totlreplace:['@href1@' => {$link->getAdminLink('AdminLocalization', true)}, '@target@' => {'target="blank"'}]}
+    {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='braintree'}|braintreereplace:['@href1@' => {$link->getAdminLink('AdminLocalization', true)}, '@target@' => {'target="blank"'}]}
 	</p>
 	<p>
 		<span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='braintree'}</span>

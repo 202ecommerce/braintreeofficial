@@ -31,7 +31,7 @@
     <div>
         {{l s='You are currently having multiple [a @href1@]currencies[/a] enabled in your PrestaShop. The currency selected by
         the customer in the Front Office is using for payment
-        (see your [a @href2@]Payment Preferences - Currency restrictions[/a]).' mod='braintree'}|totlreplace:['@href1@' => {$link->getAdminLink('AdminCurrencies', true)}, '@href2@' => {$link->getAdminLink('AdminPaymentPreferences', true)}, '@target@' => {'target="blank"'}]}
+        (see your [a @href2@]Payment Preferences - Currency restrictions[/a]).' mod='braintree'}|braintreereplace:['@href1@' => {$link->getAdminLink('AdminCurrencies', true)}, '@href2@' => {$link->getAdminLink('AdminPaymentPreferences', true)}, '@target@' => {'target="blank"'}]}
     </div>
 
     <div>

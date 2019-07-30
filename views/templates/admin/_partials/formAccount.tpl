@@ -28,7 +28,7 @@
 </p>
 <ul>
 	<li>
-		{{l s='Log into your [a @href1@]account[/a]' mod='braintree'}|totlreplace:['@href1@' => {'https://www.braintreegateway.com/login'}, '@target@' => {'target="blank"'}]}
+		{{l s='Log into your [a @href1@]account[/a]' mod='braintree'}|braintreereplace:['@href1@' => {'https://www.braintreegateway.com/login'}, '@target@' => {'target="blank"'}]}
 	</li>
 	<li>
 		{l s='Click the working wheel (logo)' mod='braintree'}
@@ -88,7 +88,7 @@
 	<div class="h3">{l s='Sandbox' mod='braintree'}</div>
 	<hr>
 	<p>
-		{{l s='To retrieve sandbox API Keys please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]' mod='braintree'}|totlreplace:['@href1@' => {'https://www.braintreepayments.com/fr/sandbox'}, '@href2@' => {'https://www.braintreepayments.com/sandbox'},  '@target@' => {'target="blank"'}]}
+		{{l s='To retrieve sandbox API Keys please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]' mod='braintree'}|braintreereplace:['@href1@' => {'https://www.braintreepayments.com/fr/sandbox'}, '@href2@' => {'https://www.braintreepayments.com/sandbox'},  '@target@' => {'target="blank"'}]}
 	</p>
 	<div class="form-group">
 		<label class="control-label col-lg-3">

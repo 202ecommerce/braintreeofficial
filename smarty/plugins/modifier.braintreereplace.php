@@ -25,13 +25,13 @@
 
 /**
  * Smarty modifier to replace HTML tags in translations.
- * @usage {{l='test'}|totlreplace}
+ * @usage {{l='test'}|braintreereplace}
  * @param.value string
  * @param.name string
  */
 
-if (!function_exists('smarty_modifier_totlreplace')) {
-    function smarty_modifier_totlreplace($string, $replaces = array())
+if (!function_exists('smarty_modifier_braintreereplace')) {
+    function smarty_modifier_braintreereplace($string, $replaces = array())
     {
         $search = array(
             '[b]',

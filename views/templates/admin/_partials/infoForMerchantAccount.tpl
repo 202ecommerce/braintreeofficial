@@ -26,10 +26,10 @@
 <div>
 
     <div>
-        {{l s='Please see our [a @href1@]video tutorial[/a] to find your merchant account id for each currency quickly.' mod='braintree'}|totlreplace:['@href1@' => 'https://help.202-ecommerce.com/paypal-for-prestashop/set-merchant-account-id-braintree-currency/', '@target@' => {'target="blank"'}]}
+        {{l s='Please see our [a @href1@]video tutorial[/a] to find your merchant account id for each currency quickly.' mod='braintree'}|braintreereplace:['@href1@' => 'https://help.202-ecommerce.com/paypal-for-prestashop/set-merchant-account-id-braintree-currency/', '@target@' => {'target="blank"'}]}
     </div>
 
     <div>
-        {{l s='Go to [a @href1@]Payment Preferences - Currency restrictions[/a] to see how PrestaShop manages the currency preferences for your payment module.' mod='braintree'}|totlreplace:['@href1@' => {$link->getAdminLink('AdminPaymentPreferences', true)}, '@target@' => {'target="blank"'}]}
+        {{l s='Go to [a @href1@]Payment Preferences - Currency restrictions[/a] to see how PrestaShop manages the currency preferences for your payment module.' mod='braintree'}|braintreereplace:['@href1@' => {$link->getAdminLink('AdminPaymentPreferences', true)}, '@target@' => {'target="blank"'}]}
     </div>
 </div>

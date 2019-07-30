@@ -25,7 +25,7 @@
 <div class="panel">
 	<div>
 		<p>
-      {{l s='If you encounter rounding issues with your orders, please change PrestaShop round mode in: [a @href1@]Preferences > General[/a] then change for:' mod='braintree'}|totlreplace:['@href1@' => {{$link->getAdminLink('AdminPreferences', true)}}, '@target@' => {'target="blank"'}]}
+      {{l s='If you encounter rounding issues with your orders, please change PrestaShop round mode in: [a @href1@]Preferences > General[/a] then change for:' mod='braintree'}|braintreereplace:['@href1@' => {{$link->getAdminLink('AdminPreferences', true)}}, '@target@' => {'target="blank"'}]}
 		</p>
 		<ul>
 			<li class="h4">{l s='Round mode: "Round up away from zero, when it is half way there (recommended) "' mod='braintree'}</li>
