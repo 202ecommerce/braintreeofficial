@@ -53,7 +53,9 @@ class BraintreeAccountModuleFrontController extends ModuleFrontController
             $payment_method = new BraintreeVaulting($id);
             $method = AbstractMethodBraintree::load('Braintree');
             $method->deleteVaultedMethod($payment_method);
-            $payment_method->delete();
+            if ($payment_method->delete()) {
+                $this->success[] = $this->l('Successfully deleted!');
+            }
         }
         if (Tools::getValue('process') == 'save') {
             $all_values = Tools::getAllValues();
@@ -62,7 +64,9 @@ class BraintreeAccountModuleFrontController extends ModuleFrontController
                 if ($val_arr[0] == 'name') {
                     $payment_method = new BraintreeVaulting($val_arr[1]);
                     $payment_method->name = $value;
-                    $payment_method->save();
+                    if ($payment_method->save()) {
+                        $this->success[] = $this->l('Successfully updated!');
+                    }
                 }
             }
         }
