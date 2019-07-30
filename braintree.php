@@ -58,7 +58,6 @@ class Braintree extends \PaymentModule
      */
     public $hooks = array(
         'paymentOptions',
-        'displayOrderConfirmation',
         'displayAdminOrder',
         'actionOrderStatusPostUpdate',
         'actionOrderStatusUpdate',

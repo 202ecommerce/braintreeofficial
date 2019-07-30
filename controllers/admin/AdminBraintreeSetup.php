@@ -294,7 +294,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         $result = parent::saveForm();
 
         if (Tools::isSubmit('braintree_merchant_id_sandbox') || Tools::isSubmit('braintree_merchant_id_live')) {
-            $this->importMerchantAccountForCurrency();
+            $this->importMerchantAccountForCurrency(true);
+            $this->importMerchantAccountForCurrency(false);
         }
 
         $this->module->checkBraintreeStats();
@@ -307,18 +308,24 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         return $result;
     }
 
-    public function importMerchantAccountForCurrency()
+    /**
+     * @param bool $mode true if mode Sandbox and false if mode Live
+     */
+    public function importMerchantAccountForCurrency($mode = null)
     {
         /* @var $method MethodBraintree*/
         $method = AbstractMethodBraintree::load('Braintree');
-        $allCurrency = $method->getAllCurrency();
+        if ($mode === null) {
+            $mode = (int)Configuration::get('BRAINTREE_SANDBOX');
+        }
+        $allCurrency = $method->getAllCurrency($mode);
 
         if (empty($allCurrency)) {
             return;
         }
 
         foreach ($allCurrency as $currency => $merchantAccountForCurrency) {
-            Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency), $merchantAccountForCurrency);
+            Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency, $mode), $merchantAccountForCurrency);
         }
     }
 

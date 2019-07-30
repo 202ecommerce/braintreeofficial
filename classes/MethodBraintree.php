@@ -115,9 +115,12 @@ class MethodBraintree extends AbstractMethodBraintree
     {
     }
 
-    public function getAllCurrency()
+    /**
+     * @param bool $mode true if mode Sandbox and false if mode Live
+     */
+    public function getAllCurrency($mode = null)
     {
-        $this->initConfig();
+        $this->initConfig($mode);
         $result = array();
         try {
             $response = $this->gateway->merchantAccount()->all();
@@ -132,6 +135,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     /**
      * Init class configurations
+     * @param $order_mode bool mode of sandbox / live (true / false)
      */
     private function initConfig($order_mode = null)
     {
