@@ -31,7 +31,7 @@
 		{{l s='Log into your [a @href1@]account[/a]' mod='braintree'}|braintreereplace:['@href1@' => {'https://www.braintreegateway.com/login'}, '@target@' => {'target="blank"'}]}
 	</li>
 	<li>
-		{l s='Click the working wheel (logo)' mod='braintree'}
+		{l s='Click on Parameters (the working wheel logo)' mod='braintree'}
 	</li>
 	<li>
 		{l s='Click on API' mod='braintree'}

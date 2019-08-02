@@ -57,7 +57,7 @@
 								</div>						
 							{/if}
 							<div data-bt-vault-info class="bt__hidden bt__mb-4">
-								<p>{l s='You have to finish your payment done with your account PayPal:' mod='braintree'}</p>
+								<p>{l s='Please complete your payment by confirming below' mod='braintree'}</p>
 							</div>
 							<div data-braintree-button id="braintree-button" class="bt__mb-4"></div>
 						</div>

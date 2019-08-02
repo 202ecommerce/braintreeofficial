@@ -33,5 +33,18 @@ class AdminBraintreeProcessLoggerController extends AdminProcessLoggerController
     {
         parent::__construct();
         $this->className = 'BraintreeAddons\classes\BraintreeLog';
+
+        if (isset($this->fields_list['id_transaction'])) {
+            $this->fields_list['id_transaction'] = array(
+                'title'    => $this->module->l('Braintree Transaction ID', 'AdminProcessLoggerController'),
+                'callback' => 'getLinkToTransaction',
+            );
+        }
+
+        if (isset($this->fields_list['log'])) {
+            $this->fields_list['log'] = array(
+                'title' => $this->module->l('Message (Braintree API response)', 'AdminProcessLoggerController'),
+            );
+        }
     }
 }

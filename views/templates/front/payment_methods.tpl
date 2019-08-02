@@ -51,7 +51,7 @@
             <p><button class="btn btn-primary" type="submit">{l s='Save' mod='braintree'}</button></p>
         </form>
     {else}
-        {l s='You don\'t have saved payment methods from Braintree' mod='braintree'}
+        {l s='You don\'t have saved payment methods' mod='braintree'}
     {/if}
 
     <script type="text/javascript">
