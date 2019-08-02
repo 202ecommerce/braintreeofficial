@@ -420,7 +420,7 @@ class Braintree extends \PaymentModule
         if ($params['newOrderStatus']->paid == 1) {
             $capture = $this->serviceBraintreeCapture->getByOrderId($params['id_order']);
             $ps_order = new Order($params['id_order']);
-            if ($capture['id_capture']) {
+            if (isset($capture['id_capture']) && $capture['id_capture']) {
                 $this->setTransactionId($ps_order, $capture['id_capture']);
             }
         }
