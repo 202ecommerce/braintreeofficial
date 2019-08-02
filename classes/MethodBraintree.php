@@ -154,6 +154,7 @@ class MethodBraintree extends AbstractMethodBraintree
         } else {
             $this->mode = Configuration::get('BRAINTREE_SANDBOX') ? 'SANDBOX' : 'LIVE';
         }
+
         $this->gateway = new Braintree_Gateway(array('environment' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
             'publicKey' => Configuration::get('BRAINTREE_PUBLIC_KEY_' . $this->mode),
             'privateKey' => Configuration::get('BRAINTREE_PRIVATE_KEY_' . $this->mode),
@@ -167,8 +168,11 @@ class MethodBraintree extends AbstractMethodBraintree
     public function init()
     {
         try {
+            $module = Module::getInstanceByName($this->name);
+            $currency = $module->getPaymentCurrencyIso();
+            $merchantAccountId = Configuration::get($module->getNameMerchantAccountForCurrency($currency));
             $this->initConfig();
-            $clientToken = $this->gateway->clientToken()->generate();
+            $clientToken = $this->gateway->clientToken()->generate(['merchantAccountId' => $merchantAccountId]);
             return $clientToken;
         } catch (Exception $e) {
             return array('error_code' => $e->getCode(), 'error_msg' => $e->getMessage());
@@ -604,7 +608,6 @@ class MethodBraintree extends AbstractMethodBraintree
             );
         }
 
-        //$merchant_accounts = (array)Tools::jsonDecode(Configuration::get('PAYPAL_'.$this->mode.'_BRAINTREE_ACCOUNT_ID'));
         $address_billing = new Address($cart->id_address_invoice);
         $country_billing = new Country($address_billing->id_country);
         $address_shipping = new Address($cart->id_address_delivery);
