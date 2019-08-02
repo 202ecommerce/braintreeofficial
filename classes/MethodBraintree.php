@@ -89,6 +89,16 @@ class MethodBraintree extends AbstractMethodBraintree
         $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
     }
 
+    protected function getPaymentMethod()
+    {
+        $transactionDetails = $this->getDetailsTransaction();
+        if ((int)\Configuration::get('BRAINTREE_SANDBOX')) {
+            return $transactionDetails['payment_tool'] . ' - SANDBOX';
+        } else {
+            return $transactionDetails['payment_tool'];
+        }
+    }
+
     /**
      * @param $values array replace for tools::getValues()
      */
@@ -191,6 +201,7 @@ class MethodBraintree extends AbstractMethodBraintree
         }
 
         $this->setDetailsTransaction($transaction);
+
         if (Configuration::get('BRAINTREE_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
             $order_state = Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION');
         } else if ((Configuration::get('BRAINTREE_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
@@ -199,6 +210,7 @@ class MethodBraintree extends AbstractMethodBraintree
         } else {
             $order_state = Configuration::get('BRAINTREE_OS_AWAITING');
         }
+
         $module->validateOrder(
             context::getContext()->cart->id,
             $order_state,
@@ -214,6 +226,12 @@ class MethodBraintree extends AbstractMethodBraintree
 
     public function setDetailsTransaction($transaction)
     {
+        if ($transaction->paymentInstrumentType == 'credit_card') {
+            $paymentTool = $transaction->creditCardDetails->cardType;
+        } else {
+            $paymentTool = 'PayPal';
+        }
+
         $this->transaction_detail = array(
             'currency' => pSQL($transaction->currencyIsoCode),
             'transaction_id' => pSQL($transaction->id),
@@ -221,10 +239,11 @@ class MethodBraintree extends AbstractMethodBraintree
             'payment_status' => $transaction->status,
             'id_payment' => $this->payment_method_nonce,
             'capture' => $transaction->status == "authorized" ? true : false,
-            'payment_tool' => $transaction->paymentInstrumentType,
+            'payment_tool' => $paymentTool,
             'date_transaction' => $this->getDateTransaction($transaction)
         );
     }
+
     public function getDateTransaction($transaction)
     {
         return $transaction->updatedAt->format('Y-m-d H:i:s');
