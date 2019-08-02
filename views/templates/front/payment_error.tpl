@@ -48,7 +48,7 @@
             <section id="main">
                 <section id="content" class="page-content card card-block">
                     {include file='_partials/breadcrumb.tpl'}
-                    <h2>{l s='Error in Braintree' mod='braintree'}</h2>
+                    <h2>{l s='An error occurred' mod='braintree'}</h2>
 
                     <div class="table-responsive-row clearfix">
                         <p class="braintree_error_msg">
