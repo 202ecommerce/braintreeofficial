@@ -59,7 +59,7 @@
 							<div data-bt-vault-info class="bt__hidden bt__mb-4">
 								<p>{l s='Please complete your payment by confirming below' mod='braintree'}</p>
 							</div>
-							<div data-braintree-button id="braintree-button" class="bt__mb-4"></div>
+							<div data-braintree-button id="braintree-button" class="braintree-button bt__mb-4"></div>
 						</div>
 					{else}
 						<div class="alert alert-danger">{$init_error}</div>

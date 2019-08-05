@@ -19,14 +19,19 @@ $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     initPaypalBraintree('checkout');
   }
-
+  function addMask() {
+    $('[data-braintree-button]').removeClass('disabled');
+    }
   // Init paypal braintree method with chosen option
   $(document).on('change', 'input[name=save_account_in_vault]', (e) => {
-    if (e.target.checked === true) {
-      initPaypalBraintree('vault');
-    } else {
-      initPaypalBraintree('checkout');
-    }
+      $('[data-braintree-button]').addClass('disabled');
+      setTimeout(addMask, 1500);      
+      
+      if (e.target.checked === true) {
+        initPaypalBraintree('vault');
+      } else {
+        initPaypalBraintree('checkout');
+      }
   });
 
   // Insert paypal info block after option name 
@@ -120,7 +125,7 @@ const hoverPopup = () => {
 
 // Init paypal braintree
 const initPaypalBraintree = (flow) => {
-  
+
   braintree.client.create({
     authorization: paypal_braintree_authorization,
   }, (clientErr, clientInstance) => {
@@ -181,6 +186,7 @@ const initPaypalBraintree = (flow) => {
       });
     });
   });
+  
 }
 
 // Order payment button action
