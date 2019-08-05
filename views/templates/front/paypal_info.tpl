@@ -56,7 +56,6 @@
 		 class="bt__text-primary"
 		 data-bt-paypal-info-popover 
 		 data-html="true" 
-		 data-trigger="hover" 
 		 data-container="body"
 		 data-content="{$data_content}"
 	>

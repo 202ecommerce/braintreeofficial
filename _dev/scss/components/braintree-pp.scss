@@ -15,9 +15,21 @@
 			width: 100%;
 		}
 	}
-
 }
 
 @media only screen and (min-width: 992px) {
 	body.pp-popover .popover {max-width:500px;}
+}
+
+@media only screen and (max-width: 991px) {
+	.popover.bs-tether-element-attached-top {
+		left: -95px !important;
+		width: 276px;
+		top: 13px !important; 
+	
+		&::before,
+		&::after {
+			left: 85%;
+		}
+	}
 }

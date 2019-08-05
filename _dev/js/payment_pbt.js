@@ -35,8 +35,17 @@ $(document).ready(() => {
       $('[data-bt-paypal-info]').insertAfter($(`#payment-option-${i}-container label`));      
     }    
   });
-  // Show block with paypal payment benefits
-  $('[data-bt-paypal-info-popover]').popover(); 
+
+  // Show block with paypal payment benefits  
+  let configs = getConfigPopup();
+  $('[data-bt-paypal-info-popover]').popover({
+    placement: configs.popoverPlacement,
+    trigger: configs.popoverTrigger
+  }); 
+
+  if ($(window).width() > 991) {
+    hoverPopup();
+  }
 
   // Show paypal button while choosing 'Add a new paypal account'
   let accountSelect = $('[data-bt-vaulting-token="pbt"]');    
@@ -46,18 +55,67 @@ $(document).ready(() => {
   }
 });
 
-// Change icon while open/close popover
-$('[data-bt-paypal-info-popover] i').on('mouseover', (e) => {
-  e.target.innerText = 'cancel';
-  $('body').addClass('pp-popover'); 
-})
-
-$('[data-bt-paypal-info-popover] i').on('mouseout', (e) => {
-  e.target.innerText = 'info';
-  if (!$('[data-pp-info]').is(':visible')) {
-    $('body').removeClass('pp-popover');      
+const getConfigPopup = () => {
+  let placement = 'right',
+      trigger = 'hover';
+  if ($(window).width() < 992) {
+    placement = 'bottom';
+    trigger = 'click';
   }
-})
+  return {
+    popoverPlacement: placement,
+    popoverTrigger: trigger
+  }
+
+}
+
+$(document).click('[data-bt-paypal-info-popover] i', (e) => { 
+  clickPopup(e);
+});
+
+const hidePopup = (el) => {
+  $('[data-bt-paypal-info-popover]').popover('hide');
+  $('body').removeClass('pp-popover'); 
+  el.text('info');
+}
+
+const showPopup = (el) => {
+  $('[data-bt-paypal-info-popover]').popover('show');
+  $('body').addClass('pp-popover'); 
+  el.text('cancel');
+}
+
+const clickPopup = (e) => {
+  $('[data-bt-paypal-info-popover]').popover('toggle');
+  if($(e.target).closest('[data-bt-paypal-info-popover]').length != 0) {
+    e.preventDefault();
+    if ($(e.target).text() == 'info') {
+      showPopup($(e.target));
+    } else {
+      hidePopup($(e.target));
+    }
+  } else {
+    hidePopup($('[data-bt-paypal-info] i'));
+  }
+}
+
+const hoverPopup = () => {
+  $('[data-bt-paypal-info-popover] i').on('mouseover', (e) => {
+    e.target.innerText = 'cancel';
+    $('body').addClass('pp-popover'); 
+  })
+  
+  $('[data-bt-paypal-info-popover] i').on('mouseout', (e) => {
+    e.target.innerText = 'info';
+    if (!$('[data-pp-info]').is(':visible')) {
+      $('body').removeClass('pp-popover');
+    }
+  })
+
+  $('[data-bt-paypal-info-popover] i').on('click', (e) => {
+    hidePopup($(e.target));
+  })
+} 
 
 
 // Init paypal braintree
