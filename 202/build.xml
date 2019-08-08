@@ -6,7 +6,7 @@
     <property name="TARGETNAME" value="braintree" />
     <property name="TARGETBRANCH" value="${env.GIT_BRANCH}" />
     <property name="TARGETVERSION" value="1.0.0" />
-    <property name="PHPVERSION" value="7.2" />
+    <property name="PHPVERSION" value="5.6" />
     <property name="PSVERSION" value="1.7.5.x" />
 
     <target name="build" depends="build-common,package-zip,psvalidator,tot-testing" />

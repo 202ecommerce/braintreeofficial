@@ -138,6 +138,7 @@ class MethodBraintree extends AbstractMethodBraintree
                 $result[$account->currencyIsoCode] = $account->id;
             }
         } catch (Exception $e) {
+            return array();
         }
         return $result;
     }
@@ -147,7 +148,7 @@ class MethodBraintree extends AbstractMethodBraintree
      * Init class configurations
      * @param $order_mode bool mode of sandbox / live (true / false)
      */
-    private function initConfig($order_mode = null)
+    protected function initConfig($order_mode = null)
     {
         if ($order_mode !== null) {
             $this->mode = $order_mode ? 'SANDBOX' : 'LIVE';
@@ -732,6 +733,10 @@ class MethodBraintree extends AbstractMethodBraintree
     public function formatPrice($price)
     {
         /* @var $module Braintree*/
+        if (is_float($price) == false) {
+            $price = floatval($price);
+        }
+
         $context = Context::getContext();
         $context_currency = $context->currency;
         $module = Module::getInstanceByName($this->name);
