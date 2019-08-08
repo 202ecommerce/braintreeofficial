@@ -1,8 +1,8 @@
-composer.lock
+
 .idea/
 vendor/*
 !vendor/ppbtlib
-config.xml
+config*.xml
 node_modules/
 package-lock.json
 views/js/*

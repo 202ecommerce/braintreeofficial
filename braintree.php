@@ -211,7 +211,7 @@ class Braintree extends \PaymentModule
         $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
         $this->serviceBraintreeCapture = new ServiceBraintreeCapture();
         $this->serviceBraintreeVaulting = new ServiceBraintreeVaulting();
-        $this->methodBraintree = AbstractMethodBraintree::load('Braintree');
+        $this->setMethodBraitree(AbstractMethodBraintree::load('Braintree'));
     }
 
     public function install()
@@ -951,18 +951,20 @@ class Braintree extends \PaymentModule
 
     public function hookPaymentOptions($params)
     {
+        $payments_options = array();
+
         /* for avoiding the connection exception need to verify if module configured correct*/
         if ($this->methodBraintree->isConfigured() == false) {
-            return;
+            return $payments_options;
         }
 
         /* for avoiding the exception of authorization need to verify mode of payment currency and merchant account*/
         if ($this->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
             $this->merchantAccountForCurrencyConfigured() == false
         ) {
-            return;
+            return $payments_options;
         }
-        $payments_options = array();
+
         if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
             $embeddedOption = new PaymentOption();
             $action_text = $this->l('Pay with PayPal');
@@ -1485,7 +1487,7 @@ class Braintree extends \PaymentModule
         $allCurrency = Currency::getCurrencies();
 
         if (empty($allCurrency)) {
-            return;
+            return false;
         }
 
         $result = true;
@@ -1494,6 +1496,11 @@ class Braintree extends \PaymentModule
             $result &= (bool)Configuration::get($this->getNameMerchantAccountForCurrency($currency['iso_code']));
         }
 
-        return $result;
+        return (bool)$result;
+    }
+
+    public function setMethodBraitree(AbstractMethodBraintree $method)
+    {
+        $this->methodBraintree = $method;
     }
 }
