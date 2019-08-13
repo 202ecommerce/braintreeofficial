@@ -25,6 +25,7 @@
  */
 
 use BraintreeAddons\classes\AbstractMethodBraintree;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 require_once _PS_MODULE_DIR_ . 'braintree/controllers/front/abstract.php';
 
@@ -33,9 +34,13 @@ require_once _PS_MODULE_DIR_ . 'braintree/controllers/front/abstract.php';
  */
 class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFrontController
 {
+    /* @var $method MethodBraintree*/
+    protected $method;
+
     public function init()
     {
         parent::init();
+        $this->setMethod(AbstractMethodBraintree::load('Braintree'));
         $this->values['payment_method_nonce'] = Tools::getvalue('payment_method_nonce');
         $this->values['payment_method_bt'] = Tools::getvalue('payment_method_bt');
         $this->values['bt_vaulting_token'] = Tools::getvalue('bt_vaulting_token');
@@ -46,11 +51,9 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
 
     public function postProcess()
     {
-        /* @var $method_bt MethodBraintree*/
-        $method_bt = AbstractMethodBraintree::load('Braintree');
         try {
-            $method_bt->setParameters($this->values);
-            $method_bt->validation();
+            $this->method->setParameters($this->values);
+            $this->method->validation();
             $cart = Context::getContext()->cart;
             $customer = new Customer($cart->id_customer);
             $module = Module::getInstanceByName($this->name);
@@ -63,11 +66,61 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();
         } finally {
-            $this->transaction_detail = $method_bt->getDetailsTransaction();
+            $this->transaction_detail = $this->method->getDetailsTransaction();
         }
 
         if (!empty($this->errors)) {
             $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $this->errors);
         }
+    }
+
+    public function setMethod(AbstractMethodBraintree $method)
+    {
+        $this->method = $method;
+    }
+
+    public function displayAjaxGetOrderInformation()
+    {
+        $customer = new Customer($this->context->cart->id_customer);
+        $address = new Address($this->context->cart->id_address_delivery);
+        $country = new Country($address->id_country);
+        $iso = '';
+
+        if ($address->id_state) {
+            $state = new State((int) $address->id_state);
+            $iso = $state->iso_code;
+        }
+
+        $responseContent = array(
+            'success' => true,
+            'orderInformation' => array(
+                'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
+                'email' => $customer->email,
+                'billingAddress' => array(
+                    'givenName' => $customer->firstname,
+                    'surneme' => $customer->lastname,
+                    'phoneNumber' => $address->phone,
+                    'streetAddress' => $address->address1,
+                    'locality' => $address->city,
+                    'countryCodeAlpha2' => $country->iso_code,
+                    'region' => $iso,
+                    'postalCode' => $address->postcode
+                ),
+                'additionalInformation' => array(
+                    'shippingGivenName' => $address->firstname,
+                    'shippingSurname' => $address->lastname,
+                    'shippingPhone' => $address->phone,
+                    'shippingAddress' => array(
+                        'streetAddress' => $address->address1,
+                        'locality' => $address->city,
+                        'countryCodeAlpha2' => $country->iso_code,
+                        'region' => $iso,
+                        'postalCode' => $address->postcode
+                    )
+                )
+            )
+        );
+        $response = new JsonResponse($responseContent);
+        $response->send();
     }
 }

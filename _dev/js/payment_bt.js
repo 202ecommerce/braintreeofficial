@@ -19,7 +19,7 @@ $(document).ready(() => {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
   }
-  
+
   $('.js-payment-option-form').each((i) => {
     let index = i+1,   
         option_label = $(`label[for="payment-option-${index}"]`);     
@@ -179,58 +179,52 @@ const setErrorMsg = (el, field) => {
 const BraintreeSubmitPayment = () => {
   
   const bt_form = $('[data-braintree-card-form]');
-
+  const bt3Dinformation = getOrderInformation();
   // use vaulted card
   if ($('[data-bt-vaulting-token="bt"]').val()) {
-    if (check3DS) {
+      bt3Dinformation["nonce"] = $('[data-bt-vaulting-token="bt"] option:checked').data('nonce');
+      bt3Dinformation["onLookupComplete"] = (data, next) => {
+          next();
+      };
+
       braintree.threeDSecure.create({
-        client: bt_client_instance,
+          version: 2, //Using 3DS 2
+          client: bt_client_instance,
       }, (ThreeDSecureerror, threeDSecure) => {
-        if (ThreeDSecureerror) {
-          switch (ThreeDSecureerror.code) {
-            case 'THREEDS_HTTPS_REQUIRED':
-              popup_message =  bt_translations_https;
-              break;
-            default:
-              popup_message =  bt_translations_load_3d;
+          if (ThreeDSecureerror) {
+              switch (ThreeDSecureerror.code) {
+                  case 'THREEDS_HTTPS_REQUIRED':
+                      popup_message =  bt_translations_https;
+                      break;
+                  default:
+                      popup_message =  bt_translations_load_3d;
+              }
+              $('[data-bt-card-error-msg]').show().text(popup_message);
+              return false;
           }
-          $('[data-bt-card-error-msg]').show().text(popup_message);
-          return false;
-        }
-        threeDSecure.verifyCard({
-          amount: bt_amount,
-          nonce: $('[data-bt-vaulting-token="bt"] option:checked').data('nonce'),
-          addFrame(err, iframe) {
-            $.fancybox.open([
-              {
-                type: 'inline',
-                autoScale: true,
-                minHeight: 30,
-                content: `<p class="braintree-iframe">${iframe.outerHTML}</p>`,
-              },
-            ]);
-          },
-          removeFrame() {
-          },
-        }, (err, three_d_secure_response) => {
-          if (err) {
-            let popup_message = '';
-            switch (err.code) {
-              case 'CLIENT_REQUEST_ERROR':
-                popup_message =  bt_translations_request_problem;
-                break;
-              default:
-                popup_message =  bt_translations_failed_3d;
-            }
-            $('[data-bt-card-error-msg]').show().text(popup_message);
-            return false;
-          }
-          bt_form.submit();
-        });
+          threeDSecure.verifyCard(
+              bt3Dinformation,
+              (err, three_d_secure_response) => {
+                  if (err) {
+                      let popup_message = '';
+                      switch (err.code) {
+                          case 'CLIENT_REQUEST_ERROR':
+                              popup_message =  bt_translations_request_problem;
+                              break;
+                          default:
+                              popup_message =  bt_translations_failed_3d;
+                      }
+                      $('[data-bt-card-error-msg]').show().text(popup_message);
+                      return false;
+                  }
+
+                  if (three_d_secure_response.threeDSecureInfo.status == "lookup_enrolled" ) {
+                      return false;
+                  }
+
+                  bt_form.submit();
+          });
       });
-    } else {
-      bt_form.submit();
-    }
   } else {
     bt_hosted_fileds.tokenize((tokenizeErr, payload) => {
       if (tokenizeErr) {        
@@ -254,61 +248,81 @@ const BraintreeSubmitPayment = () => {
         }
         return false;
       }
-      if (check3DS) {
-        braintree.threeDSecure.create({
-          client: bt_client_instance,
-        }, (ThreeDSecureerror, threeDSecure) => {
-          if (ThreeDSecureerror) {
-            switch (ThreeDSecureerror.code) {
-              case 'THREEDS_HTTPS_REQUIRED':
-                popup_message = bt_translations_https;
-                break;
-              default:
-                popup_message = bt_translations_load_3d;
-            }
-            $('[data-bt-card-error-msg]').show().text(popup_message);
-            return false;
-          }
-          threeDSecure.verifyCard({
-            nonce: payload.nonce,
-            amount: bt_amount,
-            addFrame(err, iframe) {
-              $.fancybox.open([
-                {
-                  type: 'inline',
-                  autoScale: true,
-                  minHeight: 30,
-                  content: `<p class="braintree-iframe">${iframe.outerHTML}</p>`,
-                },
-              ]);
-            },
-            removeFrame() {
-            },
-          }, (err, three_d_secure_response) => {
-            if (err) {
-              let popup_message = '';
-              switch (err.code) {
-                case 'CLIENT_REQUEST_ERROR':
-                  popup_message =  bt_translations_request_problem;
-                  break;
-                default:
-                  popup_message =  bt_translations_failed_3d;
-              }
-              $('[data-bt-card-error-msg]').show().text(popup_message);
-              return false;
-            }
 
-            $('[data-payment-method-nonce="bt"]').val(three_d_secure_response.nonce);
-            $('[data-bt-card-type]').val(payload.details.cardType);
-            bt_form.submit();
-          });
+      bt3Dinformation["nonce"] = payload.nonce;
+      bt3Dinformation["bin"] = payload.details.bin;
+      bt3Dinformation["onLookupComplete"] = (data, next) => {
+          next();
+      };
+
+        braintree.threeDSecure.create({
+            version: 2, //Using 3DS 2
+            client: bt_client_instance,
+        }, (ThreeDSecureerror, threeDSecure) => {
+            if (ThreeDSecureerror) {
+                switch (ThreeDSecureerror.code) {
+                    case 'THREEDS_HTTPS_REQUIRED':
+                        popup_message = bt_translations_https;
+                        break;
+                    default:
+                        popup_message = bt_translations_load_3d;
+                }
+                $('[data-bt-card-error-msg]').show().text(popup_message);
+                return false;
+            }
+            threeDSecure.verifyCard(
+                bt3Dinformation,
+                (err, three_d_secure_response) => {
+                if (err) {
+                    let popup_message = '';
+                    switch (err.code) {
+                        case 'CLIENT_REQUEST_ERROR':
+                            popup_message =  bt_translations_request_problem;
+                            break;
+                        default:
+                            popup_message =  bt_translations_failed_3d;
+                    }
+                    $('[data-bt-card-error-msg]').show().text(popup_message);
+                    return false;
+                }
+
+                if (three_d_secure_response.threeDSecureInfo.status == "lookup_enrolled" ) {
+                    return false;
+                }
+
+                $('[data-payment-method-nonce="bt"]').val(three_d_secure_response.nonce);
+                $('[data-bt-card-type]').val(payload.details.cardType);
+                bt_form.submit();
+            });
         });
-      } else {
-        $('[data-payment-method-nonce="bt"]').val(payload.nonce);
-        bt_form.submit();
-      }
     });
   }
+}
+
+function getOrderInformation() {
+    var res;
+    $.ajax({
+        url: controllerValidation,
+        type: 'POST',
+        dataType: 'JSON',
+        async:false,
+        data: {
+            ajax: true,
+            action: 'getOrderInformation',
+        },
+        success(response) {
+            if (("success" in response) && (response["success"] == true)) {
+                res= response["orderInformation"]
+            } else {
+                res= false;
+            }
+        },
+        error() {
+            res= false;
+        }
+    });
+
+    return res;
 }
 
 // Make function BraintreeSubmitPayment global for call in main module file

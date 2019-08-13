@@ -42,7 +42,7 @@
 								<select name="bt_vaulting_token" data-bt-vaulting-token="bt" class="form-control bt__form-control">
 									<option value="">{l s='Use a new card' mod='braintree'}</option>
 									{foreach from=$payment_methods key=method_key  item=method}
-										<option value="{$method.token|escape:'htmlall':'UTF-8'}" {if $check3Dsecure} data-nonce="{$method.nonce}"{/if}>
+										<option value="{$method.token|escape:'htmlall':'UTF-8'}" data-nonce="{$method.nonce}">
 											{if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
 											{$method.info|escape:'htmlall':'UTF-8'}
 										</option>

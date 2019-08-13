@@ -42,11 +42,9 @@ var CustomizeCheckout = {
 
   checkConfigurations() {
     const usePayPal = $('input[name="braintree_activate_paypal"]');
-    const enable3DSecure = $('input[name="braintree_3DSecure"]');
     const enableCardVerification = $('input[name="braintree_card_verification"]');
     const enableVault = $('input[name="braintree_vaulting"]');
     const showPayPalBenefits = $('input[name="braintree_show_paypal_benefits"]');
-    const Amount3DSecure = $('input[name="braintree_3DSecure_amount"]');
 
     // Activate paypal payment method and add additional config for it (Display block with paypal benefits)
     if (usePayPal.prop('checked') == false) {
@@ -60,13 +58,6 @@ var CustomizeCheckout = {
       this.hideConfiguration(enableCardVerification.attr('name'));
     } else {
       this.showConfiguration(enableCardVerification.attr('name'));
-    }
-
-    // Activate card verification for existence and validity
-    if (enable3DSecure.prop('checked') == false) {
-      this.hideConfiguration(Amount3DSecure.attr('name'));
-    } else {
-      this.showConfiguration(Amount3DSecure.attr('name'));
     }
   },
 
