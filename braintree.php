@@ -901,7 +901,6 @@ class Braintree extends \PaymentModule
             $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
             if (Configuration::get('BRAINTREE_ACTIVATE_PAYPAL')) {
-                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                 Media::addJsDefL('empty_nonce', $this->l('Please click on the PayPal Pay button first'));
                 $this->addJsVarsPB();
