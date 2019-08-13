@@ -55,9 +55,6 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
     public function run()
     {
         $this->init();
-        if ($this->ajax) {
-            return $this->ajaxProcess();
-        }
         if ($this->checkAccess()) {
             // postProcess handles ajaxProcess
             $this->postProcess();
@@ -94,19 +91,6 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
         if (!empty($this->jsonValues)) {
             $response = new JsonResponse($this->jsonValues);
             return $response->send();
-        }
-    }
-
-    public function ajaxProcess()
-    {
-        if (\Tools::isSubmit('action') == false) {
-            return false;
-        }
-
-        $method = 'displayAjax' . \Tools::getValue('action');
-
-        if (method_exists($this, $method)) {
-            return call_user_func(array($this, $method));
         }
     }
 }
