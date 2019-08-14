@@ -1142,9 +1142,12 @@ class Braintree extends \PaymentModule
                 $shop
             );
         } catch (Exception $e) {
+            $log = 'Order validation error : ' . $e->getMessage() . ';';
+            $log .= ' File: ' . $e->getFile() . ';';
+            $log .= ' Line: ' . $e->getLine() . ';';
             ProcessLoggerHandler::openLogger();
             ProcessLoggerHandler::logError(
-                'Order validation error : ' . $e->getMessage(),
+                $log,
                 isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
                 null,
                 (int)$id_cart,
@@ -1154,11 +1157,16 @@ class Braintree extends \PaymentModule
                 isset($transaction['date_transaction']) ? $transaction['date_transaction'] : null
             );
             ProcessLoggerHandler::closeLogger();
-            $msg = $this->l('Order validation error : ').$e->getMessage().'. ';
-            if (isset($transaction['transaction_id']) && $id_order_state != Configuration::get('PS_OS_ERROR')) {
-                $msg .= $this->l('Attention, your payment is made. Please, contact customer support. Your transaction ID is  : ').$transaction['transaction_id'];
+
+            $this->currentOrder = (int)Order::getIdByCartId((int) $id_cart);
+
+            if ($this->currentOrder == false) {
+                $msg = $this->l('Order validation error : ').$e->getMessage().'. ';
+                if (isset($transaction['transaction_id']) && $id_order_state != Configuration::get('PS_OS_ERROR')) {
+                    $msg .= $this->l('Attention, your payment is made. Please, contact customer support. Your transaction ID is  : ').$transaction['transaction_id'];
+                }
+                Tools::redirect(Context::getContext()->link->getModuleLink('braintree', 'error', array('error_msg' => $msg, 'no_retry' => true)));
             }
-            Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'error', array('error_msg' => $msg, 'no_retry' => true)));
         }
         ProcessLoggerHandler::openLogger();
         ProcessLoggerHandler::logInfo(
