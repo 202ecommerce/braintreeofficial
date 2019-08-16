@@ -51,7 +51,7 @@ class ServiceBraintreeVaultingTest extends TestCase
     /* @var ServiceBraintreeVaulting*/
     protected $service;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->service = new ServiceBraintreeVaulting();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
@@ -75,7 +75,7 @@ class ServiceBraintreeVaultingTest extends TestCase
     public function testGetCustomerGroupedMethods($customer)
     {
         $return = $this->service->getCustomerGroupedMethods($customer);
-        $this->assertIsArray($return);
+        $this->assertTrue(is_array($return));
     }
 
     /**
@@ -83,7 +83,7 @@ class ServiceBraintreeVaultingTest extends TestCase
      */
     public function testGetCustomerMethods($customer, $method)
     {
-        $this->assertIsArray($this->service->getCustomerMethods($customer, $method));
+        $this->assertTrue(is_array($this->service->getCustomerMethods($customer, $method)));
 
     }
 
@@ -92,7 +92,7 @@ class ServiceBraintreeVaultingTest extends TestCase
      */
     public function testVaultingExist($token, $customer)
     {
-        $this->assertIsBool($this->service->vaultingExist($token, $customer));
+        $this->assertTrue(is_bool($this->service->vaultingExist($token, $customer)));
     }
 
     public function providerGetCustomerGroupedMethods()

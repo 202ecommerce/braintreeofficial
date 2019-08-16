@@ -51,7 +51,7 @@ class ServiceBraintreeCaptureTest extends TestCase
     /* @var ServiceBraintreeCapture*/
     protected $service;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->service = new ServiceBraintreeCapture();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
@@ -80,7 +80,7 @@ class ServiceBraintreeCaptureTest extends TestCase
 
     public function testGetPayPalOrderBtId()
     {
-        $this->assertIsArray($this->service->getPayPalOrderBtId());
+        $this->assertTrue(is_array($this->service->getPayPalOrderBtId()));
     }
 
     /**

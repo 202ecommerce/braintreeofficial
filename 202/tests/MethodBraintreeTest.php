@@ -49,7 +49,7 @@ class MethodBraintreeTest extends TestCase
     /* @var MethodBraintreeMock*/
     protected $methodBraintree;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->methodBraintree = new MethodBraintreeMock();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
@@ -74,7 +74,7 @@ class MethodBraintreeTest extends TestCase
     {
         $methodBraintree = $this->methodBraintree->getInstance();
         $return = $methodBraintree->formatPrice($price);
-        $this->assertIsFloat($return);
+        $this->assertTrue(is_float($return));
     }
 
     public function testGetAllCurrency()
@@ -82,7 +82,7 @@ class MethodBraintreeTest extends TestCase
         $methodConfiguredModes = array(true, false);
         foreach ($methodConfiguredModes as $methodConfiguredMode) {
             $method = $this->methodBraintree->getInstance($methodConfiguredMode);
-            $this->assertIsArray($method->getAllCurrency());
+            $this->assertTrue(is_array($method->getAllCurrency()));
         }
     }
 
@@ -92,7 +92,7 @@ class MethodBraintreeTest extends TestCase
     public function testGetLinkToTransaction($id_transaction, $sandbox)
     {
         $method = $this->methodBraintree->getInstance();
-        $this->assertIsString($method->getLinkToTransaction($id_transaction, $sandbox));
+        $this->assertTrue(is_string($method->getLinkToTransaction($id_transaction, $sandbox)));
     }
 
     public function testGetOrderId()
@@ -104,13 +104,13 @@ class MethodBraintreeTest extends TestCase
         $cart->secure_key = 'string';
         $cart->id = 1;
 
-        $this->assertIsString($method->getOrderId($cart));
+        $this->assertTrue(is_string($method->getOrderId($cart)));
     }
 
     public function testInitSuccess()
     {
         $method = $this->methodBraintree->getInstance();
-        $this->assertIsString($method->init());
+        $this->assertTrue(is_string($method->init()));
     }
 
     public function testInitFailed()

@@ -50,12 +50,15 @@ class BraintreeTest extends TestCase
     /* @var \Braintree*/
     protected $braintree;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->braintree = new \Braintree();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
         $this->moduleNames = 'braintree';
+        $contextTest = \Context::getContext();
+        $contextTest->customer = new \Customer(1);
+        \Context::setInstanceForTesting($contextTest);
     }
 
     public function testInstall()
@@ -74,7 +77,7 @@ class BraintreeTest extends TestCase
     public function testDisplayInformation($message)
     {
         $return = $this->braintree->displayInformation($message);
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
     /**
@@ -84,7 +87,7 @@ class BraintreeTest extends TestCase
     {
         $this->braintree->setMethodBraitree($method);
         $return = $this->braintree->generateFormBT();
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
     /**
@@ -94,7 +97,7 @@ class BraintreeTest extends TestCase
     {
         $this->braintree->setMethodBraitree($method);
         $return = $this->braintree->generateFormPB();
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
 
@@ -110,7 +113,7 @@ class BraintreeTest extends TestCase
     public function testGetNameMerchantAccountForCurrency($currency, $mode)
     {
         $return = $this->braintree->getNameMerchantAccountForCurrency($currency, $mode);
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
     public function testGetPaymentCurrencyIso()
@@ -126,18 +129,18 @@ class BraintreeTest extends TestCase
     {
         $this->braintree->setMethodBraitree($method);
         $return = $this->braintree->hookPaymentOptions(array());
-        $this->assertIsArray($return);
+        $this->assertTrue(is_array($return));
 
     }
 
     public function testIsSslActive()
     {
-        $this->assertIsBool($this->braintree->isSslActive());
+        $this->assertTrue(is_bool($this->braintree->isSslActive()));
     }
 
     public function testMerchantAccountForCurrencyConfigured()
     {
-        $this->assertIsBool($this->braintree->merchantAccountForCurrencyConfigured());
+        $this->assertTrue(is_bool($this->braintree->merchantAccountForCurrencyConfigured()));
     }
 
     public function testNeedConvert()

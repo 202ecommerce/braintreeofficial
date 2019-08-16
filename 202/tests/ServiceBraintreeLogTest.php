@@ -50,7 +50,7 @@ class ServiceBraintreeLogTest extends TestCase
     /* @var ServiceBraintreeLog*/
     protected $service;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->service = new ServiceBraintreeLog();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
@@ -71,6 +71,6 @@ class ServiceBraintreeLogTest extends TestCase
     public function testGetCartBtId()
     {
         $return = $this->service->getCartBtId();
-        $this->assertIsArray($return);
+        $this->assertTrue(is_array($return));
     }
 }

@@ -137,10 +137,16 @@ class ProcessLoggerObjectModel extends ObjectModel
         }
         if ($diff == 0) {
             $diff = 'GMT';
+        } elseif ($diff > 0) {
+            $diff = "+" . $diff;
         }
-        $dateTimeZone = new \DateTimeZone($diff);
 
-        $date = new \DateTime($this->date_transaction, $dateTimeZone);
-        return $date->format('Y-m-d H:i:s T');
+        try {
+            $dateTimeZone = new \DateTimeZone($diff);
+            $date = new \DateTime($this->date_transaction, $dateTimeZone);
+            return $date->format('Y-m-d H:i:s T');
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 }

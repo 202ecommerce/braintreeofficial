@@ -51,7 +51,7 @@ class ServiceBraintreeOrderTest extends TestCase
     /* @var ServiceBraintreeOrder*/
     protected $service;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->service = new ServiceBraintreeOrder();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
@@ -72,12 +72,12 @@ class ServiceBraintreeOrderTest extends TestCase
     public function testGetBraintreeOrdersForValidation()
     {
         $return = $this->service->getBraintreeOrdersForValidation();
-        $this->assertIsArray($return);
+        $this->assertTrue(is_array($return));
     }
 
     public function testGetCountOrders()
     {
-        $this->assertIsInt($this->service->getCountOrders());
+        $this->assertTrue(is_int($this->service->getCountOrders()));
     }
 
     /**
