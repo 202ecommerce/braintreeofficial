@@ -38,7 +38,7 @@ require_once _PS_MODULE_DIR_.'braintree/classes/MethodBraintree.php';
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
-class MethodBraintreeMock extends TestCase
+class MethodBraintreeMockTest extends TestCase
 {
     public function getInstance($configured = true)
     {

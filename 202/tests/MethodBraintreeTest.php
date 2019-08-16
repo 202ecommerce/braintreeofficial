@@ -36,7 +36,7 @@ require_once _PS_MODULE_DIR_.'braintree/vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeTest\MethodBraintreeMock;
+use BraintreeTest\MethodBraintreeMockTest;
 
 class MethodBraintreeTest extends TestCase
 {
@@ -46,12 +46,12 @@ class MethodBraintreeTest extends TestCase
 
     public $moduleNames;
 
-    /* @var MethodBraintreeMock*/
+    /* @var MethodBraintreeMockTest*/
     protected $methodBraintree;
 
     protected function setUp()
     {
-        $this->methodBraintree = new MethodBraintreeMock();
+        $this->methodBraintree = new MethodBraintreeMockTest();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
         $this->moduleNames = 'braintree';

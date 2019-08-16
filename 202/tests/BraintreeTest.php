@@ -37,7 +37,7 @@ require_once _PS_MODULE_DIR_.'braintree/braintree.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeTest\MethodBraintreeMock;
+use BraintreeTest\MethodBraintreeMockTest;
 
 class BraintreeTest extends TestCase
 {
@@ -166,7 +166,7 @@ class BraintreeTest extends TestCase
 
     public function providerGenerateFormBT()
     {
-        $methodBraintreeMock = new MethodBraintreeMock();
+        $methodBraintreeMock = new MethodBraintreeMockTest();
         $data = array(
             array($methodBraintreeMock->getInstance(true)),
             array($methodBraintreeMock->getInstance(false))
