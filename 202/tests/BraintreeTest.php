@@ -58,14 +58,16 @@ class BraintreeTest extends TestCase
         $this->moduleNames = 'braintree';
         $contextTest = \Context::getContext();
         $contextTest->customer = new \Customer(1);
+        $contextTest->currency = new \Currency(1);
         \Context::setInstanceForTesting($contextTest);
     }
 
     public function testInstall()
     {
         $employees = \Employee::getEmployeesByProfile(_PS_ADMIN_PROFILE_);
+        $id_employee = (int)$employees[0]['id_employee'] ? (int)$employees[0]['id_employee'] : 1;
         $contextTest = \Context::getContext();
-        $contextTest->employee = new \Employee((int)$employees[0]['id_employee']);
+        $contextTest->employee = new \Employee($id_employee);
         $contextTest->cookie->update();
         \Context::setInstanceForTesting($contextTest);
         $this->assertTrue((bool)$this->moduleManager->install($this->moduleNames), "Could not install $this->moduleNames");
