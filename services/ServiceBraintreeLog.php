@@ -29,6 +29,7 @@ namespace BraintreeAddons\services;
 use BraintreeAddons\classes\BraintreeLog;
 use BraintreeAddons\classes\AbstractMethodBraintree;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class ServiceBraintreeLog
 {
@@ -103,13 +104,21 @@ class ServiceBraintreeLog
      */
     public function getCartBtId()
     {
+        $cartBtIds = array();
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        $moduleManager = $moduleManagerBuilder->build();
+
+        if ($moduleManager->isInstalled('paypal') == false) {
+            return $cartBtIds;
+        }
+
         $query = new \DbQuery();
         $query->select('id_cart');
         $query->from('paypal_order');
         $query->where('method="BT"');
 
         $result = \DB::getInstance()->executeS($query);
-        $cartBtIds = array();
+
         if (empty($result)) {
             return $cartBtIds;
         }
