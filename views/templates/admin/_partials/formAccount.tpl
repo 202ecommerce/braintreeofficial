@@ -43,7 +43,7 @@
 		{l s='Click on "View" in the "Private key" column' mod='braintree'}
 	</li>
 	<li>
-		{l s='Cpoy your "Private Key", "Public Key" and "Mechand ID" and paste them below:' mod='braintree'}
+		{l s='Copy your "Private Key", "Public Key" and "Merchant ID" and paste them below:' mod='braintree'}
 	</li>
 </ul>
 
