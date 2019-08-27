@@ -97,6 +97,17 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
         }
     }
 
+    public function init()
+    {
+        parent::init();
+
+        if (\Tools::getValue('ajax')) {
+            $this->ajax = true;
+        } else {
+            $this->ajax = false;
+        }
+    }
+
     public function ajaxProcess()
     {
         if (\Tools::isSubmit('action') == false) {
