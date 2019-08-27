@@ -55,12 +55,12 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
     public function run()
     {
         $this->init();
-        if ($this->ajax) {
-            return $this->ajaxProcess();
-        }
         if ($this->checkAccess()) {
-            // postProcess handles ajaxProcess
-            $this->postProcess();
+            if ($this->ajax) {
+                $this->ajaxProcess();
+            } else {
+                $this->postProcess();
+            }
         }
 
         if (empty($this->errors) == false) {

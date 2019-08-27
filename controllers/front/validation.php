@@ -120,7 +120,6 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
                 )
             )
         );
-        $response = new JsonResponse($responseContent);
-        $response->send();
+        $this->jsonValues = $responseContent;
     }
 }
