@@ -798,6 +798,7 @@ class Braintree extends \PaymentModule
 
     public function hookDisplayBackOfficeHeader()
     {
+        $this->checkEnvironment();
         $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREE_CRON_TIME')));
         if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4 || Configuration::get('BRAINTREE_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREE_CRON_TIME', date('Y-m-d H:i:s'));
@@ -1511,4 +1512,21 @@ class Braintree extends \PaymentModule
     {
         $this->methodBraintree = $method;
     }
+    public function checkEnvironment()
+    {
+        $tab = Tab::getInstanceFromClassName('AdminParentBraintreeConfiguration');
+
+        if (Validate::isLoadedObject($tab) == false) {
+            return false;
+        }
+
+        if (getenv('PLATEFORM') == 'PSREAD') {
+            $tab->active = false;
+        } else {
+            $tab->active = true;
+        }
+
+        return $tab->update();
+    }
+
 }
