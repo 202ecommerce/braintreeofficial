@@ -37,7 +37,7 @@ require_once _PS_MODULE_DIR_.'braintree/braintree.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeTest\MethodBraintreeMock;
+use BraintreeTest\MethodBraintreeMockTest;
 
 class BraintreeTest extends TestCase
 {
@@ -50,19 +50,24 @@ class BraintreeTest extends TestCase
     /* @var \Braintree*/
     protected $braintree;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->braintree = new \Braintree();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
         $this->moduleNames = 'braintree';
+        $contextTest = \Context::getContext();
+        $contextTest->customer = new \Customer(1);
+        $contextTest->currency = new \Currency(1);
+        \Context::setInstanceForTesting($contextTest);
     }
 
     public function testInstall()
     {
         $employees = \Employee::getEmployeesByProfile(_PS_ADMIN_PROFILE_);
+        $id_employee = (int)$employees[0]['id_employee'] ? (int)$employees[0]['id_employee'] : 1;
         $contextTest = \Context::getContext();
-        $contextTest->employee = new \Employee((int)$employees[0]['id_employee']);
+        $contextTest->employee = new \Employee($id_employee);
         $contextTest->cookie->update();
         \Context::setInstanceForTesting($contextTest);
         $this->assertTrue((bool)$this->moduleManager->install($this->moduleNames), "Could not install $this->moduleNames");
@@ -74,7 +79,7 @@ class BraintreeTest extends TestCase
     public function testDisplayInformation($message)
     {
         $return = $this->braintree->displayInformation($message);
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
     /**
@@ -84,7 +89,7 @@ class BraintreeTest extends TestCase
     {
         $this->braintree->setMethodBraitree($method);
         $return = $this->braintree->generateFormBT();
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
     /**
@@ -94,7 +99,7 @@ class BraintreeTest extends TestCase
     {
         $this->braintree->setMethodBraitree($method);
         $return = $this->braintree->generateFormPB();
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
 
@@ -110,7 +115,7 @@ class BraintreeTest extends TestCase
     public function testGetNameMerchantAccountForCurrency($currency, $mode)
     {
         $return = $this->braintree->getNameMerchantAccountForCurrency($currency, $mode);
-        $this->assertIsString($return);
+        $this->assertTrue(is_string($return));
     }
 
     public function testGetPaymentCurrencyIso()
@@ -126,18 +131,18 @@ class BraintreeTest extends TestCase
     {
         $this->braintree->setMethodBraitree($method);
         $return = $this->braintree->hookPaymentOptions(array());
-        $this->assertIsArray($return);
+        $this->assertTrue(is_array($return));
 
     }
 
     public function testIsSslActive()
     {
-        $this->assertIsBool($this->braintree->isSslActive());
+        $this->assertTrue(is_bool($this->braintree->isSslActive()));
     }
 
     public function testMerchantAccountForCurrencyConfigured()
     {
-        $this->assertIsBool($this->braintree->merchantAccountForCurrencyConfigured());
+        $this->assertTrue(is_bool($this->braintree->merchantAccountForCurrencyConfigured()));
     }
 
     public function testNeedConvert()
@@ -161,7 +166,7 @@ class BraintreeTest extends TestCase
 
     public function providerGenerateFormBT()
     {
-        $methodBraintreeMock = new MethodBraintreeMock();
+        $methodBraintreeMock = new MethodBraintreeMockTest();
         $data = array(
             array($methodBraintreeMock->getInstance(true)),
             array($methodBraintreeMock->getInstance(false))

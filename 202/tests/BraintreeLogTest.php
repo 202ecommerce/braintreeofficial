@@ -49,7 +49,7 @@ class BraintreeLogTest extends TestCase
     /* @var BraintreeLog*/
     protected $braintreeLog;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->braintreeLog = new BraintreeLog();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
@@ -69,11 +69,11 @@ class BraintreeLogTest extends TestCase
 
     public function testGetLinkToTransaction()
     {
-        $this->assertIsString($this->braintreeLog->getLinkToTransaction());
+        $this->assertTrue(is_string($this->braintreeLog->getLinkToTransaction()));
     }
 
     public function testGetDateTransaction()
     {
-        $this->assertIsString($this->braintreeLog->getDateTransaction());
+        $this->assertTrue(is_string($this->braintreeLog->getDateTransaction()));
     }
 }

@@ -816,8 +816,8 @@ class MethodBraintree extends AbstractMethodBraintree
     }
     /**
      * Add BraintreeVaulting
-     * @param object $result payment transaction result object
-     * @param object $braintree_customer Braintree
+     * @param object $result Braintree\Result\Successful object
+     * @param object $braintree_customer BraintreeCustomer
      */
     public function createVaulting($result, $braintree_customer)
     {

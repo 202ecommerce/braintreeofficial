@@ -18,6 +18,6 @@
       "braintree/braintree_php": "~3.40"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8"
+        "phpunit/phpunit": "^5"
     }
 }

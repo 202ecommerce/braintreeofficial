@@ -28,6 +28,7 @@ namespace BraintreeAddons\services;
 
 use BraintreeAddons\classes\BraintreeCapture;
 use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class ServiceBraintreeCapture
 {
@@ -130,13 +131,21 @@ class ServiceBraintreeCapture
      */
     public function getPayPalOrderBtId()
     {
+        $paypalOrderBtIds = array();
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        $moduleManager = $moduleManagerBuilder->build();
+
+        if ($moduleManager->isInstalled('paypal') == false) {
+            return $paypalOrderBtIds;
+        }
+
         $query = new \DbQuery();
         $query->select('id_paypal_order');
         $query->from('paypal_order');
         $query->where('method="BT"');
 
         $result = \DB::getInstance()->executeS($query);
-        $paypalOrderBtIds = array();
+
         if (empty($result)) {
             return $paypalOrderBtIds;
         }

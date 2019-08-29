@@ -798,6 +798,7 @@ class Braintree extends \PaymentModule
 
     public function hookDisplayBackOfficeHeader()
     {
+        $this->checkEnvironment();
         $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREE_CRON_TIME')));
         if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4 || Configuration::get('BRAINTREE_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREE_CRON_TIME', date('Y-m-d H:i:s'));
@@ -1129,9 +1130,12 @@ class Braintree extends \PaymentModule
                 $shop
             );
         } catch (Exception $e) {
+            $log = 'Order validation error : ' . $e->getMessage() . ';';
+            $log .= ' File: ' . $e->getFile() . ';';
+            $log .= ' Line: ' . $e->getLine() . ';';
             ProcessLoggerHandler::openLogger();
             ProcessLoggerHandler::logError(
-                'Order validation error : ' . $e->getMessage(),
+                $log,
                 isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
                 null,
                 (int)$id_cart,
@@ -1141,11 +1145,16 @@ class Braintree extends \PaymentModule
                 isset($transaction['date_transaction']) ? $transaction['date_transaction'] : null
             );
             ProcessLoggerHandler::closeLogger();
-            $msg = $this->l('Order validation error : ').$e->getMessage().'. ';
-            if (isset($transaction['transaction_id']) && $id_order_state != Configuration::get('PS_OS_ERROR')) {
-                $msg .= $this->l('Attention, your payment is made. Please, contact customer support. Your transaction ID is  : ').$transaction['transaction_id'];
+
+            $this->currentOrder = (int)Order::getIdByCartId((int) $id_cart);
+
+            if ($this->currentOrder == false) {
+                $msg = $this->l('Order validation error : ').$e->getMessage().'. ';
+                if (isset($transaction['transaction_id']) && $id_order_state != Configuration::get('PS_OS_ERROR')) {
+                    $msg .= $this->l('Attention, your payment is made. Please, contact customer support. Your transaction ID is  : ').$transaction['transaction_id'];
+                }
+                Tools::redirect(Context::getContext()->link->getModuleLink('braintree', 'error', array('error_msg' => $msg, 'no_retry' => true)));
             }
-            Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'error', array('error_msg' => $msg, 'no_retry' => true)));
         }
         ProcessLoggerHandler::openLogger();
         ProcessLoggerHandler::logInfo(
@@ -1490,4 +1499,21 @@ class Braintree extends \PaymentModule
     {
         $this->methodBraintree = $method;
     }
+    public function checkEnvironment()
+    {
+        $tab = Tab::getInstanceFromClassName('AdminParentBraintreeConfiguration');
+
+        if (Validate::isLoadedObject($tab) == false) {
+            return false;
+        }
+
+        if (getenv('PLATEFORM') == 'PSREAD') {
+            $tab->active = false;
+        } else {
+            $tab->active = true;
+        }
+
+        return $tab->update();
+    }
+
 }

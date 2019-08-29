@@ -51,7 +51,7 @@ class ServiceBraintreeCustomerTest extends TestCase
     /* @var ServiceBraintreeCustomer*/
     protected $service;
 
-    protected function setUp():void
+    protected function setUp()
     {
         $this->service = new ServiceBraintreeCustomer();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
