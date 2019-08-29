@@ -1,0 +1,23 @@
+name: braintree
+
+excludeDir:
+  - node_modules
+
+# List of relative file/directory paths to copy and mirror in the generated documentation
+# ALL LINK MUST BE RELATIVE TO THE doc/ FOLDER
+assets:
+  - ./202/doc/src/assets/
+
+# Default values for 202 sidebar theming
+theme:
+  css:
+  sidebar:
+    background: "#33363b"
+    textColor: "#fff"
+
+order:
+  - Introduction
+  - Entities
+  - Classes
+  - Controllers
+  - Services
