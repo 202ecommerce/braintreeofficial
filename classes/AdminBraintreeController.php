@@ -51,6 +51,7 @@ class AdminBraintreeController extends \ModuleAdminController
         if ($fields_form === null) {
             $fields_form = $this->fields_form;
         }
+
         $helper = new \HelperForm();
         $helper->token = \Tools::getAdminTokenLite($this->controller_name);
         $helper->currentIndex = \AdminController::$currentIndex;
@@ -89,7 +90,7 @@ class AdminBraintreeController extends \ModuleAdminController
         $result = true;
 
         foreach (\Tools::getAllValues() as $fieldName => $fieldValue) {
-            if (strpos($fieldName, 'braintree') === 0) {
+            if (strpos($fieldName, 'braintree_') === 0) {
                 $result &= \Configuration::updateValue(\Tools::strtoupper($fieldName), pSQL($fieldValue));
             }
         }

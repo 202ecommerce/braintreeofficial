@@ -110,6 +110,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             ),
             'input' => array(
                 array(
+                    'type' => 'hidden',
+                    'name' => 'SaveAccountSettingsBlock'
+                ),
+                array(
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
@@ -119,6 +123,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             ),
             'id_form' => 'bt_config_account'
         );
+
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, array('SaveAccountSettingsBlock' => 1));
     }
 
     public function getCredentialsTplVars()
@@ -260,7 +266,13 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function initMerchantAccountForm()
     {
-        $inputs = array();
+        $inputs = array(
+            array(
+                'type' => 'hidden',
+                'name' => 'SaveMerchantAccountForm'
+            )
+        );
+
         foreach (Currency::getCurrencies() as $currency) {
             $inputs[] = array(
                 'type' => 'text',
@@ -286,14 +298,31 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         foreach ($inputs as $input) {
             $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
         }
+        $values['SaveMerchantAccountForm'] = 1;
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     public function saveForm()
     {
+        if (Tools::isSubmit("SaveMerchantAccountForm")) {
+            $merchantAccounts = array();
+
+            foreach (Currency::getCurrencies() as $currency) {
+                $nameMerchantAccont = Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']));
+                $merchantAccounts[] = Tools::getValue($nameMerchantAccont);
+            }
+
+            $wrongMerchantAccounts = $this->module->validateMerchantAccounts($merchantAccounts);
+
+            if (empty($wrongMerchantAccounts) == false) {
+                $this->errors[] = $this->l('Wrong merchant accounts: ' . implode(", ", $wrongMerchantAccounts));
+                return false;
+            }
+        }
+
         $result = parent::saveForm();
 
-        if (Tools::isSubmit('braintree_merchant_id_sandbox') || Tools::isSubmit('braintree_merchant_id_live')) {
+        if (Tools::isSubmit('SaveAccountSettingsBlock')) {
             $this->importMerchantAccountForCurrency(true);
             $this->importMerchantAccountForCurrency(false);
         }

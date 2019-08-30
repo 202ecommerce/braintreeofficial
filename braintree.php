@@ -1495,10 +1495,30 @@ class Braintree extends \PaymentModule
         return (bool)$result;
     }
 
+    /**
+     * Check if the merchant account ids are right
+     * @param $data array the data for the validation
+     * @return array returns wrong merchant accounts
+     */
+    public function validateMerchantAccounts($merchantAccounts)
+    {
+        $wrongMerchantAccounts = array();
+        $allMerchantAccounts = $this->methodBraintree->getAllCurrency();
+
+        foreach ($merchantAccounts as $merchantAccount) {
+            if (in_array($merchantAccount, $allMerchantAccounts) == false) {
+                $wrongMerchantAccounts[] = $merchantAccount;
+            }
+        }
+
+        return $wrongMerchantAccounts;
+    }
+
     public function setMethodBraitree(AbstractMethodBraintree $method)
     {
         $this->methodBraintree = $method;
     }
+
     public function checkEnvironment()
     {
         $tab = Tab::getInstanceFromClassName('AdminParentBraintreeConfiguration');
@@ -1515,5 +1535,4 @@ class Braintree extends \PaymentModule
 
         return $tab->update();
     }
-
 }
