@@ -929,6 +929,8 @@ class Braintree extends \PaymentModule
         Media::addJsDefL('bt_translations_expirationDate', $this->l('This expiration date '));
         Media::addJsDefL('bt_translations_number', $this->l('This card number '));
         Media::addJsDefL('bt_translations_cvv', $this->l('Please fill out a CVV.'));
+        Media::addJsDefL('bt_translations_3ds_failed_1', $this->l('Authentication unsuccessful for this transaction. Please try another card or payment method.'));
+        Media::addJsDefL('bt_translations_3ds_failed_2', $this->l('Authentication missing for this transaction.'));
     }
 
     public function hookDisplayAdminOrderTabOrder($params)

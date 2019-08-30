@@ -214,12 +214,12 @@ const BraintreeSubmitPayment = () => {
                             return false;
                         }
 
-                        if (three_d_secure_response.threeDSecureInfo.status == "lookup_enrolled") {
+                        if (three_d_secure_response.liabilityShifted == false && three_d_secure_response.liabilityShiftPossible == true) {
+                            popup_message = bt_translations_3ds_failed_1;
+                            $('[data-bt-card-error-msg]').show().text(popup_message);
                             return false;
-                        }
-
-                        if (three_d_secure_response.threeDSecureInfo.status != "authenticate_successful") {
-                            popup_message = "An error occurred while trying to pay by this card. Please try another card or payment method.";
+                        } else if (three_d_secure_response.liabilityShifted == false) {
+                            popup_message = bt_translations_3ds_failed_2;
                             $('[data-bt-card-error-msg]').show().text(popup_message);
                             return false;
                         }
