@@ -304,6 +304,8 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function saveForm()
     {
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+
         if (Tools::isSubmit("SaveMerchantAccountForm")) {
             $merchantAccounts = array();
 
@@ -312,10 +314,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 $merchantAccounts[] = Tools::getValue($nameMerchantAccont);
             }
 
-            $wrongMerchantAccounts = $this->module->validateMerchantAccounts($merchantAccounts);
+            $wrongMerchantAccounts = $methodBraintree->validateMerchantAccounts($merchantAccounts);
 
             if (empty($wrongMerchantAccounts) == false) {
-                $this->errors[] = $this->l('Wrong merchant accounts: ' . implode(", ", $wrongMerchantAccounts));
+                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(", ", $wrongMerchantAccounts);
                 return false;
             }
         }
@@ -328,7 +330,6 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         }
 
         $this->module->checkBraintreeStats();
-        $methodBraintree = AbstractMethodBraintree::load('Braintree');
 
         if ($methodBraintree->isConfigured() == false) {
             $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');

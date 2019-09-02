@@ -130,17 +130,67 @@ class MethodBraintree extends AbstractMethodBraintree
      */
     public function getAllCurrency($mode = null)
     {
-        $this->initConfig($mode);
+        $allMerchantAccounts = $this->getAllMerchantAccounts($mode);
         $result = array();
+
+        if (empty($allMerchantAccounts)) {
+            return $result;
+        }
+
+        foreach ($allMerchantAccounts as $account) {
+            $result[$account->currencyIsoCode] = $account->id;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param bool $mode true if mode Sandbox and false if mode Live
+     * @return array array of the Braintree\MerchantAccount objects
+     */
+    public function getAllMerchantAccounts($mode = null)
+    {
+        $this->initConfig($mode);
+        $merchantAccounts = array();
+
         try {
             $response = $this->gateway->merchantAccount()->all();
-            foreach ($response as $account) {
-                $result[$account->currencyIsoCode] = $account->id;
+            foreach ($response as $merchantAccount) {
+                $merchantAccounts[] = $merchantAccount;
             }
         } catch (Exception $e) {
-            return array();
+            return $merchantAccounts;
         }
-        return $result;
+
+        return $merchantAccounts;
+    }
+
+    /**
+     * Check if the merchant account ids are right
+     * @param $data array the data for the validation
+     * @return array returns wrong merchant accounts
+     */
+    public function validateMerchantAccounts($merchantAccounts)
+    {
+        $wrongMerchantAccounts = array();
+        $allMerchantAccounts = $this->getAllMerchantAccounts();
+
+        foreach ($merchantAccounts as $merchantAccount) {
+            $match = false;
+
+            foreach ($allMerchantAccounts as $ma) {
+                if ($ma->status == 'active' && $ma->id == $merchantAccount) {
+                    $match = true;
+                    continue;
+                }
+            }
+
+            if ($match == false) {
+                $wrongMerchantAccounts[] = $merchantAccount;
+            }
+        }
+
+        return $wrongMerchantAccounts;
     }
 
 
