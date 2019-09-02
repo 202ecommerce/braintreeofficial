@@ -311,13 +311,13 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
             foreach (Currency::getCurrencies() as $currency) {
                 $nameMerchantAccont = Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']));
-                $merchantAccounts[] = Tools::getValue($nameMerchantAccont);
+                $merchantAccounts[$currency['iso_code']] = Tools::getValue($nameMerchantAccont);
             }
 
             $wrongMerchantAccounts = $methodBraintree->validateMerchantAccounts($merchantAccounts);
 
             if (empty($wrongMerchantAccounts) == false) {
-                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(", ", $wrongMerchantAccounts);
+                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(", ", array_keys($wrongMerchantAccounts));
                 return false;
             }
         }

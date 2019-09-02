@@ -168,14 +168,14 @@ class MethodBraintree extends AbstractMethodBraintree
     /**
      * Check if the merchant account ids are right
      * @param $data array the data for the validation
-     * @return array returns wrong merchant accounts
+     * @return array returns wrong merchant accounts [iso => merchantAccount]
      */
     public function validateMerchantAccounts($merchantAccounts)
     {
         $wrongMerchantAccounts = array();
         $allMerchantAccounts = $this->getAllMerchantAccounts();
 
-        foreach ($merchantAccounts as $merchantAccount) {
+        foreach ($merchantAccounts as $iso => $merchantAccount) {
             $match = false;
 
             foreach ($allMerchantAccounts as $ma) {
@@ -186,7 +186,7 @@ class MethodBraintree extends AbstractMethodBraintree
             }
 
             if ($match == false) {
-                $wrongMerchantAccounts[] = $merchantAccount;
+                $wrongMerchantAccounts[$iso] = $merchantAccount;
             }
         }
 
