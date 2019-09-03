@@ -46,8 +46,7 @@
 				{l s='Check requirements before installation' mod='braintree'}
 			</p>
 			<p>
-				{l s='Are you using the required TLS version? Did you select a default country? Click on the button below and
-				check if all requirements are completed!' mod='braintree'}
+				{l s='Are you using the required TLS version? Did you select a default country? Click on the button below and check if all requirements are completed!' mod='braintree'}
 			</p>
 			<p>
 				<button name="submit-ckeck_requirements" class="btn btn-default" id="ckeck_requirements">
