@@ -131,36 +131,21 @@ class AdminProcessLoggerController extends \ModuleAdminController
             'processLogger' => array(
                 'image'       => '../img/admin/cog.gif',
                 'title'       => $this->module->l('Process Logger Settings', 'AdminProcessLoggerController'),
-                'description' => $this->module->l(
-                    'Here you can change the default configuration for this Process Logger',
-                    'AdminProcessLoggerController'
-                ),
+                'description' => $this->module->l('Here you can change the default configuration for this Process Logger', 'AdminProcessLoggerController'),
                 'info' => $this->module->displayWarning(
-                    'Logs with order ID will not be erased.'
+                    $this->l('Logs with order ID will not be erased.', 'AdminProcessLoggerController')
                 ),
                 'fields'      => array(
                     'BRAINTREE_EXTLOGS_ERASING_DISABLED' => array(
-                        'title'        => $this->module->l(
-                            'Disable auto erasing',
-                            'AdminProcessLoggerController'
-                        ),
-                        'hint'         => $this->module->l(
-                            'If disabled, logs will be automatically erased after the delay',
-                            'AdminProcessLoggerController'
-                        ),
+                        'title'        => $this->module->l('Disable auto erasing', 'AdminProcessLoggerController'),
+                        'hint'         => $this->module->l('If disabled, logs will be automatically erased after the delay', 'AdminProcessLoggerController'),
                         'validation'   => 'isBool',
                         'cast'         => 'intval',
                         'type'         => 'bool',
                     ),
                     'BRAINTREE_EXTLOGS_ERASING_DAYSMAX' => array(
-                        'title'        => $this->module->l(
-                            'Auto erasing delay (in days)',
-                            'AdminProcessLoggerController'
-                        ),
-                        'hint'         => $this->module->l(
-                            'Choose the number of days you want to keep logs in database',
-                            'AdminProcessLoggerController'
-                        ),
+                        'title'        => $this->module->l('Auto erasing delay (in days)', 'AdminProcessLoggerController'),
+                        'hint'         => $this->module->l('Choose the number of days you want to keep logs in database', 'AdminProcessLoggerController'),
                         'validation'   => 'isInt',
                         'cast'         => 'intval',
                         'type'         => 'text',
