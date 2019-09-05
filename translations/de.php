@@ -44,7 +44,7 @@ $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3dac48b561442386bc4f82
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3fee1227f1b7e441476ccb45278a5f22'] = 'Bitte wenden Sie sich an unser';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_05b320c3ea42546cbbbe50f45b5bbd9f'] = 'Support-Team.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Erfolgreich aktualisiert.';
-$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Ihr Braintree-Konto ist zurzeit so eingerichtet, dass Sie Zahlungen in der Sandbox akzeptieren.';
+$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Ihr Braintree-Konto ist zurzeit so eingerichtet, dass Sie Zahlungen in der Sandbox akzeptieren ';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_a3016160c7a837dc134314e6191a7c46'] = 'Testumgebung';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b8e30b4ff26a2e4c2d62fdde62a4f006'] = 'Es werden keine realen Transaktionen ausgeführt. Deaktivieren Sie die Option, um echte Zahlungen zu akzeptieren (Produktionsumgebung) und sich mit Ihren Braintree-Zugangsdaten einzuloggen.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_5ee8825eb41716424065ccd113abb596'] = 'Wählen Sie ein Standardland aus, um eine Zahlungslösung zu aktivieren.';

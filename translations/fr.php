@@ -163,7 +163,7 @@ $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3dac48b561442386bc4f82
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3fee1227f1b7e441476ccb45278a5f22'] = 'Contactez notre';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_05b320c3ea42546cbbbe50f45b5bbd9f'] = 'Service clientèle.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Mise à jour réussie.';
-$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Votre compte Braintree est actuellement configuré pour accepter des paiements dans l\'environnement de test.';
+$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Votre compte Braintree est actuellement configuré pour accepter des paiements dans Sandbox ';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_a3016160c7a837dc134314e6191a7c46'] = 'environnement test';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b8e30b4ff26a2e4c2d62fdde62a4f006'] = 'Toutes les transactions seront fictives. Désactivez l\'option pour accepter des paiements réels (environnement de production) et connectez-vous avec vos identifiants Braintree.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_5ee8825eb41716424065ccd113abb596'] = 'Pour activer une solution de paiement, sélectionnez votre pays par défaut.';
