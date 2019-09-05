@@ -130,10 +130,10 @@ $_MODULE['<{braintree}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] 
 $_MODULE['<{braintree}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'Pour récupérer les clés API d\'environnement de test, répétez les étapes en vous connectant au [a @href1@]compte d\'environnement de test[/a] ou en en ouvrant [a @href2@]un[/a] nouveau.';
 $_MODULE['<{braintree}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activer le module Braintree pour augmenter le taux de conversion sur mobile et sur toutes les plateformes dans plus de 45 pays';
 $_MODULE['<{braintree}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'Activation en trois étapes simples';
-$_MODULE['<{braintree}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Connectez-vous à votre compte Braintree existant ou ouvrez-en un nouveau.';
-$_MODULE['<{braintree}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Activez la carte bancaire et/ou le portefeuille PayPal en tant que modes de paiement.';
-$_MODULE['<{braintree}prestashop>headerlogo_dfe4283340c6369e764585c747cbd74a'] = 'Réglez vos paramètres de paiement pour collecter les paiements instantanément (Vente) ou une fois que vous aurez confirmé la commande (Autoriser).';
-$_MODULE['<{braintree}prestashop>headerlogo_ab527c36284b90820e085125a7a27c96'] = 'Assurez-vous que le module est configuré en mode production.';
+$_MODULE['<{braintree}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Connectez-vous à votre compte Braintree existant ou ouvrez-en un nouveau';
+$_MODULE['<{braintree}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Activez la carte bancaire et/ou le portefeuille PayPal en tant que modes de paiement';
+$_MODULE['<{braintree}prestashop>headerlogo_dfe4283340c6369e764585c747cbd74a'] = 'Réglez vos paramètres de paiement pour collecter les paiements instantanément (Vente) ou une fois que vous aurez confirmé la commande (Autoriser)';
+$_MODULE['<{braintree}prestashop>headerlogo_ab527c36284b90820e085125a7a27c96'] = 'Assurez-vous que le module est configuré en mode production';
 $_MODULE['<{braintree}prestashop>headerlogo_18206c5add24b8898426959c811b779b'] = 'En savoir plus';
 $_MODULE['<{braintree}prestashop>warningcurrency_a0458ae714e46f9804c39d871f7b387d'] = 'Renseignez votre identifiant de compte marchand pour chaque devise.';
 $_MODULE['<{braintree}prestashop>warningcurrency_88603d241cadd9f36f5e09f20370f209'] = 'Ajouter mes identifiants de compte marchand';

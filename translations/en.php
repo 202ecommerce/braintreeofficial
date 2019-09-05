@@ -142,7 +142,7 @@ $_MODULE['<{braintree}prestashop>formaccount_6eb9040e470e8018db394832a528f56a'] 
 $_MODULE['<{braintree}prestashop>formaccount_229a7ec501323b94db7ff3157a7623c9'] = 'Merchant ID';
 $_MODULE['<{braintree}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] = 'Sandbox';
 $_MODULE['<{braintree}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'To retrieve the Sandbox API keys, please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]';
-$_MODULE['<{braintree}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activate the Braintree module to start enjoying better conversion on mobile devices and all platforms in over 45 countries.';
+$_MODULE['<{braintree}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activate the Braintree module to start enjoying better conversion on mobile devices and all platforms in over 45 countries';
 $_MODULE['<{braintree}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'Activate it in 3 easy steps';
 $_MODULE['<{braintree}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Connect your existing Braintree account below or create a new one';
 $_MODULE['<{braintree}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Enable credit card and/or PayPal wallet as payment methods';
