@@ -329,7 +329,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             $this->importMerchantAccountForCurrency(false);
         }
 
-        $this->module->checkBraintreeStats();
+        $methodBraintree = AbstractMethodBraintree::load('Braintree');
 
         if ($methodBraintree->isConfigured() == false) {
             $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');

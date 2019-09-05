@@ -103,7 +103,7 @@ class Braintree extends \PaymentModule
             ),
             'class_name' => 'AdminParentBraintreeConfiguration',
             'parent_class_name' => 'SELL',
-            'visible' => true,
+            'visible' => false,
             'icon' => 'payment'
         ),
         array(
@@ -149,15 +149,6 @@ class Braintree extends \PaymentModule
             ),
             'class_name' => 'AdminBraintreeLogs',
             'parent_class_name' => 'AdminBraintreeConfiguration',
-            'visible' => true,
-        ),
-        array(
-            'name' => array(
-                'en' => 'Report',
-                'fr' => 'Rapport'
-            ),
-            'class_name' => 'AdminBraintreeStats',
-            'parent_class_name' => 'AdminParentBraintreeConfiguration',
             'visible' => true,
         ),
         array(
@@ -235,7 +226,6 @@ class Braintree extends \PaymentModule
 
         Configuration::updateValue('BRAINTREE_API_INTENT', 'sale');
 
-        $this->checkBraintreeStats();
         return true;
     }
 
@@ -798,7 +788,6 @@ class Braintree extends \PaymentModule
 
     public function hookDisplayBackOfficeHeader()
     {
-        $this->checkEnvironment();
         $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREE_CRON_TIME')));
         if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4 || Configuration::get('BRAINTREE_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREE_CRON_TIME', date('Y-m-d H:i:s'));
@@ -1301,21 +1290,6 @@ class Braintree extends \PaymentModule
         return true;
     }
 
-    public function checkBraintreeStats()
-    {
-        $tab = Tab::getInstanceFromClassName('AdminBraintreeStats');
-        $accountConfigured = $this->methodBraintree->isConfigured();
-        if (Validate::isLoadedObject($tab)) {
-            if ($tab->active && $accountConfigured == false) {
-                $tab->active = false;
-                $tab->save();
-            } elseif ($tab->active == false && $accountConfigured) {
-                $tab->active = true;
-                $tab->save();
-            }
-        }
-    }
-
     public function displayInformation($message)
     {
         $this->context->smarty->assign('message', $message);
@@ -1501,22 +1475,5 @@ class Braintree extends \PaymentModule
     public function setMethodBraitree(AbstractMethodBraintree $method)
     {
         $this->methodBraintree = $method;
-    }
-
-    public function checkEnvironment()
-    {
-        $tab = Tab::getInstanceFromClassName('AdminParentBraintreeConfiguration');
-
-        if (Validate::isLoadedObject($tab) == false) {
-            return false;
-        }
-
-        if (getenv('PLATEFORM') == 'PSREAD') {
-            $tab->active = false;
-        } else {
-            $tab->active = true;
-        }
-
-        return $tab->update();
     }
 }
