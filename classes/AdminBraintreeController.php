@@ -70,7 +70,7 @@ class AdminBraintreeController extends \ModuleAdminController
         if (\Tools::isSubmit($this->controller_name . '_config')) {
             $result = $this->saveForm();
             if ($result) {
-                $this->confirmations[] = $this->l('Successful update.');
+                $this->confirmations[] = $this->module->l('Successful update.', 'AdminBraintreeController');
             }
         }
 
