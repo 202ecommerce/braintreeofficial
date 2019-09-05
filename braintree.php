@@ -226,7 +226,6 @@ class Braintree extends \PaymentModule
 
         Configuration::updateValue('BRAINTREE_API_INTENT', 'sale');
 
-        $this->checkBraintreeStats();
         return true;
     }
 

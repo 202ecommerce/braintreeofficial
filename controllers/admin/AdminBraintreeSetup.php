@@ -298,7 +298,6 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             $this->importMerchantAccountForCurrency(false);
         }
 
-        $this->module->checkBraintreeStats();
         $methodBraintree = AbstractMethodBraintree::load('Braintree');
 
         if ($methodBraintree->isConfigured() == false) {
