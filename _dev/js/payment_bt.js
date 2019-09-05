@@ -224,7 +224,7 @@ const BraintreeSubmitPayment = () => {
                             return false;
                         }
 
-                        if (vaultToken == false) {
+                        if (typeof(vaultToken) == 'undefined' || vaultToken == false) {
                             $('[data-payment-method-nonce="bt"]').val(three_d_secure_response.nonce);
                             $('[data-bt-card-type]').val(payload.details.cardType);
                         }
