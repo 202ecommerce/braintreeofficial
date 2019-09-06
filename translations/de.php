@@ -44,7 +44,7 @@ $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3dac48b561442386bc4f82
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3fee1227f1b7e441476ccb45278a5f22'] = 'Bitte wenden Sie sich an unser';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_05b320c3ea42546cbbbe50f45b5bbd9f'] = 'Support-Team.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Erfolgreich aktualisiert.';
-$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Ihr Braintree-Konto ist zurzeit so eingerichtet, dass Sie Zahlungen in der Sandbox akzeptieren.';
+$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Ihr Braintree-Konto ist zurzeit so eingerichtet, dass Sie Zahlungen in der Sandbox akzeptieren ';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_a3016160c7a837dc134314e6191a7c46'] = 'Testumgebung';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b8e30b4ff26a2e4c2d62fdde62a4f006'] = 'Es werden keine realen Transaktionen ausgeführt. Deaktivieren Sie die Option, um echte Zahlungen zu akzeptieren (Produktionsumgebung) und sich mit Ihren Braintree-Zugangsdaten einzuloggen.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_5ee8825eb41716424065ccd113abb596'] = 'Wählen Sie ein Standardland aus, um eine Zahlungslösung zu aktivieren.';
@@ -144,10 +144,10 @@ $_MODULE['<{braintree}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] 
 $_MODULE['<{braintree}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'Um die Sandbox-API-Schlüssel abzurufen, wiederholen Sie die Schritte, indem Sie sich mit dem [a @href1@]Sandbox-Konto[/a] verbinden oder ein [a @href2@]neues Konto[/a] erstellen.';
 $_MODULE['<{braintree}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Aktivieren Sie das Braintree-Modul, um Ihre Konversion auf Mobilgeräten und allen Plattformen in über 45 Ländern zu steigern.';
 $_MODULE['<{braintree}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'In drei einfachen Schritten aktivieren';
-$_MODULE['<{braintree}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Verknüpfen Sie unten Ihr bestehendes Braintree-Konto oder erstellen Sie ein neues.';
+$_MODULE['<{braintree}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Verknüpfen Sie unten Ihr bestehendes Braintree-Konto oder erstellen Sie ein neues';
 $_MODULE['<{braintree}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Aktivieren Sie Kreditkarten und/oder die E-Börse von PayPal als Zahlungsquellen';
 $_MODULE['<{braintree}prestashop>headerlogo_dfe4283340c6369e764585c747cbd74a'] = 'Passen Sie Ihre Zahlungseinstellung so an, dass Sie entweder sofort Zahlungen einziehen (Verkauf) oder wenn Sie die Bestellung bestätigen (Autorisation)';
-$_MODULE['<{braintree}prestashop>headerlogo_ab527c36284b90820e085125a7a27c96'] = 'Achten Sie darauf, dass das Modul auf den Produktionsmodus gesetzt ist.';
+$_MODULE['<{braintree}prestashop>headerlogo_ab527c36284b90820e085125a7a27c96'] = 'Achten Sie darauf, dass das Modul auf den Produktionsmodus gesetzt ist';
 $_MODULE['<{braintree}prestashop>headerlogo_18206c5add24b8898426959c811b779b'] = 'Mehr erfahren';
 $_MODULE['<{braintree}prestashop>infoformerchantaccount_f1ae9b2e6f57e0c178685be68c23a7b7'] = 'Sehen Sie sich unser [a @href1@]Video-Tutorial[/a] an, um zu erfahren, wie Sie Ihre Händlerkonto-ID für jede Währung schnell finden können.';
 $_MODULE['<{braintree}prestashop>infoformerchantaccount_46c8a5ce3f27c4fbbe2c88fddf378cc3'] = 'Gehen Sie zu [a @href1@]Zahlungseinstellungen -Währungseinschränkungen[/a], um zu sehen, wie Prestashop die Währungseinstellungen für Ihr Zahlungsmodul verwaltet.';

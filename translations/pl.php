@@ -44,7 +44,7 @@ $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3dac48b561442386bc4f82
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3fee1227f1b7e441476ccb45278a5f22'] = 'Skontaktuj si_ z naszym';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_05b320c3ea42546cbbbe50f45b5bbd9f'] = 'dzia_em pomocy technicznej.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Pomy_lna aktualizacja.';
-$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Twoje konto Braintree jest obecnie skonfigurowane do akceptowania p_atno_ci w _rodowisku testowym';
+$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Twoje konto Braintree jest obecnie skonfigurowane do akceptowania p_atno_ci w Sandbox ';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_a3016160c7a837dc134314e6191a7c46'] = '_rodowisko testowe';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b8e30b4ff26a2e4c2d62fdde62a4f006'] = 'Wszystkie transakcje b_d_ fikcyjne. Wy__cz t_ opcj_, aby akceptowa_ p_atno_ci rzeczywiste (w _rodowisku produkcyjnym) i zaloguj si_ za pomoc_ danych uwierzytelniaj_cych Braintree';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_5ee8825eb41716424065ccd113abb596'] = 'Aby uaktywni_ rozwi_zanie p_atnicze, wybierz swój kraj domy_lny.';

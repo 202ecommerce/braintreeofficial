@@ -44,7 +44,7 @@ $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3dac48b561442386bc4f82
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_3fee1227f1b7e441476ccb45278a5f22'] = 'Please contact our';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_05b320c3ea42546cbbbe50f45b5bbd9f'] = 'customer service team.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Successful update.';
-$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Your Braintree account is currently configured to accept payments in the Sandbox (test environment)';
+$_MODULE['<{braintree}prestashop>adminbraintreecontroller_1bbf73fb64d7462cc85a6795bf25fbba'] = 'Your Braintree account is currently configured to accept payments in the Sandbox ';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_a3016160c7a837dc134314e6191a7c46'] = 'test environment';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_b8e30b4ff26a2e4c2d62fdde62a4f006'] = 'Any transaction will be fictitious. Disable this option in order to accept actual payments (production environment) and log in with your Braintree credentials.';
 $_MODULE['<{braintree}prestashop>adminbraintreecontroller_5ee8825eb41716424065ccd113abb596'] = 'To activate a payment solution, please select your default country.';
@@ -142,8 +142,8 @@ $_MODULE['<{braintree}prestashop>formaccount_6eb9040e470e8018db394832a528f56a'] 
 $_MODULE['<{braintree}prestashop>formaccount_229a7ec501323b94db7ff3157a7623c9'] = 'Merchant ID';
 $_MODULE['<{braintree}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] = 'Sandbox';
 $_MODULE['<{braintree}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'To retrieve the Sandbox API keys, please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]';
-$_MODULE['<{braintree}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activate the Braintree module to start enjoying better conversion on mobile devices and all platforms in over 45 countries.';
-$_MODULE['<{braintree}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'Activate it in 3 easy steps:';
+$_MODULE['<{braintree}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activate the Braintree module to start enjoying better conversion on mobile devices and all platforms in over 45 countries';
+$_MODULE['<{braintree}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'Activate it in 3 easy steps';
 $_MODULE['<{braintree}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Connect your existing Braintree account below or create a new one';
 $_MODULE['<{braintree}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Enable credit card and/or PayPal wallet as payment methods';
 $_MODULE['<{braintree}prestashop>headerlogo_dfe4283340c6369e764585c747cbd74a'] = 'Adjust your payment setting to either capture payments instantly (sale) or after you confirm the order (authorise)';
