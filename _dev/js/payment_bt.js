@@ -183,55 +183,67 @@ const BraintreeSubmitPayment = () => {
         response => {
             let bt3Dinformation = response["orderInformation"];
             let payload = response["payload"];
-            braintree.threeDSecure.create({
-                version: 2, //Using 3DS 2
-                client: bt_client_instance,
-            }, (ThreeDSecureerror, threeDSecure) => {
-                if (ThreeDSecureerror) {
-                    switch (ThreeDSecureerror.code) {
-                        case 'THREEDS_HTTPS_REQUIRED':
-                            popup_message =  bt_translations_https;
-                            break;
-                        default:
-                            popup_message =  bt_translations_load_3d;
+            let use3dVerification = response["use3dVerification"];
+
+            if (use3dVerification) {
+                braintree.threeDSecure.create({
+                    version: 2, //Using 3DS 2
+                    client: bt_client_instance,
+                }, (ThreeDSecureerror, threeDSecure) => {
+                    if (ThreeDSecureerror) {
+                        switch (ThreeDSecureerror.code) {
+                            case 'THREEDS_HTTPS_REQUIRED':
+                                popup_message =  bt_translations_https;
+                                break;
+                            default:
+                                popup_message =  bt_translations_load_3d;
+                        }
+                        $('[data-bt-card-error-msg]').show().text(popup_message);
+                        return false;
                     }
-                    $('[data-bt-card-error-msg]').show().text(popup_message);
-                    return false;
-                }
-                threeDSecure.verifyCard(
-                    bt3Dinformation,
-                    (err, three_d_secure_response) => {
-                        let popup_message = '';
-                        if (err) {
-                            switch (err.code) {
-                                case 'CLIENT_REQUEST_ERROR':
-                                    popup_message =  bt_translations_request_problem;
-                                    break;
-                                default:
-                                    popup_message =  bt_translations_failed_3d;
+                    threeDSecure.verifyCard(
+                        bt3Dinformation,
+                        (err, three_d_secure_response) => {
+                            let popup_message = '';
+                            if (err) {
+                                switch (err.code) {
+                                    case 'CLIENT_REQUEST_ERROR':
+                                        popup_message =  bt_translations_request_problem;
+                                        break;
+                                    default:
+                                        popup_message =  bt_translations_failed_3d;
+                                }
+                                $('[data-bt-card-error-msg]').show().text(popup_message);
+                                return false;
                             }
-                            $('[data-bt-card-error-msg]').show().text(popup_message);
-                            return false;
-                        }
 
-                        if (three_d_secure_response.liabilityShifted == false && three_d_secure_response.liabilityShiftPossible == true) {
-                            popup_message = bt_translations_3ds_failed_1;
-                            $('[data-bt-card-error-msg]').show().text(popup_message);
-                            return false;
-                        } else if (three_d_secure_response.liabilityShifted == false) {
-                            popup_message = bt_translations_3ds_failed_2;
-                            $('[data-bt-card-error-msg]').show().text(popup_message);
-                            return false;
-                        }
+                            if (three_d_secure_response.liabilityShifted == false && three_d_secure_response.liabilityShiftPossible == true) {
+                                popup_message = bt_translations_3ds_failed_1;
+                                $('[data-bt-card-error-msg]').show().text(popup_message);
+                                return false;
+                            } else if (three_d_secure_response.liabilityShifted == false) {
+                                popup_message = bt_translations_3ds_failed_2;
+                                $('[data-bt-card-error-msg]').show().text(popup_message);
+                                return false;
+                            }
 
-                        if (typeof(vaultToken) == 'undefined' || vaultToken == false) {
-                            $('[data-payment-method-nonce="bt"]').val(three_d_secure_response.nonce);
-                            $('[data-bt-card-type]').val(payload.details.cardType);
-                        }
+                            if (typeof(vaultToken) == 'undefined' || vaultToken == false) {
+                                $('[data-payment-method-nonce="bt"]').val(three_d_secure_response.nonce);
+                                $('[data-bt-card-type]').val(payload.details.cardType);
+                            }
 
-                        bt_form.submit();
-                    });
-            });
+                            bt_form.submit();
+                        });
+                });
+            } else {
+                if (typeof(vaultToken) == 'undefined' || vaultToken == false) {
+                    $('[data-payment-method-nonce="bt"]').val(payload.nonce);
+                    $('[data-bt-card-type]').val(payload.details.cardType);
+                }
+
+                bt_form.submit();
+            }
+
         },
         errroMessage => {
             $('[data-bt-card-error-msg]').show().text(errroMessage);

@@ -84,6 +84,8 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
         $customer = new Customer($this->context->cart->id_customer);
         $address = new Address($this->context->cart->id_address_delivery);
         $country = new Country($address->id_country);
+        $use3dVerification = (int)Configuration::get('BRAINTREE_3DSECURE');
+        $use3dVerification &= (int)Configuration::get('BRAINTREE_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal();
         $iso = '';
 
         if ($address->id_state) {
@@ -93,6 +95,7 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
 
         $responseContent = array(
             'success' => true,
+            'use3dVerification' => $use3dVerification,
             'orderInformation' => array(
                 'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
                 'email' => $customer->email,

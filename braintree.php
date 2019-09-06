@@ -225,6 +225,8 @@ class Braintree extends \PaymentModule
         }
 
         Configuration::updateValue('BRAINTREE_API_INTENT', 'sale');
+        Configuration::updateValue('BRAINTREE_3DSECURE', 1);
+        Configuration::updateValue('BRAINTREE_3DSECURE_AMOUNT', 30);
 
         return true;
     }

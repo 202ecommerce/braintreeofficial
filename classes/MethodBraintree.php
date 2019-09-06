@@ -646,11 +646,14 @@ class MethodBraintree extends AbstractMethodBraintree
         $this->initConfig();
         $bt_method = $this->payment_method_bt;
         $vault_token = '';
+        $use3dVerification = (int)Configuration::get('BRAINTREE_3DSECURE');
+        $use3dVerification &= (int)Configuration::get('BRAINTREE_3DSECURE_AMOUNT') <= $cart->getOrderTotal();
+
         if ($bt_method == BRAINTREE_PAYPAL_PAYMENT) {
             $options = array(
                 'submitForSettlement' => Configuration::get('BRAINTREE_API_INTENT') == "sale" ? true : false,
                 'threeDSecure' => array(
-                    'required' => Configuration::get('BRAINTREE_3DSECURE')
+                    'required' => $use3dVerification
                 )
             );
         } else {

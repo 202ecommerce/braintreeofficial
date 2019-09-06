@@ -122,6 +122,30 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                         )
                     ),
                 ),
+                array(
+                    'type' => 'switch',
+                    'label' => $this->l('Activate 3D Secure for Braintree'),
+                    'name' => 'braintree_3DSecure',
+                    'is_bool' => true,
+                    'values' => array(
+                        array(
+                            'id' => 'braintree_3DSecure_on',
+                            'value' => 1,
+                            'label' => $this->l('Enabled'),
+                        ),
+                        array(
+                            'id' => 'braintree_3DSecure_off',
+                            'value' => 0,
+                            'label' => $this->l('Disabled'),
+                        )
+                    ),
+                ),
+                array(
+                    'type' => 'text',
+                    'label' => $this->l('Amount for 3DS in ') . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code'],
+                    'name' => 'braintree_3DSecure_amount',
+                    'hint' => $this->l('Activate 3D Secure only for orders which total is bigger that this amount in your context currency'),
+                ),
             ),
             'submit' => array(
                 'title' => $this->l('Save'),
@@ -134,6 +158,8 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
             'braintree_activate_paypal' => (int)Configuration::get('BRAINTREE_ACTIVATE_PAYPAL'),
             'braintree_vaulting' => (int)Configuration::get('BRAINTREE_VAULTING'),
             'braintree_card_verification' => (int)Configuration::get('BRAINTREE_CARD_VERIFICATION'),
+            'braintree_3DSecure' => (int)Configuration::get('BRAINTREE_3DSECURE'),
+            'braintree_3DSecure_amount' => (float)Configuration::get('BRAINTREE_3DSECURE_AMOUNT'),
             'braintree_show_paypal_benefits' => (int)Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
