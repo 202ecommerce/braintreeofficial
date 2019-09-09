@@ -179,6 +179,8 @@ const setErrorMsg = (el, field) => {
 const BraintreeSubmitPayment = () => {
     const bt_form = $('[data-braintree-card-form]');
     const vaultToken = $('[data-bt-vaulting-token="bt"]').val(); // use vaulted card
+    const btnConfirmation = $('#payment-confirmation button');
+
     getOrderInformation(vaultToken).then(
         response => {
             let bt3Dinformation = response["orderInformation"];
@@ -191,6 +193,7 @@ const BraintreeSubmitPayment = () => {
                     client: bt_client_instance,
                 }, (ThreeDSecureerror, threeDSecure) => {
                     if (ThreeDSecureerror) {
+                        btnConfirmation.prop('disabled', false);
                         switch (ThreeDSecureerror.code) {
                             case 'THREEDS_HTTPS_REQUIRED':
                                 popup_message =  bt_translations_https;
@@ -206,6 +209,7 @@ const BraintreeSubmitPayment = () => {
                         (err, three_d_secure_response) => {
                             let popup_message = '';
                             if (err) {
+                                btnConfirmation.prop('disabled', false);
                                 switch (err.code) {
                                     case 'CLIENT_REQUEST_ERROR':
                                         popup_message =  bt_translations_request_problem;
@@ -218,10 +222,12 @@ const BraintreeSubmitPayment = () => {
                             }
 
                             if (three_d_secure_response.liabilityShifted == false && three_d_secure_response.liabilityShiftPossible == true) {
+                                btnConfirmation.prop('disabled', false);
                                 popup_message = bt_translations_3ds_failed_1;
                                 $('[data-bt-card-error-msg]').show().text(popup_message);
                                 return false;
                             } else if (three_d_secure_response.liabilityShifted == false) {
+                                btnConfirmation.prop('disabled', false);
                                 popup_message = bt_translations_3ds_failed_2;
                                 $('[data-bt-card-error-msg]').show().text(popup_message);
                                 return false;
@@ -246,9 +252,11 @@ const BraintreeSubmitPayment = () => {
 
         },
         errroMessage => {
+            btnConfirmation.prop('disabled', false);
             $('[data-bt-card-error-msg]').show().text(errroMessage);
         }
     ).catch(error => {
+        btnConfirmation.prop('disabled', false);
         console.log(error);
     });
 
