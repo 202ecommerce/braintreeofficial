@@ -118,7 +118,13 @@ class Braintree extends \PaymentModule
         array(
             'name' => array(
                 'en' => 'Setup',
-                'fr' => 'Setup'
+                'fr' => 'Paramètres',
+                'pt' => 'Definições',
+                'pl' => 'Ustawienia',
+                'nl' => 'Instellingen',
+                'it' => 'Impostazioni',
+                'es' => 'Configuración',
+                'de' => 'Einstellungen'
             ),
             'class_name' => 'AdminBraintreeSetup',
             'parent_class_name' => 'AdminBraintreeConfiguration',
@@ -126,8 +132,14 @@ class Braintree extends \PaymentModule
         ),
         array(
             'name' => array(
-                'en' => 'Customize checkout experience',
-                'fr' => 'Customize checkout experience'
+                'en' => 'Experience',
+                'fr' => 'Expérience',
+                'de' => 'User Experience',
+                'pt' => 'Experiência',
+                'pl' => 'Doświadczenie',
+                'nl' => 'Ervaring',
+                'it' => 'Percorso clinte',
+                'es' => 'Experiencia'
             ),
             'class_name' => 'AdminBraintreeCustomizeCheckout',
             'parent_class_name' => 'AdminBraintreeConfiguration',
@@ -136,7 +148,13 @@ class Braintree extends \PaymentModule
         array(
             'name' => array(
                 'en' => 'Help',
-                'fr' => 'Help'
+                'fr' => 'Aide',
+                'pt' => 'Ajuda',
+                'pl' => 'Pomoc',
+                'nl' => 'Hulp',
+                'it' => 'Aiuto',
+                'es' => 'Ayuda',
+                'de' => 'Hilfe'
             ),
             'class_name' => 'AdminBraintreeHelp',
             'parent_class_name' => 'AdminBraintreeConfiguration',
@@ -145,7 +163,13 @@ class Braintree extends \PaymentModule
         array(
             'name' => array(
                 'en' => 'Logs',
-                'fr' => 'Logs'
+                'fr' => 'Logs',
+                'de' => 'Logs',
+                'pt' => 'Logs',
+                'pl' => 'Dzienniki',
+                'nl' => 'Logs',
+                'it' => 'Logs',
+                'es' => 'Logs'
             ),
             'class_name' => 'AdminBraintreeLogs',
             'parent_class_name' => 'AdminBraintreeConfiguration',
