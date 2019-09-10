@@ -90,7 +90,7 @@ const initBraintreeCard = () => {
 
       hostedFieldsInstance.on('cardTypeChange', (event) => {
 
-        // Change card bg depending on card type
+          // Change card bg depending on card type
         if (event.cards.length === 1) {
           $('.braintree-card #card-image').removeClass().addClass(event.cards[0].type);
         }
@@ -120,6 +120,8 @@ const initBraintreeCard = () => {
 
       hostedFieldsInstance.on('validityChange', (event) => {
         const field = event.fields[event.emittedBy];
+        $('[data-bt-card-error-msg]').text('').hide();
+
         if (field.isValid) {
           removeErrorMsg($(`#${field.container.id}`));
           switch (event.emittedBy) {
