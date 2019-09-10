@@ -47,6 +47,10 @@
 	</li>
 </ul>
 
+<p>
+    {{l s='To retrieve sandbox API Keys please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]' mod='braintree'}|braintreereplace:['@href1@' => {'https://sandbox.braintreegateway.com/login'}, '@href2@' => {'https://www.braintreepayments.com/sandbox'},  '@target@' => {'target="blank"'}]}
+</p>
+
 <div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment == false}current-account{/if} {if isset($braintree_merchant_id_live) && $braintree_merchant_id_live} visible{/if}">
 	<div class="h3">{l s='Live' mod='braintree'}</div>
 	<hr>
@@ -87,9 +91,7 @@
 <div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment}current-account{/if} {if isset($braintree_merchant_id_sandbox) && $braintree_merchant_id_sandbox} visible{/if}">
 	<div class="h3">{l s='Sandbox' mod='braintree'}</div>
 	<hr>
-	<p>
-		{{l s='To retrieve sandbox API Keys please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]' mod='braintree'}|braintreereplace:['@href1@' => {'https://www.braintreepayments.com/fr/sandbox'}, '@href2@' => {'https://www.braintreepayments.com/sandbox'},  '@target@' => {'target="blank"'}]}
-	</p>
+
 	<div class="form-group">
 		<label class="control-label col-lg-3">
 			{l s='Public key' mod='braintree'}

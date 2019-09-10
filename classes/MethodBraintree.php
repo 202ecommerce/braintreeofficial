@@ -132,6 +132,7 @@ class MethodBraintree extends AbstractMethodBraintree
     {
         $allMerchantAccounts = $this->getAllMerchantAccounts($mode);
         $result = array();
+        $accountDefault = null;
 
         if (empty($allMerchantAccounts)) {
             return $result;
@@ -139,7 +140,12 @@ class MethodBraintree extends AbstractMethodBraintree
 
         foreach ($allMerchantAccounts as $account) {
             $result[$account->currencyIsoCode] = $account->id;
+            if ($account->default == true) {
+                $accountDefault = $account;
+            }
         }
+        // Use account by default
+        $result[$accountDefault->currencyIsoCode] = $accountDefault->id;
 
         return $result;
     }
