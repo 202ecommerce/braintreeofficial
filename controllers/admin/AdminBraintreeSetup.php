@@ -345,6 +345,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
     {
         /* @var $method MethodBraintree*/
         $method = AbstractMethodBraintree::load('Braintree');
+
+        // Delete merchant accounts if they exists
+        $this->module->deleteMerchantAccountIds($mode);
+
         if ($mode === null) {
             $mode = (int)Configuration::get('BRAINTREE_SANDBOX');
         }

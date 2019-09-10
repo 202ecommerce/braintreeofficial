@@ -335,6 +335,14 @@ class Braintree extends \PaymentModule
         return Tools::strtoupper('braintree_merchant_account_id_' . $currency . '_' . ((int)$mode ? 'sandbox' : 'live'));
     }
 
+    public function deleteMerchantAccountIds($mode)
+    {
+        foreach (Currency::getCurrencies() as $currency) {
+            $maName = Tools::strtoupper($this->getNameMerchantAccountForCurrency($currency['iso_code'], $mode));
+            Configuration::deleteByName($maName);
+        }
+    }
+
     public function hookActionOrderSlipAdd($params)
     {
         if (Tools::isSubmit('doPartialRefundBraintree')) {
