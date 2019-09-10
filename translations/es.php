@@ -228,3 +228,9 @@ $_MODULE['<{braintree}prestashop>adminbraintreesetup_ec53a8c4f07baed5d8825072c89
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_7dcb0635c2a8196813ed73812d0dc3fa'] = 'Id. de la cuenta de vendedor para ';
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_ccefd99326251407f7fb885f3bfee13b'] = 'Cuentas de vendedor de Braintree';
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_51a9f5fc2e4d9b1c8aa4a60a7c725243'] = 'Se ha producido un error al crear tu experiencia web. Comprueba tus credenciales.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_2ce895700ba5c16bede3b769128d216f'] = 'Aquí puede cambiar la configuración predeterminada para este proceso de registros.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_36c23650a89439d28101b389567fe2f5'] = 'Los registros con ID de pedido no se borrarán.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_3073ef21c0b326939d5b630edd08cfb6'] = 'Desactivar borrado automático';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_434ef5977d28afa36e430439de18cbad'] = 'Si está deshabilitado, los registros se borrarán automáticamente después del delay.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_1607c94671fd5baf4ac06f554b118b2a'] = 'Delay de borrado automático (en días)';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_71c3e06323cd5a59436ec53afca80c57'] = 'Elija la cantidad de días que desea mantener los registros en la base de datos';

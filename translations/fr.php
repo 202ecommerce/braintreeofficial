@@ -230,3 +230,9 @@ $_MODULE['<{braintree}prestashop>adminbraintreesetup_ec53a8c4f07baed5d8825072c89
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_7dcb0635c2a8196813ed73812d0dc3fa'] = 'Numéro de compte marchand de ';
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_ccefd99326251407f7fb885f3bfee13b'] = 'Comptes marchands Braintree';
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_51a9f5fc2e4d9b1c8aa4a60a7c725243'] = 'Une erreur est survenue lors de la création de votre expérience web. Vérifiez vos identifiants.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_2ce895700ba5c16bede3b769128d216f'] = 'Configuration du Process Logger';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_36c23650a89439d28101b389567fe2f5'] = 'Les logs avec order ID ne seront pas effacés.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_3073ef21c0b326939d5b630edd08cfb6'] = 'Désactivater l\'auto-effacement';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_434ef5977d28afa36e430439de18cbad'] = 'Si désactiver, les logs seront automatiquement effacés après ce délai';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_1607c94671fd5baf4ac06f554b118b2a'] = 'Auto-effacement après (en jours)';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_71c3e06323cd5a59436ec53afca80c57'] = 'Choisissez le nombre de jours que vous souhaitez garder dans la base de données';

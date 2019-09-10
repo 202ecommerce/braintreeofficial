@@ -228,3 +228,9 @@ $_MODULE['<{braintree}prestashop>adminbraintreesetup_ec53a8c4f07baed5d8825072c89
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_7dcb0635c2a8196813ed73812d0dc3fa'] = 'Codice conto commerciante per ';
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_ccefd99326251407f7fb885f3bfee13b'] = 'Conti commerciante Braintree';
 $_MODULE['<{braintree}prestashop>adminbraintreesetup_51a9f5fc2e4d9b1c8aa4a60a7c725243'] = 'Errore durante la creazione della tua esperienza web. Controlla le credenziali.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_2ce895700ba5c16bede3b769128d216f'] = 'Qui è possibile modificare la configurazione predefinita del Process Logger';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_36c23650a89439d28101b389567fe2f5'] = 'I registri con i riferimenti agli ordini non verranno cancellati';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_3073ef21c0b326939d5b630edd08cfb6'] = 'Disabilita la cancellazione automatica';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_434ef5977d28afa36e430439de18cbad'] = 'Se questa opzione è disabilitata i registri verranno automaticamente cancellati dopo il periodo specificato.';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_1607c94671fd5baf4ac06f554b118b2a'] = 'Intervallo cancellazione automatica (in giorni)';
+$_MODULE['<{braintree}prestashop>adminprocessloggercontroller_71c3e06323cd5a59436ec53afca80c57'] = 'Scegliere il numero di giorni per cui si desidera mantenere i registri nel database';

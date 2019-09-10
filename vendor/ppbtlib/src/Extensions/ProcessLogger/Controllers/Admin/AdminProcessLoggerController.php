@@ -133,7 +133,7 @@ class AdminProcessLoggerController extends \ModuleAdminController
                 'title'       => $this->module->l('Process Logger Settings', 'AdminProcessLoggerController'),
                 'description' => $this->module->l('Here you can change the default configuration for this Process Logger', 'AdminProcessLoggerController'),
                 'info' => $this->module->displayWarning(
-                    $this->l('Logs with order ID will not be erased.', 'AdminProcessLoggerController')
+                    $this->module->l('Logs with order ID will not be erased.', 'AdminProcessLoggerController')
                 ),
                 'fields'      => array(
                     'BRAINTREE_EXTLOGS_ERASING_DISABLED' => array(
