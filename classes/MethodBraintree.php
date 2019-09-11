@@ -727,11 +727,11 @@ class MethodBraintree extends AbstractMethodBraintree
 
             if ($vault_token && $braintree_customer->id) {
                 if ($this->serviceBraintreeVaulting->vaultingExist($vault_token, $braintree_customer->id)) {
-                    $data['paymentMethodToken'] = $vault_token;
+                    $data['paymentMethodNonce'] = $token_payment;
                 }
             } else {
                 if ($this->save_card_in_vault || $this->save_account_in_vault) {
-                    if ($this->save_card_in_vault) {
+                    if ($this->save_card_in_vault && $use3dVerification == false) {
                         $payment_method = $this->gateway->paymentMethod()->create(array(
                             'customerId' => $braintree_customer->reference,
                             'paymentMethodNonce' => $token_payment,

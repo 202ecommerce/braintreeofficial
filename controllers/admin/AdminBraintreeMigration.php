@@ -94,7 +94,6 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         Configuration::updateValue('BRAINTREE_ACTIVATE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE'));
         Configuration::updateValue('BRAINTREE_SHOW_PAYPAL_BENEFITS', Configuration::get('PAYPAL_API_ADVANTAGES'));
         Configuration::updateValue('BRAINTREE_VAULTING', Configuration::get('PAYPAL_VAULTING'));
-        Configuration::updateValue('BRAINTREE_CARD_VERIFICATION', Configuration::get('PAYPAL_BT_CARD_VERIFICATION'));
         Configuration::updateValue('BRAINTREE_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE'));
         Configuration::updateValue('BRAINTREE_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT'));
 

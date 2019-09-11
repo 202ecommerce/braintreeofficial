@@ -105,25 +105,6 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 ),
                 array(
                     'type' => 'switch',
-                    'label' => $this->l('Enable Card verification'),
-                    'name' => 'braintree_card_verification',
-                    'is_bool' => true,
-                    'hint' => $this->l('Card verification is a strong first-line defense against potentially fraudulent cards. It ensures that the credit card number provided is associated with a valid, open account and can be stored in the Vault and charged successfully.'),
-                    'values' => array(
-                        array(
-                            'id' => 'braintree_card_verification_on',
-                            'value' => 1,
-                            'label' => $this->l('Enabled'),
-                        ),
-                        array(
-                            'id' => 'braintree_card_verification_off',
-                            'value' => 0,
-                            'label' => $this->l('Disabled'),
-                        )
-                    ),
-                ),
-                array(
-                    'type' => 'switch',
                     'label' => $this->l('Activate 3D Secure for Braintree'),
                     'name' => 'braintree_3DSecure',
                     'is_bool' => true,
@@ -157,7 +138,6 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         $values = array(
             'braintree_activate_paypal' => (int)Configuration::get('BRAINTREE_ACTIVATE_PAYPAL'),
             'braintree_vaulting' => (int)Configuration::get('BRAINTREE_VAULTING'),
-            'braintree_card_verification' => (int)Configuration::get('BRAINTREE_CARD_VERIFICATION'),
             'braintree_3DSecure' => (int)Configuration::get('BRAINTREE_3DSECURE'),
             'braintree_3DSecure_amount' => (float)Configuration::get('BRAINTREE_3DSECURE_AMOUNT'),
             'braintree_show_paypal_benefits' => (int)Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
