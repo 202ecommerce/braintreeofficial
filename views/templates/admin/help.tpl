@@ -35,7 +35,7 @@
 				{l s='Discover module ducumentation before configuration' mod='braintree'}
 			</p>
 			<p>
-				<a target="_blank" href="https://addons.prestashop.com/documentation/e582dd0854d8994e815d6c0e8886e703bfdf7713"
+				<a target="_blank" href="https://help.202-ecommerce.com/wp-content/uploads/2019/08/User-guide-PayPal-PrestaShop-module.pdf"
 					class="btn btn-default">
 					{l s='Access user documentation for module configuration.' mod='braintree'}
 				</a>
@@ -68,7 +68,7 @@
 				</a>
 			</p>
 			<p>
-				<a target="_blank" href="https://addons.prestashop.com/fr/contactez-nous?id_product=1748"
+				<a target="_blank" href="https://addons.prestashop.com/en/contact-us?id_product=46833"
 					class="btn btn-default">
 					{l s='Contact our technical support' mod='braintree'}
 				</a>
