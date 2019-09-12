@@ -205,7 +205,7 @@ class Braintree extends \PaymentModule
         $this->version = '@version@';
         $this->author = 'PrestaShop';
         $this->display = 'view';
-        $this->module_key = '336225a5988ad434b782f2d868d7bfcd';
+        $this->module_key = '155f56797c33f1d34fcba757d3269a35';
         $this->is_eu_compatible = 1;
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
         $this->controllers = array('payment', 'validation');
