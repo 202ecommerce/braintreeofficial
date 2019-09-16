@@ -43,7 +43,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
             'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
         ));
         $this->addCSS('https://fonts.googleapis.com/icon?family=Material+Icons');
-        $this->addJS('modules/' . $this->module->name . '/views/js/migrationAdmin.js');
+        $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/migrationAdmin.js');
     }
 
     public function getStepOne()

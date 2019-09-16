@@ -16,7 +16,7 @@
 import {selectOption} from './functions.js'; 
 
 $(document).ready(() => {
-  if ($('section#checkout-payment-step').hasClass('js-current-step')) {
+  if ($('#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
   }
 

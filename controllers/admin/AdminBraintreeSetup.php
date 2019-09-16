@@ -84,7 +84,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         Media::addJsDef(array(
             'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
         ));
-        $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
+        $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/setupAdmin.js');
     }
 
     public function offreMigration()

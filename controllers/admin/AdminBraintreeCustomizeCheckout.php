@@ -35,7 +35,7 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         $this->context->smarty->assign('form', $this->renderForm());
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'customizeCheckout.tpl');
         $this->context->smarty->assign('content', $this->content);
-        $this->addJS('modules/' . $this->module->name . '/views/js/customizeCheckoutAdmin.js');
+        $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/customizeCheckoutAdmin.js');
     }
 
     public function initBehaviorForm()
