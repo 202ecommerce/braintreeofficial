@@ -39,7 +39,7 @@
         {l s="Please uninstall the PayPal module once you finished all verifications." mod='braintreeofficial'}
     </p>
     <p class="text-center">
-        <a href="{$link->getAdminLink('AdminBraintreeSetup', true)}" class="btn btn-default">
+        <a href="{$link->getAdminLink('AdminBraintreeOfficialSetup', true)}" class="btn btn-default">
             {l s='Go to Braintree Settings' mod='braintreeofficial'}
         </a>
     </p>
