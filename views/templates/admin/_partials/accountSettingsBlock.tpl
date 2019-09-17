@@ -55,7 +55,7 @@
 
 		{if isset($showMigrationBtn) && $showMigrationBtn}
 			<div>
-				<a class="btn btn-default" href="{$link->getAdminLink('AdminBraintreeMigration', true)}">
+				<a class="btn btn-default" href="{$link->getAdminLink('AdminBraintreeOfficialMigration', true)}">
 					{l s='Migrate your settings from PayPal module' mod='braintreeofficial'}
 				</a>
 			</div>
