@@ -42,7 +42,7 @@
 
 <div class="panel active-panel bt__flex bt__align-items-center">
 	<div class="bt__pr-4">
-		<img style="width: 135px" src="/modules/braintree/views/img/braintree-paypal.png">
+		<img style="width: 135px" src="/modules/braintreeofficial/views/img/braintree-paypal.png">
 	</div>
 	<div class="bt__pl-5">
 		<p>
