@@ -35,9 +35,9 @@
 					{if !isset($init_error)}
 						{if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
 							<div id="bt-vault-form" class="bt__mt-2 bt__mb-3">
-								<p><b>{l s='Choose your PayPal account' mod='braintree'}:</b></p>
+								<p><b>{l s='Choose your PayPal account' mod='braintreeofficial'}:</b></p>
 								<select name="pbt_vaulting_token" data-bt-vaulting-token="pbt" class="form-control bt__form-control">
-									<option value="">{l s='Use a new paypal account' mod='braintree'}</option>
+									<option value="">{l s='Use a new paypal account' mod='braintreeofficial'}</option>
 									{foreach from=$payment_methods key=method_key  item=method}
 										<option value="{$method.token|escape:'htmlall':'UTF-8'}">
 											{if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
@@ -53,11 +53,11 @@
 							{if isset($active_vaulting) && $active_vaulting}
 								<div class="bt__mb-4" data-bt-save-account>
 									<input type="checkbox" name="save_account_in_vault" id="save_account_in_vault"/> 
-									<label for="save_account_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my PayPal account' mod='braintree'}</label>
+									<label for="save_account_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my PayPal account' mod='braintreeofficial'}</label>
 								</div>						
 							{/if}
 							<div data-bt-vault-info class="bt__hidden bt__mb-4">
-								<p>{l s='Please complete your payment by confirming below' mod='braintree'}</p>
+								<p>{l s='Please complete your payment by confirming below' mod='braintreeofficial'}</p>
 							</div>
 							<div data-braintree-button id="braintree-button" class="braintree-button bt__mb-4"></div>
 						</div>

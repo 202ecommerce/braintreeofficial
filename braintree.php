@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -51,7 +51,7 @@ const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
 const BRAINTREE_PAYMENT_CUSTOMER_CURRENCY = -1;
 
-class Braintree extends \PaymentModule
+class BraintreeOfficial extends \PaymentModule
 {
     /**
      * List of hooks used in this Module
@@ -200,7 +200,7 @@ class Braintree extends \PaymentModule
 
     public function __construct()
     {
-        $this->name = 'braintree';
+        $this->name = 'braintreeofficial';
         $this->tab = 'payments_gateways';
         $this->version = '@version@';
         $this->author = 'PrestaShop';

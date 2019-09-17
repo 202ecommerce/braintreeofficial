@@ -4,9 +4,9 @@
     },
     "autoload": {
         "psr-4": {
-            "BraintreePPBTlib\\": "vendor/ppbtlib/src/",
-            "BraintreeAddons\\": ".",
-            "BraintreeTest\\": "202/tests/"
+            "BraintreeOfficialPPBTlib\\": "vendor/ppbtlib/src/",
+            "BraintreeOfficialAddons\\": ".",
+            "BraintreeOfficialTest\\": "202/tests/"
         }
     },
     "scripts": {

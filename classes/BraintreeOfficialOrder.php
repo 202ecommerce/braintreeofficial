@@ -24,12 +24,12 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\classes;
+namespace BraintreeOfficialAddons\classes;
 
 /**
- * Class BraintreeOrder.
+ * Class BraintreeOfficialOrder.
  */
-class BraintreeOrder extends \ObjectModel
+class BraintreeOfficialOrder extends \ObjectModel
 {
     /** @var integer Prestashop Order generated ID */
     public $id_order;
@@ -74,8 +74,8 @@ class BraintreeOrder extends \ObjectModel
      * @see ObjectModel::$definition
      */
     public static $definition = array(
-        'table' => 'braintree_order',
-        'primary' => 'id_braintree_order',
+        'table' => 'braintreeofficial_order',
+        'primary' => 'id_braintreeofficial_order',
         'multilang' => false,
         'fields' => array(
             'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),

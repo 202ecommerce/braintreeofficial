@@ -24,11 +24,39 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\classes;
+namespace BraintreeOfficialAddons\classes;
 
-use BraintreePPBTlib\AbstractMethod;
+use Exception;
 
-abstract class AbstractMethodBraintree extends AbstractMethod
+/**
+ * Class BraintreeOfficialException
+ * Custom exception with additional long message parameter
+ * @package BraintreeOfficialAddons\classes
+ */
+class BraintreeOfficialException extends Exception
 {
+    /** @var string Long detailed error message */
+    private $message_long;
 
+    /**
+     * BraintreeOfficialException constructor.
+     * Redefine the exception construct so add long message
+     * @param int $code
+     * @param string $message not required
+     * @param string $message_long not required
+     */
+    public function __construct($code = 0, $message = '', $message_long = '')
+    {
+        $this->message_long = $message_long;
+        // make sure everything is assigned properly
+        parent::__construct($message, $code);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessageLong()
+    {
+        return $this->message_long;
+    }
 }

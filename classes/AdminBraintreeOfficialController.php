@@ -23,9 +23,9 @@
  * @version   develop
  */
 
-namespace BraintreeAddons\classes;
+namespace BraintreeOfficialAddons\classes;
 
-class AdminBraintreeController extends \ModuleAdminController
+class AdminBraintreeOfficialController extends \ModuleAdminController
 {
     public function __construct()
     {
@@ -37,11 +37,11 @@ class AdminBraintreeController extends \ModuleAdminController
     {
         parent::init();
 
-        if ((int)\Configuration::get('BRAINTREE_MIGRATION_FAILED') == 1) {
-            $message = $this->module->l('The migration of your settings from PayPal module has been completed with errors.', 'AdminBraintreeController');
+        if ((int)\Configuration::get('BRAINTREEOFFICIAL_MIGRATION_FAILED') == 1) {
+            $message = $this->module->l('The migration of your settings from PayPal module has been completed with errors.', 'AdminBraintreeOfficialController');
             $message .= $this->l('Please contact our');
             $message .= " <a href='https://addons.prestashop.com/fr/contactez-nous?id_product=1748' target='_blank'>";
-            $message .= $this->module->l('support team.', 'AdminBraintreeController') . "</a>";
+            $message .= $this->module->l('support team.', 'AdminBraintreeOfficialController') . "</a>";
             $this->warnings[] = $message;
         }
     }
@@ -71,14 +71,14 @@ class AdminBraintreeController extends \ModuleAdminController
         if (\Tools::isSubmit($this->controller_name . '_config')) {
             $result = $this->saveForm();
             if ($result) {
-                $this->confirmations[] = $this->module->l('Successful update.', 'AdminBraintreeController');
+                $this->confirmations[] = $this->module->l('Successful update.', 'AdminBraintreeOfficialController');
             }
         }
 
-        if ((int)\Configuration::get('BRAINTREE_SANDBOX') == 1) {
-            $message = $this->module->l('Your Braintree account is currently configured to accept payments on the Sandbox', 'AdminBraintreeController');
-            $message .= ' (<b>' . $this->module->l('test environment', 'AdminBraintreeController') . '</b>). ';
-            $message .= $this->module->l('Any transaction will be fictitious. Disable the option, to accept actual payments (production environment) and log in with your Braintree credentials', 'AdminBraintreeController');
+        if ((int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') == 1) {
+            $message = $this->module->l('Your Braintree account is currently configured to accept payments on the Sandbox', 'AdminBraintreeOfficialController');
+            $message .= ' (<b>' . $this->module->l('test environment', 'AdminBraintreeOfficialController') . '</b>). ';
+            $message .= $this->module->l('Any transaction will be fictitious. Disable the option, to accept actual payments (production environment) and log in with your Braintree credentials', 'AdminBraintreeOfficialController');
             $this->warnings[] = $message;
         }
 
@@ -90,7 +90,7 @@ class AdminBraintreeController extends \ModuleAdminController
         $result = true;
 
         foreach (\Tools::getAllValues() as $fieldName => $fieldValue) {
-            if (strpos($fieldName, 'braintree_') === 0) {
+            if (strpos($fieldName, 'braintreeofficial_') === 0) {
                 $result &= \Configuration::updateValue(\Tools::strtoupper($fieldName), pSQL($fieldValue));
             }
         }
@@ -118,21 +118,21 @@ class AdminBraintreeController extends \ModuleAdminController
         );
         if ((int)\Configuration::get('PS_COUNTRY_DEFAULT') == false) {
             $response['success'] = false;
-            $response['message'][] = $this->module->l('To activate a payment solution, please select your default country.', 'AdminBraintreeController');
+            $response['message'][] = $this->module->l('To activate a payment solution, please select your default country.', 'AdminBraintreeOfficialController');
         }
 
         if ($this->module->isSslActive() == false) {
             $response['success'] = false;
-            $response['message'][] = $this->module->l('SSL should be enabled on your web site.', 'AdminBraintreeController');
+            $response['message'][] = $this->module->l('SSL should be enabled on your web site.', 'AdminBraintreeOfficialController');
         }
 
         $tls_check = $this->_checkTLSVersion();
         if ($tls_check['status'] == false) {
             $response['success'] = false;
-            $response['message'][] = $this->module->l('Tls verification failed.', 'AdminBraintreeController').' '.$tls_check['error_message'];
+            $response['message'][] = $this->module->l('Tls verification failed.', 'AdminBraintreeOfficialController').' '.$tls_check['error_message'];
         }
         if ($response['success']) {
-            $response['message'][] = $this->module->l('Your shop configuration is OK. You can start to configure the Braintree module.', 'AdminBraintreeController');
+            $response['message'][] = $this->module->l('Your shop configuration is OK. You can start to configure the Braintree module.', 'AdminBraintreeOfficialController');
         }
         return $response;
     }
@@ -158,7 +158,7 @@ class AdminBraintreeController extends \ModuleAdminController
                 $return['status'] = false;
                 $curl_info = curl_getinfo($curl);
                 if ($curl_info['http_code'] == 401) {
-                    $return['error_message'] = $this->module->l('401 Unauthorized. Please note that the TLS verification can not be done if you have an htaccess password protection enabled on your web site.', 'AdminBraintreeController');
+                    $return['error_message'] = $this->module->l('401 Unauthorized. Please note that the TLS verification can not be done if you have an htaccess password protection enabled on your web site.', 'AdminBraintreeOfficialController');
                 } else {
                     $return['error_message'] = curl_error($curl);
                 }
@@ -168,9 +168,9 @@ class AdminBraintreeController extends \ModuleAdminController
         } else {
             $return['status'] = false;
             if (version_compare(curl_version()['version'], '7.34.0', '<')) {
-                $return['error_message'] = $this->module->l(' You are using an old version of cURL. Please update your cURL extension to version 7.34.0 or higher.', 'AdminBraintreeController');
+                $return['error_message'] = $this->module->l(' You are using an old version of cURL. Please update your cURL extension to version 7.34.0 or higher.', 'AdminBraintreeOfficialController');
             } else {
-                $return['error_message'] = $this->module->l('TLS version is not compatible', 'AdminBraintreeController');
+                $return['error_message'] = $this->module->l('TLS version is not compatible', 'AdminBraintreeOfficialController');
             }
         }
         return $return;

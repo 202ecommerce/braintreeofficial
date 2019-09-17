@@ -20,22 +20,22 @@
 
     <filter>
         <whitelist>
-            <directory>./build/prestashop/modules/braintree</directory>
+            <directory>./build/prestashop/modules/braintreeofficial</directory>
             <exclude>
-                <directory>./build/prestashop/modules/braintree/translations</directory>
-                <directory>./build/prestashop/modules/braintree/views</directory>
-                <directory>./build/prestashop/modules/braintree/css</directory>
-                <directory>./build/prestashop/modules/braintree/js</directory>
-                <directory>./build/prestashop/modules/braintree/img</directory>
-                <directory>./build/prestashop/modules/braintree/override</directory>
-                <directory>./build/prestashop/modules/braintree/upgrade</directory>
-                <directory>./build/prestashop/modules/braintree/sdk</directory>
-                <directory>./build/prestashop/modules/braintree/202</directory>
-                <directory>./build/prestashop/modules/braintree/vendor</directory>
-                <directory>./build/prestashop/modules/braintree/_dev</directory>
-                <directory suffix="index.php">./build/prestashop/modules/braintree/</directory>
-                <directory suffix="index.php">./build/prestashop/modules/braintree/*/</directory>
-                <directory suffix="index.php">./build/prestashop/modules/braintree/*/*/</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/translations</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/views</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/css</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/js</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/img</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/override</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/upgrade</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/sdk</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/202</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/vendor</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/_dev</directory>
+                <directory suffix="index.php">./build/prestashop/modules/braintreeofficial/</directory>
+                <directory suffix="index.php">./build/prestashop/modules/braintreeofficial/*/</directory>
+                <directory suffix="index.php">./build/prestashop/modules/braintreeofficial/*/*/</directory>
             </exclude>
         </whitelist>
     </filter>

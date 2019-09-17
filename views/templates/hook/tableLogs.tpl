@@ -26,11 +26,11 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th>{l s='Timestamp' mod='braintree'}</th>
-			<th>{l s='Timestamp Braintree' mod='braintree'}</th>
-			<th>{l s='Transaction ID' mod='braintree'}</th>
-			<th>{l s='Payment tool' mod='braintree'}</th>
-			<th>{l s='Description' mod='braintree'}</th>
+			<th>{l s='Timestamp' mod='braintreeofficial'}</th>
+			<th>{l s='Timestamp Braintree' mod='braintreeofficial'}</th>
+			<th>{l s='Transaction ID' mod='braintreeofficial'}</th>
+			<th>{l s='Payment tool' mod='braintreeofficial'}</th>
+			<th>{l s='Description' mod='braintreeofficial'}</th>
 		</tr>
 	</thead>
 	<tbody>

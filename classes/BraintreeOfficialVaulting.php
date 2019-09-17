@@ -24,21 +24,27 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\classes;
+namespace BraintreeOfficialAddons\classes;
 
 /**
- * Class BraintreeCustomer.
+ * Class BraintreeOfficialVaulting.
  */
-class BraintreeCustomer extends \ObjectModel
+class BraintreeOfficialVaulting extends \ObjectModel
 {
-    /** @var integer PrestaShop Customer ID */
-    public $id_customer;
+    /** @var string Token received from BT */
+    public $token;
 
-    /** @var string Paypal customer reference number */
-    public $reference;
+    /** @var int BT Customer ID */
+    public $id_braintreeofficial_customer;
 
-    /** @var bool mode of customer (sandbox or live) */
-    public $sandbox;
+    /** @var string client can set card name in prestashop account */
+    public $name;
+
+    /** @var string Card or paypal account short info like last 4 numbers/exp. date */
+    public $info;
+
+    /** @var string card ou paypal, etc... */
+    public $payment_tool;
 
     /** @var string Object creation date */
     public $date_add;
@@ -50,13 +56,15 @@ class BraintreeCustomer extends \ObjectModel
      * @see ObjectModel::$definition
      */
     public static $definition = array(
-        'table' => 'braintree_customer',
-        'primary' => 'id_braintree_customer',
+        'table' => 'braintreeofficial_vaulting',
+        'primary' => 'id_braintreeofficial_vaulting',
         'multilang' => false,
         'fields' => array(
-            'id_customer' => array('type' => self::TYPE_INT),
-            'reference' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
+            'token' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'id_braintreeofficial_customer' => array('type' => self::TYPE_INT),
+            'name' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'info' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'payment_tool' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
             'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
         )

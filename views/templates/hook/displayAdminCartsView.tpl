@@ -24,6 +24,6 @@
 *}
 
 <div class="panel">
-	<h3>{l s='Payment logs' mod='braintree'}</h3>
+	<h3>{l s='Payment logs' mod='braintreeofficial'}</h3>
 	{include file='./tableLogs.tpl'}
 </div>

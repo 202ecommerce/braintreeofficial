@@ -31,34 +31,34 @@
            </i>
        </div>
        <div class="h2 status-migration">
-           {l s='Perfect! Your Braintree settings were migrated successfully!' mod='braintree'}
+           {l s='Perfect! Your Braintree settings were migrated successfully!' mod='braintreeofficial'}
        </div>
        <p>
-           {l s='Please add your Public and Private Key for completing your account setup.' mod='braintree'}
+           {l s='Please add your Public and Private Key for completing your account setup.' mod='braintreeofficial'}
        </p>
        <form class="defaultForm form-horizontal" id="form-account">
            {include './formAccount.tpl'}
        </form>
        <p class="text-center text-danger">
-           {l s='PayPal module will be disabled once the process is finished.' mod='braintree'}
+           {l s='PayPal module will be disabled once the process is finished.' mod='braintreeofficial'}
        </p>
        <div class="text-center">
            <button class="btn btn-default"
                    id="save-account"
-                   data-loading-text="{l s='Saving' mod='braintree'}">
-               {l s='Save Account Settings' mod='braintree'}
+                   data-loading-text="{l s='Saving' mod='braintreeofficial'}">
+               {l s='Save Account Settings' mod='braintreeofficial'}
            </button>
        </div>
 
        <div class="bt__mt-4 bt__mb-1">
-            <div class="text-center">{l s='If needed you can add your API keys later (not recommended).' mod='braintree'}</div>
-            <div class="text-center">{l s='In this case, the payment by Braintree will not be available for your customers until you add your account information.' mod='braintree'}</div>
+            <div class="text-center">{l s='If needed you can add your API keys later (not recommended).' mod='braintreeofficial'}</div>
+            <div class="text-center">{l s='In this case, the payment by Braintree will not be available for your customers until you add your account information.' mod='braintreeofficial'}</div>
        </div>
        <div class="text-center">
            <a class="btn btn-default"
               href="{$link->getAdminLink('AdminBraintreeSetup', true)|addslashes}"
            >
-               {l s='Add API keys later' mod='braintree'}
+               {l s='Add API keys later' mod='braintreeofficial'}
            </a>
        </div>
    </div>

@@ -25,21 +25,21 @@
 
 <div class="col-lg-9">
 	<p class="h3">
-		{l s='Environment' mod='braintree'}
+		{l s='Environment' mod='braintreeofficial'}
 		{if isset($sandbox) && $sandbox}
-			<b>{l s='Sandbox' mod='braintree'}</b>
+			<b>{l s='Sandbox' mod='braintreeofficial'}</b>
 		{else}
-			<b>{l s='Production' mod='braintree'}</b>
+			<b>{l s='Production' mod='braintreeofficial'}</b>
 		{/if}
 	</p>
-	<p>{l s='Production mode is the Live environment where you\'ll be able to collect your real payments' mod='braintree'}</p>
+	<p>{l s='Production mode is the Live environment where you\'ll be able to collect your real payments' mod='braintreeofficial'}</p>
 	<p>
 		<button class="btn btn-default" id="switchEnvironmentMode">
-			{l s='Switch to' mod='braintree'}
+			{l s='Switch to' mod='braintreeofficial'}
 			{if isset($sandbox) && $sandbox}
-				{l s='Production mode' mod='braintree'}
+				{l s='Production mode' mod='braintreeofficial'}
 			{else}
-				{l s='Sandbox mode' mod='braintree'}
+				{l s='Sandbox mode' mod='braintreeofficial'}
 			{/if}
 		</button>
 	</p>

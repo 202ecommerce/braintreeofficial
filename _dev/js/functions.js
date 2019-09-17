@@ -35,12 +35,12 @@ export const hoverTabConfig = () => {
   const currentTab = $('.page-head-tabs a.current');
 
   tabs.forEach((el) => {
-    const checkoutTab = $(el).attr('href').includes('AdminBraintreeCustomizeCheckout');
-    const setupTab = $(el).attr('href').includes('AdminBraintreeSetup');
+    const checkoutTab = $(el).attr('href').includes('AdminBraintreeOfficialCustomizeCheckout');
+    const setupTab = $(el).attr('href').includes('AdminBraintreeOfficialSetup');
 
     // Add highlighting for current tab
-    if ((currentTab.attr('href').includes('AdminBraintreeCustomizeCheckout') && setupTab)
-      || (currentTab.attr('href').includes('AdminBraintreeSetup') && checkoutTab)) {
+    if ((currentTab.attr('href').includes('AdminBraintreeOfficialCustomizeCheckout') && setupTab)
+      || (currentTab.attr('href').includes('AdminBraintreeOfficialSetup') && checkoutTab)) {
       $(el).addClass('bt-settings-link-on bt__border-b-primary');
     }
   });

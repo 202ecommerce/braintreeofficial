@@ -24,18 +24,18 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\classes;
+namespace BraintreeOfficialAddons\classes;
 
 /**
- * Class BraintreeCapture.
+ * Class BraintreeOfficialCapture.
  */
-class BraintreeCapture extends \ObjectModel
+class BraintreeOfficialCapture extends \ObjectModel
 {
     /** @var string Capture ID */
     public $id_capture;
 
-    /** @var integer BraintreeOrder ID */
-    public $id_braintree_order;
+    /** @var integer BraintreeOfficialOrder ID */
+    public $id_braintreeofficial_order;
 
     /** @var float Captured amount */
     public $capture_amount;
@@ -53,12 +53,12 @@ class BraintreeCapture extends \ObjectModel
      * @see ObjectModel::$definition
      */
     public static $definition = array(
-        'table' => 'braintree_capture',
-        'primary' => 'id_braintree_capture',
+        'table' => 'braintreeofficial_capture',
+        'primary' => 'id_braintreeofficial_capture',
         'multilang' => false,
         'fields' => array(
             'id_capture' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'id_braintree_order' => array('type' => self::TYPE_INT),
+            'id_braintreeofficial_order' => array('type' => self::TYPE_INT),
             'capture_amount' => array('type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2),
             'result' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
