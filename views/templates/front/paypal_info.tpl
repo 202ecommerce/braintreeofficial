@@ -27,24 +27,24 @@
 <div class="pp-info" data-pp-info>
 	<div class="row">
 		<div class="col-md-6 item bt__mb-3">
-			{include file='module:braintree/views/templates/front/_partials/verified_user.tpl'}
+			{include file='module:braintreeofficial/views/templates/front/_partials/verified_user.tpl'}
 			<div class="header bt__pt-1">{l s="Safer and more protected" mod='braintreeofficial'}</div>
 			<div class="desc bt__pt-1">{l s="Buyer protection covers account and eligible purchases." mod='braintreeofficial'}</div>
 		</div>
 		<div class="col-md-6 item bt__mb-3">
-			{include file='module:braintree/views/templates/front/_partials/language.tpl'}
+			{include file='module:braintreeofficial/views/templates/front/_partials/language.tpl'}
 			<div class="header bt__pt-1">{l s="Simple and convenient" mod='braintreeofficial'}</div>
 			<div class="desc bt__pt-1">{l s="Skip entering your financial info and prefered address to pay even faster." mod='braintreeofficial'}</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6 item bt__mb-3">
-			{include file='module:braintree/views/templates/front/_partials/offline_bolt.tpl'}
+			{include file='module:braintreeofficial/views/templates/front/_partials/offline_bolt.tpl'}
 			<div class="header bt__pt-1">{l s="Wherever you are" mod='braintreeofficial'}</div>
 			<div class="desc bt__pt-1">{l s="Local Payment Methods according to your country and purchase." mod='braintreeofficial'}</div>
 		</div>
 		<div class="col-md-6 item bt__mb-3">
-			{include file='module:braintree/views/templates/front/_partials/monetization.tpl'}
+			{include file='module:braintreeofficial/views/templates/front/_partials/monetization.tpl'}
 			<div class="header bt__pt-1">{l s="No additional fees" mod='braintreeofficial'}</div>
 			<div class="desc bt__pt-1">{l s="Free to open account and only conversion fees." mod='braintreeofficial'}</div>
 		</div>

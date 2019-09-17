@@ -24,7 +24,7 @@
 *}
 
 {if isset($show_paypal_benefits) && $show_paypal_benefits}
-	{include file='module:braintree/views/templates/front/paypal_info.tpl'}
+	{include file='module:braintreeofficial/views/templates/front/paypal_info.tpl'}
 {/if}
 
 <div class="row">

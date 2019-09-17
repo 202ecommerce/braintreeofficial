@@ -225,6 +225,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     public function init()
     {
         try {
+            /** @var BraintreeOfficial $module */
             $module = Module::getInstanceByName($this->name);
             $currency = $module->getPaymentCurrencyIso();
             $merchantAccountId = Configuration::get($module->getNameMerchantAccountForCurrency($currency));
@@ -726,7 +727,10 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             }
 
             if ($vault_token && $braintree_customer->id) {
-                if ($this->serviceBraintreeOfficialVaulting->vaultingExist($vault_token, $braintree_customer->id)) {
+                $vaultExists = $this->serviceBraintreeOfficialVaulting->vaultingExist($vault_token, $braintree_customer->id);
+                if ($vaultExists && $this->payment_method_bt == 'paypal-braintree') {
+                    $data['paymentMethodToken'] = $vault_token;
+                } elseif ($vaultExists) {
                     $data['paymentMethodNonce'] = $token_payment;
                 }
             } else {
