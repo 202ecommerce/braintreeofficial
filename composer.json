@@ -4,7 +4,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BraintreeOfficialPPBTlib\\": "vendor/ppbtlib/src/",
+            "BraintreeofficialPPBTlib\\": "vendor/ppbtlib/src/",
             "BraintreeOfficialAddons\\": ".",
             "BraintreeOfficialTest\\": "202/tests/"
         }

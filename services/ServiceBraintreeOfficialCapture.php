@@ -27,7 +27,7 @@
 namespace BraintreeOfficialAddons\services;
 
 use BraintreeOfficialAddons\classes\BraintreeOfficialCapture;
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class ServiceBraintreeOfficialCapture

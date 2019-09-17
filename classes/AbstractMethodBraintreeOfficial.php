@@ -26,7 +26,7 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use BraintreeOfficialPPBTlib\AbstractMethod;
+use BraintreeofficialPPBTlib\AbstractMethod;
 
 abstract class AbstractMethodBraintreeOfficial extends AbstractMethod
 {

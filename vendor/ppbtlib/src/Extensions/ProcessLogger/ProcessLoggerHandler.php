@@ -23,7 +23,7 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Extensions\ProcessLogger;
+namespace BraintreeofficialPPBTlib\Extensions\ProcessLogger;
 
 use \Db;
 use \Configuration;
@@ -178,7 +178,7 @@ class ProcessLoggerHandler
                     true
             );
             Hook::exec(
-                    'actionBraintreeProcessLoggerSave',
+                    'actionBraintreeofficialProcessLoggerSave',
                     array(
                         'logs' => &self::$logs,
                     ),
@@ -187,7 +187,7 @@ class ProcessLoggerHandler
             );
             
             $result = Db::getInstance()->insert(
-                'braintree_processlogger',
+                'braintreeofficial_processlogger',
                 self::$logs
             );
 
@@ -206,7 +206,7 @@ class ProcessLoggerHandler
     {
         if (self::isAutoErasingEnabled()) {
             return Db::getInstance()->delete(
-                'braintree_processlogger',
+                'braintreeofficial_processlogger',
                 sprintf(
                     'date_add <= NOW() - INTERVAL %d DAY AND id_order = 0',
                     self::getAutoErasingDelayInDays()
@@ -222,7 +222,7 @@ class ProcessLoggerHandler
      */
     public static function isAutoErasingEnabled()
     {
-        return false === (bool)Configuration::get('BRAINTREE_EXTLOGS_ERASING_DISABLED');
+        return false === (bool)Configuration::get('BRAINTREEOFFICIAL_EXTLOGS_ERASING_DISABLED');
     }
 
     /**
@@ -230,7 +230,7 @@ class ProcessLoggerHandler
      */
     public static function getAutoErasingDelayInDays()
     {
-        $numberOfDays = Configuration::get('BRAINTREE_EXTLOGS_ERASING_DAYSMAX');
+        $numberOfDays = Configuration::get('BRAINTREEOFFICIAL_EXTLOGS_ERASING_DAYSMAX');
 
         if (empty($numberOfDays) || false === is_numeric($numberOfDays)) {
             return 5;
@@ -242,7 +242,7 @@ class ProcessLoggerHandler
     /**
      * Executes the hooks used to skip a ProcessLogger save. This will return
      * false if any module hooked to either 'actionSkipProcessLoggerSave' or
-     * 'actionSkipBraintreeProcessLoggerSave' returns false (weak comparison)
+     * 'actionSkipBraintreeofficialProcessLoggerSave' returns false (weak comparison)
      * 
      * @return bool
      */
@@ -272,9 +272,9 @@ class ProcessLoggerHandler
             }
         }
         
-        if (Hook::getIdByName('actionSkipBraintreeProcessLoggerSave')) {
+        if (Hook::getIdByName('actionSkipBraintreeofficialProcessLoggerSave')) {
             $hookModuleProcessLoggerReturnArray = Hook::exec(
-                    'actionSkipBraintreeProcessLoggerSave',
+                    'actionSkipBraintreeofficialProcessLoggerSave',
                     array(
                         'logs' => self::$logs,
                     ),

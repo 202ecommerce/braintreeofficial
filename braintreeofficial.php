@@ -35,8 +35,8 @@ use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension;
 use BraintreeOfficialAddons\classes\BraintreeOfficialOrder;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCapture;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
@@ -44,8 +44,8 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
-use BraintreeOfficialPPBTlib\Install\ModuleInstaller;
-use BraintreeOfficialPPBTlib\Extensions\AbstractModuleExtension;
+use BraintreeofficialPPBTlib\Install\ModuleInstaller;
+use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
 
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
@@ -78,7 +78,7 @@ class BraintreeOfficial extends \PaymentModule
      * List of ppbtlib extentions
      */
     public $extensions = array(
-        BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension::class,
+        BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerExtension::class,
     );
 
     /**

@@ -28,7 +28,7 @@ namespace BraintreeOfficialAddons\services;
 
 use Braintree\Exception;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeOfficialCustomer
 {

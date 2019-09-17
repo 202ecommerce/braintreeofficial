@@ -31,7 +31,7 @@ use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSetupController
 {

@@ -27,7 +27,7 @@
 namespace BraintreeOfficialAddons\services;
 
 use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 class ServiceBraintreeOfficialVaulting
 {

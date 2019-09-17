@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use BraintreeOfficialPPBTlib\CommonAbstarctModuleFrontController;
+use BraintreeofficialPPBTlib\CommonAbstarctModuleFrontController;
 
 /**
  * Class BraintreeOfficialAbstarctModuleFrontController

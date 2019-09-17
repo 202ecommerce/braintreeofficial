@@ -26,7 +26,7 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
 
 /**

@@ -24,12 +24,12 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreePPBTlib;
+namespace BraintreeofficialPPBTlib;
 
 abstract class AbstractMethod
 {
     /** @var string module name */
-    public $name = 'braintree';
+    public $name = 'braintreeofficial';
 
     // Force les classes filles à définir cette méthode
 
@@ -42,7 +42,7 @@ abstract class AbstractMethod
     /** @return string*/
     protected function getPaymentMethod()
     {
-        if ((int)\Configuration::get('BRAINTREE_SANDBOX')) {
+        if ((int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX')) {
             return $this->payment_method . ' - SANDBOX';
         } else {
             return $this->payment_method;
@@ -70,10 +70,10 @@ abstract class AbstractMethod
 
     /**
      * Refund settled transaction
-     * @param $orderBraintree BraintreeOrder object
+     * @param $orderBraintreeofficial BraintreeofficialOrder object
      * @return mixed
      */
-    abstract public function refund($orderBraintree);
+    abstract public function refund($orderBraintreeofficial);
 
     /**
      * Update configuration (postProcess)
@@ -84,17 +84,17 @@ abstract class AbstractMethod
 
     /**
      * Generate getContent
-     * @param Braintree $module
+     * @param Braintreeofficial $module
      * @return mixed
      */
-    abstract public function getConfig(\Braintree $module);
+    abstract public function getConfig(\Braintreeofficial $module);
 
     /**
      * Void authorized transaction (cancel payment)
-     * @param $orderBraintree BraintreeOrder object
+     * @param $orderBraintreeofficial BraintreeofficialOrder object
      * @return mixed
      */
-    abstract public function void($orderBraintree);
+    abstract public function void($orderBraintreeofficial);
 
     /**
      * @param $params array hookActionOrderSlipAdd parameters
@@ -108,8 +108,8 @@ abstract class AbstractMethod
      */
     public static function load($method)
     {
-        if (preg_match('/^[a-zA-Z0-9_-]+$/', $method) && file_exists(_PS_MODULE_DIR_.'braintree/classes/Method'.$method.'.php')) {
-            include_once _PS_MODULE_DIR_.'braintree/classes/Method'.$method.'.php';
+        if (preg_match('/^[a-zA-Z0-9_-]+$/', $method) && file_exists(_PS_MODULE_DIR_.'braintreeofficial/classes/Method'.$method.'.php')) {
+            include_once _PS_MODULE_DIR_.'braintreeofficial/classes/Method'.$method.'.php';
             $method_class = 'Method'.$method;
             return new $method_class();
         }

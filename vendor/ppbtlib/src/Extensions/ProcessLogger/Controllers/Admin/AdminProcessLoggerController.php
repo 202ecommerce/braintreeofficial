@@ -23,9 +23,9 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Extensions\ProcessLogger\Controllers\Admin;
+namespace BraintreeofficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin;
 
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 
 use \Db;
 use \Tools;
@@ -40,16 +40,16 @@ class AdminProcessLoggerController extends \ModuleAdminController
     public $module;
 
     /** @var string Associated object class name */
-    public $className = 'BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel';
+    public $className = 'BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel';
 
     /** @var string Associated table name */
-    public $table = 'braintree_processlogger';
+    public $table = 'braintreeofficial_processlogger';
 
     /** @var string|false Object identifier inside the associated table */
-    public $identifier = 'id_braintree_processlogger';
+    public $identifier = 'id_braintreeofficial_processlogger';
 
     /** @var string Default ORDER BY clause when $_orderBy is not defined */
-    protected $_defaultOrderBy = 'id_braintree_processlogger';
+    protected $_defaultOrderBy = 'id_braintreeofficial_processlogger';
 
     /** @var string Default ORDER WAY clause when $_orderWay is not defined */
     protected $_defaultOrderWay = 'DESC';
@@ -71,15 +71,12 @@ class AdminProcessLoggerController extends \ModuleAdminController
         $this->bulk_actions = array(
             'delete' => array(
                 'text' => $this->module->l('Delete selected', 'AdminProcessLoggerController'),
-                'confirm' => $this->module->l(
-                    'Would you like to delete the selected items?',
-                    'AdminProcessLoggerController'
-                ),
+                'confirm' => $this->module->l('Would you like to delete the selected items?', 'AdminProcessLoggerController'),
             )
         );
 
         $this->fields_list = array(
-            'id_braintree_processlogger' => array(
+            'id_braintreeofficial_processlogger' => array(
                 'title'  => $this->module->l('ID', 'AdminProcessLoggerController'),
                 'align'  => 'center',
                 'class'  => 'fixed-width-xs',
@@ -136,14 +133,14 @@ class AdminProcessLoggerController extends \ModuleAdminController
                     $this->module->l('Logs with order ID will not be erased.', 'AdminProcessLoggerController')
                 ),
                 'fields'      => array(
-                    'BRAINTREE_EXTLOGS_ERASING_DISABLED' => array(
+                    'BRAINTREEOFFICIAL_EXTLOGS_ERASING_DISABLED' => array(
                         'title'        => $this->module->l('Disable auto erasing', 'AdminProcessLoggerController'),
                         'hint'         => $this->module->l('If disabled, logs will be automatically erased after the delay', 'AdminProcessLoggerController'),
                         'validation'   => 'isBool',
                         'cast'         => 'intval',
                         'type'         => 'bool',
                     ),
-                    'BRAINTREE_EXTLOGS_ERASING_DAYSMAX' => array(
+                    'BRAINTREEOFFICIAL_EXTLOGS_ERASING_DAYSMAX' => array(
                         'title'        => $this->module->l('Auto erasing delay (in days)', 'AdminProcessLoggerController'),
                         'hint'         => $this->module->l('Choose the number of days you want to keep logs in database', 'AdminProcessLoggerController'),
                         'validation'   => 'isInt',
@@ -172,11 +169,11 @@ class AdminProcessLoggerController extends \ModuleAdminController
 
     public function getDateTransaction($date_transaction, $tr)
     {
-        if ((int)$tr['id_braintree_processlogger'] == false) {
+        if ((int)$tr['id_braintreeofficial_processlogger'] == false) {
             return '';
         }
         $collectionLogs = new \PrestaShopCollection($this->className);
-        $collectionLogs->where('id_braintree_processlogger', '=', (int)$tr['id_braintree_processlogger']);
+        $collectionLogs->where('id_braintreeofficial_processlogger', '=', (int)$tr['id_braintreeofficial_processlogger']);
         $log = $collectionLogs->getFirst();
         if (\Validate::isLoadedObject($log) == false) {
             return '';
@@ -186,11 +183,11 @@ class AdminProcessLoggerController extends \ModuleAdminController
 
     public function getLinkToTransaction($id_transaction, $tr)
     {
-        if ($id_transaction == false || (int)$tr['id_braintree_processlogger'] == false) {
+        if ($id_transaction == false || (int)$tr['id_braintreeofficial_processlogger'] == false) {
             return '';
         }
         $collectionLogs = new \PrestaShopCollection($this->className);
-        $collectionLogs->where('id_braintree_processlogger', '=', (int)$tr['id_braintree_processlogger']);
+        $collectionLogs->where('id_braintreeofficial_processlogger', '=', (int)$tr['id_braintreeofficial_processlogger']);
         $log = $collectionLogs->getFirst();
         if (\Validate::isLoadedObject($log) == false) {
             return '';
@@ -308,11 +305,11 @@ class AdminProcessLoggerController extends \ModuleAdminController
     {
         $shops = \Shop::getShops();
         foreach ($shops as $shop) {
-            $extlogs_erasing_daysmax = \Tools::getValue('BRAINTREE_EXTLOGS_ERASING_DAYSMAX');
-            $extlogs_erasing_disabled = \Tools::getValue('BRAINTREE_EXTLOGS_ERASING_DISABLED');
+            $extlogs_erasing_daysmax = \Tools::getValue('BRAINTREEOFFICIAL_EXTLOGS_ERASING_DAYSMAX');
+            $extlogs_erasing_disabled = \Tools::getValue('BRAINTREEOFFICIAL_EXTLOGS_ERASING_DISABLED');
             
             Configuration::updateValue(
-                'BRAINTREE_EXTLOGS_ERASING_DISABLED',
+                'BRAINTREEOFFICIAL_EXTLOGS_ERASING_DISABLED',
                 ($extlogs_erasing_disabled ? true : false),
                 false,
                 null,
@@ -321,21 +318,16 @@ class AdminProcessLoggerController extends \ModuleAdminController
 
             if (!is_numeric($extlogs_erasing_daysmax)) {
                 $this->errors[] = $this->module->l(
-                    'You must specify a valid \"Auto erasing delay (in days)\" number.',
-                    'AdminProcessLoggerController'
-                );
+                    'You must specify a valid \"Auto erasing delay (in days)\" number.', 'AdminProcessLoggerController');
             } else {
                 \Configuration::updateValue(
-                    'BRAINTREE_EXTLOGS_ERASING_DAYSMAX',
+                    'BRAINTREEOFFICIAL_EXTLOGS_ERASING_DAYSMAX',
                     $extlogs_erasing_daysmax,
                     false,
                     null,
                     $shop['id_shop']
                 );
-                $this->confirmations[] = $this->module->l(
-                    'Successful update.',
-                    'AdminProcessLoggerController'
-                );
+                $this->confirmations[] = $this->module->l('Successful update.', 'AdminProcessLoggerController');
             }
         }
 
