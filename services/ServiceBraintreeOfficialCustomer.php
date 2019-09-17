@@ -24,23 +24,23 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\services;
+namespace BraintreeOfficialAddons\services;
 
 use Braintree\Exception;
-use BraintreeAddons\classes\BraintreeCustomer;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
+use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
-class ServiceBraintreeCustomer
+class ServiceBraintreeOfficialCustomer
 {
     /**
      * Load customer object by ID
      * @param integer $id_customer PrestaShop Customer ID
      * @param bool $sandbox mode of customer
-     * @return object BraintreeCustomer
+     * @return object BraintreeOfficialCustomer
      */
     public function loadCustomerByMethod($id_customer, $sandbox)
     {
-        $collection = new \PrestaShopCollection(BraintreeCustomer::class);
+        $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
         $collection->where('id_customer', '=', (int)$id_customer);
         $collection->where('sandbox', '=', (int)$sandbox);
         return $collection->getFirst();
@@ -63,7 +63,7 @@ class ServiceBraintreeCustomer
             ProcessLoggerHandler::openLogger();
             /* @var $paypalCustomer \PaypalCustomer*/
             foreach ($collection->getResults() as $paypalCustomer) {
-                $braintreeCustomer = new BraintreeCustomer();
+                $braintreeCustomer = new BraintreeOfficialCustomer();
                 $braintreeCustomer->id = $paypalCustomer->id;
                 $braintreeCustomer->reference = $paypalCustomer->reference;
                 $braintreeCustomer->id_customer = $paypalCustomer->id_customer;
@@ -73,7 +73,7 @@ class ServiceBraintreeCustomer
                 try {
                     $braintreeCustomer->add();
                 } catch (\Exception $e) {
-                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
+                    \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal log. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';

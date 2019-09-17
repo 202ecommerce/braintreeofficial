@@ -24,36 +24,36 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\services;
+namespace BraintreeOfficialAddons\services;
 
-use BraintreeAddons\classes\BraintreeCapture;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeOfficialAddons\classes\BraintreeOfficialCapture;
+use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
-class ServiceBraintreeCapture
+class ServiceBraintreeOfficialCapture
 {
     /**
-     * Load BraintreeCapture object by BraintreeOrder ID
-     * @param integer $id_braintree_order BraintreeOrder ID
-     * @return BraintreeCapture
+     * Load BraintreeOfficialCapture object by BraintreeOfficialOrder ID
+     * @param integer $id_braintreeofficial_order BraintreeOfficialOrder ID
+     * @return BraintreeOfficialCapture
      */
     public function loadByOrderBraintreeId($id_braintree_order)
     {
-        $collection = new \PrestaShopCollection(BraintreeCapture::class);
-        $collection->where('id_braintree_order', '=', (int)$id_braintree_order);
+        $collection = new \PrestaShopCollection(BraintreeOfficialCapture::class);
+        $collection->where('id_braintreeofficial_order', '=', (int)$id_braintree_order);
         return $collection->getFirst();
     }
 
     /**
-     * Update PaypalCapture
+     * Update BraintreeOfficialCapture
      * @param string $transaction_id New transaction ID that correspond to capture
      * @param float $amount Captured amount
      * @param string $status new payment status
-     * @param integer $id_braintree_order BraintreeOrder ID
+     * @param integer $id_braintreeofficial_order BraintreeOfficialOrder ID
      */
     public function updateCapture($transaction_id, $amount, $status, $id_braintree_order)
     {
-        /* @var $braintreeCapture BraintreeCapture */
+        /* @var $braintreeCapture BraintreeOfficialCapture */
         $braintreeCapture = $this->loadByOrderBraintreeId($id_braintree_order);
         if (\Validate::isLoadedObject($braintreeCapture) == false) {
             return false;
@@ -65,16 +65,16 @@ class ServiceBraintreeCapture
     }
 
     /**
-     * Get all datas from BraintreeOrder and BraintreeCapture
+     * Get all datas from BraintreeOfficialOrder and BraintreeOfficialCapture
      * @param integer $id_order PrestaShop order ID
-     * @return array BraintreeCapture
+     * @return array BraintreeOfficialCapture
      */
     public function getByOrderId($id_order)
     {
         $sql = new \DbQuery();
         $sql->select('*');
-        $sql->from('braintree_order', 'bo');
-        $sql->innerJoin('braintree_capture', 'bc', 'bo.`id_braintree_order` = bc.`id_braintree_order`');
+        $sql->from('braintreeofficial_order', 'bo');
+        $sql->innerJoin('braintreeofficial_capture', 'bc', 'bo.`id_braintreeofficial_order` = bc.`id_braintreeofficial_order`');
         $sql->where('bo.id_order = '.(int)$id_order);
         return \Db::getInstance()->getRow($sql);
     }
@@ -102,11 +102,11 @@ class ServiceBraintreeCapture
             ProcessLoggerHandler::openLogger();
             /* @var $paypalCapture \PaypalCapture*/
             foreach ($collection->getResults() as $paypalCapture) {
-                $braintreeCapture = new BraintreeCapture();
+                $braintreeCapture = new BraintreeOfficialCapture();
                 $braintreeCapture->id = $paypalCapture->id;
                 $braintreeCapture->id_capture = $paypalCapture->id_capture;
                 $braintreeCapture->capture_amount = $paypalCapture->capture_amount;
-                $braintreeCapture->id_braintree_order = $paypalCapture->id_paypal_order;
+                $braintreeCapture->id_braintreeofficial_order = $paypalCapture->id_paypal_order;
                 $braintreeCapture->result = $paypalCapture->result;
                 $braintreeCapture->date_add = $paypalCapture->date_add;
                 $braintreeCapture->date_upd = $paypalCapture->date_upd;
@@ -114,7 +114,7 @@ class ServiceBraintreeCapture
                 try {
                     $braintreeCapture->add();
                 } catch (\Exception $e) {
-                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
+                    \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal capture. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';
