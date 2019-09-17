@@ -23,12 +23,12 @@
  * @version   develop
  */
 
-require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
-use BraintreeAddons\classes\AdminBraintreeController;
+use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class AdminBraintreeHelpController extends AdminBraintreeController
+class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialController
 {
     /**
      * @throws Exception

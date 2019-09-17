@@ -27,7 +27,7 @@
 /**
  * Manage errors.
  */
-class BraintreeErrorModuleFrontController extends ModuleFrontController
+class BraintreeOfficialErrorModuleFrontController extends ModuleFrontController
 {
     /**
      * @see ModuleFrontController::init()
@@ -54,6 +54,6 @@ class BraintreeErrorModuleFrontController extends ModuleFrontController
             'show_retry' => (Context::getContext()->cart->nbProducts() > 0 && !$this->values['no_retry']) ? true : false,
         ));
 
-        $this->setTemplate('module:braintree/views/templates/front/payment_error.tpl');
+        $this->setTemplate('module:braintreeofficial/views/templates/front/payment_error.tpl');
     }
 }

@@ -25,9 +25,9 @@
  */
 
 /**
- * Class BraintreeTlscurltestserverModuleFrontController. Check TLS
+ * Class BraintreeOfficialTlscurltestserverModuleFrontController. Check TLS
  */
-class BraintreeTlscurltestserverModuleFrontController extends ModuleFrontController
+class BraintreeOfficialTlscurltestserverModuleFrontController extends ModuleFrontController
 {
     public function initContent()
     {

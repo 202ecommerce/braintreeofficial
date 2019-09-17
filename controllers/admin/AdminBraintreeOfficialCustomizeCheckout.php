@@ -23,11 +23,11 @@
  * @version   develop
  */
 
-require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
-use BraintreeAddons\classes\AdminBraintreeController;
+use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 
-class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
+class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOfficialController
 {
     public function initContent()
     {
@@ -49,17 +49,17 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 array(
                     'type' => 'switch',
                     'label' => $this->l('Accept PayPal Payments'),
-                    'name' => 'braintree_activate_paypal',
+                    'name' => 'braintreeofficial_activate_paypal',
                     'desc' => $this->l(''),
                     'is_bool' => true,
                     'values' => array(
                         array(
-                            'id' => 'braintree_activate_paypal_on',
+                            'id' => 'braintreeofficial_activate_paypal_on',
                             'value' => 1,
                             'label' => $this->l('Enabled'),
                         ),
                         array(
-                            'id' => 'braintree_activate_paypal_off',
+                            'id' => 'braintreeofficial_activate_paypal_off',
                             'value' => 0,
                             'label' => $this->l('Disabled'),
                         )
@@ -68,17 +68,17 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 array(
                     'type' => 'switch',
                     'label' => $this->l('Show PayPal benefits to your customers'),
-                    'name' => 'braintree_show_paypal_benefits',
+                    'name' => 'braintreeofficial_show_paypal_benefits',
                     'hint' => $this->l('You can increase your conversion rate by presenting PayPal benefits to your customers on payment methods selection page.'),
                     'is_bool' => true,
                     'values' => array(
                         array(
-                            'id' => 'braintree_show_paypal_benefits_on',
+                            'id' => 'braintreeofficial_show_paypal_benefits_on',
                             'value' => 1,
                             'label' => $this->l('Enabled'),
                         ),
                         array(
-                            'id' => 'braintree_show_paypal_benefits_off',
+                            'id' => 'braintreeofficial_show_paypal_benefits_off',
                             'value' => 0,
                             'label' => $this->l('Disabled'),
                         )
@@ -87,17 +87,17 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 array(
                     'type' => 'switch',
                     'label' => $this->l('Enable Vault'),
-                    'name' => 'braintree_vaulting',
+                    'name' => 'braintreeofficial_vaulting',
                     'is_bool' => true,
                     'hint' => $this->l('The Vault is used to process payments so your customers don\'t need to re-enter their information each time they make a purchase from you.'),
                     'values' => array(
                         array(
-                            'id' => 'braintree_vaulting_on',
+                            'id' => 'braintreeofficial_vaulting_on',
                             'value' => 1,
                             'label' => $this->l('Enabled'),
                         ),
                         array(
-                            'id' => 'braintree_vaulting_off',
+                            'id' => 'braintreeofficial_vaulting_off',
                             'value' => 0,
                             'label' => $this->l('Disabled'),
                         )
@@ -106,16 +106,16 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 array(
                     'type' => 'switch',
                     'label' => $this->l('Activate 3D Secure for Braintree'),
-                    'name' => 'braintree_3DSecure',
+                    'name' => 'braintreeofficial_3DSecure',
                     'is_bool' => true,
                     'values' => array(
                         array(
-                            'id' => 'braintree_3DSecure_on',
+                            'id' => 'braintreeofficial_3DSecure_on',
                             'value' => 1,
                             'label' => $this->l('Enabled'),
                         ),
                         array(
-                            'id' => 'braintree_3DSecure_off',
+                            'id' => 'braintreeofficial_3DSecure_off',
                             'value' => 0,
                             'label' => $this->l('Disabled'),
                         )
@@ -124,7 +124,7 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
                 array(
                     'type' => 'text',
                     'label' => $this->l('Amount for 3DS in ') . Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'))['iso_code'],
-                    'name' => 'braintree_3DSecure_amount',
+                    'name' => 'braintreeofficial_3DSecure_amount',
                     'hint' => $this->l('Activate 3D Secure only for orders which total is bigger that this amount in your context currency'),
                 ),
             ),
@@ -136,11 +136,11 @@ class AdminBraintreeCustomizeCheckoutController extends AdminBraintreeController
         );
 
         $values = array(
-            'braintree_activate_paypal' => (int)Configuration::get('BRAINTREE_ACTIVATE_PAYPAL'),
-            'braintree_vaulting' => (int)Configuration::get('BRAINTREE_VAULTING'),
-            'braintree_3DSecure' => (int)Configuration::get('BRAINTREE_3DSECURE'),
-            'braintree_3DSecure_amount' => (float)Configuration::get('BRAINTREE_3DSECURE_AMOUNT'),
-            'braintree_show_paypal_benefits' => (int)Configuration::get('BRAINTREE_SHOW_PAYPAL_BENEFITS')
+            'braintreeofficial_activate_paypal' => (int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL'),
+            'braintreeofficial_vaulting' => (int)Configuration::get('BRAINTREEOFFICIAL_VAULTING'),
+            'braintreeofficial_3DSecure' => (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE'),
+            'braintreeofficial_3DSecure_amount' => (float)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT'),
+            'braintreeofficial_show_paypal_benefits' => (int)Configuration::get('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }

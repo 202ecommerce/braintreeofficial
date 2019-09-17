@@ -23,17 +23,17 @@
  * @version   develop
  */
 
-require_once _PS_MODULE_DIR_ . 'braintree/controllers/admin/AdminBraintreeSetup.php';
-use BraintreeAddons\classes\AbstractMethodBraintree;
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/admin/AdminBraintreeOfficialSetup.php';
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use BraintreeAddons\services\ServiceBraintreeCustomer;
-use BraintreeAddons\services\ServiceBraintreeVaulting;
-use BraintreeAddons\services\ServiceBraintreeOrder;
-use BraintreeAddons\services\ServiceBraintreeCapture;
-use BraintreeAddons\services\ServiceBraintreeLog;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
+use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
-class AdminBraintreeMigrationController extends AdminBraintreeSetupController
+class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSetupController
 {
     public function initContent()
     {
@@ -65,12 +65,12 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
 
     protected function doMigration()
     {
-        Configuration::updateValue('BRAINTREE_MIGRATION_DONE', 1);
-        $serviceBraintreeCustomer = new ServiceBraintreeCustomer();
-        $serviceBraintreeVaulting = new ServiceBraintreeVaulting();
-        $serviceBraintreeOrder = new ServiceBraintreeOrder();
-        $serviceBraintreeCapture = new ServiceBraintreeCapture();
-        $serviceBraintreeLog = new ServiceBraintreeLog();
+        Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1);
+        $serviceBraintreeCustomer = new ServiceBraintreeOfficialCustomer();
+        $serviceBraintreeVaulting = new ServiceBraintreeOfficialVaulting();
+        $serviceBraintreeOrder = new ServiceBraintreeOfficialOrder();
+        $serviceBraintreeCapture = new ServiceBraintreeOfficialCapture();
+        $serviceBraintreeLog = new ServiceBraintreeOfficialLog();
         $tablesForBackup = array(
             'paypal_order',
             'paypal_customer',
@@ -87,15 +87,15 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
         $serviceBraintreeLog->doMigration();
         $serviceBraintreeOrder->deleteBtOrderFromPayPal();
 
-        Configuration::updateValue('BRAINTREE_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID'));
-        Configuration::updateValue('BRAINTREE_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID'));
-        Configuration::updateValue('BRAINTREE_API_INTENT', Configuration::get('PAYPAL_API_INTENT'));
-        Configuration::updateValue('BRAINTREE_SANDBOX', Configuration::get('PAYPAL_SANDBOX'));
-        Configuration::updateValue('BRAINTREE_ACTIVATE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE'));
-        Configuration::updateValue('BRAINTREE_SHOW_PAYPAL_BENEFITS', Configuration::get('PAYPAL_API_ADVANTAGES'));
-        Configuration::updateValue('BRAINTREE_VAULTING', Configuration::get('PAYPAL_VAULTING'));
-        Configuration::updateValue('BRAINTREE_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE'));
-        Configuration::updateValue('BRAINTREE_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_API_INTENT', Configuration::get('PAYPAL_API_INTENT'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', Configuration::get('PAYPAL_SANDBOX'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS', Configuration::get('PAYPAL_API_ADVANTAGES'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_VAULTING', Configuration::get('PAYPAL_VAULTING'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE'));
+        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT'));
 
         $merchant_account_id_currency_sandbox = Tools::jsonDecode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID'));
         $merchant_account_id_currency_live = Tools::jsonDecode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID'));
@@ -127,7 +127,7 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
                 DB::getInstance()->execute(sprintf($queryCreatingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
                 DB::getInstance()->execute(sprintf($queryFillingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
             } catch (Exception $e) {
-                \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
+                \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                 $message = 'Error while do backup of the tables. ';
                 $message .= 'File: ' . $e->getFile() . '. ';
                 $message .= 'Line: ' . $e->getLine() . '. ';
@@ -164,8 +164,8 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
     public function displayAjaxSkipMigration()
     {
         $content = Tools::jsonEncode(array(
-            'status' => Configuration::updateValue('BRAINTREE_MIGRATION_SKIP', 1),
-            'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeSetup', true),
+            'status' => Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_SKIP', 1),
+            'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeOfficialSetup', true),
         ));
         $paypalModule = Module::getInstanceByName('paypal');
         $paypalModule->disable();
@@ -176,9 +176,9 @@ class AdminBraintreeMigrationController extends AdminBraintreeSetupController
 
     public function displayAjaxSaveAccount()
     {
-        /* @var $method MethodBraintree*/
+        /* @var $method MethodBraintreeOfficial*/
         $this->saveForm();
-        $method = AbstractMethodBraintree::load('Braintree');
+        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $isConfigured = $method->isConfigured();
 
         if ($isConfigured) {

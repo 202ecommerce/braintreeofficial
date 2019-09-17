@@ -24,12 +24,12 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use BraintreePPBTlib\CommonAbstarctModuleFrontController;
+use BraintreeOfficialPPBTlib\CommonAbstarctModuleFrontController;
 
 /**
- * Class PaypalAbstarctModuleFrontController
+ * Class BraintreeOfficialAbstarctModuleFrontController
  */
-abstract class BraintreeAbstarctModuleFrontController extends CommonAbstarctModuleFrontController
+abstract class BraintreeOfficialAbstarctModuleFrontController extends CommonAbstarctModuleFrontController
 {
 
 }

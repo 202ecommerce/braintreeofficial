@@ -23,20 +23,28 @@
  * @version   develop
  */
 
-require_once _PS_MODULE_DIR_ . 'braintree/controllers/admin/AdminBraintreeProcessLogger.php';
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
-class AdminBraintreeLogsController extends AdminBraintreeProcessLoggerController
+use BraintreeOfficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
+
+class AdminBraintreeOfficialProcessLoggerController extends AdminProcessLoggerController
 {
-    public function initContent()
+    public function __construct()
     {
-        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
-        $this->content .= parent::initContent();
-        $this->context->smarty->assign('content', $this->content);
-    }
+        parent::__construct();
+        $this->className = 'BraintreeOfficialAddons\classes\BraintreeOfficialLog';
 
-    public function setMedia($isNewTheme = false)
-    {
-        parent::setMedia($isNewTheme);
-        $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/bt_admin.css');
+        if (isset($this->fields_list['id_transaction'])) {
+            $this->fields_list['id_transaction'] = array(
+                'title'    => $this->module->l('Braintree Transaction ID', 'AdminProcessLoggerController'),
+                'callback' => 'getLinkToTransaction',
+            );
+        }
+
+        if (isset($this->fields_list['log'])) {
+            $this->fields_list['log'] = array(
+                'title' => $this->module->l('Message (Braintree API response)', 'AdminProcessLoggerController'),
+            );
+        }
     }
 }
