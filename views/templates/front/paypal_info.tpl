@@ -28,7 +28,7 @@
 	<div class="row">
 		<div class="col-md-6 item bt__mb-3">
 			{include file='module:braintreeofficial/views/templates/front/_partials/verified_user.tpl'}
-			<div class="header bt__pt-1">{l s="Safer and more protected" mod='braintreeofficial'}</div>
+			<div class="header bt__pt-1">{l s='Safer and more protected' mod='braintreeofficial'}</div>
 			<div class="desc bt__pt-1">{l s="Buyer protection covers account and eligible purchases." mod='braintreeofficial'}</div>
 		</div>
 		<div class="col-md-6 item bt__mb-3">

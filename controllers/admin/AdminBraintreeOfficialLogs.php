@@ -23,9 +23,9 @@
  * @version   develop
  */
 
-require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/admin/AdminBraintreeOfficialProcessLogger.php';
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/admin/AdminBraintreeofficialProcessLogger.php';
 
-class AdminBraintreeOfficialLogsController extends AdminBraintreeOfficialProcessLoggerController
+class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcessLoggerController
 {
     public function initContent()
     {
