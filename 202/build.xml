@@ -3,7 +3,7 @@
     <property environment="env" />
     <property name="build-dir" value="${basedir}/202/build" />
     <property name="src-dir" value="${basedir}" />
-    <property name="TARGETNAME" value="braintree" />
+    <property name="TARGETNAME" value="braintreeofficial" />
     <property name="TARGETBRANCH" value="${env.GIT_BRANCH}" />
     <property name="TARGETVERSION" value="1.1.0" />
     <property name="PHPVERSION" value="5.6" />
