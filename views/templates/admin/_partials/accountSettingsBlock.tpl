@@ -37,10 +37,10 @@
 			</span>
 
 			<strong>
-				{if isset($sandboxEnvironment) && $sandboxEnvironment && isset($braintree_merchant_id_sandbox)}
-					{$braintree_merchant_id_sandbox|escape:'htmlall':'utf-8'}
-				{elseif isset($braintree_merchant_id_live)}
-					{$braintree_merchant_id_live|escape:'htmlall':'utf-8'}
+				{if isset($sandboxEnvironment) && $sandboxEnvironment && isset($braintreeofficial_merchant_id_sandbox)}
+					{$braintreeofficial_merchant_id_sandbox|escape:'htmlall':'utf-8'}
+				{elseif isset($braintreeofficial_merchant_id_live)}
+					{$braintreeofficial_merchant_id_live|escape:'htmlall':'utf-8'}
 				{/if}
 			</strong>
 
