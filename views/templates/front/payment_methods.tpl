@@ -32,7 +32,7 @@
 {block name='page_content'}
     <!-- Page content -->
     {if $payment_methods}
-        <form action="{$link->getModuleLink('braintree', 'account', ['process' => 'save'])}" method="post">
+        <form action="{$link->getModuleLink('braintreeofficial', 'account', ['process' => 'save'])}" method="post">
         {foreach from=$payment_methods key=method_key  item=payment_method}
             {if $method_key == 'card-braintree'}<h3>{l s='Your cards' mod='braintreeofficial'}</h3>{/if}
             {if $method_key == 'paypal-braintree'}<h3>{l s='Your paypal accounts' mod='braintreeofficial'}</h3>{/if}
@@ -40,11 +40,11 @@
                 <p class="method">
                     {if $method.name}<b>{$method.name|escape:'htmlall':'UTF-8'} : </b>{/if}
                     {$method.info|escape:'htmlall':'UTF-8'}
-                    <a href="{$link->getModuleLink('braintree', 'account', ['process' => 'delete', 'id_method' => {$method.id_braintree_vaulting|escape:'htmlall':'UTF-8'}])}"><i class="material-icons">delete</i></a>
+                    <a href="{$link->getModuleLink('braintreeofficial', 'account', ['process' => 'delete', 'id_method' => {$method.id_braintreeofficial_vaulting|escape:'htmlall':'UTF-8'}])}"><i class="material-icons">delete</i></a>
                     <br />
                     {if !$method.name}{l s='Add name' mod='braintreeofficial'}{else}{l s='Edit name' mod='braintreeofficial'}{/if}
-                    <span class="edit_name" data-method_id="{$method.id_braintree_vaulting|escape:'htmlall':'UTF-8'}"><i class="material-icons">mode_edit</i></span>
-                    <input type="text" value="{$method.name|escape:'htmlall':'UTF-8'}" name="name_{$method.id_braintree_vaulting|escape:'htmlall':'UTF-8'}" class="form-control" style="display: none"/>
+                    <span class="edit_name" data-method_id="{$method.id_braintreeofficial_vaulting|escape:'htmlall':'UTF-8'}"><i class="material-icons">mode_edit</i></span>
+                    <input type="text" value="{$method.name|escape:'htmlall':'UTF-8'}" name="name_{$method.id_braintreeofficial_vaulting|escape:'htmlall':'UTF-8'}" class="form-control" style="display: none"/>
                 </p>
             {/foreach}
         {/foreach}
