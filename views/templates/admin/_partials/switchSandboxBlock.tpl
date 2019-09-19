@@ -27,7 +27,7 @@
 	<p class="h3">
 		{l s='Environment' mod='braintreeofficial'}
 		{if isset($sandbox) && $sandbox}
-			<b>{l s='Sandbox' mod='braintreeofficial'}</b>
+			<b>Sandbox</b>
 		{else}
 			<b>{l s='Production' mod='braintreeofficial'}</b>
 		{/if}
