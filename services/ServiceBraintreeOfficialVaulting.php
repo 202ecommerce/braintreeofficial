@@ -104,7 +104,7 @@ class ServiceBraintreeOfficialVaulting
                 $braintreeVaulting = new BraintreeOfficialVaulting();
                 $braintreeVaulting->id = $paypalVaulting->id;
                 $braintreeVaulting->token = $paypalVaulting->token;
-                $braintreeVaulting->id_braintree_customer = $paypalVaulting->id_paypal_customer;
+                $braintreeVaulting->id_braintreeofficial_customer = $paypalVaulting->id_paypal_customer;
                 $braintreeVaulting->payment_tool = $paypalVaulting->payment_tool;
                 $braintreeVaulting->name = $paypalVaulting->name;
                 $braintreeVaulting->info = $paypalVaulting->info;
