@@ -28,43 +28,34 @@
        <div class="h3 text-center">{l s='Hello!' mod='braintreeofficial'}</div>
        <div>{l s='Welcome to the new Braintree module. ' mod='braintreeofficial'}</div>
        <div class="mb-20">
-           {l s='Starting July 2019, Braintree payment solution is separated from the PayPal module.
-You are currently using Braintree via the PayPal module. You can quickly migrate your Braintree configurations by
-clicking on the "Import Settings" button below. We can migrate all your current configurations but you will need to add
-your Public Key and Private Key for finishing your account setup.' mod='braintreeofficial'}
+           {l s='Starting July 2019, Braintree payment solution is separated from the PayPal module. You are currently using Braintree via the PayPal module. You can quickly migrate your Braintree configurations by clicking on the "Import Settings" button below. We can migrate all your current configurations but you will need to add your Public Key and Private Key for finishing your account setup.' mod='braintreeofficial'}
        </div>
        <div>{l s='Please check our FAQ before migration :' mod='braintreeofficial'}</div>
        <ul>
            <li>
                <div class="font-italic">{l s='What should I do before migration?' mod='braintreeofficial'}</div>
                <div>
-                   {l s='We highly recommend enabling the maintenance mode before starting the migration process
-                   (the import of the Braintree settings can not take more than 10 minutes).' mod='braintreeofficial'}
+                   {l s='We highly recommend enabling the maintenance mode before starting the migration process (the import of the Braintree settings can not take more than 10 minutes).' mod='braintreeofficial'}
                </div>
            </li>
 
            <li>
                <div class="font-italic">{l s='What is happening with previously passed orders?' mod='braintreeofficial'}</div>
                <div>
-                   {l s='We will migrate all data, so every order passed via Braintree payment solution in the PayPal
-                   module will be connected to the new Braintree module. There are no additional actions to do from your
-                    side after migration. You can simply manage your orders as usual.' mod='braintreeofficial'}
+                   {l s='We will migrate all data, so every order passed via Braintree payment solution in the PayPal module will be connected to the new Braintree module. There are no additional actions to do from your side after migration. You can simply manage your orders as usual.' mod='braintreeofficial'}
                </div>
            </li>
 
            <li>
                <div class="font-italic">{l s='What should I do with the PayPal module?' mod='braintreeofficial'}</div>
                <div>
-                   {l s='PayPal module will be automatically disabled after migration. Please uninstall the Paypal
-                   module once you finished the verifications and you get some new orders passed via new Braintree
-                   module.' mod='braintreeofficial'}
+                   {l s='PayPal module will be automatically disabled after migration. Please uninstall the Paypal module once you finished the verifications and you get some new orders passed via new Braintree module.' mod='braintreeofficial'}
                </div>
            </li>
        </ul>
 
        <div class="mb-20">
-           {l s='If you do not want to migrate your Braintree settings automatically please click on
-           the button "No, thank you". Pay attention that PayPal module will be disabled.' mod='braintreeofficial'}
+           {l s='If you do not want to migrate your Braintree settings automatically please click on the button "No, thank you". Pay attention that PayPal module will be disabled.' mod='braintreeofficial'}
        </div>
 
        <div class="flex space-between">
