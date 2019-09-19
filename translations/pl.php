@@ -143,6 +143,7 @@ $_MODULE['<{braintreeofficial}prestashop>formaccount_229a7ec501323b94db7ff3157a7
 $_MODULE['<{braintreeofficial}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] = 'Centrum testowe';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'Aby odzyska_ testowe klucze API, powtórz te czynno_ci, loguj_c si_ do [a @href1@]konta testowego[/a] lub tworz_c [a @href2 @]nowe konto[/a]';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Uaktywnij modu_ Braintree, aby uzyska_ lepsz_ konwersj_ na urz_dzeniach mobilnych i wszystkich platformach w ponad 45 krajach';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Uaktywnij w 4 prostych krokach';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'Uaktywnij w trzech prostych krokach';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Powi__ istniej_ce konto Braintree lub utwórz nowe';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'W__cz funkcj_ p_atno_ci kart_ kredytow_ lub za pomoc_ portfela PayPal';

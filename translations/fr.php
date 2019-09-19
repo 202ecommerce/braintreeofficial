@@ -132,6 +132,7 @@ $_MODULE['<{braintreeofficial}prestashop>headerlogo_7837b4f9a9d71dad679da95a4b6a
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_5d1d0421b5327a04398f44c8e21689c0'] = 'Il est donc recommandé d\'activer le 3D Secure afin d\'éviter le refus des banques et l\'impact sur votre activité. (Allez dans \"Customize Experience Checkout\")';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_f5931ff1a89c64d01f26943e3eb09ce2'] = 'Plus d\'informations dans l\'article de notre blog [b]pour connaitre les dernières mises à jour :[/b]';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activer le module Braintree pour augmenter le taux de conversion sur mobile et sur toutes les plateformes dans plus de 45 pays';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Activation en 4 étapes simples';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_c3d2b0bfba763295a377b71aae0841f1'] = 'Activation en trois étapes simples';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Connectez-vous à votre compte Braintree existant ou ouvrez-en un nouveau';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Activez la carte bancaire et/ou le portefeuille PayPal en tant que modes de paiement';

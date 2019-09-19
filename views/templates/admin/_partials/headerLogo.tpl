@@ -49,7 +49,7 @@
 			{l s='Activate the Braintree module to start converting better on mobile and all platforms in 45+ countries' mod='braintreeofficial'}.
 		</p>
 		{if $page_header_toolbar_title !== 'Help' && $page_header_toolbar_title !== 'Logs'}
-			<p>{l s='Activate in three easy steps' mod='braintreeofficial'}: </p>
+			<p>{l s='Activate in 4 easy steps' mod='braintreeofficial'}: </p>
 			<p>
 				<ul class="list-unstyled">
 					<li>
