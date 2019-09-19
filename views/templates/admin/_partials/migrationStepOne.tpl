@@ -77,7 +77,7 @@
             <div class="h2 text-center">{l s='Please wait... We are migrating your Braintree settings' mod='braintreeofficial'}</div>
             <div class="h2 text-center">{l s='Please keep this page open.' mod='braintreeofficial'}</div>
             <div class="text-center">
-                <img src="/modules/braintree/views/img/loading.gif" style="width: 100px">
+                <img src="/modules/braintreeofficial/views/img/loading.gif" style="width: 100px">
             </div>
             <div class="text-center">
 							{{l s='The migration will take about 5 minutes. If it is not finished after 10 minutes please contact [a @href1@]our support team.[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {'https://addons.prestashop.com/fr/contactez-nous?id_product=1748'}, '@target@' => {'target="blank"'}]}
