@@ -1,0 +1,9 @@
+
+.idea/
+vendor/*
+!vendor/ppbtlib
+config*.xml
+node_modules/
+package-lock.json
+views/js/*
+views/css/*

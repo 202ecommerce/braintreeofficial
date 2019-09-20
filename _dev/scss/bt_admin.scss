@@ -1,0 +1,87 @@
+// Utils
+@import "abstract/variables";
+
+// Helpers
+@import "helpers/form";
+@import "helpers/spacing";
+@import "helpers/borders";
+@import "helpers/typography";
+@import "helpers/display";
+
+.flex {
+  display: flex !important;
+}
+
+.stretchHeightForm form {
+  height: 100%;
+}
+
+.stretchHeightForm .panel {
+  height: 100%;
+}
+
+.stretchHeightForm {
+  padding-bottom: 20px;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.direction-column {
+  flex-direction: column;
+}
+
+.font-italic {
+  font-style: italic;
+}
+
+#content .panel.migration-page {
+  .form-account {
+    display:none;
+  }
+  .form-account.visible {
+    display: block;
+  }
+
+  .mb-20 {
+    margin-bottom: 20px;
+  }
+
+  li {
+    margin-bottom: 20px;
+  }
+
+  padding: 60px;
+}
+
+.bt-settings-link-on {
+  background: $default !important;
+  color: #000 !important;
+
+  .panel, .panel-footer {
+    background: $default !important;
+  }
+}
+
+.bt-settings-tab-on {
+  border-bottom: 3px solid #3ed2f0;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+

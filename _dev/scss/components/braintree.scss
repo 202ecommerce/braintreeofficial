@@ -1,0 +1,73 @@
+.bt {
+	
+	.braintree-hosted-fields-focused {
+		border-color: $success;
+		outline: 0;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 4px $success;
+	}
+
+	.braintree-hosted-fields-valid {
+		border-color: $success;
+
+		&::before {
+			content: '';
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			background: rgba(255, 255, 255, 0.3);
+			top: 0;
+			left: 0;
+			border-radius: 4px;
+		}
+	}
+
+	.braintree-hosted-fields-invalid {
+		border-color: $danger;
+		box-shadow: none;
+	}
+}
+
+.braintree-card #card-image {
+	position: absolute;
+	top: 0;
+	right: 1em;
+	width: 44px;
+	height: 28px;
+	margin-bottom: 1em;
+	background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/346994/card_sprite.png);
+	background-repeat: no-repeat;
+	background-position: -100px 0;
+	background-size: 86px 458px;
+
+	&.visa {
+		background-position: 0 -398px;
+	}
+
+	.master-card {
+		background-position: 0 -281px;
+	}
+
+	.american-express {
+		background-position: 0 -370px;
+	}
+
+	.american-express {
+		background-position: 0 -370px;
+	}
+
+	.discover {
+		background-position: 0 -163px;
+	}
+
+	.maestro {
+		background-position: 0 -251px;
+	}
+
+	.jcb {
+		background-position: 0 -221px;
+	}
+
+	.diners-club {
+		background-position: 0 -133px;
+	}
+}

@@ -1,0 +1,28 @@
+.bt {
+
+	&__text-danger {
+		color: $danger;
+	}
+
+}
+
+@each $color, $value in $colors {
+	.bt__text-#{$color} {
+		color: $value !important;
+	}
+}
+
+
+$aligns: (
+  "center",
+  "start",
+  "end",
+  "left",
+  "right",
+) !default;
+
+@each $align in $aligns {
+	.bt__text-#{$align} {
+		text-align: #{$align} !important;
+	}
+}

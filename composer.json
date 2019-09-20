@@ -1,0 +1,23 @@
+{
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "BraintreeofficialPPBTlib\\": "vendor/ppbtlib/src/",
+            "BraintreeOfficialAddons\\": ".",
+            "BraintreeOfficialTest\\": "202/tests/"
+        }
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "if [ ${PPBTCLASSLIB_DEV_PATH} ]; then php ${PPBTCLASSLIB_DEV_PATH}/PPBTlib/refresh.php .; fi"
+        ]
+    },
+    "require": {
+      "braintree/braintree_php": "~3.40"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5"
+    }
+}

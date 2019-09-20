@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        processIsolation="false"
+        stopOnFailure="false"
+        syntaxCheck="true"
+        bootstrap="./build/prestashop/admin-dev/bootstrap.php"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <env name="addon_name" value="braintree"/>
+    </php>
+
+    <filter>
+        <whitelist>
+            <directory>./build/prestashop/modules/braintreeofficial</directory>
+            <exclude>
+                <directory>./build/prestashop/modules/braintreeofficial/translations</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/views</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/css</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/js</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/img</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/override</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/upgrade</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/sdk</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/202</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/vendor</directory>
+                <directory>./build/prestashop/modules/braintreeofficial/_dev</directory>
+                <directory suffix="index.php">./build/prestashop/modules/braintreeofficial/</directory>
+                <directory suffix="index.php">./build/prestashop/modules/braintreeofficial/*/</directory>
+                <directory suffix="index.php">./build/prestashop/modules/braintreeofficial/*/*/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-php" target="./build/backend.php" title="Braintree" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-html" target="./build/coverage" title="Braintree" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+</phpunit>

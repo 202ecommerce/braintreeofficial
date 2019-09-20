@@ -1,0 +1,23 @@
+.bt {
+
+	&__flex {
+		display: flex !important;
+	}
+
+	&__align-items-center {
+		align-items: center !important;
+	}
+
+	&__hidden {
+		display: none;
+	}
+
+	&__d-table-cell {
+		display: table-cell;
+	}
+
+	&__position-relative {
+		position: relative;
+	}
+
+}
