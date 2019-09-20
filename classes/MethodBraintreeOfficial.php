@@ -834,13 +834,41 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         );
 
         $result = $this->gateway->customer()->create($data);
+
+        $profileKey = $this->getProfileKey();
+
         $customer = new BrainTreeOfficialCustomer();
         $customer->id_customer = $context->customer->id;
         $customer->reference = $result->customer->id;
-        $customer->sandbox = (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+        $customer->sandbox = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+        $customer->profile_key = pSQL($profileKey);
         $customer->save();
         return $customer;
     }
+
+    /**
+     * @param bool $sandbox
+     * @return string
+     */
+    public function getProfileKey($sandbox = null)
+    {
+        if ($sandbox === null) {
+            $sandbox = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+        }
+
+        if (($this->gateway instanceof Braintree\Gateway) == false) {
+            try {
+                $this->initConfig((int)$sandbox);
+            } catch (Exception $e) {
+                return '';
+            }
+        }
+
+        $profileKey = md5($this->gateway->config->getMerchantId());
+
+        return $profileKey;
+    }
+
     /**
      * Update customer info on BT
      * @param BraintreeOfficialCustomer $braintree_customer

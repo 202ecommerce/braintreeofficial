@@ -40,6 +40,9 @@ class BraintreeOfficialCustomer extends \ObjectModel
     /** @var bool mode of customer (sandbox or live) */
     public $sandbox;
 
+    /** @var string */
+    public $profile_key;
+
     /** @var string Object creation date */
     public $date_add;
 
@@ -57,6 +60,7 @@ class BraintreeOfficialCustomer extends \ObjectModel
             'id_customer' => array('type' => self::TYPE_INT),
             'reference' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
+            'profile_key' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
             'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
         )

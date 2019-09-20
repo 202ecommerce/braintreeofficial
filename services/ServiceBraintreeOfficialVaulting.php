@@ -28,6 +28,7 @@ namespace BraintreeOfficialAddons\services;
 
 use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 
 class ServiceBraintreeOfficialVaulting
 {
@@ -51,6 +52,9 @@ class ServiceBraintreeOfficialVaulting
      */
     public function getCustomerMethods($customer, $method)
     {
+        /** @var $methodBraintree \MethodBraintreeOfficial*/
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
         $db = \Db::getInstance();
         $query = new \DbQuery();
         $query->select('*');
@@ -59,6 +63,7 @@ class ServiceBraintreeOfficialVaulting
         $query->where('bc.id_customer = '.(int)$customer);
         $query->where('bv.payment_tool = "'.pSQL($method).'"');
         $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $query->where('bc.profile_key = "' . pSQL($methodBraintree->getProfileKey()) . '"');
         $result = $db->executeS($query);
         return $result;
     }
@@ -70,6 +75,9 @@ class ServiceBraintreeOfficialVaulting
      */
     public function getCustomerGroupedMethods($customer)
     {
+        /** @var $method \MethodBraintreeOfficial*/
+        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
         $db = \Db::getInstance();
         $methods = array();
         $query = new \DbQuery();
@@ -78,6 +86,7 @@ class ServiceBraintreeOfficialVaulting
         $query->leftJoin('braintreeofficial_customer', 'bc', 'bv.id_braintreeofficial_customer = bc.id_braintreeofficial_customer');
         $query->where('bc.id_customer = '.(int)$customer);
         $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $query->where('bc.profile_key = "' . pSQL($method->getProfileKey()) . '"');
         $results = $db->query($query);
         while ($result = $db->nextRow($results)) {
             $methods[$result['payment_tool']][] = $result;
