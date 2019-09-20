@@ -22,14 +22,14 @@
  * @license   Commercial license
  * @version   develop
  */
-namespace BraintreePPBTlib\Extensions\ProcessLogger;
+namespace BraintreeofficialPPBTlib\Extensions\ProcessLogger;
 
-use BraintreePPBTlib\Extensions\AbstractModuleExtension;
-use BraintreePPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
+use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 
 /**
- * @import 'braintree/views/templates/hook/tableLogs.tpl'
+ * @import 'braintreeofficial/views/templates/hook/tableLogs.tpl'
  */
 class ProcessLoggerExtension extends AbstractModuleExtension
 {
@@ -41,8 +41,8 @@ class ProcessLoggerExtension extends AbstractModuleExtension
                 'en' => 'Logger',
                 'fr' => 'Logger',
             ),
-            'class_name' => 'AdminBraintreeProcessLogger',
-            'parent_class_name' => 'AdminParentBraintreeConfiguration',
+            'class_name' => 'AdminBraintreeofficialProcessLogger',
+            'parent_class_name' => 'AdminParentBraintreeofficialConfiguration',
             'visible' => true,
         ),
     );
@@ -55,7 +55,7 @@ class ProcessLoggerExtension extends AbstractModuleExtension
     {
         /** @var $order \Order*/
         $order = $params['order'];
-        if ($order->module != 'braintree') {
+        if ($order->module != 'braintreeofficial') {
             return;
         }
         if (isset($params['class_logger']) && is_subclass_of($params['class_logger'], ProcessLoggerObjectModel::class)) {
@@ -66,17 +66,17 @@ class ProcessLoggerExtension extends AbstractModuleExtension
         $collectionLogs = new \PrestaShopCollection($class_logger);
         $collectionLogs->where('id_cart', '=', $params['order']->id_cart);
         \Context::getContext()->smarty->assign('logs', $collectionLogs->getResults());
-        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/hook/displayAdminOrderContentOrder.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintreeofficial/views/templates/hook/displayAdminOrderContentOrder.tpl');
     }
 
     public function hookDisplayAdminOrderTabOrder($params)
     {
         /** @var $order \Order*/
         $order = $params['order'];
-        if ($order->module != 'braintree') {
+        if ($order->module != 'braintreeofficial') {
             return;
         }
-        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/hook/displayAdminOrderTabOrder.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintreeofficial/views/templates/hook/displayAdminOrderTabOrder.tpl');
     }
 
     public function hookDisplayAdminCartsView($params)
@@ -85,7 +85,7 @@ class ProcessLoggerExtension extends AbstractModuleExtension
         /** @var $cart Cart */
         $cart = $params['cart'];
         $order = new \Order((int)\Order::getIdByCartId($cart->id));
-        if (\Validate::isLoadedObject($order) && $order->module != 'braintree') {
+        if (\Validate::isLoadedObject($order) && $order->module != 'braintreeofficial') {
             return;
         }
         if (isset($params['class_logger']) && is_subclass_of($params['class_logger'], ProcessLoggerObjectModel::class)) {
@@ -101,6 +101,6 @@ class ProcessLoggerExtension extends AbstractModuleExtension
         }
 
         \Context::getContext()->smarty->assign('logs', $collectionLogs->getResults());
-        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintree/views/templates/hook/displayAdminCartsView.tpl');
+        return \Context::getContext()->smarty->fetch(_PS_MODULE_DIR_ . 'braintreeofficial/views/templates/hook/displayAdminCartsView.tpl');
     }
 }

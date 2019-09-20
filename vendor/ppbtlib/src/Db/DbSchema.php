@@ -23,12 +23,12 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Db;
+namespace BraintreeofficialPPBTlib\Db;
 
 class DbSchema
 {
     /**
-     * @var BraintreePPBTlib\Db\ObjectModelDefinition
+     * @var BraintreeofficialPPBTlib\Db\ObjectModelDefinition
      */
     protected $def;
 
@@ -40,8 +40,8 @@ class DbSchema
     protected $id;
 
     /**
-     * Register BraintreePPBTlib\Db\ObjectModelDefinition and table (internal) ID
-     * @param BraintreePPBTlib\Db\ObjectModelDefinition $def
+     * Register BraintreeofficialPPBTlib\Db\ObjectModelDefinition and table (internal) ID
+     * @param BraintreeofficialPPBTlib\Db\ObjectModelDefinition $def
      * @param string                $id
      */
     public function __construct($def, $id)
@@ -52,8 +52,8 @@ class DbSchema
 
     /**
      * Map table properties
-     * @param BraintreePPBTlib\Db\DbTable $table
-     * @return BraintreePPBTlib\Db\DbTable
+     * @param BraintreeofficialPPBTlib\Db\DbTable $table
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function map($table)
     {

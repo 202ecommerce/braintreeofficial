@@ -23,7 +23,7 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Db;
+namespace BraintreeofficialPPBTlib\Db;
 
 use \Tools;
 
@@ -67,8 +67,8 @@ class DbTable
 
     /**
      * Hydrate properties
-     * @param BraintreePPBTlib\Db\DbSchema $schema
-     * @return BraintreePPBTlib\Db\DbTable
+     * @param BraintreeofficialPPBTlib\Db\DbSchema $schema
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function hydrate($schema)
     {
@@ -210,7 +210,7 @@ class DbTable
 
     /**
      * @param string $name
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setName($name)
     {
@@ -221,7 +221,7 @@ class DbTable
 
     /**
      * @param string $engine
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setEngine($engine)
     {
@@ -232,7 +232,7 @@ class DbTable
 
     /**
      * @param string $charset
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setCharset($charset)
     {
@@ -243,7 +243,7 @@ class DbTable
 
     /**
      * @param string $collation
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setCollation($collation)
     {
@@ -254,7 +254,7 @@ class DbTable
 
     /**
      * @param array $columns
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setColumns($columns)
     {
@@ -265,7 +265,7 @@ class DbTable
 
     /**
      * @param array $columns
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeyPrimary($columns)
     {
@@ -274,7 +274,7 @@ class DbTable
 
     /**
      * @param array $keys
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeysForeign($keys)
     {
@@ -287,7 +287,7 @@ class DbTable
 
     /**
      * @param array $columns
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeyForeign($columns)
     {
@@ -296,7 +296,7 @@ class DbTable
 
     /**
      * @param array $keys
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeysUnique($keys)
     {
@@ -305,7 +305,7 @@ class DbTable
 
     /**
      * @param array $columns
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeyUnique($columns)
     {
@@ -314,7 +314,7 @@ class DbTable
 
     /**
      * @param array $keys
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeysFulltext($keys)
     {
@@ -323,7 +323,7 @@ class DbTable
 
     /**
      * @param array $columns
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeyFulltext($columns)
     {
@@ -332,7 +332,7 @@ class DbTable
 
     /**
      * @param array $keys
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeysSimple($keys)
     {
@@ -341,7 +341,7 @@ class DbTable
 
     /**
      * @param array $columns
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     public function setKeySimple($columns)
     {
@@ -351,7 +351,7 @@ class DbTable
     /**
      * @param array    $columns
      * @param int|null $type
-     * @return BraintreePPBTlib\Db\DbTable
+     * @return BraintreeofficialPPBTlib\Db\DbTable
      */
     protected function setKey($columns, $type = null)
     {

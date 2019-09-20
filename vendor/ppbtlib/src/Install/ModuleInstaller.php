@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreePPBTlib\Install;
+namespace BraintreeofficialPPBTlib\Install;
 
 use \Configuration;
 use \Db;
@@ -32,8 +32,8 @@ use \DbQuery;
 use \Language;
 use \OrderState;
 use \Tools;
-use BraintreePPBTlib\Install\AbstractInstaller;
-use BraintreePPBTlib\Install\ExtensionInstaller;
+use BraintreeofficialPPBTlib\Install\AbstractInstaller;
+use BraintreeofficialPPBTlib\Install\ExtensionInstaller;
 
 class ModuleInstaller extends AbstractInstaller
 {

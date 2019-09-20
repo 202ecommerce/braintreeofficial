@@ -23,16 +23,16 @@
  * @version   develop
  */
 
-require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
-use BraintreePPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
 
-class AdminBraintreeProcessLoggerController extends AdminProcessLoggerController
+class AdminBraintreeofficialProcessLoggerController extends AdminProcessLoggerController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->className = 'BraintreeAddons\classes\BraintreeLog';
+        $this->className = 'BraintreeOfficialAddons\classes\BraintreeOfficialLog';
 
         if (isset($this->fields_list['id_transaction'])) {
             $this->fields_list['id_transaction'] = array(

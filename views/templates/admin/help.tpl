@@ -32,45 +32,45 @@
 	<ul class="tick">
 		<li>
 			<p class="h4">
-				{l s='Discover module ducumentation before configuration' mod='braintree'}
+				{l s='Discover module ducumentation before configuration' mod='braintreeofficial'}
 			</p>
 			<p>
-				<a target="_blank" href="https://addons.prestashop.com/documentation/e582dd0854d8994e815d6c0e8886e703bfdf7713"
+				<a target="_blank" href="https://help.202-ecommerce.com/wp-content/uploads/2019/08/User-guide-PayPal-PrestaShop-module.pdf"
 					class="btn btn-default">
-					{l s='Access user documentation for module configuration.' mod='braintree'}
+					{l s='Access user documentation for module configuration.' mod='braintreeofficial'}
 				</a>
 			</p>
 		</li>
 		<li>
 			<p class="h4">
-				{l s='Check requirements before installation' mod='braintree'}
+				{l s='Check requirements before installation' mod='braintreeofficial'}
 			</p>
 			<p>
-				{l s='Are you using the required TLS version? Did you select a default country? Click on the button below and check if all requirements are completed!' mod='braintree'}
+				{l s='Are you using the required TLS version? Did you select a default country? Click on the button below and check if all requirements are completed!' mod='braintreeofficial'}
 			</p>
 			<p>
 				<button name="submit-ckeck_requirements" class="btn btn-default" id="ckeck_requirements">
-					{l s='Check requirements' mod='braintree'}
+					{l s='Check requirements' mod='braintreeofficial'}
 				</button>
 				<p class="action_response"></p>
 			</p>
 		</li>
 		<li>
 			<p class="h4">
-				{l s='Do you still have any questions?' mod='braintree'}
+				{l s='Do you still have any questions?' mod='braintreeofficial'}
 			</p>
 			<p>
-				{l s='Contact us! We will be happy to help!' mod='braintree'}
+				{l s='Contact us! We will be happy to help!' mod='braintreeofficial'}
 			</p>
 			<p>
 				<a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/contact-us" class="btn btn-default">
-					{l s='Contact our product team for any functional questions' mod='braintree'}
+					{l s='Contact our product team for any functional questions' mod='braintreeofficial'}
 				</a>
 			</p>
 			<p>
-				<a target="_blank" href="https://addons.prestashop.com/fr/contactez-nous?id_product=1748"
+				<a target="_blank" href="https://addons.prestashop.com/en/contact-us?id_product=46833"
 					class="btn btn-default">
-					{l s='Contact our technical support' mod='braintree'}
+					{l s='Contact our technical support' mod='braintreeofficial'}
 				</a>
 			</p>
 		</li>

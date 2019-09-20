@@ -24,21 +24,21 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\services;
+namespace BraintreeOfficialAddons\services;
 
-use BraintreeAddons\classes\BraintreeOrder;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeOfficialAddons\classes\BraintreeOfficialOrder;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
-class ServiceBraintreeOrder
+class ServiceBraintreeOfficialOrder
 {
     /**
-     * Load BraintreeOrder object by PrestaShop order ID
+     * Load BraintreeOfficialOrder object by PrestaShop order ID
      * @param integer $id_order Order ID
-     * @return BraintreeOrder
+     * @return BraintreeOfficialOrder
      */
     public function loadByOrderId($id_order)
     {
-        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('id_order', '=', (int)$id_order);
         return $collection->getFirst();
     }
@@ -49,7 +49,7 @@ class ServiceBraintreeOrder
      */
     public function getBraintreeOrdersForValidation()
     {
-        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('payment_method', '=', 'sale');
         $collection->where('payment_tool', '=', 'paypal_account');
         $collection->where('payment_status', 'in', array('settling', 'submitted_for_settlement'));
@@ -58,11 +58,11 @@ class ServiceBraintreeOrder
 
     /**
      * @param string $id_transaction Transaction ID
-     * @return BraintreeOrder Order id
+     * @return BraintreeOfficialOrder Order id
      */
     public function loadByTransactionId($id_transaction)
     {
-        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('id_transaction', '=', pSQL($id_transaction));
         return $collection->getFirst();
     }
@@ -84,7 +84,7 @@ class ServiceBraintreeOrder
             ProcessLoggerHandler::openLogger();
             /* @var $paypalOrder \PaypalOrder*/
             foreach ($collection->getResults() as $paypalOrder) {
-                $braintreeOrder = new BraintreeOrder();
+                $braintreeOrder = new BraintreeOfficialOrder();
                 $braintreeOrder->id = $paypalOrder->id;
                 $braintreeOrder->id_order = $paypalOrder->id_order;
                 $braintreeOrder->payment_tool = $paypalOrder->payment_tool;
@@ -102,7 +102,7 @@ class ServiceBraintreeOrder
                 try {
                     $braintreeOrder->add();
                 } catch (\Exception $e) {
-                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
+                    \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal order. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';
@@ -119,7 +119,7 @@ class ServiceBraintreeOrder
      */
     public function getCountOrders()
     {
-        $collection = new \PrestaShopCollection(BraintreeOrder::class);
+        $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         return $collection->count();
     }
 
@@ -128,14 +128,14 @@ class ServiceBraintreeOrder
         if (\Module::isInstalled('paypal')) {
             require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalOrder.php';
             require_once _PS_MODULE_DIR_ . 'paypal/classes/PaypalCapture.php';
-            $collection = new \PrestaShopCollection(BraintreeOrder::class);
+            $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
 
             if ($collection->count() == 0) {
                 return;
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $braintreeOrder BraintreeOrder
+            /* @var $braintreeOrder BraintreeOfficialOrder
              * @var $paypalOrder \PaypalOrder
              * @var $paypalCapture \PaypalCapture
              */
@@ -146,7 +146,7 @@ class ServiceBraintreeOrder
                     $paypalOrder->delete();
                     $paypalCapture->delete();
                 } catch (\Exception $e) {
-                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
+                    \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                     $message = 'Error while deleting paypal order. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';

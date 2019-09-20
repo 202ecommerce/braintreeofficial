@@ -24,18 +24,23 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use BraintreeAddons\classes\AbstractMethodBraintree;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-require_once _PS_MODULE_DIR_ . 'braintree/controllers/front/abstract.php';
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/front/abstract.php';
 
 /**
  * Validate BT payment
  */
-class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFrontController
+class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficialAbstarctModuleFrontController
 {
+    /* @var $method MethodBraintreeOfficial*/
+    protected $method;
+
     public function init()
     {
         parent::init();
+        $this->setMethod(AbstractMethodBraintreeOfficial::load('BraintreeOfficial'));
         $this->values['payment_method_nonce'] = Tools::getvalue('payment_method_nonce');
         $this->values['payment_method_bt'] = Tools::getvalue('payment_method_bt');
         $this->values['bt_vaulting_token'] = Tools::getvalue('bt_vaulting_token');
@@ -46,16 +51,14 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
 
     public function postProcess()
     {
-        /* @var $method_bt MethodBraintree*/
-        $method_bt = AbstractMethodBraintree::load('Braintree');
         try {
-            $method_bt->setParameters($this->values);
-            $method_bt->validation();
+            $this->method->setParameters($this->values);
+            $this->method->validation();
             $cart = Context::getContext()->cart;
             $customer = new Customer($cart->id_customer);
             $module = Module::getInstanceByName($this->name);
             $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id .'&id_module=' . $module->id .'&key='.$customer->secure_key;
-        } catch (BraintreeAddons\classes\BraintreeException $e) {
+        } catch (BraintreeOfficialAddons\classes\BraintreeOfficialException $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();
             $this->errors['msg_long'] = $e->getMessageLong();
@@ -63,11 +66,63 @@ class BraintreeValidationModuleFrontController extends BraintreeAbstarctModuleFr
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();
         } finally {
-            $this->transaction_detail = $method_bt->getDetailsTransaction();
+            $this->transaction_detail = $this->method->getDetailsTransaction();
         }
 
         if (!empty($this->errors)) {
             $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $this->errors);
         }
+    }
+
+    public function setMethod(AbstractMethodBraintreeOfficial $method)
+    {
+        $this->method = $method;
+    }
+
+    public function displayAjaxGetOrderInformation()
+    {
+        $customer = new Customer($this->context->cart->id_customer);
+        $address = new Address($this->context->cart->id_address_delivery);
+        $country = new Country($address->id_country);
+        $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
+        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal();
+        $iso = '';
+
+        if ($address->id_state) {
+            $state = new State((int) $address->id_state);
+            $iso = $state->iso_code;
+        }
+
+        $responseContent = array(
+            'success' => true,
+            'use3dVerification' => $use3dVerification,
+            'orderInformation' => array(
+                'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
+                'email' => $customer->email,
+                'billingAddress' => array(
+                    'givenName' => $customer->firstname,
+                    'surneme' => $customer->lastname,
+                    'phoneNumber' => $address->phone,
+                    'streetAddress' => $address->address1,
+                    'locality' => $address->city,
+                    'countryCodeAlpha2' => $country->iso_code,
+                    'region' => $iso,
+                    'postalCode' => $address->postcode
+                ),
+                'additionalInformation' => array(
+                    'shippingGivenName' => $address->firstname,
+                    'shippingSurname' => $address->lastname,
+                    'shippingPhone' => $address->phone,
+                    'shippingAddress' => array(
+                        'streetAddress' => $address->address1,
+                        'locality' => $address->city,
+                        'countryCodeAlpha2' => $country->iso_code,
+                        'region' => $iso,
+                        'postalCode' => $address->postcode
+                    )
+                )
+            )
+        );
+        $this->jsonValues = $responseContent;
     }
 }

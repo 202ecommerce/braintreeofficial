@@ -23,20 +23,35 @@
  * @version   develop
  */
 
-require_once _PS_MODULE_DIR_ . 'braintree/controllers/admin/AdminBraintreeProcessLogger.php';
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
-class AdminBraintreeLogsController extends AdminBraintreeProcessLoggerController
+use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialController
 {
+    /**
+     * @throws Exception
+     * @throws SmartyException
+     */
     public function initContent()
     {
-        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
-        $this->content .= parent::initContent();
+        $need_rounding = (Configuration::get('PS_ROUND_TYPE') != Order::ROUND_ITEM) || (Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_DOWN);
+        $tpl_vars = array(
+            'need_rounding' => $need_rounding,
+        );
+        $this->context->smarty->assign($tpl_vars);
+        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'help.tpl');
         $this->context->smarty->assign('content', $this->content);
+        Media::addJsDef(array(
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
+        ));
+        $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/helpAdmin.js');
     }
 
-    public function setMedia($isNewTheme = false)
+    public function displayAjaxCheckCredentials()
     {
-        parent::setMedia($isNewTheme);
-        $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/bt_admin.css');
+        $response = new JsonResponse($this->_checkRequirements());
+        return $response->send();
     }
 }

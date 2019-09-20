@@ -25,32 +25,32 @@
 
 <div>
 	<p>
-		{l s='Merchant Country:' mod='braintree'} <b>{$merchantCountry|escape:'htmlall':'utf-8'}</b>
+		{l s='Merchant Country:' mod='braintreeofficial'} <b>{$merchantCountry|escape:'htmlall':'utf-8'}</b>
 	</p>
 	<p>
-    {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='braintree'}|braintreereplace:['@href1@' => {$link->getAdminLink('AdminLocalization', true)}, '@target@' => {'target="blank"'}]}
+    {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {$link->getAdminLink('AdminLocalization', true)}, '@target@' => {'target="blank"'}]}
 	</p>
 	<p>
-		<span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='braintree'}</span>
+		<span class="btn btn-default" id="btn-check-requirements">{l s='Check requirements' mod='braintreeofficial'}</span>
 	</p>
 	<ul class="list-unstyled">
 		<li>
             {if isset($sslActivated) && $sslActivated}
 				<i class="icon-check text-success"></i>
-                {l s='SSL enabled.' mod='braintree'}
+                {l s='SSL enabled.' mod='braintreeofficial'}
             {else}
 				<i class="icon-remove text-danger"></i>
-                {l s='SSL should be enabled on your web site.' mod='braintree'}
+                {l s='SSL should be enabled on your web site.' mod='braintreeofficial'}
             {/if}
 		</li>
 
 		<li>
 			{if isset($tlsVersion) && $tlsVersion['status']}
 				<i class="icon-check text-success"></i>
-				{l s='PHP cURL extension must be enabled on your server' mod='braintree'}
+				{l s='PHP cURL extension must be enabled on your server' mod='braintreeofficial'}
 			{elseif isset($tlsVersion) && $tlsVersion['status'] == false}
 				<i class="icon-remove text-danger"></i>
-				{l s='PHP cURL extension must be enabled on your server' mod='braintree'}. {$tlsVersion['error_message']}
+				{l s='PHP cURL extension must be enabled on your server' mod='braintreeofficial'}. {$tlsVersion['error_message']}
 			{/if}
 		</li>
 		<li>
@@ -59,7 +59,7 @@
 			{else}
 				<i class="icon-remove text-danger"></i>
 			{/if}
-			{l s='You must connect your Braintree account' mod='braintree'}
+			{l s='You must connect your Braintree account' mod='braintreeofficial'}
 		</li>
 
 		<li>
@@ -68,7 +68,7 @@
             {else}
 				<i class="icon-remove text-danger"></i>
             {/if}
-            {l s='You must add your merchant account ID for each currency' mod='braintree'}
+            {l s='You must add your merchant account ID for each currency' mod='braintreeofficial'}
 		</li>
 	</ul>
 </div>

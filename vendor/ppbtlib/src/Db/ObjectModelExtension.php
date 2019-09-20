@@ -23,13 +23,13 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Db;
+namespace BraintreeofficialPPBTlib\Db;
 
-use BraintreePPBTlib\Db\ObjectModelDefinition;
-use BraintreePPBTlib\Db\DbTableDefinitionModel;
-use BraintreePPBTlib\Db\DbTableDefinitionRelation;
-use BraintreePPBTlib\Db\DbSchema;
-use BraintreePPBTlib\Db\DbTable;
+use BraintreeofficialPPBTlib\Db\ObjectModelDefinition;
+use BraintreeofficialPPBTlib\Db\DbTableDefinitionModel;
+use BraintreeofficialPPBTlib\Db\DbTableDefinitionRelation;
+use BraintreeofficialPPBTlib\Db\DbSchema;
+use BraintreeofficialPPBTlib\Db\DbTable;
 
 class ObjectModelExtension
 {
@@ -75,7 +75,7 @@ class ObjectModelExtension
     }
 
     /**
-     * @return BraintreePPBTlib\Db\ObjectModelDefinition (as an array collection object)
+     * @return BraintreeofficialPPBTlib\Db\ObjectModelDefinition (as an array collection object)
      */
     protected function getObjectModelDefinition()
     {
@@ -92,7 +92,7 @@ class ObjectModelExtension
     }
 
     /**
-     * @param BraintreePPBTlib\Db\DbSchema $schema
+     * @param BraintreeofficialPPBTlib\Db\DbSchema $schema
      * @return bool
      */
     protected function createTable($schema)

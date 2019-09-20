@@ -24,23 +24,23 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\classes;
+namespace BraintreeOfficialAddons\classes;
 
-use BraintreePPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
-use BraintreeAddons\services\ServiceBraintreeLog;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
 
 /**
- * Class BraintreeLog.
+ * Class BraintreeOfficialLog.
  */
-class BraintreeLog extends ProcessLoggerObjectModel
+class BraintreeOfficialLog extends ProcessLoggerObjectModel
 {
-    /* @var ServiceBraintreeLog object service*/
+    /* @var ServiceBraintreeOfficialLog object service*/
     protected $serviceLog;
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)
     {
         parent::__construct($id, $id_lang, $id_shop);
-        $this->setServiceLog(new ServiceBraintreeLog());
+        $this->setServiceLog(new ServiceBraintreeOfficialLog());
     }
 
     public function setServiceLog($service)

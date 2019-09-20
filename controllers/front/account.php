@@ -24,22 +24,22 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use BraintreeAddons\classes\BraintreeVaulting;
-use BraintreeAddons\classes\BraintreeCustomer;
-use BraintreeAddons\classes\AbstractMethodBraintree;
-use BraintreeAddons\services\ServiceBraintreeVaulting;
+use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
+use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
 
-class BraintreeAccountModuleFrontController extends ModuleFrontController
+class BraintreeOfficialAccountModuleFrontController extends ModuleFrontController
 {
-    /* @var ServiceBraintreeVaulting*/
-    protected $serviceBraintreeVaulting;
+    /* @var ServiceBraintreeOfficialVaulting*/
+    protected $serviceBraintreeOfficialVaulting;
 
     public function __construct()
     {
         $this->auth = true;
         parent::__construct();
         $this->context = Context::getContext();
-        $this->serviceBraintreeVaulting = new ServiceBraintreeVaulting();
+        $this->serviceBraintreeOfficialVaulting = new ServiceBraintreeOfficialVaulting();
     }
 
     /**
@@ -47,11 +47,11 @@ class BraintreeAccountModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        /* @var $method MethodBraintree*/
+        /* @var $method MethodBraintreeOfficial*/
         if (Tools::getValue('process') == 'delete') {
             $id = (int)Tools::getValue('id_method');
-            $payment_method = new BraintreeVaulting($id);
-            $method = AbstractMethodBraintree::load('Braintree');
+            $payment_method = new BraintreeOfficialVaulting($id);
+            $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
             $method->deleteVaultedMethod($payment_method);
             if ($payment_method->delete()) {
                 $this->success[] = $this->l('Successfully deleted!');
@@ -62,7 +62,7 @@ class BraintreeAccountModuleFrontController extends ModuleFrontController
             foreach ($all_values as $key => $value) {
                 $val_arr = explode('_', $key);
                 if ($val_arr[0] == 'name') {
-                    $payment_method = new BraintreeVaulting($val_arr[1]);
+                    $payment_method = new BraintreeOfficialVaulting($val_arr[1]);
                     $payment_method->name = $value;
                     if ($payment_method->save()) {
                         $this->success[] = $this->l('Successfully updated!');
@@ -78,11 +78,11 @@ class BraintreeAccountModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
-        $methods = $this->serviceBraintreeVaulting->getCustomerGroupedMethods($this->context->customer->id);
+        $methods = $this->serviceBraintreeOfficialVaulting->getCustomerGroupedMethods($this->context->customer->id);
         $this->context->smarty->assign(array(
             'payment_methods' => $methods,
         ));
-        $this->setTemplate('module:braintree/views/templates/front/payment_methods.tpl');
+        $this->setTemplate('module:braintreeofficial/views/templates/front/payment_methods.tpl');
     }
 
 

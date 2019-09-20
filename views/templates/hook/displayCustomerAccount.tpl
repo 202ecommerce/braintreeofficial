@@ -23,9 +23,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<a class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="braintree-link" href="{$link->getModuleLink('braintree', 'account')|addslashes}" title="{l s='My payment methods' mod='braintree'}">
+<a class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="braintree-link" href="{$link->getModuleLink('braintreeofficial', 'account')|addslashes}" title="{l s='My payment methods' mod='braintreeofficial'}">
   <span class="link-item">
     <i class="material-icons">credit_card</i>
-      {l s='My payment methods' mod='braintree'}
+      {l s='My payment methods' mod='braintreeofficial'}
   </span>
 </a>

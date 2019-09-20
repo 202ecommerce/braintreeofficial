@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreePPBTlib\Install;
+namespace BraintreeofficialPPBTlib\Install;
 
 
 use \Configuration;
@@ -33,14 +33,14 @@ use \DbQuery;
 use \Language;
 use \Tab;
 use \Tools;
-use BraintreePPBTlib\Db\ObjectModelExtension;
+use BraintreeofficialPPBTlib\Db\ObjectModelExtension;
 
 abstract class AbstractInstaller
 {
     //region Fields
 
     /**
-     * @var \Braintree
+     * @var \Braintreeofficial
      */
     protected $module;
 
@@ -85,7 +85,7 @@ abstract class AbstractInstaller
     abstract public function getObjectModels();
 
     /**
-     * @param \Braintree $module
+     * @param \Braintreeofficial $module
      * @return $this
      */
     public function setModule($module)
@@ -126,7 +126,7 @@ abstract class AbstractInstaller
     /**
      * Used only if merchant choose to keep data on modal in Prestashop 1.6
      *
-     * @param Braintree $module
+     * @param Braintreeofficial $module
      * @return bool
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
@@ -250,7 +250,7 @@ abstract class AbstractInstaller
             if (in_array($parentClassName, $defaultTabLevel1) && version_compare(_PS_VERSION_, '1.7', '<')) {
                 continue;
             }
-            if ($tabData['class_name'] == 'braintree' && version_compare(_PS_VERSION_, '1.7', '<')) {
+            if ($tabData['class_name'] == 'braintreeofficial' && version_compare(_PS_VERSION_, '1.7', '<')) {
                 $parentClassName = 'AdminParentModulesSf';
                 $tabData['parent_class_name'] = 'AdminParentModulesSf';
                 $tabData['visible'] = true;

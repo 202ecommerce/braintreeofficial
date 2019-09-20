@@ -24,15 +24,15 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreePPBTlib;
+namespace BraintreeofficialPPBTlib;
 use \ModuleFrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
 abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
 {
     /** @var string module name */
-    public $name = 'braintree';
+    public $name = 'braintreeofficial';
 
     /** @var  array Contain ajax response. */
     public $jsonValues;
@@ -78,11 +78,11 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
             ProcessLoggerHandler::logError(
                 $message,
                 null,
-                isset($this->transaction_detail['payment_tool']) && $this->transaction_detail['payment_tool']  ? $this->transaction_detail['payment_tool'] : 'Braintree',
+                isset($this->transaction_detail['payment_tool']) && $this->transaction_detail['payment_tool']  ? $this->transaction_detail['payment_tool'] : 'Braintreeofficial',
                 \Context::getContext()->cart->id,
                 \Context::getContext()->shop->id,
                 isset($this->transaction_detail['transaction_id']) ? $this->transaction_detail['transaction_id'] : null,
-                (int)\Configuration::get('BRAINTREE_SANDBOX'),
+                (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'),
                 isset($this->transaction_detail['date_transaction']) ? $this->transaction_detail['date_transaction'] : null
             );
             ProcessLoggerHandler::closeLogger();

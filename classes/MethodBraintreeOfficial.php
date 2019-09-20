@@ -24,21 +24,21 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use BraintreeAddons\classes\BraintreeCustomer;
-use BraintreeAddons\classes\BraintreeVaulting;
-use BraintreeAddons\classes\BraintreeException;
-use BraintreeAddons\classes\AbstractMethodBraintree;
-use BraintreeAddons\classes\BraintreeOrder;
-use BraintreeAddons\services\ServiceBraintreeCapture;
-use BraintreeAddons\services\ServiceBraintreeCustomer;
-use BraintreeAddons\services\ServiceBraintreeVaulting;
-use BraintreeAddons\services\ServiceBraintreeOrder;
+use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
+use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
+use BraintreeOfficialAddons\classes\BraintreeOfficialException;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\classes\BraintreeOfficialOrder;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 
 /**
  * Class MethodBT
  * @see https://developers.braintreepayments.com/guides/overview BT developper documentation
  */
-class MethodBraintree extends AbstractMethodBraintree
+class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 {
     /** @var string token*/
     public $token;
@@ -64,35 +64,35 @@ class MethodBraintree extends AbstractMethodBraintree
     /** @var  bool vaulting checkbox */
     private $save_account_in_vault;
 
-    protected $payment_method = 'Braintree';
+    protected $payment_method = 'Braintree Official';
 
     /* @var Braintree_Gateway*/
     public $gateway;
 
-    /* @var ServiceBraintreeCapture */
-    protected $serviceBraintreeCapture;
+    /* @var ServiceBraintreeOfficialCapture */
+    protected $serviceBraintreeOfficialCapture;
 
-    /* @var ServiceBraintreeCustomer*/
-    protected $serviceBraintreeCustomer;
+    /* @var ServiceBraintreeOfficialCustomer*/
+    protected $serviceBraintreeOfficialCustomer;
 
-    /* @var ServiceBraintreeVaulting*/
-    protected $serviceBraintreeVaulting;
+    /* @var ServiceBraintreeOfficialVaulting*/
+    protected $serviceBraintreeOfficialVaulting;
 
-    /* @var ServiceBraintreeOrder*/
-    protected $serviceBraintreeOrder;
+    /* @var ServiceBraintreeOfficialOrder*/
+    protected $serviceBraintreeOfficialOrder;
 
     public function __construct()
     {
-        $this->serviceBraintreeCapture = new ServiceBraintreeCapture();
-        $this->serviceBraintreeCustomer = new ServiceBraintreeCustomer();
-        $this->serviceBraintreeVaulting = new ServiceBraintreeVaulting();
-        $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
+        $this->serviceBraintreeOfficialCapture = new ServiceBraintreeOfficialCapture();
+        $this->serviceBraintreeOfficialCustomer = new ServiceBraintreeOfficialCustomer();
+        $this->serviceBraintreeOfficialVaulting = new ServiceBraintreeOfficialVaulting();
+        $this->serviceBraintreeOfficialOrder = new ServiceBraintreeOfficialOrder();
     }
 
     protected function getPaymentMethod()
     {
         $transactionDetails = $this->getDetailsTransaction();
-        if ((int)\Configuration::get('BRAINTREE_SANDBOX')) {
+        if ((int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX')) {
             return $transactionDetails['payment_tool'] . ' - SANDBOX';
         } else {
             return $transactionDetails['payment_tool'];
@@ -112,16 +112,16 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
-     * @see AbstractMethodBraintree::setConfig()
+     * @see AbstractMethodBraintreeOfficial::setConfig()
      */
     public function setConfig($params)
     {
     }
 
     /**
-     * @see AbstractMethodBraintree::setConfig()
+     * @see AbstractMethodBraintreeOfficial::setConfig()
      */
-    public function getConfig(\Braintree $module)
+    public function getConfig(\BraintreeOfficial $module)
     {
     }
 
@@ -130,17 +130,73 @@ class MethodBraintree extends AbstractMethodBraintree
      */
     public function getAllCurrency($mode = null)
     {
-        $this->initConfig($mode);
+        $allMerchantAccounts = $this->getAllMerchantAccounts($mode);
         $result = array();
+        $accountDefault = null;
+
+        if (empty($allMerchantAccounts)) {
+            return $result;
+        }
+
+        foreach ($allMerchantAccounts as $account) {
+            $result[$account->currencyIsoCode] = $account->id;
+            if ($account->default == true) {
+                $accountDefault = $account;
+            }
+        }
+        // Use account by default
+        $result[$accountDefault->currencyIsoCode] = $accountDefault->id;
+
+        return $result;
+    }
+
+    /**
+     * @param bool $mode true if mode Sandbox and false if mode Live
+     * @return array array of the Braintree\MerchantAccount objects
+     */
+    public function getAllMerchantAccounts($mode = null)
+    {
+        $this->initConfig($mode);
+        $merchantAccounts = array();
+
         try {
             $response = $this->gateway->merchantAccount()->all();
-            foreach ($response as $account) {
-                $result[$account->currencyIsoCode] = $account->id;
+            foreach ($response as $merchantAccount) {
+                $merchantAccounts[] = $merchantAccount;
             }
         } catch (Exception $e) {
-            return array();
+            return $merchantAccounts;
         }
-        return $result;
+
+        return $merchantAccounts;
+    }
+
+    /**
+     * Check if the merchant account ids are right
+     * @param $data array the data for the validation
+     * @return array returns wrong merchant accounts [iso => merchantAccount]
+     */
+    public function validateMerchantAccounts($merchantAccounts)
+    {
+        $wrongMerchantAccounts = array();
+        $allMerchantAccounts = $this->getAllMerchantAccounts();
+
+        foreach ($merchantAccounts as $iso => $merchantAccount) {
+            $match = false;
+
+            foreach ($allMerchantAccounts as $ma) {
+                if ($ma->status == 'active' && $ma->id == $merchantAccount) {
+                    $match = true;
+                    continue;
+                }
+            }
+
+            if ($match == false) {
+                $wrongMerchantAccounts[$iso] = $merchantAccount;
+            }
+        }
+
+        return $wrongMerchantAccounts;
     }
 
 
@@ -153,22 +209,23 @@ class MethodBraintree extends AbstractMethodBraintree
         if ($order_mode !== null) {
             $this->mode = $order_mode ? 'SANDBOX' : 'LIVE';
         } else {
-            $this->mode = Configuration::get('BRAINTREE_SANDBOX') ? 'SANDBOX' : 'LIVE';
+            $this->mode = Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'SANDBOX' : 'LIVE';
         }
 
         $this->gateway = new Braintree_Gateway(array('environment' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
-            'publicKey' => Configuration::get('BRAINTREE_PUBLIC_KEY_' . $this->mode),
-            'privateKey' => Configuration::get('BRAINTREE_PRIVATE_KEY_' . $this->mode),
-            'merchantId' => Configuration::get('BRAINTREE_MERCHANT_ID_' . $this->mode)));
+            'publicKey' => Configuration::get('BRAINTREEOFFICIAL_PUBLIC_KEY_' . $this->mode),
+            'privateKey' => Configuration::get('BRAINTREEOFFICIAL_PRIVATE_KEY_' . $this->mode),
+            'merchantId' => Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_' . $this->mode)));
         $this->error = '';
     }
 
     /**
-     * @see AbstractMethodBraintree::init()
+     * @see AbstractMethodBraintreeOfficial::init()
      */
     public function init()
     {
         try {
+            /** @var BraintreeOfficial $module */
             $module = Module::getInstanceByName($this->name);
             $currency = $module->getPaymentCurrencyIso();
             $merchantAccountId = Configuration::get($module->getNameMerchantAccountForCurrency($currency));
@@ -193,12 +250,12 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
-     * @see AbstractMethodBraintree::validation()
+     * @see AbstractMethodBraintreeOfficial::validation()
      */
     public function validation()
     {
-        /* @var $module Braintree*/
-        $module = Module::getInstanceByName('braintree');
+        /* @var $module BraintreeOfficial*/
+        $module = Module::getInstanceByName('braintreeofficial');
         $transaction = $this->sale(context::getContext()->cart, $this->payment_method_nonce);
 
         if (!$transaction) {
@@ -207,13 +264,13 @@ class MethodBraintree extends AbstractMethodBraintree
 
         $this->setDetailsTransaction($transaction);
 
-        if (Configuration::get('BRAINTREE_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
-            $order_state = Configuration::get('BRAINTREE_OS_AWAITING_VALIDATION');
-        } else if ((Configuration::get('BRAINTREE_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
-            || (Configuration::get('BRAINTREE_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
+        if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
+            $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
+        } else if ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+            || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
             $order_state = Configuration::get('PS_OS_PAYMENT');
         } else {
-            $order_state = Configuration::get('BRAINTREE_OS_AWAITING');
+            $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
         }
 
         $module->validateOrder(
@@ -257,7 +314,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     /**
      * Capture authorized transaction
-     * @param $braintree_order BraintreeOrder object
+     * @param $braintree_order BraintreeOfficialOrder object
      * @return array|Exception
      */
     public function confirmCapture($braintree_order)
@@ -266,7 +323,7 @@ class MethodBraintree extends AbstractMethodBraintree
             $this->initConfig($braintree_order->sandbox);
             $result = $this->gateway->transaction()->submitForSettlement($braintree_order->id_transaction, number_format($braintree_order->total_paid, 2, ".", ''));
             if ($result instanceof Braintree_Result_Successful && $result->success) {
-                $this->serviceBraintreeCapture->updateCapture($result->transaction->id, $result->transaction->amount, $result->transaction->status, $braintree_order->id);
+                $this->serviceBraintreeOfficialCapture->updateCapture($result->transaction->id, $result->transaction->amount, $result->transaction->status, $braintree_order->id);
                 $response =  array(
                     'success' => true,
                     'authorization_id' => $result->transaction->id,
@@ -322,7 +379,7 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
-     * @param BraintreeOrder $braintreeOrder
+     * @param BraintreeOfficialOrder $braintreeOrder
      * @return mixed
      */
     public function searchTransaction($braintreeOrder)
@@ -376,7 +433,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     /**
      * Deleted vaulted method from BT
-     * @param $payment_method BraintreeVaulting
+     * @param $payment_method BraintreeOfficialVaulting
      */
     public function deleteVaultedMethod($payment_method)
     {
@@ -386,7 +443,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     /**
      * Refund settled transaction
-     * @param $orderBraintree BraintreeOrder object
+     * @param $orderBraintree BraintreeOfficialOrder object
      * @return mixed
      */
     public function refund($orderBraintree)
@@ -504,7 +561,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     /**
      * Get current Transaction status from BT
-     * @param BraintreeOrder $orderBraintree
+     * @param BraintreeOfficialOrder $orderBraintree
      * @return string|boolean
      */
     public function getTransactionStatus($orderBraintree)
@@ -519,7 +576,7 @@ class MethodBraintree extends AbstractMethodBraintree
     }
 
     /**
-     * @see AbstractMethodBraintree::void()
+     * @see AbstractMethodBraintreeOfficial::void()
      */
     public function void($orderBraintree)
     {
@@ -559,14 +616,14 @@ class MethodBraintree extends AbstractMethodBraintree
 
 
     /**
-     * @see AbstractMethodBraintree::getLinkToTransaction()
+     * @see AbstractMethodBraintreeOfficial::getLinkToTransaction()
      */
     public function getLinkToTransaction($id_transaction, $sandbox)
     {
         if ($sandbox) {
-            $url = 'https://sandbox.braintreegateway.com/merchants/' . Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX') . '/transactions/';
+            $url = 'https://sandbox.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX') . '/transactions/';
         } else {
-            $url = 'https://www.braintreegateway.com/merchants/' . Configuration::get('BRAINTREE_MERCHANT_ID_LIVE') . '/transactions/';
+            $url = 'https://www.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE') . '/transactions/';
         }
         return $url . $id_transaction;
     }
@@ -588,24 +645,27 @@ class MethodBraintree extends AbstractMethodBraintree
      * @param $token_payment
      * @return bool|mixed
      * @throws Exception
-     * @throws BraintreeException
+     * @throws BraintreeOfficialException
      */
     public function sale($cart, $token_payment)
     {
-        /* @var $module Braintree*/
+        /* @var $module BraintreeOfficial*/
         $this->initConfig();
         $bt_method = $this->payment_method_bt;
         $vault_token = '';
+        $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
+        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $cart->getOrderTotal();
+
         if ($bt_method == BRAINTREE_PAYPAL_PAYMENT) {
             $options = array(
-                'submitForSettlement' => Configuration::get('BRAINTREE_API_INTENT') == "sale" ? true : false,
+                'submitForSettlement' => Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" ? true : false,
                 'threeDSecure' => array(
-                    'required' => Configuration::get('BRAINTREE_3DSECURE')
+                    'required' => $use3dVerification
                 )
             );
         } else {
             $options = array(
-                'submitForSettlement' => Configuration::get('BRAINTREE_API_INTENT') == "sale" ? true : false,
+                'submitForSettlement' => Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" ? true : false,
             );
         }
 
@@ -652,14 +712,14 @@ class MethodBraintree extends AbstractMethodBraintree
             "deviceData"            => '',
         );
 
-        $braintree_customer = $this->serviceBraintreeCustomer->loadCustomerByMethod(Context::getContext()->customer->id, (int)Configuration::get('BRAINTREE_SANDBOX'));
+        $braintree_customer = $this->serviceBraintreeOfficialCustomer->loadCustomerByMethod(Context::getContext()->customer->id, (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         if (Validate::isLoadedObject($braintree_customer) == false) {
             $braintree_customer = $this->createCustomer();
         } else {
             $this->updateCustomer($braintree_customer);
         }
 
-        if (Configuration::get('BRAINTREE_VAULTING')) {
+        if (Configuration::get('BRAINTREEOFFICIAL_VAULTING')) {
             if ($bt_method == BRAINTREE_CARD_PAYMENT) {
                 $vault_token = $this->bt_vaulting_token;
             } elseif ($bt_method == BRAINTREE_PAYPAL_PAYMENT) {
@@ -667,12 +727,15 @@ class MethodBraintree extends AbstractMethodBraintree
             }
 
             if ($vault_token && $braintree_customer->id) {
-                if ($this->serviceBraintreeVaulting->vaultingExist($vault_token, $braintree_customer->id)) {
+                $vaultExists = $this->serviceBraintreeOfficialVaulting->vaultingExist($vault_token, $braintree_customer->id);
+                if ($vaultExists && $this->payment_method_bt == 'paypal-braintree') {
                     $data['paymentMethodToken'] = $vault_token;
+                } elseif ($vaultExists) {
+                    $data['paymentMethodNonce'] = $token_payment;
                 }
             } else {
                 if ($this->save_card_in_vault || $this->save_account_in_vault) {
-                    if ($this->save_card_in_vault) {
+                    if ($this->save_card_in_vault && $use3dVerification == false) {
                         $payment_method = $this->gateway->paymentMethod()->create(array(
                             'customerId' => $braintree_customer->reference,
                             'paymentMethodNonce' => $token_payment,
@@ -711,19 +774,19 @@ class MethodBraintree extends AbstractMethodBraintree
         }
 
         if (($result instanceof Braintree_Result_Successful) && $result->success && $this->isValidStatus($result->transaction->status)) {
-            if (Configuration::get('BRAINTREE_VAULTING')
+            if (Configuration::get('BRAINTREEOFFICIAL_VAULTING')
                 && (($this->save_card_in_vault && $bt_method == BRAINTREE_CARD_PAYMENT)
                     || ($this->save_account_in_vault && $bt_method == BRAINTREE_PAYPAL_PAYMENT))
-                && $this->serviceBraintreeVaulting->vaultingExist($result->transaction->creditCard['token'], $braintree_customer->id) == false) {
+                && $this->serviceBraintreeOfficialVaulting->vaultingExist($result->transaction->creditCard['token'], $braintree_customer->id) == false) {
                 $this->createVaulting($result, $braintree_customer);
             }
             return $result->transaction;
         } else {
             $errors = $result->errors->deepAll();
             if ($errors) {
-                throw new BraintreeException($errors[0]->code, $errors[0]->message);
+                throw new BraintreeOfficialException($errors[0]->code, $errors[0]->message);
             } else {
-                throw new BraintreeException($result->transaction->processorResponseCode, $result->message);
+                throw new BraintreeOfficialException($result->transaction->processorResponseCode, $result->message);
             }
         }
 
@@ -732,7 +795,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     public function formatPrice($price)
     {
-        /* @var $module Braintree*/
+        /* @var $module BraintreeOfficial*/
         if (is_float($price) == false) {
             $price = floatval($price);
         }
@@ -759,7 +822,7 @@ class MethodBraintree extends AbstractMethodBraintree
 
     /**
      * Create new customer on BT and PS
-     * @return object BraintreeCustomer
+     * @return object BraintreeOfficialCustomer
      */
     public function createCustomer()
     {
@@ -771,16 +834,16 @@ class MethodBraintree extends AbstractMethodBraintree
         );
 
         $result = $this->gateway->customer()->create($data);
-        $customer = new BrainTreeCustomer();
+        $customer = new BrainTreeOfficialCustomer();
         $customer->id_customer = $context->customer->id;
         $customer->reference = $result->customer->id;
-        $customer->sandbox = (int) Configuration::get('BRAINTREE_SANDBOX');
+        $customer->sandbox = (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
         $customer->save();
         return $customer;
     }
     /**
      * Update customer info on BT
-     * @param BraintreeCustomer $braintree_customer
+     * @param BraintreeOfficialCustomer $braintree_customer
      * @throws Exception
      */
     public function updateCustomer($braintree_customer)
@@ -797,8 +860,8 @@ class MethodBraintree extends AbstractMethodBraintree
             $braintree_customer->sandbox = !$braintree_customer->sandbox;
             $braintree_customer->save();
             $module = Module::getInstanceByName($this->name);
-            $mode  = Configuration::get('BRAINTREE_SANDBOX') ? 'Sandbox' : 'Live';
-            $mode2  = !Configuration::get('BRAINTREE_SANDBOX') ? 'Sandbox' : 'Live';
+            $mode  = Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'Sandbox' : 'Live';
+            $mode2  = !Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'Sandbox' : 'Live';
             $msg = sprintf($module->l('This client is not found in %s mode.', get_class($this)), $mode);
             $msg .= sprintf($module->l('Probably this customer has been already created in %s mode. Please create new prestashop client for this mode.', get_class($this)), $mode2);
             throw new Exception($msg);
@@ -815,14 +878,14 @@ class MethodBraintree extends AbstractMethodBraintree
         return in_array($status, array('submitted_for_settlement','authorized','settled', 'settling'));
     }
     /**
-     * Add BraintreeVaulting
+     * Add BraintreeOfficialVaulting
      * @param object $result Braintree\Result\Successful object
-     * @param object $braintree_customer BraintreeCustomer
+     * @param object $braintree_customer BraintreeOfficialCustomer
      */
     public function createVaulting($result, $braintree_customer)
     {
-        $vaulting = new BraintreeVaulting();
-        $vaulting->id_braintree_customer = $braintree_customer->id;
+        $vaulting = new BraintreeOfficialVaulting();
+        $vaulting->id_braintreeofficial_customer = $braintree_customer->id;
         $vaulting->payment_tool = $this->payment_method_bt;
         if ($vaulting->payment_tool == BRAINTREE_CARD_PAYMENT) {
             $vaulting->token = $result->transaction->creditCard['token'];

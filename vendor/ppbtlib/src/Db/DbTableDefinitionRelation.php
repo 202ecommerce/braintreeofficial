@@ -23,10 +23,10 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Db;
+namespace BraintreeofficialPPBTlib\Db;
 
-use BraintreePPBTlib\Db\ObjectModelDefinition;
-use BraintreePPBTlib\Db\DbTableDefinitionRelation;
+use BraintreeofficialPPBTlib\Db\ObjectModelDefinition;
+use BraintreeofficialPPBTlib\Db\DbTableDefinitionRelation;
 
 use \ObjectModel;
 
@@ -46,13 +46,13 @@ class DbTableDefinitionRelation
     protected $id;
 
     /**
-     * @var braintreeObjectModelDefinition
+     * @var braintreeofficialObjectModelDefinition
      */
     protected $def;
 
     /**
-     * Register braintreeObjectModelDefinition and the internal ID
-     * @param braintreeObjectModelDefinition $def
+     * Register braintreeofficialObjectModelDefinition and the internal ID
+     * @param braintreeofficialObjectModelDefinition $def
      * @param string                $id
      */
     public function __construct($def, $id)
@@ -62,7 +62,7 @@ class DbTableDefinitionRelation
     }
 
     /**
-     * Get key value from braintreeObjectModel::$definition['associations'][$this->id]
+     * Get key value from braintreeofficialObjectModel::$definition['associations'][$this->id]
      * @param string $key
      * @return array|null
      */

@@ -24,12 +24,12 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-namespace BraintreeAddons\services;
+namespace BraintreeOfficialAddons\services;
 
-use BraintreeAddons\classes\BraintreeVaulting;
-use BraintreePPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
-class ServiceBraintreeVaulting
+class ServiceBraintreeOfficialVaulting
 {
     /**
      * Checking if vault was created already for this card/pp account
@@ -37,9 +37,9 @@ class ServiceBraintreeVaulting
      */
     public function vaultingExist($token, $customer)
     {
-        $collection = new \PrestaShopCollection(BraintreeVaulting::class);
+        $collection = new \PrestaShopCollection(BraintreeOfficialVaulting::class);
         $collection->where('token', '=', pSQL($token));
-        $collection->where('id_braintree_customer', '=', (int)$customer);
+        $collection->where('id_braintreeofficial_customer', '=', (int)$customer);
         $braintreeVaulting = $collection->getFirst();
         return \Validate::isLoadedObject($braintreeVaulting) ? true : false;
     }
@@ -47,18 +47,18 @@ class ServiceBraintreeVaulting
      * Get all vaulted methods (cards, accounts) for this customer
      * @param integer $customer PrestaShop Customer ID
      * @param string $method payment tool (card or paypal account)
-     * @return array BraintreeVaulting
+     * @return array BraintreeOfficialVaulting
      */
     public function getCustomerMethods($customer, $method)
     {
         $db = \Db::getInstance();
         $query = new \DbQuery();
         $query->select('*');
-        $query->from('braintree_vaulting', 'bv');
-        $query->leftJoin('braintree_customer', 'bc', 'bv.id_braintree_customer = bc.id_braintree_customer');
+        $query->from('braintreeofficial_vaulting', 'bv');
+        $query->leftJoin('braintreeofficial_customer', 'bc', 'bv.id_braintreeofficial_customer = bc.id_braintreeofficial_customer');
         $query->where('bc.id_customer = '.(int)$customer);
         $query->where('bv.payment_tool = "'.pSQL($method).'"');
-        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREE_SANDBOX'));
+        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $result = $db->executeS($query);
         return $result;
     }
@@ -66,7 +66,7 @@ class ServiceBraintreeVaulting
     /**
      * Get vaulted methods grouped by tools (card or paypal account)
      * @param integer $customer PrestaShop Customer ID
-     * @return array BraintreeVaulting
+     * @return array BraintreeOfficialVaulting
      */
     public function getCustomerGroupedMethods($customer)
     {
@@ -74,10 +74,10 @@ class ServiceBraintreeVaulting
         $methods = array();
         $query = new \DbQuery();
         $query->select('*');
-        $query->from('braintree_vaulting', 'bv');
-        $query->leftJoin('braintree_customer', 'bc', 'bv.id_braintree_customer = bc.id_braintree_customer');
+        $query->from('braintreeofficial_vaulting', 'bv');
+        $query->leftJoin('braintreeofficial_customer', 'bc', 'bv.id_braintreeofficial_customer = bc.id_braintreeofficial_customer');
         $query->where('bc.id_customer = '.(int)$customer);
-        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREE_SANDBOX'));
+        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $results = $db->query($query);
         while ($result = $db->nextRow($results)) {
             $methods[$result['payment_tool']][] = $result;
@@ -101,10 +101,10 @@ class ServiceBraintreeVaulting
             ProcessLoggerHandler::openLogger();
             /* @var $paypalVaulting \PaypalVaulting*/
             foreach ($collection->getResults() as $paypalVaulting) {
-                $braintreeVaulting = new BraintreeVaulting();
+                $braintreeVaulting = new BraintreeOfficialVaulting();
                 $braintreeVaulting->id = $paypalVaulting->id;
                 $braintreeVaulting->token = $paypalVaulting->token;
-                $braintreeVaulting->id_braintree_customer = $paypalVaulting->id_paypal_customer;
+                $braintreeVaulting->id_braintreeofficial_customer = $paypalVaulting->id_paypal_customer;
                 $braintreeVaulting->payment_tool = $paypalVaulting->payment_tool;
                 $braintreeVaulting->name = $paypalVaulting->name;
                 $braintreeVaulting->info = $paypalVaulting->info;
@@ -113,7 +113,7 @@ class ServiceBraintreeVaulting
                 try {
                     $braintreeVaulting->add();
                 } catch (\Exception $e) {
-                    \Configuration::updateValue('BRAINTREE_MIGRATION_FAILED', 1);
+                    \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                     $message = 'Error while migration paypal vaulting. ';
                     $message .= 'File: ' . $e->getFile() . '. ';
                     $message .= 'Line: ' . $e->getLine() . '. ';

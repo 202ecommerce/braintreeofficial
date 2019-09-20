@@ -23,10 +23,10 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Db;
+namespace BraintreeofficialPPBTlib\Db;
 
-use BraintreePPBTlib\Db\ObjectModelDefinition;
-use BraintreePPBTlib\Db\DbTableDefinitionRelation;
+use BraintreeofficialPPBTlib\Db\ObjectModelDefinition;
+use BraintreeofficialPPBTlib\Db\DbTableDefinitionRelation;
 
 use \ObjectModel;
 
@@ -38,13 +38,13 @@ class DbTableDefinitionModel
     const ID = 'm';
 
     /**
-     * @var BraintreePPBTlib\Db\ObjectModelDefinition
+     * @var BraintreeofficialPPBTlib\Db\ObjectModelDefinition
      */
     protected $def;
 
     /**
-     * Register BraintreePPBTlib\Db\ObjectModelDefinition
-     * @param BraintreePPBTlib\Db\ObjectModelDefinition $def
+     * Register BraintreeofficialPPBTlib\Db\ObjectModelDefinition
+     * @param BraintreeofficialPPBTlib\Db\ObjectModelDefinition $def
      */
     public function __construct($def)
     {

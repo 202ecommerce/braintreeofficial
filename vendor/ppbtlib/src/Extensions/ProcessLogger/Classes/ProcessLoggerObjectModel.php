@@ -23,7 +23,7 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Extensions\ProcessLogger\Classes;
+namespace BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes;
 
 use \ObjectModel;
 
@@ -63,8 +63,8 @@ class ProcessLoggerObjectModel extends ObjectModel
      * @see \ObjectModel::$definition
      */
     public static $definition = array(
-        'table'        => 'braintree_processlogger',
-        'primary'      => 'id_braintree_processlogger',
+        'table'        => 'braintreeofficial_processlogger',
+        'primary'      => 'id_braintreeofficial_processlogger',
         'fields'       => array(
             'id_order'     => array(
                 'type'     => ObjectModel::TYPE_INT,

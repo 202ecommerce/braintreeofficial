@@ -30,19 +30,19 @@
 		<div class="bt braintree-row-payment bt__pb-3">
 			<div class="bt__mb-2">
 				<i class="material-icons mi-lock">lock</i>
-				<b>{l s='Pay securely using your credit card.' mod='braintree'}</b>
-			<img style="width: 120px" class="bt__ml-2" src="/modules/braintree/views/img/braintree-paypal.png">
+				<b>{l s='Pay securely using your credit card.' mod='braintreeofficial'}</b>
+			<img style="width: 120px" class="bt__ml-2" src="/modules/braintreeofficial/views/img/braintree-paypal.png">
 			</div>	
 			<div class="payment_module braintree-card">
 				{if !isset($init_error)}
 					<form action="{$braintreeSubmitUrl}" data-braintree-card-form method="post">
 						{if isset($active_vaulting) && isset($payment_methods) && !empty($payment_methods)}
 							<div id="bt-vault-form" class="bt__mt-2 bt__mb-3">
-								<p><b>{l s='Choose your card' mod='braintree'}:</b></p>
+								<p><b>{l s='Choose your card' mod='braintreeofficial'}:</b></p>
 								<select name="bt_vaulting_token" data-bt-vaulting-token="bt" class="form-control bt__form-control">
-									<option value="">{l s='Use a new card' mod='braintree'}</option>
+									<option value="">{l s='Use a new card' mod='braintreeofficial'}</option>
 									{foreach from=$payment_methods key=method_key  item=method}
-										<option value="{$method.token|escape:'htmlall':'UTF-8'}" {if $check3Dsecure} data-nonce="{$method.nonce}"{/if}>
+										<option value="{$method.token|escape:'htmlall':'UTF-8'}" data-nonce="{$method.nonce}">
 											{if $method.name}{$method.name|escape:'htmlall':'UTF-8'} - {/if}
 											{$method.info|escape:'htmlall':'UTF-8'}
 										</option>
@@ -53,7 +53,7 @@
 						
 						<div data-form-new-card>							
 							<div id="block-card-number" class="form-group">
-								<label for="card-number" class="bt__form-label">{l s='Card number' mod='braintree'}</label>
+								<label for="card-number" class="bt__form-label">{l s='Card number' mod='braintreeofficial'}</label>
 								<div id="card-number" class="form-control bt__form-control bt__position-relative" data-bt-field="number">
 									<div id="card-image"></div>
 								</div>
@@ -61,15 +61,15 @@
 							</div>
 							<div class="bt__form-row">
 								<div id="block-expiration-date" class="form-group col-md-6">
-									<label for="expiration-date" class="bt__form-label">{l s='Expiration Date' mod='braintree'}
-										<span class="text-muted">{l s='(MM/YY)' mod='braintree'}</span>
+									<label for="expiration-date" class="bt__form-label">{l s='Expiration Date' mod='braintreeofficial'}
+										<span class="text-muted">{l s='(MM/YY)' mod='braintreeofficial'}</span>
 									</label>
 									<div id="expiration-date" class="form-control bt__form-control bt__position-relative" data-bt-field="expirationDate"></div>
 									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 								</div>
 
 								<div id="block-cvv" class="form-group col-md-6" data-bt-card-cvv>
-									<label for="cvv" class="bt__form-label">{l s='CVV' mod='braintree'}</label>
+									<label for="cvv" class="bt__form-label">{l s='CVV' mod='braintreeofficial'}</label>
 									<div id="cvv" class="form-control bt__form-control bt__position-relative" data-bt-field="cvv"></div>
 									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 								</div>
@@ -86,7 +86,7 @@
 							{if isset($active_vaulting) && $active_vaulting}
 								<div class="bt__my-2">
 									<input type="checkbox" name="save_card_in_vault" id="save_card_in_vault"/> 
-									<label for="save_card_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my card' mod='braintree'}</label>
+									<label for="save_card_in_vault" class="form-check-label bt__form-check-label"> {l s='Memorize my card' mod='braintreeofficial'}</label>
 								</div>
 							{/if}
 						</div>

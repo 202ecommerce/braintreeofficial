@@ -30,17 +30,17 @@
         </i>
     </div>
    <h2 class="text-center mb-20">
-       {l s="Perfect! Your Braintree settings were migrated successfully!" mod="braintree"}
+       {l s="Perfect! Your Braintree settings were migrated successfully!" mod='braintreeofficial'}
    </h2>
     <p class="text-center mb-20">
-        {l s="Please check again all settings and disable the maintenance mode in your shop." mod="braintree"}
+        {l s="Please check again all settings and disable the maintenance mode in your shop." mod='braintreeofficial'}
     </p>
     <p class="text-center text-danger mb-20">
-        {l s="Please uninstall the PayPal module once you finished all verifications." mod="braintree"}
+        {l s="Please uninstall the PayPal module once you finished all verifications." mod='braintreeofficial'}
     </p>
     <p class="text-center">
-        <a href="{$link->getAdminLink('AdminBraintreeSetup', true)}" class="btn btn-default">
-            {l s='Go to Braintree Settings' mod='braintree'}
+        <a href="{$link->getAdminLink('AdminBraintreeOfficialSetup', true)}" class="btn btn-default">
+            {l s='Go to Braintree Settings' mod='braintreeofficial'}
         </a>
     </p>
 </div>

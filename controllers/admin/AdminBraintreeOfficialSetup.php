@@ -23,27 +23,27 @@
  * @version   develop
  */
 
-require_once(_PS_MODULE_DIR_ . 'braintree/vendor/autoload.php');
+require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
-use BraintreeAddons\classes\AdminBraintreeController;
-use BraintreeAddons\classes\AbstractMethodBraintree;
+use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use BraintreeAddons\services\ServiceBraintreeOrder;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 
-class AdminBraintreeSetupController extends AdminBraintreeController
+class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialController
 {
-    protected $serviceBraintreeOrder;
+    protected $serviceBraintreeOfficialOrder;
 
     public function __construct()
     {
         parent::__construct();
-        $this->serviceBraintreeOrder = new ServiceBraintreeOrder();
+        $this->serviceBraintreeOfficialOrder = new ServiceBraintreeOfficialOrder();
     }
 
     public function initContent()
     {
-        if ($this->offreMigration() && Configuration::get('BRAINTREE_MIGRATION_SKIP') != '1') {
-            return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeMigration', true));
+        if ($this->offreMigration() && Configuration::get('BRAINTREEOFFICIAL_MIGRATION_SKIP') != '1') {
+            return Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeOfficialMigration', true));
         }
 
         if ($this->showWarningCurrency()) {
@@ -84,16 +84,16 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         Media::addJsDef(array(
             'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
         ));
-        $this->addJS('modules/' . $this->module->name . '/views/js/setupAdmin.js');
+        $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/setupAdmin.js');
     }
 
     public function offreMigration()
     {
-        $offerMigration = Configuration::get('BRAINTREE_MIGRATION_DONE') != '1';
+        $offerMigration = Configuration::get('BRAINTREEOFFICIAL_MIGRATION_DONE') != '1';
         $offerMigration &= Module::isInstalled('paypal');
         $offerMigration &= Configuration::get('PAYPAL_BRAINTREE_ENABLED') == '1';
         $offerMigration &= Configuration::get('PAYPAL_METHOD') == 'BT';
-        $offerMigration &= $this->serviceBraintreeOrder->getCountOrders() == 0;
+        $offerMigration &= $this->serviceBraintreeOfficialOrder->getCountOrders() == 0;
         return $offerMigration;
     }
 
@@ -110,6 +110,10 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             ),
             'input' => array(
                 array(
+                    'type' => 'hidden',
+                    'name' => 'SaveAccountSettingsBlock'
+                ),
+                array(
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
@@ -119,22 +123,24 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             ),
             'id_form' => 'bt_config_account'
         );
+
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, array('SaveAccountSettingsBlock' => 1));
     }
 
     public function getCredentialsTplVars()
     {
-        /* @var $methodBraintree MethodBraintree*/
-        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+        /* @var $methodBraintree MethodBraintreeOfficial*/
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         $tpl_vars = array(
-            'braintree_public_key_live' => Configuration::get('BRAINTREE_PUBLIC_KEY_LIVE'),
-            'braintree_public_key_sandbox' => Configuration::get('BRAINTREE_PUBLIC_KEY_SANDBOX'),
-            'braintree_private_key_live' => Configuration::get('BRAINTREE_PRIVATE_KEY_LIVE'),
-            'braintree_private_key_sandbox' => Configuration::get('BRAINTREE_PRIVATE_KEY_SANDBOX'),
-            'braintree_merchant_id_live' => Configuration::get('BRAINTREE_MERCHANT_ID_LIVE'),
-            'braintree_merchant_id_sandbox' => Configuration::get('BRAINTREE_MERCHANT_ID_SANDBOX'),
+            'braintreeofficial_public_key_live' => Configuration::get('BRAINTREEOFFICIAL_PUBLIC_KEY_LIVE'),
+            'braintreeofficial_public_key_sandbox' => Configuration::get('BRAINTREEOFFICIAL_PUBLIC_KEY_SANDBOX'),
+            'braintreeofficial_private_key_live' => Configuration::get('BRAINTREEOFFICIAL_PRIVATE_KEY_LIVE'),
+            'braintreeofficial_private_key_sandbox' => Configuration::get('BRAINTREEOFFICIAL_PRIVATE_KEY_SANDBOX'),
+            'braintreeofficial_merchant_id_live' => Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE'),
+            'braintreeofficial_merchant_id_sandbox' => Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX'),
             'accountConfigured' => $methodBraintree->isConfigured(),
-            'sandboxEnvironment' => (int)Configuration::get('BRAINTREE_SANDBOX'),
+            'sandboxEnvironment' => (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX'),
             'showMigrationBtn' => $this->offreMigration()
         );
         return $tpl_vars;
@@ -151,7 +157,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 array(
                     'type' => 'select',
                     'label' => $this->l('Payment action'),
-                    'name' => 'braintree_api_intent',
+                    'name' => 'braintreeofficial_api_intent',
                     'options' => array(
                         'query' => array(
                             array(
@@ -181,15 +187,15 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         );
 
         $values = array(
-            'braintree_api_intent' => Configuration::get('BRAINTREE_API_INTENT'),
-            'braintree_sandbox' => (int)Configuration::get('BRAINTREE_SANDBOX')
+            'braintreeofficial_api_intent' => Configuration::get('BRAINTREEOFFICIAL_API_INTENT'),
+            'braintreeofficial_sandbox' => (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     public function initEnvironmentSettings()
     {
-        $this->context->smarty->assign('sandbox', (int)\Configuration::get('BRAINTREE_SANDBOX'));
+        $this->context->smarty->assign('sandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
         $this->fields_form['form']['form'] = array(
             'legend' => array(
@@ -206,7 +212,7 @@ class AdminBraintreeSetupController extends AdminBraintreeController
                 ),
                 array(
                     'type' => 'hidden',
-                    'name' => 'braintree_sandbox',
+                    'name' => 'braintreeofficial_sandbox',
                     'col' => 12,
                     'label' => '',
                 )
@@ -214,16 +220,16 @@ class AdminBraintreeSetupController extends AdminBraintreeController
             'id_form' => 'bt_config_environment'
         );
         $values = array(
-            'braintree_sandbox' => !(int)Configuration::get('BRAINTREE_SANDBOX')
+            'braintreeofficial_sandbox' => !(int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX')
         );
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     public function initStatusBlock()
     {
-        /* @var $methodBraintree MethodBraintree*/
+        /* @var $methodBraintree MethodBraintreeOfficial*/
         $countryDefault = new \Country((int)\Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
-        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         $tpl_vars = array(
             'merchantCountry' => $countryDefault->name,
@@ -260,7 +266,13 @@ class AdminBraintreeSetupController extends AdminBraintreeController
 
     public function initMerchantAccountForm()
     {
-        $inputs = array();
+        $inputs = array(
+            array(
+                'type' => 'hidden',
+                'name' => 'SaveMerchantAccountForm'
+            )
+        );
+
         foreach (Currency::getCurrencies() as $currency) {
             $inputs[] = array(
                 'type' => 'text',
@@ -286,19 +298,38 @@ class AdminBraintreeSetupController extends AdminBraintreeController
         foreach ($inputs as $input) {
             $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
         }
+        $values['SaveMerchantAccountForm'] = 1;
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     public function saveForm()
     {
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
+        if (Tools::isSubmit("SaveMerchantAccountForm")) {
+            $merchantAccounts = array();
+
+            foreach (Currency::getCurrencies() as $currency) {
+                $nameMerchantAccont = Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']));
+                $merchantAccounts[$currency['iso_code']] = Tools::getValue($nameMerchantAccont);
+            }
+
+            $wrongMerchantAccounts = $methodBraintree->validateMerchantAccounts($merchantAccounts);
+
+            if (empty($wrongMerchantAccounts) == false) {
+                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(", ", array_keys($wrongMerchantAccounts));
+                return false;
+            }
+        }
+
         $result = parent::saveForm();
 
-        if (Tools::isSubmit('braintree_merchant_id_sandbox') || Tools::isSubmit('braintree_merchant_id_live')) {
+        if (Tools::isSubmit('SaveAccountSettingsBlock')) {
             $this->importMerchantAccountForCurrency(true);
             $this->importMerchantAccountForCurrency(false);
         }
 
-        $methodBraintree = AbstractMethodBraintree::load('Braintree');
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         if ($methodBraintree->isConfigured() == false) {
             $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
@@ -312,10 +343,14 @@ class AdminBraintreeSetupController extends AdminBraintreeController
      */
     public function importMerchantAccountForCurrency($mode = null)
     {
-        /* @var $method MethodBraintree*/
-        $method = AbstractMethodBraintree::load('Braintree');
+        /* @var $method MethodBraintreeOfficial*/
+        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
+        // Delete merchant accounts if they exists
+        $this->module->deleteMerchantAccountIds($mode);
+
         if ($mode === null) {
-            $mode = (int)Configuration::get('BRAINTREE_SANDBOX');
+            $mode = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
         }
         $allCurrency = $method->getAllCurrency($mode);
 

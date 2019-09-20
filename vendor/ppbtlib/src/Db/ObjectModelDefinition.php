@@ -23,11 +23,11 @@
  * @version   develop
  */
 
-namespace BraintreePPBTlib\Db;
+namespace BraintreeofficialPPBTlib\Db;
 
-use BraintreePPBTlib\Db\DbTableDefinitionModel;
-use BraintreePPBTlib\Db\DbTableDefinitionRelation;
-use BraintreePPBTlib\Db\DbSchema;
+use BraintreeofficialPPBTlib\Db\DbTableDefinitionModel;
+use BraintreeofficialPPBTlib\Db\DbTableDefinitionRelation;
+use BraintreeofficialPPBTlib\Db\DbSchema;
 
 use \ObjectModel;
 use \Tools;
@@ -72,7 +72,7 @@ class ObjectModelDefinition
     protected $model;
 
     /**
-     * @var array of BraintreePPBTlib\Db\DbTableDefinitionRelation
+     * @var array of BraintreeofficialPPBTlib\Db\DbTableDefinitionRelation
      */
     protected $relations;
 
@@ -130,7 +130,7 @@ class ObjectModelDefinition
 
     /**
      * @param string $id
-     * @return BraintreePPBTlib\Db\DbSchema
+     * @return BraintreeofficialPPBTlib\Db\DbSchema
      */
     public function getSchema($id)
     {
@@ -162,7 +162,7 @@ class ObjectModelDefinition
 
     /**
      * @param string $id
-     * @return BraintreePPBTlib\Db\DbTableDefinitionRelation
+     * @return BraintreeofficialPPBTlib\Db\DbTableDefinitionRelation
      */
     public function getRelation($id)
     {

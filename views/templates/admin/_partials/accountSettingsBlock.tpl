@@ -25,38 +25,38 @@
 
 <div>
 	<p>
-		{l s='Braintree Account' mod='braintree'}.
+		{l s='Braintree Account' mod='braintreeofficial'}.
 	</p>
 	<p>
-		{l s='In order to activate the module, you must connect your existing Braintree account or create a new one.' mod='braintree'}
+		{l s='In order to activate the module, you must connect your existing Braintree account or create a new one.' mod='braintreeofficial'}
 	</p>
 	<p>
 		{if isset($accountConfigured) && $accountConfigured}
 			<span class="mr-20">
-				{l s='Connected Merchand ID' mod='braintree'}
+				{l s='Connected Merchand ID' mod='braintreeofficial'}
 			</span>
 
 			<strong>
-				{if isset($sandboxEnvironment) && $sandboxEnvironment && isset($braintree_merchant_id_sandbox)}
-					{$braintree_merchant_id_sandbox|escape:'htmlall':'utf-8'}
-				{elseif isset($braintree_merchant_id_live)}
-					{$braintree_merchant_id_live|escape:'htmlall':'utf-8'}
+				{if isset($sandboxEnvironment) && $sandboxEnvironment && isset($braintreeofficial_merchant_id_sandbox)}
+					{$braintreeofficial_merchant_id_sandbox|escape:'htmlall':'utf-8'}
+				{elseif isset($braintreeofficial_merchant_id_live)}
+					{$braintreeofficial_merchant_id_live|escape:'htmlall':'utf-8'}
 				{/if}
 			</strong>
 
 			<span class="btn btn-default ml-20" data-bt-logout>
-				{l s='Logout' mod='braintree'}
+				{l s='Logout' mod='braintreeofficial'}
 			</span>
 		{else}
 			<span class="btn btn-default" data-toggle="modal" data-target="#credentialBlock">
-				{l s='Connect or create Braintree account' mod='braintree'}
+				{l s='Connect or create Braintree account' mod='braintreeofficial'}
 			</span>
 		{/if}
 
 		{if isset($showMigrationBtn) && $showMigrationBtn}
 			<div>
-				<a class="btn btn-default" href="{$link->getAdminLink('AdminBraintreeMigration', true)}">
-					{l s='Migrate your settings from PayPal module' mod='braintree'}
+				<a class="btn btn-default" href="{$link->getAdminLink('AdminBraintreeOfficialMigration', true)}">
+					{l s='Migrate your settings from PayPal module' mod='braintreeofficial'}
 				</a>
 			</div>
 		{/if}
@@ -68,20 +68,20 @@
 			<div class="modal-body">
 				<div>
 					<div>
-						<p class="h3">{l s='API Credentials' mod='braintree'}</p>
+						<p class="h3">{l s='API Credentials' mod='braintreeofficial'}</p>
 						<p>
-							{l s='In order to accept Braintree payments, please fill your API Keys.' mod='braintree'}
+							{l s='In order to accept Braintree payments, please fill your API Keys.' mod='braintreeofficial'}
 						</p>
 						<p>
-							{{l s='If you do not have a Braintree account, you can create by following this [a @href1@]link[/a]' mod='braintree'}|braintreereplace:['@href1@' => {'https://signups.braintreepayments.com/'}, '@target@' => {'target="blank"'}]}
+							{{l s='If you do not have a Braintree account, you can create by following this [a @href1@]link[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {'https://signups.braintreepayments.com/'}, '@target@' => {'target="blank"'}]}
 						</p>
 						{include './formAccount.tpl'}
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Cancel' mod='braintree'}</button>
-				<button type="button" data-confirm-credentials class="btn btn-primary">{l s='Confirm API Credentials' mod='braintree'}</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">{l s='Cancel' mod='braintreeofficial'}</button>
+				<button type="button" data-confirm-credentials class="btn btn-primary">{l s='Confirm API Credentials' mod='braintreeofficial'}</button>
 			</div>
 		</div>
 	</div>

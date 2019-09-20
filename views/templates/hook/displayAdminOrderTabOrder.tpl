@@ -26,7 +26,7 @@
 
 <li>
 	<a href="#braintree">
-		{l s='Braintree' mod='braintree'}
+		{l s='Braintree' mod='braintreeofficial'}
 		<span class="badge">{if isset($logs)}{$logs|@count}{else}0{/if}</span>
 	</a>
 </li>

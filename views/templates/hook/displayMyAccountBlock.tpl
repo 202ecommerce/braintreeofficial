@@ -24,7 +24,7 @@
 *}
 
 <li>
-	<a href="{$link->getModuleLink('braintree', 'account')|escape:'html':'UTF-8'}" title="{l s='My payment methods' mod='braintree'}">
-		{l s='My payment methods' mod='braintree'}
+	<a href="{$link->getModuleLink('braintreeofficial', 'account')|escape:'html':'UTF-8'}" title="{l s='My payment methods' mod='braintreeofficial'}">
+		{l s='My payment methods' mod='braintreeofficial'}
 	</a>
 </li>

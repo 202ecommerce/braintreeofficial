@@ -26,32 +26,32 @@
 {extends file='customer/page.tpl'}
 
 {block name='page_title'}
-    {l s='My payment methods' mod='braintree'}
+    {l s='My payment methods' mod='braintreeofficial'}
 {/block}
 
 {block name='page_content'}
     <!-- Page content -->
     {if $payment_methods}
-        <form action="{$link->getModuleLink('braintree', 'account', ['process' => 'save'])}" method="post">
+        <form action="{$link->getModuleLink('braintreeofficial', 'account', ['process' => 'save'])}" method="post">
         {foreach from=$payment_methods key=method_key  item=payment_method}
-            {if $method_key == 'card-braintree'}<h3>{l s='Your cards' mod='braintree'}</h3>{/if}
-            {if $method_key == 'paypal-braintree'}<h3>{l s='Your paypal accounts' mod='braintree'}</h3>{/if}
+            {if $method_key == 'card-braintree'}<h3>{l s='Your cards' mod='braintreeofficial'}</h3>{/if}
+            {if $method_key == 'paypal-braintree'}<h3>{l s='Your paypal accounts' mod='braintreeofficial'}</h3>{/if}
             {foreach from=$payment_method key=key  item=method}
                 <p class="method">
                     {if $method.name}<b>{$method.name|escape:'htmlall':'UTF-8'} : </b>{/if}
                     {$method.info|escape:'htmlall':'UTF-8'}
-                    <a href="{$link->getModuleLink('braintree', 'account', ['process' => 'delete', 'id_method' => {$method.id_braintree_vaulting|escape:'htmlall':'UTF-8'}])}"><i class="material-icons">delete</i></a>
+                    <a href="{$link->getModuleLink('braintreeofficial', 'account', ['process' => 'delete', 'id_method' => {$method.id_braintreeofficial_vaulting|escape:'htmlall':'UTF-8'}])}"><i class="material-icons">delete</i></a>
                     <br />
-                    {if !$method.name}{l s='Add name' mod='braintree'}{else}{l s='Edit name' mod='braintree'}{/if}
-                    <span class="edit_name" data-method_id="{$method.id_braintree_vaulting|escape:'htmlall':'UTF-8'}"><i class="material-icons">mode_edit</i></span>
-                    <input type="text" value="{$method.name|escape:'htmlall':'UTF-8'}" name="name_{$method.id_braintree_vaulting|escape:'htmlall':'UTF-8'}" class="form-control" style="display: none"/>
+                    {if !$method.name}{l s='Add name' mod='braintreeofficial'}{else}{l s='Edit name' mod='braintreeofficial'}{/if}
+                    <span class="edit_name" data-method_id="{$method.id_braintreeofficial_vaulting|escape:'htmlall':'UTF-8'}"><i class="material-icons">mode_edit</i></span>
+                    <input type="text" value="{$method.name|escape:'htmlall':'UTF-8'}" name="name_{$method.id_braintreeofficial_vaulting|escape:'htmlall':'UTF-8'}" class="form-control" style="display: none"/>
                 </p>
             {/foreach}
         {/foreach}
-            <p><button class="btn btn-primary" type="submit">{l s='Save' mod='braintree'}</button></p>
+            <p><button class="btn btn-primary" type="submit">{l s='Save' mod='braintreeofficial'}</button></p>
         </form>
     {else}
-        {l s='You don\'t have saved payment methods' mod='braintree'}
+        {l s='You don\'t have saved payment methods' mod='braintreeofficial'}
     {/if}
 
     <script type="text/javascript">
