@@ -266,7 +266,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 
         if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
             $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
-        } else if ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+        } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
             || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
             $order_state = Configuration::get('PS_OS_PAYMENT');
         } else {
@@ -334,7 +334,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     'merchantAccountId' => $result->transaction->merchantAccountId,
                     'date_transaction' => $this->getDateTransaction($result->transaction)
                 );
-            } else if ($result->transaction->status == Braintree_Transaction::SETTLEMENT_DECLINED) {
+            } elseif ($result->transaction->status == Braintree_Transaction::SETTLEMENT_DECLINED) {
                 $order = new Order(Tools::getValue('id_order'));
                 $order->setCurrentState(Configuration::get('PS_OS_ERROR'));
             } else {

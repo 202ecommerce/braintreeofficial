@@ -56,7 +56,7 @@
        </div>
        <div class="text-center">
            <a class="btn btn-default"
-              href="{$link->getAdminLink('AdminBraintreeOfficialSetup', true)|addslashes}"
+              href="{$link->getAdminLink('AdminBraintreeOfficialSetup', true)|addslash}"
            >
                {l s='Add API keys later' mod='braintreeofficial'}
            </a>
