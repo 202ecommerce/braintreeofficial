@@ -138,7 +138,7 @@ class BraintreeOfficial extends \PaymentModule
                 'pt' => 'Experiência',
                 'pl' => 'Doświadczenie',
                 'nl' => 'Ervaring',
-                'it' => 'Percorso clinte',
+                'it' => 'Percorso cliente',
                 'es' => 'Experiencia'
             ),
             'class_name' => 'AdminBraintreeOfficialCustomizeCheckout',
