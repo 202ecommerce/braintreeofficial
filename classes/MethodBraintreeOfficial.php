@@ -797,7 +797,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     {
         /* @var $module BraintreeOfficial*/
         if (is_float($price) == false) {
-            $price = floatval($price);
+            $price = (float)$price;
         }
 
         $context = Context::getContext();
