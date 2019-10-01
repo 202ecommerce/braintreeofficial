@@ -141,8 +141,8 @@ class ServiceBraintreeOfficialOrder
              */
             foreach ($collection->getResults() as $braintreeOrder) {
                 try {
-                    $paypalOrder = \PaypalOrder::loadByOrderId($braintreeOrder->id_order);
-                    $paypalCapture = \PaypalCapture::loadByOrderPayPalId($paypalOrder->id);
+                    $paypalOrder = \PaypalOrder::loadByOrderId($braintreeOrder->id_order); // method loadByOrderId exists
+                    $paypalCapture = \PaypalCapture::loadByOrderPayPalId($paypalOrder->id); // method loadByOrderPayPalId exists
                     $paypalOrder->delete();
                     $paypalCapture->delete();
                 } catch (\Exception $e) {

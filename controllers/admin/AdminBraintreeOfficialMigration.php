@@ -178,7 +178,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     {
         /* @var $method MethodBraintreeOfficial*/
         $this->saveForm();
-        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial'); // mehtod load exists in class BraintreeofficialPPBTlib\AbstractMethod
         $isConfigured = $method->isConfigured();
 
         if ($isConfigured) {
