@@ -339,7 +339,13 @@ class BraintreeOfficial extends \PaymentModule
     {
         foreach (Currency::getCurrencies() as $currency) {
             $maName = Tools::strtoupper($this->getNameMerchantAccountForCurrency($currency['iso_code'], $mode));
-            Configuration::deleteByName($maName);
+            $where = 'name="' . pSQL($maName) .'"';
+
+            if (Shop::isFeatureActive()) {
+                $where .= ' AND id_shop=' . $this->context->shop->id;
+            }
+
+            Db::getInstance()->delete('configuration', $where);
         }
     }
 
