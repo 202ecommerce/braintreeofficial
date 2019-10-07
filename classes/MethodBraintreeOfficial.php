@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 202-ecommerce
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -266,7 +266,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 
         if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
             $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
-        } else if ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+        } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
             || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
             $order_state = Configuration::get('PS_OS_PAYMENT');
         } else {
@@ -334,7 +334,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     'merchantAccountId' => $result->transaction->merchantAccountId,
                     'date_transaction' => $this->getDateTransaction($result->transaction)
                 );
-            } else if ($result->transaction->status == Braintree_Transaction::SETTLEMENT_DECLINED) {
+            } elseif ($result->transaction->status == Braintree_Transaction::SETTLEMENT_DECLINED) {
                 $order = new Order(Tools::getValue('id_order'));
                 $order->setCurrentState(Configuration::get('PS_OS_ERROR'));
             } else {
@@ -797,7 +797,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     {
         /* @var $module BraintreeOfficial*/
         if (is_float($price) == false) {
-            $price = floatval($price);
+            $price = (float)$price;
         }
 
         $context = Context::getContext();
@@ -834,13 +834,41 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         );
 
         $result = $this->gateway->customer()->create($data);
+
+        $profileKey = $this->getProfileKey();
+
         $customer = new BrainTreeOfficialCustomer();
         $customer->id_customer = $context->customer->id;
         $customer->reference = $result->customer->id;
-        $customer->sandbox = (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+        $customer->sandbox = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+        $customer->profile_key = pSQL($profileKey);
         $customer->save();
         return $customer;
     }
+
+    /**
+     * @param bool $sandbox
+     * @return string
+     */
+    public function getProfileKey($sandbox = null)
+    {
+        if ($sandbox === null) {
+            $sandbox = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+        }
+
+        if (($this->gateway instanceof Braintree\Gateway) == false) {
+            try {
+                $this->initConfig((int)$sandbox);
+            } catch (Exception $e) {
+                return '';
+            }
+        }
+
+        $profileKey = md5($this->gateway->config->getMerchantId());
+
+        return $profileKey;
+    }
+
     /**
      * Update customer info on BT
      * @param BraintreeOfficialCustomer $braintree_customer

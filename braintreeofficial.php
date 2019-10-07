@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 202-ecommerce
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -138,7 +138,7 @@ class BraintreeOfficial extends \PaymentModule
                 'pt' => 'Experiência',
                 'pl' => 'Doświadczenie',
                 'nl' => 'Ervaring',
-                'it' => 'Percorso clinte',
+                'it' => 'Percorso cliente',
                 'es' => 'Experiencia'
             ),
             'class_name' => 'AdminBraintreeOfficialCustomizeCheckout',
@@ -915,6 +915,7 @@ class BraintreeOfficial extends \PaymentModule
                 return;
             }
 
+            $preconnectResources = array('https://js.braintreegateway.com');
             $this->context->controller->addJqueryPlugin('fancybox');
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.50.0/js/client.min.js', array('server' => 'remote'));
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js', array('server' => 'remote'));
@@ -925,12 +926,15 @@ class BraintreeOfficial extends \PaymentModule
             $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
+                $preconnectResources[] = 'https://www.paypalobjects.com';
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 Media::addJsDefL('empty_nonce', $this->l('Please click on the PayPal Pay button first'));
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
+            $this->context->smarty->assign('preconnectResources', $preconnectResources);
+            return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/preconnect.tpl');
         }
     }
 

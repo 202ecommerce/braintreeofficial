@@ -183,8 +183,25 @@ related to the payment method "Express checkout"
     
       `void`
       
+- **validateMerchantAccounts($merchantAccounts)**
+
+    - **Parametres**
+          
+      merchantAccounts: `array` the data for the validation [iso => mechantAccountId]
+    
+    - **Return Values**
+    
+      `array` returns wrong merchant accounts [iso => mechantAccountId]      
    
-      
+- **initConfig(\[$order_mode = null\])**
+
+    - **Parametres**
+          
+      order_mode: `bool` mode of sandbox / live (true / false)
+    
+    - **Return Values**
+    
+      `void`         
       
       
       

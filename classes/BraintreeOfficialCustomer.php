@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 202-ecommerce
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -40,6 +40,9 @@ class BraintreeOfficialCustomer extends \ObjectModel
     /** @var bool mode of customer (sandbox or live) */
     public $sandbox;
 
+    /** @var string */
+    public $profile_key;
+
     /** @var string Object creation date */
     public $date_add;
 
@@ -57,6 +60,7 @@ class BraintreeOfficialCustomer extends \ObjectModel
             'id_customer' => array('type' => self::TYPE_INT),
             'reference' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
+            'profile_key' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
             'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
         )

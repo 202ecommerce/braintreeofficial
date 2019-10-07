@@ -1,4 +1,4 @@
-name: braintree
+name: BraintreeOfficial
 
 excludeDir:
   - node_modules
@@ -19,5 +19,6 @@ order:
   - Introduction
   - Entities
   - Classes
-  - Controllers
+  - Front Controllers
+  - Admin Controllers
   - Services

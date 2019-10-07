@@ -18,15 +18,15 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2019 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author 202-ecommerce <tech@202-ecommerce.com>
+ *  @copyright Copyright (c) 202-ecommerce
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 namespace BraintreeOfficialAddons\services;
 
-use Braintree\Exception;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
@@ -40,9 +40,12 @@ class ServiceBraintreeOfficialCustomer
      */
     public function loadCustomerByMethod($id_customer, $sandbox)
     {
+        /** @var $method \MethodBraintreeOfficial*/
+        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
         $collection->where('id_customer', '=', (int)$id_customer);
         $collection->where('sandbox', '=', (int)$sandbox);
+        $collection->where('profile_key', '=', pSQL($method->getProfileKey((int)$sandbox)));
         return $collection->getFirst();
     }
 
@@ -83,5 +86,36 @@ class ServiceBraintreeOfficialCustomer
             }
             ProcessLoggerHandler::closeLogger();
         }
+    }
+
+    public function setProfileKeyForCustomers($sandbox)
+    {
+        $result = true;
+        $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+        $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
+        $collection->where('profile_key', '=', '');
+        $collection->where('sandbox', '=', (int)$sandbox);
+        $braintreeCustomers = $collection->getResults();
+
+        if (empty($braintreeCustomers)) {
+            return $result;
+        }
+
+        foreach ($braintreeCustomers as $braintreeCustomer) {
+            $result &= $this->setProfileKeyForCustomer($braintreeCustomer, $method);
+        }
+
+        return $result;
+    }
+
+    public function setProfileKeyForCustomer(BraintreeOfficialCustomer $braintreeCustomer, \MethodBraintreeOfficial $method = null)
+    {
+        if ($method === null) {
+            $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+        }
+
+        $braintreeCustomer->profile_key = $method->getProfileKey($braintreeCustomer->sandbox);
+
+        return $braintreeCustomer->save();
     }
 }
