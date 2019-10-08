@@ -450,7 +450,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     {
         try {
             $this->initConfig($orderBraintree->sandbox);
-            $capture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($orderBraintree->id);
+            $capture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
             $id_transaction = Validate::isLoadedObject($capture) ? $capture->id_capture : $orderBraintree->id_transaction;
 
             $result = $this->gateway->transaction()->refund($id_transaction, number_format($orderBraintree->total_paid, 2, ".", ''));
@@ -502,9 +502,9 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     public function partialRefund($params)
     {
         try {
-            $braintreeOrder = $this->serviceBraintreeOrder->loadByOrderId(Tools::getValue('id_order'));
+            $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId(Tools::getValue('id_order'));
             $this->initConfig($braintreeOrder->sandbox);
-            $capture = $this->serviceBraintreeCapture->loadByOrderBraintreeId($braintreeOrder->id);
+            $capture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($braintreeOrder->id);
             $id_transaction = Validate::isLoadedObject($capture) ? $capture->id_capture : $braintreeOrder->id_transaction;
             $amount = 0;
             foreach ($params['productList'] as $product) {
