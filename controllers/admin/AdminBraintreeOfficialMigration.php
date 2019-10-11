@@ -65,7 +65,16 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
     protected function doMigration()
     {
-        Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1);
+        if (Shop::isFeatureActive()) {
+            $shops = Shop::getShops();
+            foreach ($shops as $shop) {
+                Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1, false, null, (int)$shop['id_shop']);
+                $this->doMigrateConfigurations((int)$shop['id_shop']);
+            }
+        } else {
+            Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1);
+            $this->doMigrateConfigurations();
+        }
         $serviceBraintreeCustomer = new ServiceBraintreeOfficialCustomer();
         $serviceBraintreeVaulting = new ServiceBraintreeOfficialVaulting();
         $serviceBraintreeOrder = new ServiceBraintreeOfficialOrder();
@@ -86,15 +95,6 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         $serviceBraintreeCapture->doMigration();
         $serviceBraintreeLog->doMigration();
         $serviceBraintreeOrder->deleteBtOrderFromPayPal();
-
-        if (Shop::isFeatureActive()) {
-            $shops = Shop::getShops();
-            foreach ($shops as $shop) {
-                $this->doMigrateConfigurations((int)$shop['id_shop']);
-            }
-        } else {
-            $this->doMigrateConfigurations();
-        }
     }
 
     /**
