@@ -54,6 +54,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     public function getStepTwo()
     {
         $tpl_vars = $this->getCredentialsTplVars();
+        $tpl_vars['isMultishop'] = Shop::isFeatureActive();
         $this->context->smarty->assign($tpl_vars);
         return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/migrationStepTwo.tpl');
     }
@@ -139,7 +140,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
     public function displayAjaxStartMigration()
     {
-        $this->doMigration();
+        //$this->doMigration();
         $content = Tools::jsonEncode(array(
             'status' => true,
             'content' => $this->getStepTwo(),
