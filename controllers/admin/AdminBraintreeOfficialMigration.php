@@ -140,7 +140,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
     public function displayAjaxStartMigration()
     {
-        //$this->doMigration();
+        $this->doMigration();
         $content = Tools::jsonEncode(array(
             'status' => true,
             'content' => $this->getStepTwo(),
