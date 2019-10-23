@@ -116,6 +116,13 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             'success' => true,
             'message' => array()
         );
+        $hooksUnregistered = $this->module->getHooksUnregistered();
+
+        if (empty($hooksUnregistered) == false) {
+            $response['success'] = false;
+            $response['message'][] = $this->getHooksUnregisteredMessage($hooksUnregistered);
+        }
+
         if ((int)\Configuration::get('PS_COUNTRY_DEFAULT') == false) {
             $response['success'] = false;
             $response['message'][] = $this->module->l('To activate a payment solution, please select your default country.', 'AdminBraintreeOfficialController');
@@ -174,5 +181,19 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             }
         }
         return $return;
+    }
+
+    /**
+     *  @param array $hooks array of the hooks name
+     *  @return string
+     */
+    public function getHooksUnregisteredMessage($hooks)
+    {
+        if (is_array($hooks) == false || empty($hooks)) {
+            return '';
+        }
+
+        $this->context->smarty->assign('hooks', $hooks);
+        return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/unregisteredHooksMessage.tpl');
     }
 }
