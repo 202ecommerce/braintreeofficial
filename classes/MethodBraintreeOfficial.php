@@ -748,7 +748,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                             if ($payment_method->verification->gatewayRejectionReason) {
                                 $error_msg .= $module->l('Rejection reason : ', get_class($this)).' '.$payment_method->verification->gatewayRejectionReason;
                             }
-                            throw new Exception($error_msg, '00000');
+                            throw new BraintreeOfficialException('00000', $error_msg);
                         }
                         $paymentMethodToken = $payment_method->paymentMethod->token;
                     }
@@ -770,7 +770,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         try {
             $result = $this->gateway->transaction()->sale($data);
         } catch (Braintree\Exception\Authorization $e) {
-            throw new Exception('Authorization exception: please try to pay again or contact customer support', '00000');
+            throw new BraintreeOfficialException('00000', 'Authorization exception: please try to pay again or contact customer support');
         }
 
         if (($result instanceof Braintree_Result_Successful) && $result->success && $this->isValidStatus($result->transaction->status)) {

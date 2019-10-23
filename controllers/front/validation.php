@@ -60,8 +60,8 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
             $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id .'&id_module=' . $module->id .'&key='.$customer->secure_key;
         } catch (BraintreeOfficialAddons\classes\BraintreeOfficialException $e) {
             $this->errors['error_code'] = $e->getCode();
-            $this->errors['error_msg'] = $e->getMessage();
-            $this->errors['msg_long'] = $e->getMessageLong();
+            $this->errors['logger_msg'] = $e->getMessage();
+            $this->errors['error_msg'] = $this->l('Your payment has been declined : please try again or with another payment method.');
         } catch (Exception $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();
