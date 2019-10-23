@@ -66,7 +66,7 @@
 					</li>
 				</ul>
 			</p>
-			<p><a target="_blank" href="https://www.paypal.com/fr/webapps/mpp/hosted">{l s='More Information' mod='braintreeofficial'}</a></p>
+			<p><a target="_blank" href="https://addons.prestashop.com/fr/modules-paiement-prestashop/46833-braintree-officiel.html">{l s='More Information' mod='braintreeofficial'}</a></p>
 		{/if}
 	</div>
 </div>
