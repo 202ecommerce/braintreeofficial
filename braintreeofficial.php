@@ -1505,4 +1505,51 @@ class BraintreeOfficial extends \PaymentModule
 
         return $hooksUnregistered;
     }
+
+    /**
+     * @return bool
+     */
+    public function renameOrderState()
+    {
+        $result = true;
+        $languages = Language::getLanguages();
+        $braintreeAwaiting = new State((int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING'));
+        $braintreeAwaitingValidation = new State((int)Configuration::get('PAYPAL_BRAINTREE_OS_AWAITING_VALIDATION'));
+
+        if (Validate::isLoadedObject($braintreeAwaiting)) {
+            foreach ($languages as $language) {
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $braintreeAwaiting->name[$isoCode] = '';
+                        break;
+                    default:
+                        $braintreeAwaiting->name['en'] = 'Payment pending (authorized)';
+                }
+            }
+
+            $result &= $braintreeAwaiting->save();
+        } else {
+            $result &= false;
+        }
+
+        if (Validate::isLoadedObject($braintreeAwaitingValidation)) {
+            foreach ($languages as $language) {
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $braintreeAwaitingValidation->name[$isoCode] = '';
+                        break;
+                    default:
+                        $braintreeAwaitingValidation->name['en'] = 'Payment processing (authorized)';
+                }
+            }
+
+            $result &= $braintreeAwaitingValidation->save();
+        } else {
+            $result &= false;
+        }
+
+        return $result;
+    }
 }

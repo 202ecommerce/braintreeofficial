@@ -75,7 +75,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             'formPaymentSettings' => $formPaymentSettings,
             'formMerchantAccounts' => $formMerchantAccounts,
             'formEnvironmentSettings' => $formEnvironmentSettings,
-            'formStatus' => $formStatus
+            'formStatus' => $formStatus,
+            'showMessageAboutStateName' => (int)Configuration::get('BRAINTREEOFFICIAL_SHOW_MESSAGE_ABOUT_STATE_NAME')
 
         );
         $this->context->smarty->assign($tpl_vars);
