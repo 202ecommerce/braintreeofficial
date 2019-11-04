@@ -70,7 +70,10 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         }
 
         if (!empty($this->errors)) {
-            $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $this->errors);
+            $params = array(
+                'error_msg' => $this->errors['error_msg']
+            );
+            $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $params);
         }
     }
 
