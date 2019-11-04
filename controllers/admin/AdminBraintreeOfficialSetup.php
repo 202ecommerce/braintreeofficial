@@ -332,6 +332,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
         if ($methodBraintree->isConfigured() == false) {
             $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
+        } else {
+            if (Module::isEnabled('paypal') && (int)Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {
+                $paypalModule = Module::getInstanceByName('paypal');
+                $paypalModule->disable();
+            }
         }
 
         return $result;
