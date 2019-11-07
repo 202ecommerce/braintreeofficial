@@ -933,11 +933,8 @@ class BraintreeOfficial extends \PaymentModule
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
-            $this->context->smarty->assign('preconnectResources', $resources);
             $this->context->smarty->assign('prefetchResources', $resources);
-            $head = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/preconnect.tpl');
-            $head .= $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/prefetch.tpl');
-            return $head;
+            return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/prefetch.tpl');
         }
     }
 
