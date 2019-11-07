@@ -25,6 +25,6 @@
 
 {if isset($prefetchResources) && is_array($prefetchResources) && empty($prefetchResources) == false}
     {foreach from=$prefetchResources item=prefetchResource}
-        <link href="{$prefetchResource|addslashes}" rel="prefetch">
+        <link href="{$prefetchResource|addslashes}" rel="prefetch" as="script">
     {/foreach}
 {/if}

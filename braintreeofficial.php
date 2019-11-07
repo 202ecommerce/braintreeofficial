@@ -915,7 +915,6 @@ class BraintreeOfficial extends \PaymentModule
                 return;
             }
 
-            $resources = array('https://js.braintreegateway.com');
             $this->context->controller->addJqueryPlugin('fancybox');
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.50.0/js/client.min.js', array('server' => 'remote'));
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js', array('server' => 'remote'));
@@ -926,12 +925,25 @@ class BraintreeOfficial extends \PaymentModule
             $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
-                $resources[] = 'https://www.paypalobjects.com';
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 Media::addJsDefL('empty_nonce', $this->l('Please click on the PayPal Pay button first'));
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
+            }
+        } else if (Tools::getValue('controller') == "cart") {
+            $resources = array(
+                'https://js.braintreegateway.com/web/3.50.0/js/client.min.js',
+                'https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js',
+                'https://js.braintreegateway.com/web/3.24.0/js/data-collector.min.js',
+                'https://js.braintreegateway.com/web/3.50.0/js/three-d-secure.min.js'
+            );
+            if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
+                $resources_paypal = array(
+                    'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js',
+                    'https://www.paypalobjects.com/api/checkout.js'
+                );
+                $resources = array_merge($resources, $resources_paypal);
             }
             $this->context->smarty->assign('prefetchResources', $resources);
             return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/prefetch.tpl');
