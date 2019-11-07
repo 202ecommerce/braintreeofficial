@@ -901,17 +901,7 @@ class BraintreeOfficial extends \PaymentModule
     public function hookHeader()
     {
         if (Tools::getValue('controller') == "order") {
-            $active = false;
-            $modules = Hook::getHookModuleExecList('paymentOptions');
-            if (empty($modules)) {
-                return;
-            }
-            foreach ($modules as $module) {
-                if ($module['module'] == $this->name) {
-                    $active = true;
-                }
-            }
-            if (!$active) {
+            if (!$this->checkActiveModule()) {
                 return;
             }
 
@@ -931,7 +921,10 @@ class BraintreeOfficial extends \PaymentModule
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
-        } else if (Tools::getValue('controller') == "cart") {
+        } else if (Tools::getValue('controller') == "cart") {            
+            if (!$this->checkActiveModule()) {
+                return;
+            }
             $resources = array(
                 'https://js.braintreegateway.com/web/3.50.0/js/client.min.js',
                 'https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js',
@@ -948,6 +941,21 @@ class BraintreeOfficial extends \PaymentModule
             $this->context->smarty->assign('prefetchResources', $resources);
             return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/prefetch.tpl');
         }
+    }
+
+    public function checkActiveModule() 
+    {
+        $active = false;
+        $modules = Hook::getHookModuleExecList('paymentOptions');
+        if (empty($modules)) {
+            return;
+        }
+        foreach ($modules as $module) {
+            if ($module['module'] == $this->name) {
+                $active = true;
+            }
+        }
+        return $active;
     }
 
     public function addJsVarsLangBT()
