@@ -921,7 +921,7 @@ class BraintreeOfficial extends \PaymentModule
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
-        } else if (Tools::getValue('controller') == "cart") {            
+        } elseif (Tools::getValue('controller') == "cart") {            
             if (!$this->checkActiveModule()) {
                 return;
             }
