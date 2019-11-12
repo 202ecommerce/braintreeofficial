@@ -54,6 +54,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     public function getStepTwo()
     {
         $tpl_vars = $this->getCredentialsTplVars();
+        $tpl_vars['isMultishop'] = Shop::isFeatureActive();
         $this->context->smarty->assign($tpl_vars);
         return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/migrationStepTwo.tpl');
     }
@@ -65,7 +66,16 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
     protected function doMigration()
     {
-        Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1);
+        if (Shop::isFeatureActive()) {
+            $shops = Shop::getShops();
+            foreach ($shops as $shop) {
+                Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1, false, null, (int)$shop['id_shop']);
+                $this->doMigrateConfigurations((int)$shop['id_shop']);
+            }
+        } else {
+            Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1);
+            $this->doMigrateConfigurations();
+        }
         $serviceBraintreeCustomer = new ServiceBraintreeOfficialCustomer();
         $serviceBraintreeVaulting = new ServiceBraintreeOfficialVaulting();
         $serviceBraintreeOrder = new ServiceBraintreeOfficialOrder();
@@ -86,27 +96,6 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         $serviceBraintreeCapture->doMigration();
         $serviceBraintreeLog->doMigration();
         $serviceBraintreeOrder->deleteBtOrderFromPayPal();
-
-        Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_API_INTENT', Configuration::get('PAYPAL_API_INTENT'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', Configuration::get('PAYPAL_SANDBOX'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS', Configuration::get('PAYPAL_API_ADVANTAGES'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_VAULTING', Configuration::get('PAYPAL_VAULTING'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE'));
-        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT'));
-
-        $merchant_account_id_currency_sandbox = Tools::jsonDecode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID'));
-        $merchant_account_id_currency_live = Tools::jsonDecode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID'));
-
-        if ($merchant_account_id_currency_sandbox) {
-            $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_sandbox, 1);
-        }
-
-        if ($merchant_account_id_currency_live) {
-            $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_live, 0);
-        }
     }
 
     /**
@@ -138,14 +127,14 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         ProcessLoggerHandler::closeLogger();
     }
 
-    protected function doMigrateMerchantAccountIdCurrency($merchantAccountIdCurrency, $sandbox)
+    protected function doMigrateMerchantAccountIdCurrency($merchantAccountIdCurrency, $sandbox, $idShop=null)
     {
         if (is_array($merchantAccountIdCurrency) == false) {
             return;
         }
 
         foreach ($merchantAccountIdCurrency as $currency => $merchantAccountId) {
-            Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency, $sandbox), $merchantAccountId);
+            Configuration::updateValue($this->module->getNameMerchantAccountForCurrency($currency, $sandbox), $merchantAccountId, false, null, $idShop);
         }
     }
 
@@ -194,5 +183,29 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         $response = new JsonResponse();
         $response->setContent($content);
         return $response->send();
+    }
+
+    protected function doMigrateConfigurations($idShop=null)
+    {
+        Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_API_INTENT', Configuration::get('PAYPAL_API_INTENT', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', Configuration::get('PAYPAL_SANDBOX', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL', Configuration::get('PAYPAL_BY_BRAINTREE', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS', Configuration::get('PAYPAL_API_ADVANTAGES', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_VAULTING', Configuration::get('PAYPAL_VAULTING', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE', null, null, $idShop), false, null, $idShop);
+        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT', null, null, $idShop), false, null, $idShop);
+
+        $merchant_account_id_currency_sandbox = Tools::jsonDecode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
+        $merchant_account_id_currency_live = Tools::jsonDecode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
+
+        if ($merchant_account_id_currency_sandbox) {
+            $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_sandbox, 1, $idShop);
+        }
+
+        if ($merchant_account_id_currency_live) {
+            $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_live, 0, $idShop);
+        }
     }
 }

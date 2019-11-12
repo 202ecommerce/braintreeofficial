@@ -33,30 +33,50 @@
        <div class="h2 status-migration">
            {l s='Perfect! Your Braintree settings were migrated successfully!' mod='braintreeofficial'}
        </div>
-       <p>
-           {l s='Please add your Public and Private Key for completing your account setup.' mod='braintreeofficial'}
-       </p>
-       <form class="defaultForm form-horizontal" id="form-account">
-           {include './formAccount.tpl'}
-       </form>
-       <p class="text-center text-danger">
-           {l s='PayPal module will be disabled once the process is finished.' mod='braintreeofficial'}
-       </p>
-       <div class="text-center">
-           <button class="btn btn-default"
-                   id="save-account"
-                   data-loading-text="{l s='Saving' mod='braintreeofficial'}">
-               {l s='Save Account Settings' mod='braintreeofficial'}
-           </button>
-       </div>
 
-       <div class="bt__mt-4 bt__mb-1">
-            <div class="text-center">{l s='If needed you can add your API keys later (not recommended).' mod='braintreeofficial'}</div>
-            <div class="text-center">{l s='In this case, the payment by Braintree will not be available for your customers until you add your account information.' mod='braintreeofficial'}</div>
-       </div>
+       {if isset($isMultishop) == false || $isMultishop == false}
+
+           <p>
+               {l s='Please add your Public and Private Key for completing your account setup.' mod='braintreeofficial'}
+           </p>
+           <form class="defaultForm form-horizontal" id="form-account">
+               {include './formAccount.tpl'}
+           </form>
+           <p class="text-center text-danger">
+               {l s='PayPal module will be disabled once the process is finished.' mod='braintreeofficial'}
+           </p>
+           <div class="text-center">
+               <button class="btn btn-default"
+                       id="save-account"
+                       data-loading-text="{l s='Saving' mod='braintreeofficial'}">
+                   {l s='Save Account Settings' mod='braintreeofficial'}
+               </button>
+           </div>
+
+           <div class="bt__mt-4 bt__mb-1">
+                <div class="text-center">{l s='If needed you can add your API keys later (not recommended).' mod='braintreeofficial'}</div>
+                <div class="text-center">{l s='In this case, the payment by Braintree will not be available for your customers until you add your account information.' mod='braintreeofficial'}</div>
+           </div>
+
+       {else}
+
+           <p class="text-center text-danger">
+               {l s='You are using the multishop configuration. Please go to the Braintree module configuration page to add your credentials.' mod='braintreeofficial'}
+           </p>
+
+           <p class="text-center text-danger">
+               {l s='You have to add your credentials for each shop if you are using different Braintree accounts.' mod='braintreeofficial'}
+           </p>
+
+           <p class="text-center text-danger">
+               {l s='PayPal module will be disabled once the process is finished.' mod='braintreeofficial'}
+           </p>
+
+       {/if}
+
        <div class="text-center">
            <a class="btn btn-default"
-              href="{$link->getAdminLink('AdminBraintreeOfficialSetup', true)|addslash}"
+              href="{$link->getAdminLink('AdminBraintreeOfficialSetup', true)|addslashes}"
            >
                {l s='Add API keys later' mod='braintreeofficial'}
            </a>

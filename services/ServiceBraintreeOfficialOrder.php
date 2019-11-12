@@ -51,7 +51,7 @@ class ServiceBraintreeOfficialOrder
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('payment_method', '=', 'sale');
-        $collection->where('payment_tool', '=', 'paypal_account');
+        $collection->where('payment_tool', 'in', array('paypal_account', 'PayPal'));
         $collection->where('payment_status', 'in', array('settling', 'submitted_for_settlement'));
         return $collection->getResults();
     }

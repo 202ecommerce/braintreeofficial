@@ -339,7 +339,7 @@ class BraintreeOfficial extends \PaymentModule
     {
         foreach (Currency::getCurrencies() as $currency) {
             $maName = Tools::strtoupper($this->getNameMerchantAccountForCurrency($currency['iso_code'], $mode));
-            Configuration::deleteByName($maName);
+            Configuration::deleteFromContext($maName);
         }
     }
 

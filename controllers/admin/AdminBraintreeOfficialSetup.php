@@ -329,10 +329,13 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             $this->importMerchantAccountForCurrency(false);
         }
 
-        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
-
         if ($methodBraintree->isConfigured() == false) {
             $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
+        } else {
+            if (Module::isEnabled('paypal') && (int)Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {
+                $paypalModule = Module::getInstanceByName('paypal');
+                $paypalModule->disable();
+            }
         }
 
         return $result;
@@ -346,12 +349,13 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         /* @var $method MethodBraintreeOfficial*/
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
-        // Delete merchant accounts if they exists
-        $this->module->deleteMerchantAccountIds($mode);
-
         if ($mode === null) {
             $mode = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
         }
+
+        // Delete merchant accounts if they exists
+        $this->module->deleteMerchantAccountIds($mode);
+
         $allCurrency = $method->getAllCurrency($mode);
 
         if (empty($allCurrency)) {
