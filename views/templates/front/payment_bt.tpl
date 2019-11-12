@@ -60,16 +60,28 @@
 								<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 							</div>
 							<div class="bt__form-row">
-								<div id="block-expiration-date" class="form-group col-md-6">
-									<label for="expiration-date" class="bt__form-label">{l s='Expiration Date' mod='braintreeofficial'}
+								<div id="block-expiration-date" class="form-group col-md-6 bt__flex bt__flex-column">
+									<label for="expiration-date" class="bt__form-label bt__flex bt__align-items-center bt__flex-grow-1">{l s='Expiration Date' mod='braintreeofficial'}
 										<span class="text-muted">{l s='(MM/YY)' mod='braintreeofficial'}</span>
 									</label>
 									<div id="expiration-date" class="form-control bt__form-control bt__position-relative" data-bt-field="expirationDate"></div>
 									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 								</div>
 
-								<div id="block-cvv" class="form-group col-md-6" data-bt-card-cvv>
-									<label for="cvv" class="bt__form-label">{l s='CVV' mod='braintreeofficial'}</label>
+								<div id="block-cvv" class="form-group col-md-6 bt__flex bt__flex-column" data-bt-card-cvv>
+									<label for="cvv" class="bt__form-label bt__flex bt__align-items-center bt__flex-grow-1">
+										<div class="bt__flex bt__align-items-center">
+											<div>
+												{l s='CVV' mod='braintreeofficial'}
+											</div>
+											<div class="bt__ml-2 bt__flex-grow-1">
+												{include file='module:braintreeofficial/views/templates/front/_partials/svg/cvv.tpl'}
+											</div>
+											<div class="bt__flex-grow-1">
+												{include file='module:braintreeofficial/views/templates/front/_partials/svg/cvc.tpl'}
+											</div>
+										</div>
+									</label>
 									<div id="cvv" class="form-control bt__form-control bt__position-relative" data-bt-field="cvv"></div>
 									<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
 								</div>
