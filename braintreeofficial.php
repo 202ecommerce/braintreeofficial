@@ -823,7 +823,7 @@ class BraintreeOfficial extends \PaymentModule
     public function hookDisplayBackOfficeHeader()
     {
         $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREEOFFICIAL_CRON_TIME')));
-        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4 || Configuration::get('BRAINTREEOFFICIAL_CRON_TIME') == false) {
+        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 1 || Configuration::get('BRAINTREEOFFICIAL_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREEOFFICIAL_CRON_TIME', date('Y-m-d H:i:s'));
             $bt_orders = $this->serviceBraintreeOfficialOrder->getBraintreeOrdersForValidation();
             
@@ -1206,9 +1206,12 @@ class BraintreeOfficial extends \PaymentModule
                 Tools::redirect(Context::getContext()->link->getModuleLink($this->name, 'error', array('error_msg' => $msg, 'no_retry' => true)));
             }
         }
+
+        $message = $this->getPaymentMessage($transaction);
+
         ProcessLoggerHandler::openLogger();
         ProcessLoggerHandler::logInfo(
-            'Payment successful',
+            $message,
             isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
             $this->currentOrder,
             (int)$id_cart,
@@ -1257,6 +1260,29 @@ class BraintreeOfficial extends \PaymentModule
             $braintree_capture->id_braintreeofficial_order = $braintree_order->id;
             $braintree_capture->save();
         }
+    }
+
+    /**
+     * @param $transactionInfo array
+     * @return string
+     * */
+    protected function getPaymentMessage($transactionInfo)
+    {
+        switch ($transactionInfo['payment_status']) {
+            case 'authorized':
+                $message = $this->l('Payment authorized : waiting for payment validation by admin');
+                break;
+            case 'setteling':
+                $message = $this->l('Payment authorized : Settling');
+                break;
+            case 'submitted_for_settlement':
+                $message = $this->l('Payment processing (authorized)');
+                break;
+            default:
+                $message = $transactionInfo['payment_status'];
+        }
+
+        return $message;
     }
 
     public function isOneOrder($order_reference)
