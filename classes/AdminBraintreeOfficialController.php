@@ -25,6 +25,8 @@
 
 namespace BraintreeOfficialAddons\classes;
 
+use Symfony\Component\VarDumper\VarDumper;
+
 class AdminBraintreeOfficialController extends \ModuleAdminController
 {
     public function __construct()
@@ -44,6 +46,8 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             $message .= $this->module->l('support team.', 'AdminBraintreeOfficialController') . "</a>";
             $this->warnings[] = $message;
         }
+
+        $this->context->smarty->assign('moduleDir', _MODULE_DIR_);
     }
 
     public function renderForm($fields_form = null)

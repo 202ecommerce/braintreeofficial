@@ -41,47 +41,52 @@ var CustomizeCheckout = {
   },
 
   checkConfigurations() {
-    const usePayPal = $('input[name="braintree_activate_paypal"]');
-    const enable3DSecure = $('input[name="braintree_3DSecure"]');
-    const showPayPalBenefits = $('input[name="braintree_show_paypal_benefits"]');
-    const Amount3DSecure = $('input[name="braintree_3DSecure_amount"]');
+    const usePayPal = $('input[name="braintreeofficial_activate_paypal"]');
+    const enable3DSecure = $('input[name="braintreeofficial_3DSecure"]');
+    const showPayPalBenefits = $('input[name="braintreeofficial_show_paypal_benefits"]');
+    const Amount3DSecure = $('input[name="braintreeofficial_3DSecure_amount"]');
+    const checkoutInContext = $('select[name="braintreeofficial_express_checkout_in_context"]');
+    const blockPreviewButton = $('.block-preview-button-context');
 
     // Activate paypal payment method and add additional config for it (Display block with paypal benefits)
     if (usePayPal.prop('checked') == false) {
-      this.hideConfiguration(showPayPalBenefits.attr('name'));
+      this.hideConfiguration(showPayPalBenefits);
+      this.hideConfiguration(checkoutInContext);
+      this.hideConfiguration(blockPreviewButton);
     } else {
-      this.showConfiguration(showPayPalBenefits.attr('name'));
+      this.showConfiguration(showPayPalBenefits);
+      this.showConfiguration(checkoutInContext);
+      this.showConfiguration(blockPreviewButton);
     }
 
       // Activate card verification for existence and validity
       if (enable3DSecure.prop('checked') == false) {
-          this.hideConfiguration(Amount3DSecure.attr('name'));
+          this.hideConfiguration(Amount3DSecure);
       } else {
-          this.showConfiguration(Amount3DSecure.attr('name'));
+          this.showConfiguration(Amount3DSecure);
       }
   },
 
   // Hide block while switch inactive
-  hideConfiguration(name) {
-    const selector = `input[name="${name}"]`;
-    const configuration = $(selector);
+  hideConfiguration(elem) {
+    const configuration = $(elem);
     const formGroup = configuration.closest('.form-group');
     if (configuration.attr('type') == 'radio') {
-      this.disableConfiguration(name);
+      this.disableConfiguration(elem);
     }
     formGroup.hide();
   },
 
   // Show block while switch is active
-  showConfiguration(name) {
-    const selector = `input[name="${name}"]`;
-    const configuration = $(selector);
+  showConfiguration(elem) {
+    const configuration = $(elem);
     const formGroup = configuration.closest('.form-group');
     formGroup.show();
   },
 
   // Disable configuration for depending settings
-  disableConfiguration(name) {
+  disableConfiguration(elem) {
+    let name = $(elem).attr('name');
     $(`input#${name}_on`).prop('checked', '');
     $(`input#${name}_off`).prop('checked', 'checked');
   },

@@ -29,6 +29,24 @@ use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 
 class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOfficialController
 {
+    public $parameters = array();
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->parameters = array(
+            'braintreeofficial_activate_paypal',
+            'braintreeofficial_vaulting',
+            'braintreeofficial_3DSecure',
+            'braintreeofficial_3DSecure_amount',
+            'braintreeofficial_show_paypal_benefits',
+            'braintreeofficial_express_checkout_in_context',
+            'braintreeofficial_express_checkout_shortcut',
+            'braintreeofficial_express_checkout_shortcut_cart',
+        );
+    }
+
     public function initContent()
     {
         $this->initBehaviorForm();
@@ -40,6 +58,13 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
 
     public function initBehaviorForm()
     {
+        $tplVars = array(
+            'braintreeofficial_express_checkout_shortcut' => Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT'),
+            'braintreeofficial_express_checkout_shortcut_cart' => Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART'),
+        );
+        $this->context->smarty->assign($tplVars);
+        $htmlContent = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/blockPreviewButtonContext.tpl');
+
         $this->fields_form['form']['form'] = array(
             'legend' => array(
                 'title' => $this->l('Behavior'),
@@ -64,6 +89,33 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
                             'label' => $this->l('Disabled'),
                         )
                     ),
+                ),
+                array(
+                    'type' => 'select',
+                    'label' => $this->l('PayPal checkout'),
+                    'name' => 'braintreeofficial_express_checkout_in_context',
+                    'hint' => $this->l('PayPal opens in a pop-up window, allowing your buyers to finalize their payment without leaving your website. Optimized, modern and reassuring experience which benefits from the same security standards than during a redirection to the PayPal website.'),
+                    'options' => array(
+                        'query' => array(
+                            array(
+                                'id' => '1',
+                                'name' => $this->l('IN-CONTEXT'),
+                            ),
+                            array(
+                                'id' => '0',
+                                'name' => $this->l('REDIRECT'),
+                            )
+                        ),
+                        'id' => 'id',
+                        'name' => 'name'
+                    )
+                ),
+                array(
+                    'type' => 'html',
+                    'label' => $this->l('PayPal Express Checkout Shortcut on'),
+                    'hint' => $this->l('The PayPal Shortcut is displayed directly on your cart or on your product pages, allowing a faster checkout for your buyers. PayPal provides you with the client\'s shipping and billing information so that you don\'t have to collect it yourself.'),
+                    'name' => '',
+                    'html_content' => $htmlContent
                 ),
                 array(
                     'type' => 'switch',
@@ -135,13 +187,23 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
             'id_form' => 'bt_config_behavior'
         );
 
-        $values = array(
-            'braintreeofficial_activate_paypal' => (int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL'),
-            'braintreeofficial_vaulting' => (int)Configuration::get('BRAINTREEOFFICIAL_VAULTING'),
-            'braintreeofficial_3DSecure' => (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE'),
-            'braintreeofficial_3DSecure_amount' => (float)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT'),
-            'braintreeofficial_show_paypal_benefits' => (int)Configuration::get('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS')
-        );
+        $values =array();
+
+        foreach ($this->parameters as $parameter) {
+            $values[$parameter] = Configuration::get(Tools::strtoupper($parameter));
+        }
+
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
+    }
+
+    public function saveForm()
+    {
+        $return = parent::saveForm();
+
+        foreach ($this->parameters as $parameter) {
+            $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+        }
+
+        return $return;
     }
 }
