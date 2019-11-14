@@ -23,7 +23,8 @@ const config = {
 		'css/bt_admin': './_dev/scss/bt_admin.scss',
 		'css/braintree': './_dev/scss/bt_main.scss',
 		'js/migrationAdmin': './_dev/js/migrationAdmin.js',
-        'js/btShortcut': './_dev/js/btShortcut.js'
+        'js/btShortcut': './_dev/js/btShortcut.js',
+		'js/shortcutPayment': './_dev/js/shortcutPayment.js'
 	},
 
 	output: {

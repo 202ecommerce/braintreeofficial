@@ -26,7 +26,6 @@ const BtCheckout = {
     },
 
     init() {
-        console.log('test braintree');
         let btnSc = $('[data-braintree-button]');
 
         if (btnSc == 0) {
@@ -40,13 +39,13 @@ const BtCheckout = {
     },
 
     addListeners() {
-        prestashop.on('updateCart', () => {
+        prestashop.on('updateCart', (data) => {
             BtCheckout.checkAvaibility();
-            BtCheckout.updateAmount();
+            BtCheckout.updateAmount(data);
         });
     },
 
-    updateAmount() {
+    updateAmount(data) {
 
     },
 
@@ -92,6 +91,10 @@ const BtCheckout = {
     },
 
     initPaymentBtn(flow) {
+        if (BtCheckout.button == null) {
+            return;
+        }
+
         braintree.client.create({
             authorization: this.data.authorizationToken,
         }, (clientErr, clientInstance) => {

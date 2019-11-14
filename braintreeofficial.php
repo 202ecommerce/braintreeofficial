@@ -52,6 +52,92 @@ const BRAINTREE_PAYMENT_CUSTOMER_CURRENCY = -1;
 
 class BraintreeOfficial extends \PaymentModule
 {
+    public static $state_iso_code_matrix = array(
+        'MX' => array(
+            'AGS' => 'AGS',
+            'BCN' => 'BC',
+            'BCS' => 'BCS',
+            'CAM' => 'CAMP',
+            'CHP' => 'CHIS',
+            'CHH' => 'CHIH',
+            'COA' => 'COAH',
+            'COL' => 'COL',
+            'DIF' => 'DF',
+            'DUR' => 'DGO',
+            'GUA' => 'GTO',
+            'GRO' => 'GRO',
+            'HID' => 'HGO',
+            'JAL' => 'JAL',
+            'MEX' => 'MEX',
+            'MIC' => 'MICH',
+            'MOR' => 'MOR',
+            'NAY' => 'NAY',
+            'NLE' => 'NL',
+            'OAX' => 'OAX',
+            'PUE' => 'PUE',
+            'QUE' => 'QRO',
+            'ROO' => 'Q ROO',
+            'SLP' => 'SLP',
+            'SIN' => 'SIN',
+            'SON' => 'SON',
+            'TAB' => 'TAB',
+            'TAM' => 'TAMPS',
+            'TLA' => 'TLAX',
+            'VER' => 'VER',
+            'YUC' => 'YUC',
+            'ZAC' => 'ZAC',
+        ),
+        'JP' => array(
+            'Aichi' => 'Aichi-KEN',
+            'Akita' => 'Akita-KEN',
+            'Aomori' => 'Aomori-KEN',
+            'Chiba' => 'Chiba-KEN',
+            'Ehime' => 'Ehime-KEN',
+            'Fukui' => 'Fukui-KEN',
+            'Fukuoka' => 'Fukuoka-KEN',
+            'Fukushima' => 'Fukushima-KEN',
+            'Gifu' => 'Gifu-KEN',
+            'Gunma' => 'Gunma-KEN',
+            'Hiroshima' => 'Hiroshima-KEN',
+            'Hokkaido' => 'Hokkaido-KEN',
+            'Hyogo' => 'Hyogo-KEN',
+            'Ibaraki' => 'Ibaraki-KEN',
+            'Ishikawa' => 'Ishikawa-KEN',
+            'Iwate' => 'Iwate-KEN',
+            'Kagawa' => 'Kagawa-KEN',
+            'Kagoshima' => 'Kagoshima-KEN',
+            'Kanagawa' => 'Kanagawa-KEN',
+            'Kochi' => 'Kochi-KEN',
+            'Kumamoto' => 'Kumamoto-KEN',
+            'Kyoto' => 'Kyoto-KEN',
+            'Mie' => 'Mie-KEN',
+            'Miyagi' => 'Miyagi-KEN',
+            'Miyazaki' => 'Miyazaki-KEN',
+            'Nagano' => 'Nagano-KEN',
+            'Nagasaki' => 'Nagasaki-KEN',
+            'Nara' => 'Nara-KEN',
+            'Niigata' => 'Niigata-KEN',
+            'Oita' => 'Oita-KEN',
+            'Okayama' => 'Okayama-KEN',
+            'Okinawa' => 'Okinawa-KEN',
+            'Osaka' => 'Osaka-KEN',
+            'Saga' => 'Saga-KEN',
+            'Saitama' => 'Saitama-KEN',
+            'Shiga' => 'Shiga-KEN',
+            'Shimane' => 'Shimane-KEN',
+            'Shizuoka' => 'Shizuoka-KEN',
+            'Tochigi' => 'Tochigi-KEN',
+            'Tokushima' => 'Tokushima-KEN',
+            'Tokyo' => 'Tokyo-KEN',
+            'Tottori' => 'Tottori-KEN',
+            'Toyama' => 'Toyama-KEN',
+            'Wakayama' => 'Wakayama-KEN',
+            'Yamagata' => 'Yamagata-KEN',
+            'Yamaguchi' => 'Yamaguchi-KEN',
+            'Yamanashi' => 'Yamanashi-KEN'
+        )
+    );
+
     /**
      * List of hooks used in this Module
      */
@@ -915,12 +1001,28 @@ class BraintreeOfficial extends \PaymentModule
             $this->addJsVarsLangBT();
             $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
+
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 Media::addJsDefL('empty_nonce', $this->l('Please click on the PayPal Pay button first'));
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
+            }
+
+            if (isset($this->context->cookie->payment_method_nonce) && isset($this->context->cookie->brainteeofficial_payer_email)) {
+                $this->context->smarty->assign('payerEmail', $this->context->cookie->brainteeofficial_payer_email);
+                $carrierFees = $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
+
+                if ($carrierFees == 0) {
+                    $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
+                } else {
+                    $this->context->smarty->assign('carrierFees', Tools::displayPrice($carrierFees));
+                    $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerTwo.tpl');
+                }
+
+                Media::addJsDefL('scPaypalCheckedMsg', $messageForCustomer);
+                $this->context->controller->registerJavascript($this->name . '-shortcut-payment', 'modules/' . $this->name . '/views/js/shortcutPayment.js');
             }
         } elseif (Tools::getValue('controller') == "cart") {            
             if (!$this->checkActiveModule()) {
@@ -1035,6 +1137,15 @@ class BraintreeOfficial extends \PaymentModule
                 ->setAdditionalInformation($this->generateFormPB())
                 ->setAction('javascript:BraintreePaypalSubmitPayment();');
             $payments_options[] = $embeddedOption;
+
+            if (isset($this->context->cookie->payment_method_nonce) && isset($this->context->cookie->brainteeofficial_payer_email)) {
+                $paymentOption = new PaymentOption();
+                $action_text = $this->l('Pay with paypal express checkout');
+                $paymentOption->setCallToActionText($action_text);
+                $paymentOption->setModuleName('braintreeofficial-shortcut');
+                $paymentOption->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true));
+                $payments_options[] = $paymentOption;
+            }
         }
 
         $embeddedOption = new PaymentOption();
@@ -1283,7 +1394,7 @@ class BraintreeOfficial extends \PaymentModule
             case 'authorized':
                 $message = $this->l('Payment authorized : waiting for payment validation by admin');
                 break;
-            case 'setteling':
+            case 'settling':
                 $message = $this->l('Payment authorized : Settling');
                 break;
             case 'submitted_for_settlement':
@@ -1621,5 +1732,26 @@ class BraintreeOfficial extends \PaymentModule
     public function hookDisplayReassurance($params)
     {
 
+    }
+
+    public function getIdStateByPaypalCode($isoState, $isoCountry)
+    {
+        $idState = 0;
+        $idCountry = Country::getByIso($isoCountry);
+        if (Country::containsStates($idCountry)) {
+            if (isset(self::$state_iso_code_matrix[$isoCountry])) {
+                $matrix = self::$state_iso_code_matrix[$isoCountry];
+                $isoState = array_search(Tools::strtolower($isoState), array_map('strtolower', $matrix));
+            }
+            if ($idState = (int)State::getIdByIso(Tools::strtoupper($isoState), $idCountry)) {
+                $idState = $idState;
+            } elseif ($idState = State::getIdByName(pSQL(trim($isoState)))) {
+                $state = new State((int)$idState);
+                if ($state->id_country == $idCountry) {
+                    $idState = $state->id;
+                }
+            }
+        }
+        return $idState;
     }
 }

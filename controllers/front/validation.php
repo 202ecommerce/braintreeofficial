@@ -41,8 +41,8 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
     {
         parent::init();
         $this->setMethod(AbstractMethodBraintreeOfficial::load('BraintreeOfficial'));
-        $this->values['payment_method_nonce'] = Tools::getvalue('payment_method_nonce');
-        $this->values['payment_method_bt'] = Tools::getvalue('payment_method_bt');
+        $this->values['payment_method_nonce'] = isset($this->context->cookie->payment_method_nonce) ? $this->context->cookie->payment_method_nonce : Tools::getvalue('payment_method_nonce');
+        $this->values['payment_method_bt'] = isset($this->context->cookie->payment_method_bt) ? $this->context->cookie->payment_method_bt : Tools::getvalue('payment_method_bt');
         $this->values['bt_vaulting_token'] = Tools::getvalue('bt_vaulting_token');
         $this->values['pbt_vaulting_token'] = Tools::getvalue('pbt_vaulting_token');
         $this->values['save_card_in_vault'] = Tools::getvalue('save_card_in_vault');

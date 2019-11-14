@@ -654,7 +654,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             Tools::getAllValues(),
             $token_payment,
         );
-        \Symfony\Component\VarDumper\VarDumper::dump($log); die;
+        //\Symfony\Component\VarDumper\VarDumper::dump($log); die;
         $this->initConfig();
         $bt_method = $this->payment_method_bt;
         $vault_token = '';
@@ -946,7 +946,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             'paypal_braintree_amount' => Context::getContext()->cart->getOrderTotal(),
             'paypal_braintree_mode' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
             'paypal_braintree_currency' => Context::getContext()->currency->iso_code,
-            'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink()
+            'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink($this->name, 'shortcut')
         );
 
         return $tplVars;
