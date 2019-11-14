@@ -650,6 +650,11 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     public function sale($cart, $token_payment)
     {
         /* @var $module BraintreeOfficial*/
+        $log = array(
+            Tools::getAllValues(),
+            $token_payment,
+        );
+        \Symfony\Component\VarDumper\VarDumper::dump($log); die;
         $this->initConfig();
         $bt_method = $this->payment_method_bt;
         $vault_token = '';
@@ -928,5 +933,22 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             $vaulting->info .= $result->transaction->paypal['payerEmail'];
         }
         $vaulting->save();
+    }
+
+    /**
+     * @return array
+     * */
+    public function getShortcutJsVars()
+    {
+        $clientToken = $this->init();
+        $tplVars = array(
+            'paypal_braintree_authorization' => $clientToken,
+            'paypal_braintree_amount' => Context::getContext()->cart->getOrderTotal(),
+            'paypal_braintree_mode' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
+            'paypal_braintree_currency' => Context::getContext()->currency->iso_code,
+            'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink()
+        );
+
+        return $tplVars;
     }
 }

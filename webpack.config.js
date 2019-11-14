@@ -22,7 +22,8 @@ const config = {
 		'js/payment_pbt': './_dev/js/payment_pbt.js',
 		'css/bt_admin': './_dev/scss/bt_admin.scss',
 		'css/braintree': './_dev/scss/bt_main.scss',
-		'js/migrationAdmin': './_dev/js/migrationAdmin.js'
+		'js/migrationAdmin': './_dev/js/migrationAdmin.js',
+        'js/btShortcut': './_dev/js/btShortcut.js'
 	},
 
 	output: {

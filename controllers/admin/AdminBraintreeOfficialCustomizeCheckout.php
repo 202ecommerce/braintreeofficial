@@ -91,26 +91,6 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
                     ),
                 ),
                 array(
-                    'type' => 'select',
-                    'label' => $this->l('PayPal checkout'),
-                    'name' => 'braintreeofficial_express_checkout_in_context',
-                    'hint' => $this->l('PayPal opens in a pop-up window, allowing your buyers to finalize their payment without leaving your website. Optimized, modern and reassuring experience which benefits from the same security standards than during a redirection to the PayPal website.'),
-                    'options' => array(
-                        'query' => array(
-                            array(
-                                'id' => '1',
-                                'name' => $this->l('IN-CONTEXT'),
-                            ),
-                            array(
-                                'id' => '0',
-                                'name' => $this->l('REDIRECT'),
-                            )
-                        ),
-                        'id' => 'id',
-                        'name' => 'name'
-                    )
-                ),
-                array(
                     'type' => 'html',
                     'label' => $this->l('PayPal Express Checkout Shortcut on'),
                     'hint' => $this->l('The PayPal Shortcut is displayed directly on your cart or on your product pages, allowing a faster checkout for your buyers. PayPal provides you with the client\'s shipping and billing information so that you don\'t have to collect it yourself.'),
