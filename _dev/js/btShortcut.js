@@ -22,13 +22,17 @@ const BtCheckout = {
         currency: null,
         mode: null,
         authorizationToken: null,
-        controller: null
+        controller: null,
+        idProduct: null,
+        idProductAttribute: null,
+        quantity: null,
+        page: null,
     },
 
     init() {
         let btnSc = $('[data-braintree-button]');
 
-        if (btnSc == 0) {
+        if (btnSc.length == 0) {
             return;
         }
 
@@ -36,15 +40,57 @@ const BtCheckout = {
         this.initData();
         this.addListeners();
         this.initPaymentBtn('checkout');
+        this.checkAvaibility();
     },
 
     addListeners() {
-        prestashop.on('updateCart', (data) => {
-            BtCheckout.updateAmount();
+        prestashop.on('updateCart', () => {
+            BtCheckout.updateCartAmount();
+        });
+
+        prestashop.on('updatedProduct', (data) => {
+            BtCheckout.updateProductAmount(data);
         });
     },
 
-    updateAmount() {
+    updateProductAmount(data) {
+        console.log(data);
+        let quantity = $('input[name="qty"]').val();
+        let idProductAttribute = data['id_product_attribute'];
+
+        $.ajax({
+            url: BtCheckout.data.controller,
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                ajax: true,
+                action: 'getProductAmount',
+                quantity: quantity,
+                idProductAttribute: idProductAttribute,
+                idProduct: BtCheckout.data.idProduct
+            },
+            success (response) {
+                if (("success" in response) && (response["success"] == true)) {
+                    BtCheckout.data.amount = response["amount"];
+                }
+
+                if (BtCheckout.data.amount == 0) {
+                    BtCheckout.button.hide();
+                } else {
+                    BtCheckout.button.show();
+                }
+
+                if (response["available"] == false) {
+                    BtCheckout.button.hide();
+                } else {
+                    BtCheckout.button.show();
+                }
+            }
+        });
+
+    },
+
+    updateCartAmount() {
         $.ajax({
             url: BtCheckout.data.controller,
             type: "POST",
@@ -87,6 +133,22 @@ const BtCheckout = {
         if (typeof(paypal_braintree_contoller) != 'undefined') {
             this.data.controller = paypal_braintree_contoller;
         }
+
+        if (typeof(paypal_braintree_id_product) != 'undefined') {
+            this.data.idProduct = paypal_braintree_id_product;
+        }
+
+        if (typeof(paypal_braintree_id_product_attribute) != 'undefined') {
+            this.data.idProductAttribute = paypal_braintree_id_product_attribute;
+        }
+
+        if (typeof(paypal_braintree_quantity) != 'undefined') {
+            this.data.quantity = paypal_braintree_quantity;
+        }
+
+        if (typeof(paypal_braintree_page) != 'undefined') {
+            this.data.page = paypal_braintree_page;
+        }
     },
 
     showError(msgError) {
@@ -96,14 +158,35 @@ const BtCheckout = {
     sendData(data) {
         let form = document.createElement('form');
         let input = document.createElement('input');
+        let inputPage = document.createElement('input');
+        let inputProductId = document.createElement('input');
+        let inputProductIdAttr = document.createElement('input');
+        let inputProductQuantity = document.createElement('input');
 
         input.name = "paymentData";
         input.value = JSON.stringify(data);
+
+        inputPage.name = "page";
+        inputPage.value = BtCheckout.data.page;
+
+        inputProductId.name = "idProduct";
+        inputProductId.value = BtCheckout.data.idProduct;
+
+        inputProductIdAttr.name = "idProductAttribute";
+        inputProductIdAttr.value = BtCheckout.data.idProductAttribute;
+
+        inputProductQuantity.name = "quantity";
+        inputProductQuantity.value = BtCheckout.data.quantity;
 
         form.method = "POST";
         form.action = BtCheckout.data.controller;
 
         form.appendChild(input);
+        form.appendChild(inputPage);
+        form.appendChild(inputProductId);
+        form.appendChild(inputProductIdAttr);
+        form.appendChild(inputProductQuantity);
+
         document.body.appendChild(form);
         form.submit();
     },
@@ -158,13 +241,8 @@ const BtCheckout = {
                         return paypalCheckoutInstance.tokenizePayment(data)
                             .then((payload) => {
                                 // Submit `payload.nonce` to your server.
-                                console.log(payload);
                                 BtCheckout.sendData(payload);
-                                /*$('[data-payment-method-nonce="pbt"]').val(payload.nonce);
-                                $('[data-braintree-button]').hide();
-                                $('[data-bt-pp-error-msg]').hide();
-                                $('[data-bt-save-account]').hide();
-                                $('[data-bt-vault-info]').show().append(`${payload.details.firstName} ${payload.details.lastName} ${payload.details.email}`);*/
+
                             });
                     },
                     onError(err) {
@@ -178,7 +256,27 @@ const BtCheckout = {
     },
 
     checkAvaibility() {
-
+        $.ajax({
+            url: BtCheckout.data.controller,
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                ajax: true,
+                action: 'checkProductAvaibility',
+                idProduct: BtCheckout.data.idProduct,
+                idProductAttribute: BtCheckout.data.idProductAttribute,
+                quantity: BtCheckout.data.quantity
+            },
+            success (response) {
+                if (("success" in response) && (response["success"] == true)) {
+                    if (response['available']) {
+                        BtCheckout.button.show();
+                    } else {
+                        BtCheckout.button.hide();
+                    }
+                }
+            }
+        });
     }
 };
 

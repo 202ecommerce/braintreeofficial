@@ -938,15 +938,45 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     /**
      * @return array
      * */
-    public function getShortcutJsVars()
+    public function getShortcutJsVars($page)
     {
+        switch ($page) {
+            case BRAINTREE_CART_PAGE:
+                $amount = Context::getContext()->cart->getOrderTotal();
+                break;
+            case BRAINTREE_PRODUCT_PAGE:
+                $product = new Product((int)Tools::getValue('id_product'));
+                $idProductAttribute = (int)Tools::getValue('id_product_attribute');
+
+                if (Validate::isLoadedObject($product)) {
+                    $amount = $product->getPrice(
+                        true,
+                        $idProductAttribute ? $idProductAttribute : 0,
+                        6,
+                        null,
+                        false,
+                        true
+                    );
+                } else {
+                    $amount = 0;
+                }
+
+                break;
+            default:
+                $amount = 0;
+        }
+
         $clientToken = $this->init();
         $tplVars = array(
             'paypal_braintree_authorization' => $clientToken,
-            'paypal_braintree_amount' => Context::getContext()->cart->getOrderTotal(),
+            'paypal_braintree_amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_),
             'paypal_braintree_mode' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
             'paypal_braintree_currency' => Context::getContext()->currency->iso_code,
-            'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink($this->name, 'shortcut')
+            'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink($this->name, 'shortcut'),
+            'paypal_braintree_id_product' => Tools::isSubmit('id_product') ? (int)Tools::getValue('id_product') : null,
+            'paypal_braintree_id_product_attribute' => (int)Tools::getValue('id_product_attribute'),
+            'paypal_braintree_quantity' => 1,
+            'paypal_braintree_page' => $page
         );
 
         return $tplVars;

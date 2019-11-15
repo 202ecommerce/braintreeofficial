@@ -36,16 +36,24 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 {
     protected $paymentData;
 
+    protected $checkoutInfo;
+
     public function init()
     {
         parent::init();
-        $this->paymentData = Tools::jsonDecode(Tools::getValue('paymentData'));
+        $this->setPaymentData(Tools::jsonDecode(Tools::getValue('paymentData')));
+        $this->setCheckoutInfo(Tools::getAllValues());
     }
 
     public function postProcess()
     {
         try {
             $this->redirectUrl = $this->context->link->getPageLink('order', null, null, array('step'=>2));
+
+            if ($this->getCheckoutInfo()['page'] == BRAINTREE_PRODUCT_PAGE) {
+                $this->updateCart();
+            }
+
             $this->prepareOrder();
         } catch (Exception $e) {
             $this->errors['error_code'] = $e->getCode();
@@ -224,5 +232,107 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
             'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH)
         );
         $this->jsonValues = $response;
+    }
+
+    public function displayAjaxGetProductAmount()
+    {
+        $product = new Product((int)Tools::getValue('idProduct'));
+
+        if (Validate::isLoadedObject($product) == false) {
+            $response = array(
+                'success' => false
+            );
+            return $this->jsonValues = $response;
+        }
+
+        $idProductAttribute = (int)Tools::getValue('idProductAttribute');
+        $quantity = (int)Tools::getValue('quantity');
+
+        // we don't pass quantity because in version Prestashop 1.7.6 this method does not take in account quantity
+        $amount = $product->getPrice(
+            true,
+            $idProductAttribute ? $idProductAttribute : 0,
+            6,
+            null,
+            false,
+            true
+        );
+
+        $available = $this->isProductAvailable($product, $idProductAttribute, $quantity);
+
+        $response = array(
+            'success' => true,
+            'amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_) * $quantity,
+            'available' => $available
+        );
+
+        $this->jsonValues = $response;
+    }
+
+    public function displayAjaxCheckProductAvailability()
+    {
+        $product = new Product((int)Tools::getValue('idProduct'));
+        $idProductAttribute = (int)Tools::getValue('idProductAttribute');
+        $quantity = (int)Tools::getValue('quantity');
+
+        if (Validate::isLoadedObject($product) == false) {
+            $response = array(
+                'success' => false
+            );
+            return $this->jsonValues = $response;
+        }
+
+        $available = $this->isProductAvailable($product, $idProductAttribute, $quantity);
+
+        $response = array(
+            'success' => true,
+            'available' => $available
+        );
+
+        $this->jsonValues = $response;
+    }
+
+    public function isProductAvailable($product, $idProductAttribute, $quantity)
+    {
+        $product->id_product_attribute = $idProductAttribute;
+        if ($product->checkQty($quantity)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function setCheckoutInfo($data)
+    {
+        $vars = array(
+            'idProduct' => (int)$data['idProduct'],
+            'idProductAttribute' => (int)$data['idProductAttribute'],
+            'page' => (int)$data['page'],
+            'quantity' => (int)$data['quantity']
+        );
+
+        $this->checkoutInfo = $vars;
+    }
+
+    public function getCheckoutInfo()
+    {
+        return $this->checkoutInfo;
+    }
+
+    protected function updateCart()
+    {
+        if (empty($this->context->cart->id)) {
+            $this->context->cart->add();
+            $this->context->cookie->id_cart = $this->context->cart->id;
+            $this->context->cookie->write();
+        } else {
+            // delete all product in cart
+            $products = $this->context->cart->getProducts();
+            foreach ($products as $product) {
+                $this->context->cart->deleteProduct($product['id_product'], $product['id_product_attribute'], $product['id_customization'], $product['id_address_delivery']);
+            }
+        }
+
+        $this->context->cart->updateQty($this->getCheckoutInfo()['quantity'], $this->getCheckoutInfo()['idProduct'], $this->getCheckoutInfo()['idProductAttribute']);
     }
 }

@@ -49,6 +49,8 @@ use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
 const BRAINTREE_PAYMENT_CUSTOMER_CURRENCY = -1;
+const BRAINTREE_CART_PAGE = 1;
+const BRAINTREE_PRODUCT_PAGE = 2;
 
 class BraintreeOfficial extends \PaymentModule
 {
@@ -1040,7 +1042,7 @@ class BraintreeOfficial extends \PaymentModule
                 );
 
                 if (Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART')) {
-                    Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars());
+                    Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars(BRAINTREE_CART_PAGE));
                     $this->context->controller->registerJavascript($this->name . '-braintreeShortcut', 'modules/' . $this->name . '/views/js/btShortcut.js');
                     $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                     $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
@@ -1053,6 +1055,15 @@ class BraintreeOfficial extends \PaymentModule
 
             $this->context->smarty->assign('prefetchResources', $resources);
             return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/prefetch.tpl');
+        } elseif ($this->context->controller instanceof ProductController) {
+            if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') && Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT')) {
+                Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars(BRAINTREE_PRODUCT_PAGE));
+                $this->context->controller->registerJavascript($this->name . '-braintreeShortcut', 'modules/' . $this->name . '/views/js/btShortcut.js');
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.50.0/js/client.min.js', array('server' => 'remote'));
+
+            }
         }
     }
 
@@ -1115,7 +1126,6 @@ class BraintreeOfficial extends \PaymentModule
     public function hookPaymentOptions($params)
     {
         $payments_options = array();
-
         /* for avoiding the connection exception need to verify if module configured correct*/
         if ($this->methodBraintreeOfficial->isConfigured() == false) {
             return $payments_options;
@@ -1724,14 +1734,23 @@ class BraintreeOfficial extends \PaymentModule
             return false;
         }
 
-
+        if ($this->context->cart->nbProducts() == 0) {
+            return false;
+        }
 
         return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/shortCut.tpl');
     }
 
     public function hookDisplayReassurance($params)
     {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART') == false) {
+            return false;
+        }
 
+        if (($this->context->controller instanceof ProductController) == false) {
+            return false;
+        }
+        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/shortCut.tpl');
     }
 
     public function getIdStateByPaypalCode($isoState, $isoCountry)
