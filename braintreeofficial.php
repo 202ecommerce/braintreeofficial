@@ -160,7 +160,8 @@ class BraintreeOfficial extends \PaymentModule
         'displayAdminOrderContentOrder',
         'displayAdminCartsView',
         'displayReassurance',
-        'displayShoppingCartFooter'
+        'displayShoppingCartFooter',
+        'actionBeforeCartUpdateQty'
     );
 
     /**
@@ -1772,5 +1773,11 @@ class BraintreeOfficial extends \PaymentModule
             }
         }
         return $idState;
+    }
+
+    public function hookActionBeforeCartUpdateQty($params)
+    {
+        Context::getContext()->cookie->__unset('payment_method_nonce');
+        Context::getContext()->cookie->__unset('brainteeofficial_payer_email');
     }
 }

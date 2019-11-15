@@ -785,6 +785,10 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 && $this->serviceBraintreeOfficialVaulting->vaultingExist($result->transaction->creditCard['token'], $braintree_customer->id) == false) {
                 $this->createVaulting($result, $braintree_customer);
             }
+
+            Context::getContext()->cookie->__unset('payment_method_nonce');
+            Context::getContext()->cookie->__unset('brainteeofficial_payer_email');
+
             return $result->transaction;
         } else {
             $errors = $result->errors->deepAll();
