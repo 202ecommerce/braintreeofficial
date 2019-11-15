@@ -40,13 +40,31 @@ const BtCheckout = {
 
     addListeners() {
         prestashop.on('updateCart', (data) => {
-            BtCheckout.checkAvaibility();
-            BtCheckout.updateAmount(data);
+            BtCheckout.updateAmount();
         });
     },
 
-    updateAmount(data) {
+    updateAmount() {
+        $.ajax({
+            url: BtCheckout.data.controller,
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                ajax: true,
+                action: 'getCartAmount',
+            },
+            success (response) {
+                if (("success" in response) && (response["success"] == true)) {
+                    BtCheckout.data.amount = response["amount"];
+                }
 
+                if (BtCheckout.data.amount == 0) {
+                    BtCheckout.button.hide();
+                } else {
+                    BtCheckout.button.show();
+                }
+            }
+        });
     },
 
     initData() {
