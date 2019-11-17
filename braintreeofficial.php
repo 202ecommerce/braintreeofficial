@@ -1091,11 +1091,24 @@ class BraintreeOfficial extends \PaymentModule
     public function addJsVarsBT()
     {
         $clientToken = $this->methodBraintreeOfficial->init();
+        $use3dVerification = $this->use3dVerification();
 
         Media::addJsDef(array(
             'authorization' => $clientToken,
-            'controllerValidation' => $this->context->link->getModuleLink($this->name, 'validation', array(), true)
+            'controllerValidation' => $this->context->link->getModuleLink($this->name, 'validation', array(), true),
+            'use3dVerification' => $use3dVerification
         ));
+    }
+
+    /**
+     * @return bool
+     * */
+    public function use3dVerification()
+    {
+        $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
+        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal();
+
+        return $use3dVerification;
     }
 
     /**

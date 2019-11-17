@@ -84,8 +84,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         $customer = new Customer($this->context->cart->id_customer);
         $address = new Address($this->context->cart->id_address_delivery);
         $country = new Country($address->id_country);
-        $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
-        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal();
+        $use3dVerification = $this->module->use3dVerification();
         $iso = '';
 
         if ($address->id_state) {
