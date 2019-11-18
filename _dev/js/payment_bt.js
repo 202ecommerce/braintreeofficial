@@ -39,8 +39,16 @@ let bt_client_instance;
 const initBraintreeCvvField = () => {
     let cardSelect = $('[data-bt-vaulting-token="bt"]');
     let cardForm = $('[data-form-cvv-field]');
+    $(document).on('input', '#btCvvField', maxLengthCheck)
     if (cardSelect.length) {
         toggleCvv(cardSelect, cardForm);
+    }
+}
+
+const maxLengthCheck = (event) => {
+    let object = event.target;
+    if (object.value.length > 4) {
+        object.value = object.value.slice(0, 4);
     }
 }
 
