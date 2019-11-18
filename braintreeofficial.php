@@ -1106,7 +1106,7 @@ class BraintreeOfficial extends \PaymentModule
     public function use3dVerification()
     {
         $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
-        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal();
+        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal(true, Cart::BOTH);
 
         return $use3dVerification;
     }

@@ -18,7 +18,9 @@ import {selectOption} from './functions.js';
 $(document).ready(() => {
   if ($('#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
-    initBraintreeCvvField();
+    if (use3dVerification) {
+        initBraintreeCvvField();
+    }
   }
 
   $('.js-payment-option-form').each((i) => {
