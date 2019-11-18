@@ -47,6 +47,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         $this->values['pbt_vaulting_token'] = Tools::getvalue('pbt_vaulting_token');
         $this->values['save_card_in_vault'] = Tools::getvalue('save_card_in_vault');
         $this->values['save_account_in_vault'] = Tools::getvalue('save_account_in_vault');
+        $this->values['cvv_field'] = Tools::getValue('btCvvField');
     }
 
     public function postProcess()

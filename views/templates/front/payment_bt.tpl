@@ -92,10 +92,9 @@
 						</div>
 
 						<div data-form-cvv-field class="bt__hidden">
-							<div id="block-cvv-field" class="form-group col-md-6" data-bt-card-cvv-field>
-								<label for="cvv-field" class="bt__form-label">{l s='CVV' mod='braintreeofficial'}</label>
-								<div id="cvv-field" class="form-control bt__form-control bt__position-relative" data-bt-field="cvv"></div>
-								<div data-bt-error-msg class="bt__text-danger bt__mt-1"></div>
+							<div id="block-cvv-field" class="form-group col-md-6">
+								<label for="btCvvField" class="bt__form-label">{l s='CVV' mod='braintreeofficial'}</label>
+								<input type="number" name="btCvvField" id="btCvvField" class="form-control bt__form-control bt__number-field" placeholder="123">
 							</div>
 						</div>
 					</form>

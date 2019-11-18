@@ -35,8 +35,14 @@ $(document).ready(() => {
 
 let bt_hosted_fileds;
 let bt_client_instance;
-let bt_hosted_cvv_field;
-let bt_cvv_client_instance;
+
+const initBraintreeCvvField = () => {
+    let cardSelect = $('[data-bt-vaulting-token="bt"]');
+    let cardForm = $('[data-form-cvv-field]');
+    if (cardSelect.length) {
+        toggleCvv(cardSelect, cardForm);
+    }
+}
 
 const initBraintreeCard = () => {
   braintree.client.create({
@@ -157,86 +163,6 @@ const initBraintreeCard = () => {
   });
 }
 
-const initBraintreeCvvField = () => {
-    braintree.client.create({
-        authorization,
-    }, (clientErr, clientInstance) => {
-        if (clientErr) {
-            $('[data-bt-card-error-msg]').show().text( bt_translations_client);
-            return;
-        }
-
-        // Show card form while choosing 'Add a new card'
-        let cardSelect = $('[data-bt-vaulting-token="bt"]');
-        let cardForm = $('[data-form-cvv-field]');
-        if (cardSelect.length) {
-            toggleCvv(cardSelect, cardForm);
-        }
-
-        braintree.hostedFields.create({
-            client: clientInstance,
-            styles: {
-                input: {
-                    'color': '#000',
-                    'background': '#fff',
-                    'height': '20px',
-                    'font-size': '14px',
-                    'font-family': 'PayPal Forward, sans-serif',
-                },
-                '.valid': {
-                    'color': '#349840'
-                }
-            },
-            fields: {
-                cvv: {
-                    selector: '#cvv-field',
-                    placeholder: '123',
-                }
-            },
-        }, (hostedFieldsErr, hostedFieldsInstance) => {
-            if (hostedFieldsErr) {
-                $('[data-bt-cvv-error-msg]').show().text( bt_translations_hosted);
-                return;
-            }
-
-            hostedFieldsInstance.on('blur', (event) => {
-                const blur_field_info = event.fields[event.emittedBy];
-                if (blur_field_info.isEmpty || !blur_field_info.isValid) {
-                    setErrorMsg(event.emittedBy, blur_field_info);
-                }
-            });
-
-            hostedFieldsInstance.on('focus', (event) => {
-                const focused_field_info = event.fields[event.emittedBy];
-                removeErrorMsg($(`#${focused_field_info.container.id}`));
-            });
-
-            hostedFieldsInstance.on('validityChange', (event) => {
-                const field = event.fields[event.emittedBy];
-                $('[data-bt-card-error-msg]').text('').hide();
-
-                if (field.isValid) {
-                    removeErrorMsg($(`#${field.container.id}`));
-                    if (event.emittedBy == 'cvv') {
-                        $(`#${field.container.id}`).removeClass('braintree-hosted-fields-focused');
-                    }
-                } else if (field.isPotentiallyValid) {
-                    removeErrorMsg($(`#${field.container.id}`));
-                } else {
-                    setErrorMsg(event.emittedBy, field);
-                }
-            });
-
-            $('[data-bt-field]').on('click', (e) => {
-                hostedFieldsInstance.focus(e.currentTarget.dataset.btField);
-            });
-
-            bt_hosted_cvv_field = hostedFieldsInstance;
-            bt_cvv_client_instance = clientInstance;
-        });
-    });
-};
-
 const toggleCvv = (select, el) => {
     if (select) {
         select.on('change', (e) => {
@@ -288,7 +214,6 @@ const BraintreeSubmitPayment = () => {
             let bt3Dinformation = response["orderInformation"];
             let payload = response["payload"];
             let use3dVerification = response["use3dVerification"];
-            let btClientInstance = response["btClientInstance"];
 
             if (use3dVerification) {
                 braintree.threeDSecure.create({
@@ -374,29 +299,17 @@ function getOrderInformation(vaultToken) {
                 action: 'getOrderInformation',
             },
             success(response) {
-                let btCientInstance;
-                let btHostedFields;
-
                 if (("success" in response) && (response["success"] == true)) {
-                    if (vaultToken && response["use3dVerification"]) {
-                        btCientInstance = bt_cvv_client_instance;
-                        btHostedFields = bt_hosted_cvv_field;
-                    } else {
-                        btCientInstance = bt_client_instance;
-                        btHostedFields = bt_hosted_fileds;
-                    }
-
                     response["orderInformation"]["onLookupComplete"] = (data, next) => {
                         next();
                     };
-                    if (vaultToken && (response["use3dVerification"] == false)) {
+                    if (vaultToken) {
                         response["orderInformation"]["nonce"] = $('[data-bt-vaulting-token="bt"] option:checked').data('nonce');
-                        response["clientInstance"] = btCientInstance;
                         resolve(response);
                     } else {
-                        btHostedFields.tokenize((tokenizeErr, payload) => {
+                        bt_hosted_fileds.tokenize((tokenizeErr, payload) => {
                             if (tokenizeErr) {
-                                Object.entries(btHostedFields._state.fields).forEach(entry => {
+                                Object.entries(bt_hosted_fileds._state.fields).forEach(entry => {
                                     setErrorMsg(entry[0], entry[1]);
                                 });
 
@@ -417,7 +330,6 @@ function getOrderInformation(vaultToken) {
                             } else {
                                 response["orderInformation"]["nonce"] = payload.nonce;
                                 response["orderInformation"]["bin"] = payload.details.bin;
-                                response["clientInstance"] = btCientInstance;
                                 response["payload"] = payload;
                                 resolve(response);
                             }
