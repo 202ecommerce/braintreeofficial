@@ -1050,6 +1050,7 @@ class BraintreeOfficial extends \PaymentModule
             'paypal_braintree_amount' => $this->context->cart->getOrderTotal(),
             'paypal_braintree_mode' => $this->methodBraintreeOfficial->mode == 'SANDBOX' ? Tools::strtolower($this->methodBraintreeOfficial->mode) : 'production',
             'paypal_braintree_currency' => $this->context->currency->iso_code,
+            'envLocale' => str_replace("-", "_", $this->context->language->locale)
         ));
     }
 
