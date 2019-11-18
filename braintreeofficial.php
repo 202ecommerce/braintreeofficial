@@ -479,20 +479,6 @@ class BraintreeOfficial extends \PaymentModule
         $ex_detailed_message = '';
         if ($params['newOrderStatus']->id == Configuration::get('PS_OS_CANCELED')) {
             $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
-            if (Validate::isLoadedObject($braintreeCapture) && !$braintreeCapture->id_capture) {
-                ProcessLoggerHandler::openLogger();
-                ProcessLoggerHandler::logError(
-                    $this->l('You couldn\'t refund order, it\'s not payed yet.'),
-                    null,
-                    $orderBraintree->id_order,
-                    $orderBraintree->id_cart,
-                    $this->context->shop->id,
-                    $orderBraintree->payment_tool,
-                    $orderBraintree->sandbox
-                );
-                ProcessLoggerHandler::closeLogger();
-                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
-            }
 
             try {
                 $response_void = $this->methodBraintreeOfficial->void($orderBraintree);
