@@ -734,6 +734,12 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     $data['paymentMethodToken'] = $vault_token;
                 } elseif ($vaultExists) {
                     if ($module->use3dVerification()) {
+                        if (empty($this->cvv_field)) {
+                            $error_msg = $module->l('Card verification failed.', get_class($this));
+
+                            throw new Exception($error_msg, '00000');
+                        }
+
                         $params = array(
                             'cvv' => $this->cvv_field,
                             'options' => [
