@@ -54,7 +54,6 @@ const BtCheckout = {
     },
 
     updateProductAmount(data) {
-        console.log(data);
         let quantity = $('input[name="qty"]').val();
         let idProductAttribute = data['id_product_attribute'];
 

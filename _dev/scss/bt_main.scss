@@ -37,4 +37,12 @@
 @import "components/braintree";
 @import "components/braintree-pp";
 
+#cart .braintreeofficial-shortcut-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#product .braintreeofficial-shortcut-container {
+  padding-top: 25px;
+}
 

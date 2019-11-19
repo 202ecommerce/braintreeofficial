@@ -305,10 +305,10 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     public function setCheckoutInfo($data)
     {
         $vars = array(
-            'idProduct' => (int)$data['idProduct'],
-            'idProductAttribute' => (int)$data['idProductAttribute'],
-            'page' => (int)$data['page'],
-            'quantity' => (int)$data['quantity']
+            'idProduct' => isset($data['idProduct']) ? (int)$data['idProduct'] : null,
+            'idProductAttribute' => isset($data['idProductAttribute']) ? (int)$data['idProductAttribute'] : null,
+            'page' => isset($data['page']) ? (int)$data['page'] : null,
+            'quantity' => isset($data['quantity']) ? (int)$data['quantity'] : null,
         );
 
         $this->checkoutInfo = $vars;
