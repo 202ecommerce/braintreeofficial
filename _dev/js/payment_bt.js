@@ -18,6 +18,9 @@ import {selectOption} from './functions.js';
 $(document).ready(() => {
   if ($('#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
+    if (use3dVerification) {
+        initBraintreeCvvField();
+    }
   }
 
   $('.js-payment-option-form').each((i) => {
@@ -32,6 +35,22 @@ $(document).ready(() => {
 
 let bt_hosted_fileds;
 let bt_client_instance;
+
+const initBraintreeCvvField = () => {
+    let cardSelect = $('[data-bt-vaulting-token="bt"]');
+    let cardForm = $('[data-form-cvv-field]');
+    $(document).on('input', '#btCvvField', maxLengthCheck)
+    if (cardSelect.length) {
+        toggleCvv(cardSelect, cardForm);
+    }
+}
+
+const maxLengthCheck = (event) => {
+    let object = event.target;
+    if (object.value.length > 4) {
+        object.value = object.value.slice(0, 4);
+    }
+}
 
 const initBraintreeCard = () => {
   braintree.client.create({
@@ -153,6 +172,20 @@ const initBraintreeCard = () => {
   });
 }
 
+const toggleCvv = (select, el) => {
+    if (select) {
+        select.on('change', (e) => {
+            const index = e.target.selectedIndex;
+
+            if (index === 0) {
+                el.hide();
+            } else {
+                el.show();
+            }
+        });
+    }
+};
+
 
 
 const removeErrorMsg = (el) => {
@@ -178,6 +211,7 @@ const setErrorMsg = (el, field) => {
     $msgBlock.hide();
   }
 }
+
 
 const BraintreeSubmitPayment = () => {
     const bt_form = $('[data-braintree-card-form]');

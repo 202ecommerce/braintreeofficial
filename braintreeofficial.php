@@ -569,20 +569,6 @@ class BraintreeOfficial extends \PaymentModule
         $ex_detailed_message = '';
         if ($params['newOrderStatus']->id == Configuration::get('PS_OS_CANCELED')) {
             $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
-            if (Validate::isLoadedObject($braintreeCapture) && !$braintreeCapture->id_capture) {
-                ProcessLoggerHandler::openLogger();
-                ProcessLoggerHandler::logError(
-                    $this->l('You couldn\'t refund order, it\'s not payed yet.'),
-                    null,
-                    $orderBraintree->id_order,
-                    $orderBraintree->id_cart,
-                    $this->context->shop->id,
-                    $orderBraintree->payment_tool,
-                    $orderBraintree->sandbox
-                );
-                ProcessLoggerHandler::closeLogger();
-                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
-            }
 
             try {
                 $response_void = $this->methodBraintreeOfficial->void($orderBraintree);
@@ -1203,6 +1189,7 @@ class BraintreeOfficial extends \PaymentModule
             'paypal_braintree_amount' => $this->context->cart->getOrderTotal(),
             'paypal_braintree_mode' => $this->methodBraintreeOfficial->mode == 'SANDBOX' ? Tools::strtolower($this->methodBraintreeOfficial->mode) : 'production',
             'paypal_braintree_currency' => $this->context->currency->iso_code,
+            'envLocale' => str_replace("-", "_", $this->context->language->locale)
         ));
     }
 
@@ -1244,11 +1231,24 @@ class BraintreeOfficial extends \PaymentModule
     public function addJsVarsBT()
     {
         $clientToken = $this->methodBraintreeOfficial->init();
+        $use3dVerification = $this->use3dVerification();
 
         Media::addJsDef(array(
             'authorization' => $clientToken,
-            'controllerValidation' => $this->context->link->getModuleLink($this->name, 'validation', array(), true)
+            'controllerValidation' => $this->context->link->getModuleLink($this->name, 'validation', array(), true),
+            'use3dVerification' => $use3dVerification
         ));
+    }
+
+    /**
+     * @return bool
+     * */
+    public function use3dVerification()
+    {
+        $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
+        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal(true, Cart::BOTH);
+
+        return $use3dVerification;
     }
 
     /**
