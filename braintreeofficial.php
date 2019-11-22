@@ -1450,10 +1450,19 @@ class BraintreeOfficial extends \PaymentModule
 
             $order_state->name = array();
             foreach (Language::getLanguages() as $language) {
-                if (Tools::strtolower($language['iso_code']) == 'fr') {
-                    $order_state->name[$language['id_lang']] = 'En attente de paiement Braintree';
-                } else {
-                    $order_state->name[$language['id_lang']] = 'Awaiting for Braintree payment';
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $order_state->name[$isoCode] = 'Paiement en attente (autorisé)';
+                        break;
+                    case 'es':
+                        $order_state->name[$isoCode] = 'Pagamento in corso (autorizzato)';
+                        break;
+                    case 'it':
+                        $order_state->name[$isoCode] = 'Pagamento in sospeso (autorizzato)';
+                        break;
+                    default:
+                        $order_state->name[$isoCode] = 'Payment pending (authorized)';
                 }
             }
             $order_state->send_email = false;
@@ -1484,13 +1493,24 @@ class BraintreeOfficial extends \PaymentModule
                 $order_state = new OrderState();
             }
             $order_state->name = array();
+
             foreach (Language::getLanguages() as $language) {
-                if (Tools::strtolower($language['iso_code']) == 'fr') {
-                    $order_state->name[$language['id_lang']] = 'En attente de validation Braintree';
-                } else {
-                    $order_state->name[$language['id_lang']] = 'Awaiting for Braintree validation';
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $order_state->name[$isoCode] = 'Paiement en cours (autorisé)';
+                        break;
+                    case 'es':
+                        $order_state->name[$isoCode] = 'Pago en proceso (autorizado)';
+                        break;
+                    case 'it':
+                        $order_state->name[$isoCode] = 'Pago pendiente (autorizado)';
+                        break;
+                    default:
+                        $order_state->name[$isoCode] = 'Payment processing (authorized)';
                 }
             }
+
             $order_state->send_email = false;
             $order_state->color = '#4169E1';
             $order_state->hidden = false;
@@ -1700,10 +1720,16 @@ class BraintreeOfficial extends \PaymentModule
                 $isoCode = Tools::strtolower($language['iso_code']);
                 switch ($isoCode) {
                     case 'fr':
-                        $braintreeAwaiting->name[$isoCode] = '';
+                        $braintreeAwaiting->name[$isoCode] = 'Paiement en attente (autorisé)';
+                        break;
+                    case 'es':
+                        $braintreeAwaiting->name[$isoCode] = 'Pagamento in corso (autorizzato)';
+                        break;
+                    case 'it':
+                        $braintreeAwaiting->name[$isoCode] = 'Pagamento in sospeso (autorizzato)';
                         break;
                     default:
-                        $braintreeAwaiting->name['en'] = 'Payment pending (authorized)';
+                        $braintreeAwaiting->name[$isoCode] = 'Payment pending (authorized)';
                 }
             }
 
@@ -1717,10 +1743,16 @@ class BraintreeOfficial extends \PaymentModule
                 $isoCode = Tools::strtolower($language['iso_code']);
                 switch ($isoCode) {
                     case 'fr':
-                        $braintreeAwaitingValidation->name[$isoCode] = '';
+                        $braintreeAwaitingValidation->name[$isoCode] = 'Paiement en cours (autorisé)';
+                        break;
+                    case 'es':
+                        $braintreeAwaitingValidation->name[$isoCode] = 'Pago en proceso (autorizado)';
+                        break;
+                    case 'it':
+                        $braintreeAwaitingValidation->name[$isoCode] = 'Pago pendiente (autorizado)';
                         break;
                     default:
-                        $braintreeAwaitingValidation->name['en'] = 'Payment processing (authorized)';
+                        $braintreeAwaitingValidation->name[$isoCode] = 'Payment processing (authorized)';
                 }
             }
 
