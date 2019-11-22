@@ -96,6 +96,7 @@
 								<label for="btCvvField" class="bt__form-label">{l s='CVV' mod='braintreeofficial'}</label>
 								<input type="number" name="btCvvField" id="btCvvField" class="form-control bt__form-control bt__number-field" placeholder="123">
 							</div>
+							<div data-bt-cvv-error-msg class="bt__text-danger bt__mt-1 col-lg-12"></div>
 						</div>
 					</form>
 					<div data-bt-card-error-msg class="alert alert-danger bt__hidden"></div>
