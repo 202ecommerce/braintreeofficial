@@ -182,6 +182,12 @@ class BraintreeOfficial extends \PaymentModule
         BraintreeOfficialCustomer::class
     );
 
+
+    /**
+     * @var array
+     */
+    public $moduleConfigs = array();
+
     /**
      * List of admin tabs used in this Module
      */
@@ -317,6 +323,19 @@ class BraintreeOfficial extends \PaymentModule
         $this->serviceBraintreeOfficialCapture = new ServiceBraintreeOfficialCapture();
         $this->serviceBraintreeOfficialVaulting = new ServiceBraintreeOfficialVaulting();
         $this->setMethodBraitree(AbstractMethodBraintreeOfficial::load('BraintreeOfficial'));
+        $this->moduleConfigs = array(
+            'BRAINTREEOFFICIAL_API_INTENT' => 'sale',
+            'BRAINTREEOFFICIAL_3DSECURE' => 1,
+            'BRAINTREEOFFICIAL_3DSECURE_AMOUNT' => 0,
+            'BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS' => 0,
+            'BRAINTREEOFFICIAL_OS_REFUNDED' => (int)Configuration::get('PS_OS_REFUND'),
+            'BRAINTREEOFFICIAL_OS_CANCELED' => (int)Configuration::get('PS_OS_CANCELED'),
+            'BRAINTREEOFFICIAL_OS_ACCEPTED' => (int)Configuration::get('PS_OS_PAYMENT'),
+            'BRAINTREEOFFICIAL_OS_CAPTURE_CANCELED' => (int)Configuration::get('PS_OS_CANCELED'),
+            'BRAINTREEOFFICIAL_OS_ACCEPTED_TWO' => (int)Configuration::get('PS_OS_PAYMENT'),
+            'BRAINTREEOFFICIAL_OS_PENDING' => (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING'),
+            'BRAINTREEOFFICIAL_OS_PROCESSING' => (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION'),
+        );
     }
 
     public function install()
@@ -338,9 +357,11 @@ class BraintreeOfficial extends \PaymentModule
             return false;
         }
 
-        Configuration::updateValue('BRAINTREEOFFICIAL_API_INTENT', 'sale');
-        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', 1);
-        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', 0);
+        foreach ($this->moduleConfigs as $key => $value) {
+            if (!Configuration::updateValue($key, $value)) {
+                return false;
+            }
+        }
 
         return true;
     }

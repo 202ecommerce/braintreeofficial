@@ -317,7 +317,7 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
                 'type' => 'select',
                 'label' => $this->l('Payment pending (authorized)'),
                 'name' => 'braintreeofficial_os_pending',
-                'hint' => $this->l('ou are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. By default the orders will be created in the "Payment pending (authorized)" status but you can customize it if needed.'),
+                'hint' => $this->l('You are currently using the Authorize mode. It means that you separate the payment authorization from the capture of the authorized payment. By default the orders will be created in the "Payment pending (authorized)" status but you can customize it if needed.'),
                 'desc' => $this->l('Default status : Payment pending (authorized)'),
                 'options' => array(
                     'query' => $orderStatuses,
