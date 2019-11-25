@@ -1815,4 +1815,24 @@ class BraintreeOfficial extends \PaymentModule
         Context::getContext()->cookie->__unset('payment_method_nonce');
         Context::getContext()->cookie->__unset('brainteeofficial_payer_email');
     }
+
+    public function getOrderStatuses()
+    {
+        $orderStatuses = array(
+            array(
+                'id' => 0,
+                'name' => $this->l('Choose status')
+            )
+        );
+        $prestashopOrderStatuses = OrderState::getOrderStates($this->context->language->id);
+
+        foreach ($prestashopOrderStatuses as $prestashopOrderStatus) {
+            $orderStatuses[] = array(
+                'id' => $prestashopOrderStatus['id_order_state'],
+                'name' => $prestashopOrderStatus['name']
+            );
+        }
+
+        return $orderStatuses;
+    }
 }

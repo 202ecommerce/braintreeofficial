@@ -42,28 +42,57 @@ var CustomizeCheckout = {
 
   checkConfigurations() {
     const usePayPal = $('input[name="braintreeofficial_activate_paypal"]');
+    const usePayPalOptions = [
+      $('input[name="braintreeofficial_show_paypal_benefits"]'),
+      $('select[name="braintreeofficial_express_checkout_in_context"]'),
+      $('.block-preview-button-context')
+    ];
     const enable3DSecure = $('input[name="braintreeofficial_3DSecure"]');
-    const showPayPalBenefits = $('input[name="braintreeofficial_show_paypal_benefits"]');
-    const Amount3DSecure = $('input[name="braintreeofficial_3DSecure_amount"]');
-    const checkoutInContext = $('select[name="braintreeofficial_express_checkout_in_context"]');
-    const blockPreviewButton = $('.block-preview-button-context');
+    const enable3DSecureOptions = [
+      $('input[name="braintreeofficial_3DSecure_amount"]')
+    ];
+    //const showPayPalBenefits = $('input[name="braintreeofficial_show_paypal_benefits"]');
+    //const Amount3DSecure = $('input[name="braintreeofficial_3DSecure_amount"]');
+    //const checkoutInContext = $('select[name="braintreeofficial_express_checkout_in_context"]');
+    //const blockPreviewButton = $('.block-preview-button-context');
+    const customOrderStatus = $('[name="braintreeofficial_customize_order_status"]');
+    const statusOptions = [
+      $('[name="braintreeofficial_os_refunded"]'),
+      $('[name="braintreeofficial_os_canceled"]'),
+      $('[name="braintreeofficial_os_accepted"]'),
+      $('[name="braintreeofficial_os_capture_canceled"]'),
+      $('[name="braintreeofficial_os_accepted_two"]'),
+      $('[name="braintreeofficial_os_processing"]'),
+      $('[name="braintreeofficial_os_pending"]'),
+      $('.advanced-help-message'),
+    ];
 
     // Activate paypal payment method and add additional config for it (Display block with paypal benefits)
     if (usePayPal.prop('checked') == false) {
-      this.hideConfiguration(showPayPalBenefits);
-      this.hideConfiguration(checkoutInContext);
-      this.hideConfiguration(blockPreviewButton);
+      usePayPalOptions.forEach(CustomizeCheckout.hideConfiguration);
+      //this.hideConfiguration(showPayPalBenefits);
+      //this.hideConfiguration(checkoutInContext);
+      //this.hideConfiguration(blockPreviewButton);
     } else {
-      this.showConfiguration(showPayPalBenefits);
+      usePayPalOptions.forEach(CustomizeCheckout.showConfiguration);
+      /*this.showConfiguration(showPayPalBenefits);
       this.showConfiguration(checkoutInContext);
-      this.showConfiguration(blockPreviewButton);
+      this.showConfiguration(blockPreviewButton);*/
     }
 
       // Activate card verification for existence and validity
       if (enable3DSecure.prop('checked') == false) {
-          this.hideConfiguration(Amount3DSecure);
+        enable3DSecureOptions.forEach(CustomizeCheckout.hideConfiguration);
+          //this.hideConfiguration(Amount3DSecure);
       } else {
-          this.showConfiguration(Amount3DSecure);
+        enable3DSecureOptions.forEach(CustomizeCheckout.showConfiguration);
+          //this.showConfiguration(Amount3DSecure);
+      }
+
+      if (customOrderStatus.prop('checked') == false) {
+        statusOptions.forEach(CustomizeCheckout.hideConfiguration);
+      } else {
+        statusOptions.forEach(CustomizeCheckout.showConfiguration);
       }
   },
 
@@ -72,7 +101,7 @@ var CustomizeCheckout = {
     const configuration = $(elem);
     const formGroup = configuration.closest('.form-group');
     if (configuration.attr('type') == 'radio') {
-      this.disableConfiguration(elem);
+      CustomizeCheckout.disableConfiguration(elem);
     }
     formGroup.hide();
   },
