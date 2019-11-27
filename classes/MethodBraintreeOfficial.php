@@ -265,15 +265,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         }
 
         $this->setDetailsTransaction($transaction);
-
-        if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
-            $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
-        } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
-            || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
-            $order_state = Configuration::get('PS_OS_PAYMENT');
-        } else {
-            $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
-        }
+        $order_state = $this->getOrderState($transaction);
 
         $module->validateOrder(
             context::getContext()->cart->id,
@@ -286,6 +278,31 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             false,
             context::getContext()->customer->secure_key
         );
+    }
+
+    public function getOrderState($transaction)
+    {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS')) {
+            if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_PROCESSING');
+            } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+                || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_ACCEPTED_TWO');
+            } else {
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_PENDING');
+            }
+        } else {
+            if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
+            } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+                || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
+                $orderState = (int)Configuration::get('PS_OS_PAYMENT');
+            } else {
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
+            }
+        }
+
+        return $orderState;
     }
 
     public function setDetailsTransaction($transaction)

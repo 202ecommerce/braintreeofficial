@@ -584,6 +584,8 @@ class BraintreeOfficial extends \PaymentModule
          * @var $braintreeCapture BraintreeOfficialCapture
          */
         $orderBraintree = $this->serviceBraintreeOfficialOrder->loadByOrderId($params['id_order']);
+        $statusCanceled = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_CANCELED') : (int)Configuration::get('PS_OS_CANCELED');
+        $statusRefunded = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_REFUNDED') : (int)Configuration::get('PS_OS_REFUND');
 
         if (!Validate::isLoadedObject($orderBraintree)) {
             return false;
@@ -591,7 +593,7 @@ class BraintreeOfficial extends \PaymentModule
 
         $message = '';
         $ex_detailed_message = '';
-        if ($params['newOrderStatus']->id == Configuration::get('PS_OS_CANCELED')) {
+        if ($params['newOrderStatus']->id == $statusCanceled) {
             $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
 
             try {
@@ -659,7 +661,7 @@ class BraintreeOfficial extends \PaymentModule
             }
         }
 
-        if ($params['newOrderStatus']->id == Configuration::get('PS_OS_REFUND')) {
+        if ($params['newOrderStatus']->id == $statusRefunded) {
             $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
 
             if (Validate::isLoadedObject($braintreeCapture) && !$braintreeCapture->id_capture) {
@@ -942,7 +944,7 @@ class BraintreeOfficial extends \PaymentModule
                     }
 
                     $ps_order = new Order($braintreeOrder->id_order);
-                    $paid_state  = Configuration::get('PS_OS_PAYMENT');
+                    $paid_state  = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_ACCEPTED') : (int)Configuration::get('PS_OS_PAYMENT');
                     $ps_order_details = OrderDetail::getList($braintreeOrder->id_order);
 
                     foreach ($ps_order_details as $order_detail) {
