@@ -44,6 +44,9 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
             'braintreeofficial_express_checkout_in_context',
             'braintreeofficial_express_checkout_shortcut',
             'braintreeofficial_express_checkout_shortcut_cart',
+        );
+
+        $this->advancedFormParameters = array(
             'braintreeofficial_customize_order_status',
             'braintreeofficial_os_refunded',
             'braintreeofficial_os_canceled',
@@ -344,7 +347,7 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
 
         $values =array();
 
-        foreach ($this->parameters as $parameter) {
+        foreach ($this->advancedFormParameters as $parameter) {
             $values[$parameter] = Configuration::get(Tools::strtoupper($parameter));
         }
 
@@ -357,6 +360,12 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
 
         foreach ($this->parameters as $parameter) {
             $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+        }
+
+        if (Tools::isSubmit('saveAdvancedForm')) {
+            foreach ($this->advancedFormParameters as $parameter) {
+                $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+            }
         }
 
         return $return;
