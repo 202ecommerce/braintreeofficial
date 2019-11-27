@@ -40,6 +40,16 @@ function upgrade_module_1_2_0($module)
 {
     $result = true;
     $result &= $module->renameOrderState();
+    $configs = array(
+        'BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS' => 0,
+        'BRAINTREEOFFICIAL_OS_REFUNDED' => (int)Configuration::get('PS_OS_REFUND'),
+        'BRAINTREEOFFICIAL_OS_CANCELED' => (int)Configuration::get('PS_OS_CANCELED'),
+        'BRAINTREEOFFICIAL_OS_ACCEPTED' => (int)Configuration::get('PS_OS_PAYMENT'),
+        'BRAINTREEOFFICIAL_OS_CAPTURE_CANCELED' => (int)Configuration::get('PS_OS_CANCELED'),
+        'BRAINTREEOFFICIAL_OS_ACCEPTED_TWO' => (int)Configuration::get('PS_OS_PAYMENT'),
+        'BRAINTREEOFFICIAL_OS_PENDING' => (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING'),
+        'BRAINTREEOFFICIAL_OS_PROCESSING' => (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION'),
+    );
 
     if ($result) {
         if (Shop::isFeatureActive()) {
@@ -49,6 +59,17 @@ function upgrade_module_1_2_0($module)
             }
         } else {
             $result &= Configuration::updateValue('BRAINTREEOFFICIAL_SHOW_MESSAGE_ABOUT_STATE_NAME', 1);
+        }
+    }
+
+    foreach ($configs as $config => $value) {
+        if (Shop::isFeatureActive()) {
+            $shops = Shop::getShops();
+            foreach ($shops as $shop) {
+                $result &= Configuration::updateValue($config, $value, false, null, (int)$shop['id_shop']);
+            }
+        } else {
+            $result &= Configuration::updateValue($config, $value);
         }
     }
 

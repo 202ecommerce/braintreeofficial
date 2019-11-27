@@ -357,6 +357,9 @@ class BraintreeOfficial extends \PaymentModule
             return false;
         }
 
+        $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PENDING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
+        $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PROCESSING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
+
         foreach ($this->moduleConfigs as $key => $value) {
             if (!Configuration::updateValue($key, $value)) {
                 return false;

@@ -177,6 +177,7 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
             'submit' => array(
                 'title' => $this->l('Save'),
                 'class' => 'btn btn-default pull-right button',
+                'name' => 'behaviorForm'
             ),
             'id_form' => 'bt_config_behavior'
         );
@@ -358,13 +359,17 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
     {
         $return = parent::saveForm();
 
-        foreach ($this->parameters as $parameter) {
-            $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+        if (Tools::isSubmit('behaviorForm')) {
+            foreach ($this->parameters as $parameter) {
+                $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+            }
         }
 
         if (Tools::isSubmit('saveAdvancedForm')) {
             foreach ($this->advancedFormParameters as $parameter) {
-                $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+                if (Tools::isSubmit($parameter)) {
+                    $return &= Configuration::updateValue(Tools::strtoupper($parameter), Tools::getValue($parameter));
+                }
             }
         }
 
