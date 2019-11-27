@@ -222,26 +222,26 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
             ),
         );
 
-        if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == 'authorization') {
-            $inputs[] = array(
-                'type' => 'html',
-                'name' => '',
-                'html_content' => $this->context->smarty->fetch($this->getTemplatePath() . '_partials/formAdvancedHelpOne.tpl')
-            );
+        $inputs[] = array(
+            'type' => 'html',
+            'name' => '',
+            'html_content' => $this->context->smarty->fetch($this->getTemplatePath() . '_partials/formAdvancedHelpOne.tpl')
+        );
 
-            $inputs[] = array(
-                'type' => 'select',
-                'label' => $this->l('Order Status for triggering the refund on Braintree'),
-                'name' => 'braintreeofficial_os_refunded',
-                'hint' => $this->l('You can refund the orders paid via Braintree directly via your PrestaShop BackOffice. Here you can choose the order status that triggers the refund on Braintree. Choose the option "no actions" if you would like to change the order status without triggering the automatic refund on Braintree.'),
-                'desc' => $this->l('Default status : Refunded'),
-                'options' => array(
-                    'query' => $orderStatuses,
-                    'id' => 'id',
-                    'name' => 'name'
-                )
-            );
+        $inputs[] = array(
+            'type' => 'select',
+            'label' => $this->l('Order Status for triggering the refund on Braintree'),
+            'name' => 'braintreeofficial_os_refunded',
+            'hint' => $this->l('You can refund the orders paid via Braintree directly via your PrestaShop BackOffice. Here you can choose the order status that triggers the refund on Braintree. Choose the option "no actions" if you would like to change the order status without triggering the automatic refund on Braintree.'),
+            'desc' => $this->l('Default status : Refunded'),
+            'options' => array(
+                'query' => $orderStatuses,
+                'id' => 'id',
+                'name' => 'name'
+            )
+        );
 
+        if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == 'sale') {
             $inputs[] = array(
                 'type' => 'select',
                 'label' => $this->l('Order Status for triggering the cancellation on Braintree'),
@@ -254,7 +254,9 @@ class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOf
                     'name' => 'name'
                 )
             );
+        }
 
+        if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == 'authorization') {
             $inputs[] = array(
                 'type' => 'select',
                 'label' => $this->l('Payment accepted via BO (call Braintree to get the payment)'),

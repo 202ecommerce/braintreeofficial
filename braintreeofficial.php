@@ -584,12 +584,18 @@ class BraintreeOfficial extends \PaymentModule
          * @var $braintreeCapture BraintreeOfficialCapture
          */
         $orderBraintree = $this->serviceBraintreeOfficialOrder->loadByOrderId($params['id_order']);
-        $statusCanceled = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_CANCELED') : (int)Configuration::get('PS_OS_CANCELED');
-        $statusRefunded = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_REFUNDED') : (int)Configuration::get('PS_OS_REFUND');
 
         if (!Validate::isLoadedObject($orderBraintree)) {
             return false;
         }
+
+        if ($orderBraintree->payment_method == 'sale') {
+            $statusCanceled = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_CANCELED') : (int)Configuration::get('PS_OS_CANCELED');
+        } else {
+            $statusCanceled = (int)Configuration::get('BRAINTREEOFFICIAL_OS_CAPTURE_CANCELED') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_CANCELED') : (int)Configuration::get('PS_OS_CANCELED');
+        }
+        $statusRefunded = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_REFUNDED') : (int)Configuration::get('PS_OS_REFUND');
+
 
         $message = '';
         $ex_detailed_message = '';
