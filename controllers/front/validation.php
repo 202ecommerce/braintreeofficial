@@ -47,6 +47,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         $this->values['pbt_vaulting_token'] = Tools::getvalue('pbt_vaulting_token');
         $this->values['save_card_in_vault'] = Tools::getvalue('save_card_in_vault');
         $this->values['save_account_in_vault'] = Tools::getvalue('save_account_in_vault');
+        $this->values['cvv_field'] = Tools::getValue('btCvvField');
     }
 
     public function postProcess()
@@ -84,8 +85,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         $customer = new Customer($this->context->cart->id_customer);
         $address = new Address($this->context->cart->id_address_delivery);
         $country = new Country($address->id_country);
-        $use3dVerification = (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE');
-        $use3dVerification &= (int)Configuration::get('BRAINTREEOFFICIAL_3DSECURE_AMOUNT') <= $this->context->cart->getOrderTotal();
+        $use3dVerification = $this->module->use3dVerification();
         $iso = '';
 
         if ($address->id_state) {

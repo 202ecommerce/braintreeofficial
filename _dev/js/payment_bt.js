@@ -18,6 +18,9 @@ import {selectOption} from './functions.js';
 $(document).ready(() => {
   if ($('#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
+    if (use3dVerification) {
+        initBraintreeCvvField();
+    }
   }
 
   $('.js-payment-option-form').each((i) => {
@@ -32,6 +35,22 @@ $(document).ready(() => {
 
 let bt_hosted_fileds;
 let bt_client_instance;
+
+const initBraintreeCvvField = () => {
+    let cardSelect = $('[data-bt-vaulting-token="bt"]');
+    let cardForm = $('[data-form-cvv-field]');
+    $(document).on('input', '#btCvvField', maxLengthCheck)
+    if (cardSelect.length) {
+        toggleCvv(cardSelect, cardForm);
+    }
+}
+
+const maxLengthCheck = (event) => {
+    let object = event.target;
+    if (object.value.length > 4) {
+        object.value = object.value.slice(0, 4);
+    }
+}
 
 const initBraintreeCard = () => {
   braintree.client.create({
@@ -152,6 +171,20 @@ const initBraintreeCard = () => {
   });
 }
 
+const toggleCvv = (select, el) => {
+    if (select) {
+        select.on('change', (e) => {
+            const index = e.target.selectedIndex;
+
+            if (index === 0) {
+                el.hide();
+            } else {
+                el.show();
+            }
+        });
+    }
+};
+
 
 
 const removeErrorMsg = (el) => {
@@ -178,10 +211,12 @@ const setErrorMsg = (el, field) => {
   }
 }
 
+
 const BraintreeSubmitPayment = () => {
     const bt_form = $('[data-braintree-card-form]');
     const vaultToken = $('[data-bt-vaulting-token="bt"]').val(); // use vaulted card
     const btnConfirmation = $('#payment-confirmation button');
+    const cvvField = $('[name = "btCvvField"]');
 
     getOrderInformation(vaultToken).then(
         response => {
@@ -190,6 +225,12 @@ const BraintreeSubmitPayment = () => {
             let use3dVerification = response["use3dVerification"];
 
             if (use3dVerification) {
+                if (vaultToken && (cvvField.length == 0 || cvvField.val() == '')) {
+                    btnConfirmation.prop('disabled', false);
+                    $('[data-bt-cvv-error-msg]').show().text(bt_translations_cvv);
+                    return false;
+                }
+
                 braintree.threeDSecure.create({
                     version: 2, //Using 3DS 2
                     client: bt_client_instance,

@@ -81,6 +81,8 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     /* @var ServiceBraintreeOfficialOrder*/
     protected $serviceBraintreeOfficialOrder;
 
+    protected $cvv_field;
+
     public function __construct()
     {
         $this->serviceBraintreeOfficialCapture = new ServiceBraintreeOfficialCapture();
@@ -731,6 +733,30 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 if ($vaultExists && $this->payment_method_bt == 'paypal-braintree') {
                     $data['paymentMethodToken'] = $vault_token;
                 } elseif ($vaultExists) {
+                    if ($module->use3dVerification()) {
+                        if (empty($this->cvv_field)) {
+                            $error_msg = $module->l('Card verification failed.', get_class($this));
+
+                            throw new Exception($error_msg, '00000');
+                        }
+
+                        $params = array(
+                            'cvv' => $this->cvv_field,
+                            'options' => [
+                                'verifyCard' => true
+                            ]
+                        );
+                        $payment_method = $this->gateway->paymentMethod()->update($vault_token, $params);
+
+                        if ((isset($payment_method->verification) && $payment_method->verification == null) ||
+                            (isset($payment_method->verification) && $payment_method->verification->status != 'verified')) {
+                            $error_msg = $module->l('Card verification failed.', get_class($this));
+                            $error_msg .= $module->l('The reason : ', get_class($this)).' '.$payment_method->message;
+
+                            throw new Exception($error_msg, '00000');
+                        }
+                    }
+
                     $data['paymentMethodNonce'] = $token_payment;
                 }
             } else {

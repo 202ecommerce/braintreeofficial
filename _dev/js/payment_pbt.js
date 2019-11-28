@@ -151,6 +151,7 @@ const initPaypalBraintree = (flow) => {
       
       $('[data-braintree-button]').html('');
       paypal.Button.render({
+        locale: envLocale,
         env: paypal_braintree_mode, // 'production' or 'sandbox'
         style: {
           tagline: false
