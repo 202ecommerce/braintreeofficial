@@ -18,7 +18,7 @@ import {selectOption} from './functions.js';
 $(document).ready(() => {
   if ($('#checkout-payment-step').hasClass('js-current-step')) {
     initBraintreeCard();
-    if (use3dVerification) {
+    if (use3dVerification == false) {
         initBraintreeCvvField();
     }
   }
@@ -226,12 +226,6 @@ const BraintreeSubmitPayment = () => {
             let use3dVerification = response["use3dVerification"];
 
             if (use3dVerification) {
-                if (vaultToken && (cvvField.length == 0 || cvvField.val() == '')) {
-                    btnConfirmation.prop('disabled', false);
-                    $('[data-bt-cvv-error-msg]').show().text(bt_translations_cvv);
-                    return false;
-                }
-
                 braintree.threeDSecure.create({
                     version: 2, //Using 3DS 2
                     client: bt_client_instance,
@@ -287,6 +281,10 @@ const BraintreeSubmitPayment = () => {
                 if (typeof(vaultToken) == 'undefined' || vaultToken == false) {
                     $('[data-payment-method-nonce="bt"]').val(payload.nonce);
                     $('[data-bt-card-type]').val(payload.details.cardType);
+                } else if (vaultToken && (cvvField.length == 0 || cvvField.val() == '')) {
+                    btnConfirmation.prop('disabled', false);
+                    $('[data-bt-cvv-error-msg]').show().text(bt_translations_cvv);
+                    return false;
                 }
 
                 bt_form.submit();
