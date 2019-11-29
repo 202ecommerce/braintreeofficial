@@ -733,7 +733,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 if ($vaultExists && $this->payment_method_bt == 'paypal-braintree') {
                     $data['paymentMethodToken'] = $vault_token;
                 } elseif ($vaultExists) {
-                    if ($module->use3dVerification()) {
+                    if ($module->use3dVerification() == false) {
                         if (empty($this->cvv_field)) {
                             $error_msg = $module->l('Card verification failed.', get_class($this));
 
