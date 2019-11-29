@@ -669,11 +669,6 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     public function sale($cart, $token_payment)
     {
         /* @var $module BraintreeOfficial*/
-        $log = array(
-            Tools::getAllValues(),
-            $token_payment,
-        );
-        //\Symfony\Component\VarDumper\VarDumper::dump($log); die;
         $this->initConfig();
         $bt_method = $this->payment_method_bt;
         $vault_token = '';
