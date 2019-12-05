@@ -49,6 +49,7 @@ const BtCheckout = {
         });
 
         prestashop.on('updatedProduct', (data) => {
+            BtCheckout.initPaymentBtn('checkout');
             BtCheckout.updateProductAmount(data);
         });
     },
@@ -71,6 +72,7 @@ const BtCheckout = {
             success (response) {
                 if (("success" in response) && (response["success"] == true)) {
                     BtCheckout.data.amount = response["amount"];
+                    BtCheckout.data.quantity = quantity;
                 }
 
                 if (BtCheckout.data.amount == 0) {
