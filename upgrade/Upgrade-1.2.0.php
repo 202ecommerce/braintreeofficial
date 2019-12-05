@@ -29,8 +29,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use BraintreeofficialPPBTlib\Install\ModuleInstaller;
-use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
-use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
 
 /**
  * @param $module BraintreeOfficial
@@ -39,6 +37,8 @@ use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
 function upgrade_module_1_2_0($module)
 {
     $result = true;
+    $installer = new ModuleInstaller($module);
+    $result &= $installer->registerHooks();
     $result &= $module->renameOrderState();
     $configs = array(
         'BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS' => 0,
