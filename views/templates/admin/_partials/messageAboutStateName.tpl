@@ -24,6 +24,7 @@
 *}
 
 <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">×</button>
     <div>
         {l s='Please note that some order status have been renamed for improving the user experience of your customers :' mod='braintreeofficial'}
     </div>
