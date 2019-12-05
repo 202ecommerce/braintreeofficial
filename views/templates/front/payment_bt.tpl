@@ -104,7 +104,7 @@
 						</div>
 
 						<div data-form-cvv-field class="bt__hidden">
-							<div id="block-cvv-field" class="form-group col-md-6">
+							<div id="block-cvv-field" class="form-group col-md-6 bt__pl-0">
 								<label for="btCvvField" class="bt__form-label">{l s='CVV' mod='braintreeofficial'}</label>
 								<input type="number" name="btCvvField" id="btCvvField" class="form-control bt__form-control bt__number-field" placeholder="123">
 							</div>
