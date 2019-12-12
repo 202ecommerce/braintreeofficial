@@ -361,8 +361,17 @@ class BraintreeOfficial extends \PaymentModule
         $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PROCESSING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
 
         foreach ($this->moduleConfigs as $key => $value) {
-            if (!Configuration::updateValue($key, $value)) {
-                return false;
+            if (Shop::isFeatureActive()) {
+                $shops = Shop::getShops();
+                foreach ($shops as $shop) {
+                    if (!Configuration::updateValue($key, $value, false, null, (int)$shop['id_shop'])) {
+                        return false;
+                    }
+                }
+            } else {
+                if (!Configuration::updateValue($key, $value)) {
+                    return false;
+                }
             }
         }
 
@@ -1504,6 +1513,7 @@ class BraintreeOfficial extends \PaymentModule
             $order_state->logable = false;
             $order_state->invoice = false;
             $order_state->module_name = $this->name;
+
             if ($order_state->id) {
                 $order_state->update();
             } elseif ($order_state->add()) {
@@ -1511,7 +1521,15 @@ class BraintreeOfficial extends \PaymentModule
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
                 copy($source, $destination);
             }
-            Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING', (int) $order_state->id);
+
+            if (Shop::isFeatureActive()) {
+                $shops = Shop::getShops();
+                foreach ($shops as $shop) {
+                    Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING', (int) $order_state->id, false, null, (int)$shop['id_shop']);
+                }
+            } else {
+                Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING', (int) $order_state->id);
+            }
         }
 
         if (!Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION')
@@ -1550,6 +1568,7 @@ class BraintreeOfficial extends \PaymentModule
             $order_state->logable = false;
             $order_state->invoice = false;
             $order_state->module_name = $this->name;
+
             if ($order_state->id && $order_state->update()) {
                 $order_state->update();
             } elseif ($order_state->add()) {
@@ -1557,8 +1576,17 @@ class BraintreeOfficial extends \PaymentModule
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
                 copy($source, $destination);
             }
-            Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION', (int) $order_state->id);
+
+            if (Shop::isFeatureActive()) {
+                $shops = Shop::getShops();
+                foreach ($shops as $shop) {
+                    Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION', (int) $order_state->id, false, null, (int)$shop['id_shop']);
+                }
+            } else {
+                Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION', (int) $order_state->id);
+            }
         }
+
         return true;
     }
 
