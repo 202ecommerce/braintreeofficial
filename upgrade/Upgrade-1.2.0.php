@@ -37,6 +37,7 @@ use BraintreeofficialPPBTlib\Install\ModuleInstaller;
 function upgrade_module_1_2_0($module)
 {
     $result = true;
+    $shops = Shop::getShops();
     $installer = new ModuleInstaller($module);
     $result &= $installer->registerHooks();
     $result &= $module->renameOrderState();
@@ -64,7 +65,6 @@ function upgrade_module_1_2_0($module)
 
     foreach ($configs as $config => $value) {
         if (Shop::isFeatureActive()) {
-            $shops = Shop::getShops();
             foreach ($shops as $shop) {
                 $result &= Configuration::updateValue($config, $value, false, null, (int)$shop['id_shop']);
             }

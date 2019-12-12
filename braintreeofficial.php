@@ -359,10 +359,10 @@ class BraintreeOfficial extends \PaymentModule
 
         $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PENDING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
         $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PROCESSING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
+        $shops = Shop::getShops();
 
         foreach ($this->moduleConfigs as $key => $value) {
             if (Shop::isFeatureActive()) {
-                $shops = Shop::getShops();
                 foreach ($shops as $shop) {
                     if (!Configuration::updateValue($key, $value, false, null, (int)$shop['id_shop'])) {
                         return false;
