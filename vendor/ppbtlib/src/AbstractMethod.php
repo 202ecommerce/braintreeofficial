@@ -26,6 +26,8 @@
 
 namespace BraintreeofficialPPBTlib;
 
+use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
+
 abstract class AbstractMethod
 {
     /** @var string module name */
@@ -133,9 +135,8 @@ abstract class AbstractMethod
 
     /**
      * Get link to transaction
-     * @param string $id_transaction
-     * @param bool $sandbox mode (sandbox/live)
+     * @param BraintreeOfficialLog
      * @return string
      */
-    abstract public function getLinkToTransaction($id_transaction, $sandbox);
+    abstract public function getLinkToTransaction($log);
 }

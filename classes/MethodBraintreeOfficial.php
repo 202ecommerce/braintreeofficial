@@ -637,14 +637,14 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     /**
      * @see AbstractMethodBraintreeOfficial::getLinkToTransaction()
      */
-    public function getLinkToTransaction($id_transaction, $sandbox)
+    public function getLinkToTransaction($log)
     {
-        if ($sandbox) {
-            $url = 'https://sandbox.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX') . '/transactions/';
+        if ($log->sandbox) {
+            $url = 'https://sandbox.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX', null, null, $log->id_shop) . '/transactions/';
         } else {
-            $url = 'https://www.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE') . '/transactions/';
+            $url = 'https://www.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE', null, null, $log->id_shop) . '/transactions/';
         }
-        return $url . $id_transaction;
+        return $url . $log->id_transaction;
     }
 
     /**
