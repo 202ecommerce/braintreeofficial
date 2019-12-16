@@ -27,6 +27,7 @@ const BtCheckout = {
         idProductAttribute: null,
         quantity: null,
         page: null,
+        locale: null,
     },
 
     init() {
@@ -150,6 +151,10 @@ const BtCheckout = {
         if (typeof(paypal_braintree_page) != 'undefined') {
             this.data.page = paypal_braintree_page;
         }
+
+        if (typeof(paypal_braintree_locale) != 'undefined') {
+            this.data.locale = paypal_braintree_locale;
+        }
     },
 
     showError(msgError) {
@@ -223,6 +228,7 @@ const BtCheckout = {
                 $('[data-braintree-button]').html('');
                 paypal.Button.render({
                     env: BtCheckout.data.mode, // 'production' or 'sandbox'
+                    locale: BtCheckout.data.locale,
                     style: {
                         tagline: false
                     },

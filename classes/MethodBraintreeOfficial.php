@@ -1018,7 +1018,8 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             'paypal_braintree_id_product' => Tools::isSubmit('id_product') ? (int)Tools::getValue('id_product') : null,
             'paypal_braintree_id_product_attribute' => (int)Tools::getValue('id_product_attribute'),
             'paypal_braintree_quantity' => 1,
-            'paypal_braintree_page' => $page
+            'paypal_braintree_page' => $page,
+            'paypal_braintree_locale' => str_replace("-", "_", Context::getContext()->language->locale)
         );
 
         return $tplVars;
