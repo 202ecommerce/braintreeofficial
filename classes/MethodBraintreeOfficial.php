@@ -733,7 +733,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 if ($vaultExists && $this->payment_method_bt == 'paypal-braintree') {
                     $data['paymentMethodToken'] = $vault_token;
                 } elseif ($vaultExists) {
-                    if ($module->use3dVerification()) {
+                    if ($module->use3dVerification() == false) {
                         if (empty($this->cvv_field)) {
                             $error_msg = $module->l('Card verification failed.', get_class($this));
 
@@ -768,14 +768,25 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                             'options' => array('verifyCard' => true),
                         ));
 
-                        if (isset($payment_method->verification) && $payment_method->verification->status != 'verified') {
+                        if (isset($payment_method->verification) && $payment_method->verification != null &&
+                            isset($payment_method->verification->status) && $payment_method->verification->status != 'verified') {
                             $error_msg = $module->l('Card verification respond with status', get_class($this)).' '.$payment_method->verification->status.'. ';
                             $error_msg .= $module->l('The reason : ', get_class($this)).' '.$payment_method->verification->processorResponseText.'. ';
+
                             if ($payment_method->verification->gatewayRejectionReason) {
                                 $error_msg .= $module->l('Rejection reason : ', get_class($this)).' '.$payment_method->verification->gatewayRejectionReason;
                             }
+
                             throw new Exception($error_msg, '00000');
                         }
+
+                        if ($payment_method instanceof Braintree\Result\Error) {
+                            $error_msg = $module->l('Card verification is failed. ', get_class($this));
+                            $error_msg .= $module->l('The reason : ', get_class($this)).' '.$payment_method->message.'. ';
+
+                            throw new Exception($error_msg, '00000');
+                        }
+
                         $paymentMethodToken = $payment_method->paymentMethod->token;
                     }
                     $options['storeInVaultOnSuccess'] = true;
