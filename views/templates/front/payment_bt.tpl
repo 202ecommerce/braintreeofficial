@@ -77,9 +77,6 @@
 											<div class="bt__ml-2 bt__flex-grow-1">
 												{include file='module:braintreeofficial/views/templates/front/_partials/svg/cvv.tpl'}
 											</div>
-											<div class="bt__flex-grow-1">
-												{include file='module:braintreeofficial/views/templates/front/_partials/svg/cvc.tpl'}
-											</div>
 										</div>
 									</label>
 									<div id="cvv" class="form-control bt__form-control bt__position-relative" data-bt-field="cvv"></div>
