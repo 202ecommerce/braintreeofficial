@@ -30,6 +30,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialController
 {
+    public function init()
+    {
+        parent::init();
+
+        if (Tools::isSubmit('registerHooks')) {
+            if ($this->registerHooks()) {
+                $this->confirmations[] = $this->l('Hooks successfully registered');
+            }
+        }
+    }
+
     /**
      * @throws Exception
      * @throws SmartyException
@@ -53,5 +64,21 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
     {
         $response = new JsonResponse($this->_checkRequirements());
         return $response->send();
+    }
+
+    public function registerHooks()
+    {
+        $result = true;
+        $hooksUnregistered = $this->module->getHooksUnregistered();
+
+        if (empty($hooksUnregistered)) {
+            return $result;
+        }
+
+        foreach ($hooksUnregistered as $hookName) {
+            $result &= $this->module->registerHook($hookName);
+        }
+
+        return $result;
     }
 }

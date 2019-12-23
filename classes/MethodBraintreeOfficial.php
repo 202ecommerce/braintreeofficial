@@ -265,15 +265,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         }
 
         $this->setDetailsTransaction($transaction);
-
-        if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
-            $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
-        } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
-            || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
-            $order_state = Configuration::get('PS_OS_PAYMENT');
-        } else {
-            $order_state = Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
-        }
+        $order_state = $this->getOrderState($transaction);
 
         $module->validateOrder(
             context::getContext()->cart->id,
@@ -286,6 +278,31 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             false,
             context::getContext()->customer->secure_key
         );
+    }
+
+    public function getOrderState($transaction)
+    {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS')) {
+            if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_PROCESSING');
+            } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+                || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_ACCEPTED_TWO');
+            } else {
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_PENDING');
+            }
+        } else {
+            if (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settling") { // or submitted for settlement?
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
+            } elseif ((Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "paypal_account" && $transaction->status == "settled")
+                || (Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" && $transaction->paymentInstrumentType == "credit_card")) {
+                $orderState = (int)Configuration::get('PS_OS_PAYMENT');
+            } else {
+                $orderState = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
+            }
+        }
+
+        return $orderState;
     }
 
     public function setDetailsTransaction($transaction)
@@ -620,14 +637,14 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     /**
      * @see AbstractMethodBraintreeOfficial::getLinkToTransaction()
      */
-    public function getLinkToTransaction($id_transaction, $sandbox)
+    public function getLinkToTransaction($log)
     {
-        if ($sandbox) {
-            $url = 'https://sandbox.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX') . '/transactions/';
+        if ($log->sandbox) {
+            $url = 'https://sandbox.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX', null, null, $log->id_shop) . '/transactions/';
         } else {
-            $url = 'https://www.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE') . '/transactions/';
+            $url = 'https://www.braintreegateway.com/merchants/' . Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE', null, null, $log->id_shop) . '/transactions/';
         }
-        return $url . $id_transaction;
+        return $url . $log->id_transaction;
     }
 
     /**
@@ -776,8 +793,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                             if ($payment_method->verification->gatewayRejectionReason) {
                                 $error_msg .= $module->l('Rejection reason : ', get_class($this)).' '.$payment_method->verification->gatewayRejectionReason;
                             }
-
-                            throw new Exception($error_msg, '00000');
+                            throw new BraintreeOfficialException('00000', $error_msg);
                         }
 
                         if ($payment_method instanceof Braintree\Result\Error) {
@@ -807,7 +823,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         try {
             $result = $this->gateway->transaction()->sale($data);
         } catch (Braintree\Exception\Authorization $e) {
-            throw new Exception('Authorization exception: please try to pay again or contact customer support', '00000');
+            throw new BraintreeOfficialException('00000', 'Authorization exception: please try to pay again or contact customer support');
         }
 
         if (($result instanceof Braintree_Result_Successful) && $result->success && $this->isValidStatus($result->transaction->status)) {
@@ -817,6 +833,10 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 && $this->serviceBraintreeOfficialVaulting->vaultingExist($result->transaction->creditCard['token'], $braintree_customer->id) == false) {
                 $this->createVaulting($result, $braintree_customer);
             }
+
+            Context::getContext()->cookie->__unset('payment_method_nonce');
+            Context::getContext()->cookie->__unset('brainteeofficial_payer_email');
+
             return $result->transaction;
         } else {
             $errors = $result->errors->deepAll();
@@ -965,5 +985,53 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             $vaulting->info .= $result->transaction->paypal['payerEmail'];
         }
         $vaulting->save();
+    }
+
+    /**
+     * @return array
+     * */
+    public function getShortcutJsVars($page)
+    {
+        switch ($page) {
+            case BRAINTREE_CART_PAGE:
+                $amount = Context::getContext()->cart->getOrderTotal();
+                break;
+            case BRAINTREE_PRODUCT_PAGE:
+                $product = new Product((int)Tools::getValue('id_product'));
+                $idProductAttribute = (int)Tools::getValue('id_product_attribute');
+
+                if (Validate::isLoadedObject($product)) {
+                    $amount = $product->getPrice(
+                        true,
+                        $idProductAttribute ? $idProductAttribute : 0,
+                        6,
+                        null,
+                        false,
+                        true
+                    );
+                } else {
+                    $amount = 0;
+                }
+
+                break;
+            default:
+                $amount = 0;
+        }
+
+        $clientToken = $this->init();
+        $tplVars = array(
+            'paypal_braintree_authorization' => $clientToken,
+            'paypal_braintree_amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_),
+            'paypal_braintree_mode' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
+            'paypal_braintree_currency' => Context::getContext()->currency->iso_code,
+            'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink($this->name, 'shortcut'),
+            'paypal_braintree_id_product' => Tools::isSubmit('id_product') ? (int)Tools::getValue('id_product') : null,
+            'paypal_braintree_id_product_attribute' => (int)Tools::getValue('id_product_attribute'),
+            'paypal_braintree_quantity' => 1,
+            'paypal_braintree_page' => $page,
+            'paypal_braintree_locale' => str_replace("-", "_", Context::getContext()->language->locale)
+        );
+
+        return $tplVars;
     }
 }

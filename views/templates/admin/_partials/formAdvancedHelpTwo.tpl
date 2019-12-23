@@ -18,18 +18,16 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author 202-ecommerce <tech@202-ecommerce.com>
-*  @copyright Copyright (c) 202-ecommerce
+*  @copyright 202-ecommerce
 *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{include './_partials/headerLogo.tpl'}
-
-{if isset($form)}
-    {$form nofilter}   {*can not escape a variable. Variable contains html code*}
-{/if}
-
-{if isset($advancedForm)}
-    {$advancedForm nofilter}    {*can not escape a variable. Variable contains html code*}
-{/if}
+<div class="alert alert-info advanced-help-message">
+    {l s='It is also possible to customize the default status for the orders created via Braintree. You can find below the list of the different cases and corresponding order status.' mod='braintreeofficial'}
+    <br>
+    {l s='Ex: If the transaction is completed an order will be created on the PrestaShop. By default, the order status "Payment accepted" is applied for all completed transactions.' mod='braintreeofficial'}
+    <br>
+    {l s='You can manage the order status below:' mod='braintreeofficial'}
+</div>
 

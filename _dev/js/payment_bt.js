@@ -91,6 +91,7 @@ const initBraintreeCard = () => {
         cvv: {
           selector: '#cvv',
           placeholder: '123',
+          maskInput: true
         },
         expirationDate: {
           selector: '#expiration-date',

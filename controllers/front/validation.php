@@ -41,8 +41,8 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
     {
         parent::init();
         $this->setMethod(AbstractMethodBraintreeOfficial::load('BraintreeOfficial'));
-        $this->values['payment_method_nonce'] = Tools::getvalue('payment_method_nonce');
-        $this->values['payment_method_bt'] = Tools::getvalue('payment_method_bt');
+        $this->values['payment_method_nonce'] = isset($this->context->cookie->payment_method_nonce) ? $this->context->cookie->payment_method_nonce : Tools::getvalue('payment_method_nonce');
+        $this->values['payment_method_bt'] = isset($this->context->cookie->payment_method_bt) ? $this->context->cookie->payment_method_bt : Tools::getvalue('payment_method_bt');
         $this->values['bt_vaulting_token'] = Tools::getvalue('bt_vaulting_token');
         $this->values['pbt_vaulting_token'] = Tools::getvalue('pbt_vaulting_token');
         $this->values['save_card_in_vault'] = Tools::getvalue('save_card_in_vault');
@@ -61,8 +61,8 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
             $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id .'&id_module=' . $module->id .'&key='.$customer->secure_key;
         } catch (BraintreeOfficialAddons\classes\BraintreeOfficialException $e) {
             $this->errors['error_code'] = $e->getCode();
-            $this->errors['error_msg'] = $e->getMessage();
-            $this->errors['msg_long'] = $e->getMessageLong();
+            $this->errors['logger_msg'] = $e->getMessage();
+            $this->errors['error_msg'] = $this->l('Your payment has been declined : please try again or with another payment method.');
         } catch (Exception $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();
@@ -71,7 +71,10 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         }
 
         if (!empty($this->errors)) {
-            $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $this->errors);
+            $params = array(
+                'error_msg' => $this->errors['error_msg']
+            );
+            $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $params);
         }
     }
 

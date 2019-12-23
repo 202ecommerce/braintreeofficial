@@ -29,6 +29,10 @@ $spacers: (
 		padding-top: $length !important;
 		padding-bottom: $length !important;
 	}
+	.bt__px-#{$size} {
+		padding-left: $length !important;
+		padding-right: $length !important;
+	}
 }
 
 @each $prop, $direction in $directions {
