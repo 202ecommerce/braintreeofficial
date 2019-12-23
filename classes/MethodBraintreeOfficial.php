@@ -785,14 +785,24 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                             'options' => array('verifyCard' => true),
                         ));
 
-                        if (isset($payment_method->verification) && $payment_method->verification->status != 'verified') {
+                        if (isset($payment_method->verification) && $payment_method->verification != null &&
+                            isset($payment_method->verification->status) && $payment_method->verification->status != 'verified') {
                             $error_msg = $module->l('Card verification respond with status', get_class($this)).' '.$payment_method->verification->status.'. ';
                             $error_msg .= $module->l('The reason : ', get_class($this)).' '.$payment_method->verification->processorResponseText.'. ';
+
                             if ($payment_method->verification->gatewayRejectionReason) {
                                 $error_msg .= $module->l('Rejection reason : ', get_class($this)).' '.$payment_method->verification->gatewayRejectionReason;
                             }
                             throw new BraintreeOfficialException('00000', $error_msg);
                         }
+
+                        if ($payment_method instanceof Braintree\Result\Error) {
+                            $error_msg = $module->l('Card verification is failed. ', get_class($this));
+                            $error_msg .= $module->l('The reason : ', get_class($this)).' '.$payment_method->message.'. ';
+
+                            throw new Exception($error_msg, '00000');
+                        }
+
                         $paymentMethodToken = $payment_method->paymentMethod->token;
                     }
                     $options['storeInVaultOnSuccess'] = true;
