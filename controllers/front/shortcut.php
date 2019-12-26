@@ -118,13 +118,14 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
             return $this->context->customer;
         }
 
-        if ($idCustomer = Customer::customerExists($this->getPaymentData()->details->email)) {
+        if ($idCustomer = Customer::customerExists($this->getPaymentData()->details->email, true)) {
             return new Customer($idCustomer);
         }
 
         $customer = new Customer();
         $customer->firstname = $this->getPaymentData()->details->firstName;
         $customer->lastname = $this->getPaymentData()->details->lastName;
+        $customer->email = $this->getPaymentData()->details->email;
         $customer->passwd = Tools::encrypt(Tools::passwdGen());
         $customer->save();
 
