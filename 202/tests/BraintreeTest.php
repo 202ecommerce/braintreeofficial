@@ -32,8 +32,8 @@ if (file_exists($pathConfig)) {
 if (file_exists($pathInit)) {
     require_once $pathInit;
 }
-require_once _PS_MODULE_DIR_.'braintree/vendor/autoload.php';
-require_once _PS_MODULE_DIR_.'braintree/braintree.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/braintreeofficial.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
@@ -47,15 +47,15 @@ class BraintreeTest extends TestCase
 
     public $moduleNames;
 
-    /* @var \Braintree*/
+    /* @var \Braintreeofficial*/
     protected $braintree;
 
     protected function setUp()
     {
-        $this->braintree = new \Braintree();
+        $this->braintree = new \Braintreeofficial();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
-        $this->moduleNames = 'braintree';
+        $this->moduleNames = 'braintreeofficial';
         $contextTest = \Context::getContext();
         $contextTest->customer = new \Customer(1);
         $contextTest->currency = new \Currency(1);

@@ -32,12 +32,12 @@ if (file_exists($pathConfig)) {
 if (file_exists($pathInit)) {
     require_once $pathInit;
 }
-require_once _PS_MODULE_DIR_.'braintree/vendor/autoload.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeAddons\services\ServiceBraintreeCapture;
-use BraintreeAddons\classes\BraintreeCapture;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
+use BraintreeOfficialAddons\classes\BraintreeOfficialCapture;
 
 
 class ServiceBraintreeCaptureTest extends TestCase
@@ -48,15 +48,15 @@ class ServiceBraintreeCaptureTest extends TestCase
 
     public $moduleNames;
 
-    /* @var ServiceBraintreeCapture*/
+    /* @var ServiceBraintreeOfficialCapture*/
     protected $service;
 
     protected function setUp()
     {
-        $this->service = new ServiceBraintreeCapture();
+        $this->service = new ServiceBraintreeOfficialCapture();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
-        $this->moduleNames = 'braintree';
+        $this->moduleNames = 'braintreeofficial';
     }
 
     public function testInstall()

@@ -32,11 +32,11 @@ if (file_exists($pathConfig)) {
 if (file_exists($pathInit)) {
     require_once $pathInit;
 }
-require_once _PS_MODULE_DIR_.'braintree/vendor/autoload.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeAddons\classes\BraintreeLog;
+use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 
 class BraintreeLogTest extends TestCase
 {
@@ -46,15 +46,15 @@ class BraintreeLogTest extends TestCase
 
     public $moduleNames;
 
-    /* @var BraintreeLog*/
+    /* @var BraintreeOfficialLog*/
     protected $braintreeLog;
 
     protected function setUp()
     {
-        $this->braintreeLog = new BraintreeLog();
+        $this->braintreeLog = new BraintreeOfficialLog();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
-        $this->moduleNames = 'braintree';
+        $this->moduleNames = 'braintreeofficial';
     }
 
     public function testInstall()
