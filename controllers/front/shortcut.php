@@ -162,8 +162,11 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
         $orderAddress = new Address();
         $nameArray = explode(" ", $paypalAddress->recipientName);
-        $orderAddress->firstname = $nameArray[0];
-        $orderAddress->lastname = isset($nameArray[1]) ? $nameArray[1] : '';
+        $firstName = implode(' ', array_slice($nameArray, 0, count($nameArray) - 1));
+        $lastName = $nameArray[count($nameArray) - 1];
+
+        $orderAddress->firstname = $firstName;
+        $orderAddress->lastname = $lastName;
         $orderAddress->address1 = $paypalAddress->line1;
 
         if (isset($paypalAddress->line2)) {
