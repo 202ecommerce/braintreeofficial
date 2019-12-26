@@ -32,8 +32,8 @@ if (file_exists($pathConfig)) {
 if (file_exists($pathInit)) {
     require_once $pathInit;
 }
-require_once _PS_MODULE_DIR_.'braintree/vendor/autoload.php';
-require_once _PS_MODULE_DIR_.'braintree/classes/MethodBraintree.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/classes/MethodBraintreeOfficial.php';
 
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +41,7 @@ class MethodBraintreeMockTest extends TestCase
 {
     public function getInstance($configured = true)
     {
-        $methodMock = $this->getMockBuilder(\MethodBraintree::class)
+        $methodMock = $this->getMockBuilder(\MethodBraintreeOfficial::class)
             ->setMethods(array('initConfig'))
             ->getMock();
 
