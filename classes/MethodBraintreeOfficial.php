@@ -836,6 +836,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 
             Context::getContext()->cookie->__unset('payment_method_nonce');
             Context::getContext()->cookie->__unset('brainteeofficial_payer_email');
+            Context::getContext()->cookie->__unset('payment_method_bt');
 
             return $result->transaction;
         } else {
