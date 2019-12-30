@@ -92,22 +92,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         }
 
         $this->context->cart->id_address_delivery = $address->id;
-        $this->context->cart->id_address_invoice = $address->id;;
-
-        $addressValidator = new AddressValidator();
-        $invalidAddressIds = $addressValidator->validateCartAddresses($this->context->cart);
-
-        if (empty($invalidAddressIds) == false) {
-            $vars = array(
-                'id_address' => $address->id,
-                'editAddress' => 'delivery'
-            );
-            session_start();
-            $_SESSION['notifications'] = Tools::jsonEncode(array('error' => $this->l('Your address is incomplete, please update it.')));
-            $url = Context::getContext()->link->getPageLink('order', null, null, $vars);
-            $this->redirectUrl = $url;
-            return false;
-        }
+        $this->context->cart->id_address_invoice = $address->id;
 
         return true;
     }
