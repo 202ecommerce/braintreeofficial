@@ -55,6 +55,10 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
             }
 
             $this->prepareOrder();
+
+            if (!empty($this->errors)) {
+                return;
+            }
         } catch (Exception $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();
@@ -193,8 +197,8 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
                 'address2' => $orderAddress->address2,
                 'id_state' => $orderAddress->id_state
             );
-            session_start();
-            $_SESSION['notifications'] = Tools::jsonEncode(array('error' => $validationMessage));
+
+            $this->errors[] = $validationMessage;
             $url = Context::getContext()->link->getPageLink('order', null, null, $vars);
             $this->redirectUrl = $url;
             return false;

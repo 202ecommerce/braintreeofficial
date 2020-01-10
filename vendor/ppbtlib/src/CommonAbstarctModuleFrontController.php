@@ -95,7 +95,7 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
         }
 
         if (!empty($this->redirectUrl)) {
-            \Tools::redirect($this->redirectUrl);
+            $this->redirectWithNotifications($this->redirectUrl);
         }
         if (!empty($this->jsonValues)) {
             $response = new JsonResponse($this->jsonValues);
