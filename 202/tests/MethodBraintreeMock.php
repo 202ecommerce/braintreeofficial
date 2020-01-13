@@ -22,8 +22,6 @@
  * @license   Commercial license
  */
 
-namespace BraintreeTest;
-
 $pathConfig = dirname(__FILE__) . '/../../../../config/config.inc.php';
 $pathInit = dirname(__FILE__) . '/../../../../init.php';
 if (file_exists($pathConfig)) {
@@ -37,7 +35,7 @@ require_once _PS_MODULE_DIR_.'braintreeofficial/classes/MethodBraintreeOfficial.
 
 use PHPUnit\Framework\TestCase;
 
-class MethodBraintreeMockTest extends TestCase
+class MethodBraintreeMock extends TestCase
 {
     public function getInstance($configured = true)
     {

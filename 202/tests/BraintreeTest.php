@@ -34,10 +34,10 @@ if (file_exists($pathInit)) {
 }
 require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
 require_once _PS_MODULE_DIR_.'braintreeofficial/braintreeofficial.php';
+require_once dirname(__FILE__) . '/MethodBraintreeMock.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeTest\MethodBraintreeMockTest;
 
 class BraintreeTest extends TestCase
 {
@@ -166,7 +166,7 @@ class BraintreeTest extends TestCase
 
     public function providerGenerateFormBT()
     {
-        $methodBraintreeMock = new MethodBraintreeMockTest();
+        $methodBraintreeMock = new \MethodBraintreeMock();
         $data = array(
             array($methodBraintreeMock->getInstance(true)),
             array($methodBraintreeMock->getInstance(false))

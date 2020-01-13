@@ -33,10 +33,10 @@ if (file_exists($pathInit)) {
     require_once $pathInit;
 }
 require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
+require_once dirname(__FILE__) . '/MethodBraintreeMock.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeTest\MethodBraintreeMockTest;
 use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 
 class MethodBraintreeTest extends TestCase
@@ -47,12 +47,12 @@ class MethodBraintreeTest extends TestCase
 
     public $moduleNames;
 
-    /* @var MethodBraintreeMockTest*/
+    /* @var \MethodBraintreeMock*/
     protected $methodBraintree;
 
     protected function setUp()
     {
-        $this->methodBraintree = new MethodBraintreeMockTest();
+        $this->methodBraintree = new \MethodBraintreeMock();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
         $this->moduleNames = 'braintreeofficial';
@@ -154,8 +154,8 @@ class MethodBraintreeTest extends TestCase
         $logLive->id_transaction = 'transactionRef';
 
         $data = array(
-            $logSandbox,
-            $logLive
+            array($logSandbox),
+            array($logLive)
         );
 
         return $data;
