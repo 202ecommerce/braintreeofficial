@@ -229,6 +229,7 @@ const BtCheckout = {
                 paypal.Button.render({
                     env: BtCheckout.data.mode, // 'production' or 'sandbox'
                     locale: BtCheckout.data.locale,
+                    commit: true,
                     style: {
                         tagline: false
                     },
