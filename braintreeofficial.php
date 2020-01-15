@@ -30,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
@@ -50,9 +49,97 @@ use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
 const BRAINTREE_CARD_PAYMENT = 'card-braintree';
 const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
 const BRAINTREE_PAYMENT_CUSTOMER_CURRENCY = -1;
+const BRAINTREE_CART_PAGE = 1;
+const BRAINTREE_PRODUCT_PAGE = 2;
 
 class BraintreeOfficial extends \PaymentModule
 {
+    public static $state_iso_code_matrix = array(
+        'MX' => array(
+            'AGS' => 'AGS',
+            'BCN' => 'BC',
+            'BCS' => 'BCS',
+            'CAM' => 'CAMP',
+            'CHP' => 'CHIS',
+            'CHH' => 'CHIH',
+            'COA' => 'COAH',
+            'COL' => 'COL',
+            'DIF' => 'DF',
+            'DUR' => 'DGO',
+            'GUA' => 'GTO',
+            'GRO' => 'GRO',
+            'HID' => 'HGO',
+            'JAL' => 'JAL',
+            'MEX' => 'MEX',
+            'MIC' => 'MICH',
+            'MOR' => 'MOR',
+            'NAY' => 'NAY',
+            'NLE' => 'NL',
+            'OAX' => 'OAX',
+            'PUE' => 'PUE',
+            'QUE' => 'QRO',
+            'ROO' => 'Q ROO',
+            'SLP' => 'SLP',
+            'SIN' => 'SIN',
+            'SON' => 'SON',
+            'TAB' => 'TAB',
+            'TAM' => 'TAMPS',
+            'TLA' => 'TLAX',
+            'VER' => 'VER',
+            'YUC' => 'YUC',
+            'ZAC' => 'ZAC',
+        ),
+        'JP' => array(
+            'Aichi' => 'Aichi-KEN',
+            'Akita' => 'Akita-KEN',
+            'Aomori' => 'Aomori-KEN',
+            'Chiba' => 'Chiba-KEN',
+            'Ehime' => 'Ehime-KEN',
+            'Fukui' => 'Fukui-KEN',
+            'Fukuoka' => 'Fukuoka-KEN',
+            'Fukushima' => 'Fukushima-KEN',
+            'Gifu' => 'Gifu-KEN',
+            'Gunma' => 'Gunma-KEN',
+            'Hiroshima' => 'Hiroshima-KEN',
+            'Hokkaido' => 'Hokkaido-KEN',
+            'Hyogo' => 'Hyogo-KEN',
+            'Ibaraki' => 'Ibaraki-KEN',
+            'Ishikawa' => 'Ishikawa-KEN',
+            'Iwate' => 'Iwate-KEN',
+            'Kagawa' => 'Kagawa-KEN',
+            'Kagoshima' => 'Kagoshima-KEN',
+            'Kanagawa' => 'Kanagawa-KEN',
+            'Kochi' => 'Kochi-KEN',
+            'Kumamoto' => 'Kumamoto-KEN',
+            'Kyoto' => 'Kyoto-KEN',
+            'Mie' => 'Mie-KEN',
+            'Miyagi' => 'Miyagi-KEN',
+            'Miyazaki' => 'Miyazaki-KEN',
+            'Nagano' => 'Nagano-KEN',
+            'Nagasaki' => 'Nagasaki-KEN',
+            'Nara' => 'Nara-KEN',
+            'Niigata' => 'Niigata-KEN',
+            'Oita' => 'Oita-KEN',
+            'Okayama' => 'Okayama-KEN',
+            'Okinawa' => 'Okinawa-KEN',
+            'Osaka' => 'Osaka-KEN',
+            'Saga' => 'Saga-KEN',
+            'Saitama' => 'Saitama-KEN',
+            'Shiga' => 'Shiga-KEN',
+            'Shimane' => 'Shimane-KEN',
+            'Shizuoka' => 'Shizuoka-KEN',
+            'Tochigi' => 'Tochigi-KEN',
+            'Tokushima' => 'Tokushima-KEN',
+            'Tokyo' => 'Tokyo-KEN',
+            'Tottori' => 'Tottori-KEN',
+            'Toyama' => 'Toyama-KEN',
+            'Wakayama' => 'Wakayama-KEN',
+            'Yamagata' => 'Yamagata-KEN',
+            'Yamaguchi' => 'Yamaguchi-KEN',
+            'Yamanashi' => 'Yamanashi-KEN'
+        )
+    );
+
     /**
      * List of hooks used in this Module
      */
@@ -71,7 +158,10 @@ class BraintreeOfficial extends \PaymentModule
         'actionOrderSlipAdd',
         'displayAdminOrderTabOrder',
         'displayAdminOrderContentOrder',
-        'displayAdminCartsView'
+        'displayAdminCartsView',
+        'displayProductAdditionalInfo',
+        'displayShoppingCartFooter',
+        'actionBeforeCartUpdateQty'
     );
 
     /**
@@ -91,6 +181,12 @@ class BraintreeOfficial extends \PaymentModule
         BraintreeOfficialVaulting::class,
         BraintreeOfficialCustomer::class
     );
+
+
+    /**
+     * @var array
+     */
+    public $moduleConfigs = array();
 
     /**
      * List of admin tabs used in this Module
@@ -227,6 +323,19 @@ class BraintreeOfficial extends \PaymentModule
         $this->serviceBraintreeOfficialCapture = new ServiceBraintreeOfficialCapture();
         $this->serviceBraintreeOfficialVaulting = new ServiceBraintreeOfficialVaulting();
         $this->setMethodBraitree(AbstractMethodBraintreeOfficial::load('BraintreeOfficial'));
+        $this->moduleConfigs = array(
+            'BRAINTREEOFFICIAL_API_INTENT' => 'sale',
+            'BRAINTREEOFFICIAL_3DSECURE' => 1,
+            'BRAINTREEOFFICIAL_3DSECURE_AMOUNT' => 0,
+            'BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS' => 0,
+            'BRAINTREEOFFICIAL_OS_REFUNDED' => (int)Configuration::get('PS_OS_REFUND'),
+            'BRAINTREEOFFICIAL_OS_CANCELED' => (int)Configuration::get('PS_OS_CANCELED'),
+            'BRAINTREEOFFICIAL_OS_ACCEPTED' => (int)Configuration::get('PS_OS_PAYMENT'),
+            'BRAINTREEOFFICIAL_OS_CAPTURE_CANCELED' => (int)Configuration::get('PS_OS_CANCELED'),
+            'BRAINTREEOFFICIAL_OS_ACCEPTED_TWO' => (int)Configuration::get('PS_OS_PAYMENT'),
+            'BRAINTREEOFFICIAL_OS_PENDING' => (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING'),
+            'BRAINTREEOFFICIAL_OS_PROCESSING' => (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION'),
+        );
     }
 
     public function install()
@@ -248,9 +357,23 @@ class BraintreeOfficial extends \PaymentModule
             return false;
         }
 
-        Configuration::updateValue('BRAINTREEOFFICIAL_API_INTENT', 'sale');
-        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', 1);
-        Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', 0);
+        $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PENDING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING');
+        $this->moduleConfigs['BRAINTREEOFFICIAL_OS_PROCESSING'] = (int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION');
+        $shops = Shop::getShops();
+
+        foreach ($this->moduleConfigs as $key => $value) {
+            if (Shop::isFeatureActive()) {
+                foreach ($shops as $shop) {
+                    if (!Configuration::updateValue($key, $value, false, null, (int)$shop['id_shop'])) {
+                        return false;
+                    }
+                }
+            } else {
+                if (!Configuration::updateValue($key, $value)) {
+                    return false;
+                }
+            }
+        }
 
         return true;
     }
@@ -475,9 +598,17 @@ class BraintreeOfficial extends \PaymentModule
             return false;
         }
 
+        if ($orderBraintree->payment_method == 'sale') {
+            $statusCanceled = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_CANCELED') : (int)Configuration::get('PS_OS_CANCELED');
+        } else {
+            $statusCanceled = (int)Configuration::get('BRAINTREEOFFICIAL_OS_CAPTURE_CANCELED') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_CANCELED') : (int)Configuration::get('PS_OS_CANCELED');
+        }
+        $statusRefunded = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_REFUNDED') : (int)Configuration::get('PS_OS_REFUND');
+
+
         $message = '';
         $ex_detailed_message = '';
-        if ($params['newOrderStatus']->id == Configuration::get('PS_OS_CANCELED')) {
+        if ($params['newOrderStatus']->id == $statusCanceled) {
             $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
 
             try {
@@ -545,7 +676,7 @@ class BraintreeOfficial extends \PaymentModule
             }
         }
 
-        if ($params['newOrderStatus']->id == Configuration::get('PS_OS_REFUND')) {
+        if ($params['newOrderStatus']->id == $statusRefunded) {
             $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($orderBraintree->id);
 
             if (Validate::isLoadedObject($braintreeCapture) && !$braintreeCapture->id_capture) {
@@ -809,7 +940,7 @@ class BraintreeOfficial extends \PaymentModule
     public function hookDisplayBackOfficeHeader()
     {
         $diff_cron_time = date_diff(date_create('now'), date_create(Configuration::get('BRAINTREEOFFICIAL_CRON_TIME')));
-        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 4 || Configuration::get('BRAINTREEOFFICIAL_CRON_TIME') == false) {
+        if ($diff_cron_time->d > 0 || $diff_cron_time->h > 1 || Configuration::get('BRAINTREEOFFICIAL_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREEOFFICIAL_CRON_TIME', date('Y-m-d H:i:s'));
             $bt_orders = $this->serviceBraintreeOfficialOrder->getBraintreeOrdersForValidation();
             
@@ -828,7 +959,7 @@ class BraintreeOfficial extends \PaymentModule
                     }
 
                     $ps_order = new Order($braintreeOrder->id_order);
-                    $paid_state  = Configuration::get('PS_OS_PAYMENT');
+                    $paid_state  = (int)Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS') ? (int)Configuration::get('BRAINTREEOFFICIAL_OS_ACCEPTED') : (int)Configuration::get('PS_OS_PAYMENT');
                     $ps_order_details = OrderDetail::getList($braintreeOrder->id_order);
 
                     foreach ($ps_order_details as $order_detail) {
@@ -887,41 +1018,99 @@ class BraintreeOfficial extends \PaymentModule
     public function hookHeader()
     {
         if (Tools::getValue('controller') == "order") {
-            $active = false;
-            $modules = Hook::getHookModuleExecList('paymentOptions');
-            if (empty($modules)) {
-                return;
-            }
-            foreach ($modules as $module) {
-                if ($module['module'] == $this->name) {
-                    $active = true;
-                }
-            }
-            if (!$active) {
+            if (!$this->checkActiveModule()) {
                 return;
             }
 
-            $preconnectResources = array('https://js.braintreegateway.com');
             $this->context->controller->addJqueryPlugin('fancybox');
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.50.0/js/client.min.js', array('server' => 'remote'));
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js', array('server' => 'remote'));
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.56.0/js/client.min.js', array('server' => 'remote'));
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.56.0/js/hosted-fields.min.js', array('server' => 'remote'));
             $this->context->controller->registerJavascript($this->name . '-braintreegateway-data', 'https://js.braintreegateway.com/web/3.24.0/js/data-collector.min.js', array('server' => 'remote'));
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-3ds', 'https://js.braintreegateway.com/web/3.50.0/js/three-d-secure.min.js', array('server' => 'remote'));
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-3ds', 'https://js.braintreegateway.com/web/3.56.0/js/three-d-secure.min.js', array('server' => 'remote'));
             $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
             $this->addJsVarsLangBT();
             $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
+
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
-                $preconnectResources[] = 'https://www.paypalobjects.com';
-                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.56.0/js/paypal-checkout.min.js', array('server' => 'remote'));
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
                 Media::addJsDefL('empty_nonce', $this->l('Please click on the PayPal Pay button first'));
                 $this->addJsVarsPB();
                 $this->context->controller->registerJavascript($this->name . '-pp-braintreejs', 'modules/' . $this->name . '/views/js/payment_pbt.js');
             }
-            $this->context->smarty->assign('preconnectResources', $preconnectResources);
-            return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/preconnect.tpl');
+
+            if (isset($this->context->cookie->payment_method_nonce) && isset($this->context->cookie->brainteeofficial_payer_email)) {
+                $this->context->smarty->assign('payerEmail', $this->context->cookie->brainteeofficial_payer_email);
+                $carrierFees = $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
+
+                if ($carrierFees == 0) {
+                    $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
+                } else {
+                    $this->context->smarty->assign('carrierFees', Tools::displayPrice($carrierFees));
+                    $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerTwo.tpl');
+                }
+
+                Media::addJsDefL('scPaypalCheckedMsg', $messageForCustomer);
+                $this->context->controller->registerJavascript($this->name . '-shortcut-payment', 'modules/' . $this->name . '/views/js/shortcutPayment.js');
+            }
+        } elseif (Tools::getValue('controller') == "cart") {            
+            if (!$this->checkActiveModule()) {
+                return;
+            }
+
+            $resources = array(
+                'https://js.braintreegateway.com/web/3.56.0/js/client.min.js',
+                'https://js.braintreegateway.com/web/3.56.0/js/hosted-fields.min.js',
+                'https://js.braintreegateway.com/web/3.24.0/js/data-collector.min.js',
+                'https://js.braintreegateway.com/web/3.56.0/js/three-d-secure.min.js',
+            );
+            $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
+
+            if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
+                $resources_paypal = array(
+                    'https://js.braintreegateway.com/web/3.56.0/js/paypal-checkout.min.js'
+                );
+
+                if (Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART')) {
+                    Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars(BRAINTREE_CART_PAGE));
+                    $this->context->controller->registerJavascript($this->name . '-braintreeShortcut', 'modules/' . $this->name . '/views/js/btShortcut.js');
+                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.56.0/js/paypal-checkout.min.js', array('server' => 'remote'));
+                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
+                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.56.0/js/client.min.js', array('server' => 'remote'));
+                }
+
+                $resources = array_merge($resources, $resources_paypal);
+            }
+
+
+            $this->context->smarty->assign('prefetchResources', $resources);
+            return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/prefetch.tpl');
+        } elseif ($this->context->controller instanceof ProductController) {
+            $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
+            if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') && Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT')) {
+                Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars(BRAINTREE_PRODUCT_PAGE));
+                $this->context->controller->registerJavascript($this->name . '-braintreeShortcut', 'modules/' . $this->name . '/views/js/btShortcut.js');
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.56.0/js/paypal-checkout.min.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', array('server' => 'remote'));
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.56.0/js/client.min.js', array('server' => 'remote'));
+            }
         }
+    }
+
+    public function checkActiveModule() 
+    {
+        $active = false;
+        $modules = Hook::getHookModuleExecList('paymentOptions');
+        if (empty($modules)) {
+            return;
+        }
+        foreach ($modules as $module) {
+            if ($module['module'] == $this->name) {
+                $active = true;
+            }
+        }
+        return $active;
     }
 
     public function addJsVarsLangBT()
@@ -968,7 +1157,6 @@ class BraintreeOfficial extends \PaymentModule
     public function hookPaymentOptions($params)
     {
         $payments_options = array();
-
         /* for avoiding the connection exception need to verify if module configured correct*/
         if ($this->methodBraintreeOfficial->isConfigured() == false) {
             return $payments_options;
@@ -990,6 +1178,15 @@ class BraintreeOfficial extends \PaymentModule
                 ->setAdditionalInformation($this->generateFormPB())
                 ->setAction('javascript:BraintreePaypalSubmitPayment();');
             $payments_options[] = $embeddedOption;
+
+            if (isset($this->context->cookie->payment_method_nonce) && isset($this->context->cookie->brainteeofficial_payer_email)) {
+                $paymentOption = new PaymentOption();
+                $action_text = $this->l('Pay with paypal express checkout');
+                $paymentOption->setCallToActionText($action_text);
+                $paymentOption->setModuleName('braintreeofficial-shortcut');
+                $paymentOption->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true));
+                $payments_options[] = $paymentOption;
+            }
         }
 
         $embeddedOption = new PaymentOption();
@@ -1186,9 +1383,12 @@ class BraintreeOfficial extends \PaymentModule
                 Tools::redirect(Context::getContext()->link->getModuleLink($this->name, 'error', array('error_msg' => $msg, 'no_retry' => true)));
             }
         }
+
+        $message = $this->getPaymentMessage($transaction);
+
         ProcessLoggerHandler::openLogger();
         ProcessLoggerHandler::logInfo(
-            'Payment successful',
+            $message,
             isset($transaction['transaction_id']) ? $transaction['transaction_id'] : null,
             $this->currentOrder,
             (int)$id_cart,
@@ -1239,6 +1439,29 @@ class BraintreeOfficial extends \PaymentModule
         }
     }
 
+    /**
+     * @param $transactionInfo array
+     * @return string
+     * */
+    protected function getPaymentMessage($transactionInfo)
+    {
+        switch ($transactionInfo['payment_status']) {
+            case 'authorized':
+                $message = $this->l('Payment authorized : waiting for payment validation by admin');
+                break;
+            case 'settling':
+                $message = $this->l('Payment authorized : Settling');
+                break;
+            case 'submitted_for_settlement':
+                $message = $this->l('Payment processing (authorized)');
+                break;
+            default:
+                $message = $transactionInfo['payment_status'];
+        }
+
+        return $message;
+    }
+
     public function isOneOrder($order_reference)
     {
         $query = new DBQuery();
@@ -1268,10 +1491,19 @@ class BraintreeOfficial extends \PaymentModule
 
             $order_state->name = array();
             foreach (Language::getLanguages() as $language) {
-                if (Tools::strtolower($language['iso_code']) == 'fr') {
-                    $order_state->name[$language['id_lang']] = 'En attente de paiement Braintree';
-                } else {
-                    $order_state->name[$language['id_lang']] = 'Awaiting for Braintree payment';
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $order_state->name[$language['id_lang']] = 'Paiement en attente (autorisé)';
+                        break;
+                    case 'es':
+                        $order_state->name[$language['id_lang']] = 'Pagamento in corso (autorizzato)';
+                        break;
+                    case 'it':
+                        $order_state->name[$language['id_lang']] = 'Pagamento in sospeso (autorizzato)';
+                        break;
+                    default:
+                        $order_state->name[$language['id_lang']] = 'Payment pending (authorized)';
                 }
             }
             $order_state->send_email = false;
@@ -1281,6 +1513,7 @@ class BraintreeOfficial extends \PaymentModule
             $order_state->logable = false;
             $order_state->invoice = false;
             $order_state->module_name = $this->name;
+
             if ($order_state->id) {
                 $order_state->update();
             } elseif ($order_state->add()) {
@@ -1288,7 +1521,15 @@ class BraintreeOfficial extends \PaymentModule
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
                 copy($source, $destination);
             }
-            Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING', (int) $order_state->id);
+
+            if (Shop::isFeatureActive()) {
+                $shops = Shop::getShops();
+                foreach ($shops as $shop) {
+                    Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING', (int) $order_state->id, false, null, (int)$shop['id_shop']);
+                }
+            } else {
+                Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING', (int) $order_state->id);
+            }
         }
 
         if (!Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION')
@@ -1302,13 +1543,24 @@ class BraintreeOfficial extends \PaymentModule
                 $order_state = new OrderState();
             }
             $order_state->name = array();
+
             foreach (Language::getLanguages() as $language) {
-                if (Tools::strtolower($language['iso_code']) == 'fr') {
-                    $order_state->name[$language['id_lang']] = 'En attente de validation Braintree';
-                } else {
-                    $order_state->name[$language['id_lang']] = 'Awaiting for Braintree validation';
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $order_state->name[$language['id_lang']] = 'Paiement en cours (autorisé)';
+                        break;
+                    case 'es':
+                        $order_state->name[$language['id_lang']] = 'Pago en proceso (autorizado)';
+                        break;
+                    case 'it':
+                        $order_state->name[$language['id_lang']] = 'Pago pendiente (autorizado)';
+                        break;
+                    default:
+                        $order_state->name[$language['id_lang']] = 'Payment processing (authorized)';
                 }
             }
+
             $order_state->send_email = false;
             $order_state->color = '#4169E1';
             $order_state->hidden = false;
@@ -1316,6 +1568,7 @@ class BraintreeOfficial extends \PaymentModule
             $order_state->logable = false;
             $order_state->invoice = false;
             $order_state->module_name = $this->name;
+
             if ($order_state->id && $order_state->update()) {
                 $order_state->update();
             } elseif ($order_state->add()) {
@@ -1323,8 +1576,17 @@ class BraintreeOfficial extends \PaymentModule
                 $destination = _PS_ROOT_DIR_.'/img/os/'.(int) $order_state->id.'.gif';
                 copy($source, $destination);
             }
-            Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION', (int) $order_state->id);
+
+            if (Shop::isFeatureActive()) {
+                $shops = Shop::getShops();
+                foreach ($shops as $shop) {
+                    Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION', (int) $order_state->id, false, null, (int)$shop['id_shop']);
+                }
+            } else {
+                Configuration::updateValue('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION', (int) $order_state->id);
+            }
         }
+
         return true;
     }
 
@@ -1483,5 +1745,154 @@ class BraintreeOfficial extends \PaymentModule
     public function setMethodBraitree(AbstractMethodBraintreeOfficial $method)
     {
         $this->methodBraintreeOfficial = $method;
+    }
+
+    /**
+     * @return array return the unregistered hooks
+     */
+    public function getHooksUnregistered()
+    {
+        $hooksUnregistered = array();
+
+        foreach ($this->hooks as $hookName) {
+            if (Hook::isModuleRegisteredOnHook($this, $hookName, $this->context->shop->id)) {
+                continue;
+            }
+
+            $hooksUnregistered[] = $hookName;
+        }
+
+        return $hooksUnregistered;
+    }
+
+    /**
+     * @return bool
+     */
+    public function renameOrderState()
+    {
+        $result = true;
+        $languages = Language::getLanguages();
+        $braintreeAwaiting = new OrderState((int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING'));
+        $braintreeAwaitingValidation = new OrderState((int)Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION'));
+
+        if (Validate::isLoadedObject($braintreeAwaiting)) {
+            foreach ($languages as $language) {
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $braintreeAwaiting->name[$language['id_lang']] = 'Paiement en attente (autorisé)';
+                        break;
+                    case 'es':
+                        $braintreeAwaiting->name[$language['id_lang']] = 'Pagamento in corso (autorizzato)';
+                        break;
+                    case 'it':
+                        $braintreeAwaiting->name[$language['id_lang']] = 'Pagamento in sospeso (autorizzato)';
+                        break;
+                    default:
+                        $braintreeAwaiting->name[$language['id_lang']] = 'Payment pending (authorized)';
+                }
+            }
+
+            $result &= $braintreeAwaiting->save();
+        } else {
+            $result &= false;
+        }
+
+        if (Validate::isLoadedObject($braintreeAwaitingValidation)) {
+            foreach ($languages as $language) {
+                $isoCode = Tools::strtolower($language['iso_code']);
+                switch ($isoCode) {
+                    case 'fr':
+                        $braintreeAwaitingValidation->name[$language['id_lang']] = 'Paiement en cours (autorisé)';
+                        break;
+                    case 'es':
+                        $braintreeAwaitingValidation->name[$language['id_lang']] = 'Pago en proceso (autorizado)';
+                        break;
+                    case 'it':
+                        $braintreeAwaitingValidation->name[$language['id_lang']] = 'Pago pendiente (autorizado)';
+                        break;
+                    default:
+                        $braintreeAwaitingValidation->name[$language['id_lang']] = 'Payment processing (authorized)';
+                }
+            }
+
+            $result &= $braintreeAwaitingValidation->save();
+        } else {
+            $result &= false;
+        }
+
+        return $result;
+    }
+
+    public function hookDisplayShoppingCartFooter($params)
+    {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART') == false) {
+            return false;
+        }
+
+        if ($this->context->cart->nbProducts() == 0) {
+            return false;
+        }
+
+        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/shortCut.tpl');
+    }
+
+    public function hookDisplayProductAdditionalInfo($params)
+    {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART') == false) {
+            return false;
+        }
+
+        if (($this->context->controller instanceof ProductController) == false) {
+            return false;
+        }
+        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/shortCut.tpl');
+    }
+
+    public function getIdStateByPaypalCode($isoState, $isoCountry)
+    {
+        $idState = 0;
+        $idCountry = Country::getByIso($isoCountry);
+        if (Country::containsStates($idCountry)) {
+            if (isset(self::$state_iso_code_matrix[$isoCountry])) {
+                $matrix = self::$state_iso_code_matrix[$isoCountry];
+                $isoState = array_search(Tools::strtolower($isoState), array_map('strtolower', $matrix));
+            }
+            if ($idState = (int)State::getIdByIso(Tools::strtoupper($isoState), $idCountry)) {
+                $idState = $idState;
+            } elseif ($idState = State::getIdByName(pSQL(trim($isoState)))) {
+                $state = new State((int)$idState);
+                if ($state->id_country == $idCountry) {
+                    $idState = $state->id;
+                }
+            }
+        }
+        return $idState;
+    }
+
+    public function hookActionBeforeCartUpdateQty($params)
+    {
+        Context::getContext()->cookie->__unset('payment_method_nonce');
+        Context::getContext()->cookie->__unset('brainteeofficial_payer_email');
+    }
+
+    public function getOrderStatuses()
+    {
+        $orderStatuses = array(
+            array(
+                'id' => 0,
+                'name' => $this->l('Choose status')
+            )
+        );
+        $prestashopOrderStatuses = OrderState::getOrderStates($this->context->language->id);
+
+        foreach ($prestashopOrderStatuses as $prestashopOrderStatus) {
+            $orderStatuses[] = array(
+                'id' => $prestashopOrderStatus['id_order_state'],
+                'name' => $prestashopOrderStatus['name']
+            );
+        }
+
+        return $orderStatuses;
     }
 }

@@ -18,18 +18,17 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author 202-ecommerce <tech@202-ecommerce.com>
-*  @copyright Copyright (c) 202-ecommerce
+*  @copyright 202-ecommerce
 *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{include './_partials/headerLogo.tpl'}
+<div class="alert alert-info">
+    <div>
+        {{l s='You have to [b]finish your payment[/b] done with your PayPal account ' mod='braintreeofficial'}|braintreereplace nofilter} {if isset($payerEmail)}{$payerEmail|escape:'htmlall':'utf-8'}{/if}
+    </div>
 
-{if isset($form)}
-    {$form nofilter}   {*can not escape a variable. Variable contains html code*}
-{/if}
-
-{if isset($advancedForm)}
-    {$advancedForm nofilter}    {*can not escape a variable. Variable contains html code*}
-{/if}
-
+    <div>
+        {l s='by accepting the terms of service and clicking on the order validation button below.' mod='braintreeofficial'}
+    </div>
+</div>

@@ -35,7 +35,7 @@
 				{l s='Discover module ducumentation before configuration' mod='braintreeofficial'}
 			</p>
 			<p>
-				<a target="_blank" href="https://help.202-ecommerce.com/wp-content/uploads/2019/11/Braintree_Prestashop_Doc_updated1411191.pdf"
+				<a target="_blank" href="https://help.202-ecommerce.com/wp-content/uploads/2019/12/User-guide-Braintree-PrestaShop-module.pdf"
 					class="btn btn-default">
 					{l s='Access user documentation for module configuration.' mod='braintreeofficial'}
 				</a>

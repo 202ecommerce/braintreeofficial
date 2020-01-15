@@ -68,12 +68,18 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
             if (isset($this->errors['error_code'])) {
                 $message .= 'Error code: ' . $this->errors['error_code'] . ';';
             }
-            if (isset($this->errors['error_msg']) && $this->errors['error_msg']) {
-                $message .= 'Short message: ' . $this->errors['error_msg'] . ';';
+
+            if (isset($this->errors['logger_msg'])) {
+                $message .= 'Short message: ' . $this->errors['logger_msg'] . ';';
+            } else {
+                if (isset($this->errors['error_msg']) && $this->errors['error_msg']) {
+                    $message .= 'Short message: ' . $this->errors['error_msg'] . ';';
+                }
+                if (isset($this->errors['msg_long']) && $this->errors['msg_long']) {
+                    $message .= 'Long message: ' . $this->errors['msg_long'] . ';';
+                }
             }
-            if (isset($this->errors['msg_long']) && $this->errors['msg_long']) {
-                $message .= 'Long message: ' . $this->errors['msg_long'] . ';';
-            }
+
             ProcessLoggerHandler::openLogger();
             ProcessLoggerHandler::logError(
                 $message,
@@ -89,7 +95,7 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
         }
 
         if (!empty($this->redirectUrl)) {
-            \Tools::redirect($this->redirectUrl);
+            $this->redirectWithNotifications($this->redirectUrl);
         }
         if (!empty($this->jsonValues)) {
             $response = new JsonResponse($this->jsonValues);

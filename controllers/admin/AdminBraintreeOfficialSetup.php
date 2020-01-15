@@ -75,7 +75,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             'formPaymentSettings' => $formPaymentSettings,
             'formMerchantAccounts' => $formMerchantAccounts,
             'formEnvironmentSettings' => $formEnvironmentSettings,
-            'formStatus' => $formStatus
+            'formStatus' => $formStatus,
+            'showMessageAboutStateName' => (int)Configuration::get('BRAINTREEOFFICIAL_SHOW_MESSAGE_ABOUT_STATE_NAME')
 
         );
         $this->context->smarty->assign($tpl_vars);
@@ -330,7 +331,10 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         }
 
         if ($methodBraintree->isConfigured() == false) {
-            $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
+            if (Tools::isSubmit('braintreeofficial_sandbox') == false) {
+                $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
+            }
+
         } else {
             if (Module::isEnabled('paypal') && (int)Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {
                 $paypalModule = Module::getInstanceByName('paypal');

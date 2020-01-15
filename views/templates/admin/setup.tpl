@@ -23,6 +23,10 @@
 	* International Registered Trademark & Property of PrestaShop SA
 	*}
 
+{if isset($showMessageAboutStateName) && $showMessageAboutStateName}
+    {include './_partials/messageAboutStateName.tpl'}
+{/if}
+
 {include './_partials/headerLogo.tpl'}
 
 <div class="container-fluid bt__p-0">

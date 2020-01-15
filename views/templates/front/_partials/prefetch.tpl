@@ -23,8 +23,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{if isset($preconnectResources) && is_array($preconnectResources) && empty($preconnectResources) == false}
-    {foreach from=$preconnectResources item=preconnectResource}
-        <link href="{$preconnectResource|addslashes}" rel="preconnect" crossorigin>
+{if isset($prefetchResources) && is_array($prefetchResources) && empty($prefetchResources) == false}
+    {foreach from=$prefetchResources item=prefetchResource}
+        <link href="{$prefetchResource|addslashes}" rel="prefetch" as="script">
     {/foreach}
 {/if}

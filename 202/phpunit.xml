@@ -15,7 +15,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <env name="addon_name" value="braintree"/>
+        <env name="addon_name" value="braintreeofficial"/>
     </php>
 
     <filter>

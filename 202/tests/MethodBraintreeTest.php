@@ -32,11 +32,12 @@ if (file_exists($pathConfig)) {
 if (file_exists($pathInit)) {
     require_once $pathInit;
 }
-require_once _PS_MODULE_DIR_.'braintree/vendor/autoload.php';
+require_once _PS_MODULE_DIR_.'braintreeofficial/vendor/autoload.php';
+require_once dirname(__FILE__) . '/MethodBraintreeMock.php';
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use BraintreeTest\MethodBraintreeMockTest;
+use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 
 class MethodBraintreeTest extends TestCase
 {
@@ -46,15 +47,15 @@ class MethodBraintreeTest extends TestCase
 
     public $moduleNames;
 
-    /* @var MethodBraintreeMockTest*/
+    /* @var \MethodBraintreeMock*/
     protected $methodBraintree;
 
     protected function setUp()
     {
-        $this->methodBraintree = new MethodBraintreeMockTest();
+        $this->methodBraintree = new \MethodBraintreeMock();
         $this->moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $this->moduleManager = $this->moduleManagerBuilder->build();
-        $this->moduleNames = 'braintree';
+        $this->moduleNames = 'braintreeofficial';
     }
 
     public function testInstall()
@@ -89,10 +90,10 @@ class MethodBraintreeTest extends TestCase
     /**
      * @dataProvider providerGetLinkToTransaction
      */
-    public function testGetLinkToTransaction($id_transaction, $sandbox)
+    public function testGetLinkToTransaction($log)
     {
         $method = $this->methodBraintree->getInstance();
-        $this->assertTrue(is_string($method->getLinkToTransaction($id_transaction, $sandbox)));
+        $this->assertTrue(is_string($method->getLinkToTransaction($log)));
     }
 
     public function testGetOrderId()
@@ -144,13 +145,17 @@ class MethodBraintreeTest extends TestCase
 
     public function providerGetLinkToTransaction()
     {
+        $logSandbox = new BraintreeOfficialLog();
+        $logSandbox->sandbox = true;
+        $logSandbox->id_transaction = 'transactionRef';
+
+        $logLive = new BraintreeOfficialLog();
+        $logLive->sandbox = false;
+        $logLive->id_transaction = 'transactionRef';
+
         $data = array(
-            array('string', 'string'),
-            array('string', 1),
-            array('string', null),
-            array('string', false),
-            array(1, false),
-            array(null, false),
+            array($logSandbox),
+            array($logLive)
         );
 
         return $data;

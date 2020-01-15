@@ -153,6 +153,7 @@ const initPaypalBraintree = (flow) => {
       paypal.Button.render({
         locale: envLocale,
         env: paypal_braintree_mode, // 'production' or 'sandbox'
+        commit: true,
         style: {
           tagline: false
         },
