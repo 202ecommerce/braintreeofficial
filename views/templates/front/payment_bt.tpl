@@ -31,7 +31,7 @@
 			<div class="bt__mb-2">
 				<i class="material-icons mi-lock">lock</i>
 				<b>{l s='Pay securely using your credit card.' mod='braintreeofficial'}</b>
-			<img style="width: 120px" class="bt__ml-2" src="/modules/braintreeofficial/views/img/braintree-paypal.png">
+			<img style="width: 120px" class="bt__ml-2" src="{$baseDir|addslashes}modules/braintreeofficial/views/img/braintree-paypal.png">
 			</div>	
 			<div class="payment_module braintree-card">
 				{if !isset($init_error)}
