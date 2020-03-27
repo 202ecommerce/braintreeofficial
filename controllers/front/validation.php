@@ -103,7 +103,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
                 'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
                 'email' => $customer->email,
                 'billingAddress' => array(
-                    'givenName' => $customer->firstname,
+                    'givenName' => iconv("utf-8", "ascii//TRANSLIT", $customer->firstname),
                     'surneme' => $customer->lastname,
                     'phoneNumber' => $address->phone,
                     'streetAddress' => $address->address1,
