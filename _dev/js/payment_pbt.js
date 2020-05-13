@@ -178,6 +178,7 @@ const initPaypalBraintree = (flow) => {
               $('[data-bt-pp-error-msg]').hide();
               $('[data-bt-save-account]').hide();
               $('[data-bt-vault-info]').show().append(`${payload.details.firstName} ${payload.details.lastName} ${payload.details.email}`);
+              $('#conditions-to-approve input').prop('checked', false);
             });
         },
         onError(err) {
