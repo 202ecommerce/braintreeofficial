@@ -82,6 +82,7 @@
 						<p>
 							{{l s='If you do not have a Braintree account, you can create by following this [a @href1@]link[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {'https://signups.braintreepayments.com/'}, '@target@' => {'target="blank"'}]}
 						</p>
+
 						{include './formAccount.tpl'}
 					</div>
 				</div>

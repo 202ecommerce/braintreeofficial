@@ -55,6 +55,11 @@
 				<p class="action_response"></p>
 			</p>
 		</li>
+
+		<li>
+			{include './_partials/apiHelpButton.tpl'}
+		</li>
+
 		<li>
 			<p class="h4">
 				{l s='Do you still have any questions?' mod='braintreeofficial'}
