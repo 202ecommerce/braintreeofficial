@@ -31,7 +31,7 @@
 
     <div class="alert alert-info bt__mt-2" style="display: none" id="apiHelpMessage">
         <p>
-            {{l s='If you get an error message "[b]You do not have the proper authorization for this request[/b]" when you access to your [a @href1@]API keys[/a] via your Braintree account:' mod='braintreeofficial'}|braintreereplace:['@href1@' => {'https://signups.braintreepayments.com/'}, '@target@' => {'target="blank"'}]}
+            {{l s='If you get an error message "[b]You do not have the proper authorization for this request[/b]" when you access to your API keys via your Braintree account:' mod='braintreeofficial'}|braintreereplace}
         </p>
 
         <p class="bt__mt-2">
