@@ -51,7 +51,15 @@
     {{l s='To retrieve sandbox API Keys please repeat the steps by connecting to [a @href1@]sandbox account[/a] or creating a new [a @href2@]one[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {'https://sandbox.braintreegateway.com/login'}, '@href2@' => {'https://www.braintreepayments.com/sandbox'},  '@target@' => {'target="blank"'}]}
 </p>
 
-{include './apiHelpButton.tpl'}
+<div>
+	<button class="btn btn-default" type="button" data-role-collapse data-collapsed="#apiHelpMessage">
+		{l s='Impossible to access to API via Braintree account?' mod='braintreeofficial'}
+	</button>
+
+	<div id="apiHelpMessage" class="alert alert-info bt__mt-2" style="display: none">
+		{include './apiHelpMessage.tpl'}
+	</div>
+</div>
 
 <div class="row form-account {if isset($sandboxEnvironment) && $sandboxEnvironment == false}current-account{/if} {if isset($braintreeofficial_merchant_id_live) && $braintreeofficial_merchant_id_live} visible{/if}">
 	<div class="h3">{l s='Live' mod='braintreeofficial'}</div>
