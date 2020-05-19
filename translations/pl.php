@@ -122,7 +122,7 @@ $_MODULE['<{braintreeofficial}prestashop>formaccount_9ff77bd3d61cd4ed209293283ef
 $_MODULE['<{braintreeofficial}prestashop>formaccount_8258080b2001c14b75014329dbb07ed4'] = 'Kliknij opcję API';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_ce98ec2f851e8f9d5ee87f124326a3a3'] = 'Kliknij przycisk Utwórz nowy klucz API';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_b322bce65e09c6719fbe8c0f0b2a30c2'] = 'Kliknij Wyświetl w kolumnie Klucz prywatny';
-$_MODULE['<{braintreeofficial}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'Aby odzyskać testowe klucze API, powtórz te czynności, logując się do [a @href1@]konta testowego[/a] lub tworząc [a @href2 @]nowe konto[/a]';
+$_MODULE['<{braintreeofficial}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'Aby odzyskać testowe klucze API, powtórz te czynności, logując się do [a @href1@]konta testowego[/a] lub tworząc [a @href2@]nowe konto[/a]';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_955ad3298db330b5ee880c2c9e6f23a0'] = 'Skopiuj Klucz prywatny, Klucz publiczny i ID handlowca, a następnie wklej je poniżej:';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_ed6445336472aef39084720adcf903b9'] = 'Na żywo';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_6eb9040e470e8018db394832a528f56a'] = 'Klucz publiczny';
