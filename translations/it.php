@@ -247,3 +247,5 @@ $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialsetup_51a9f5fc2e4
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialprocesslogger_4533bc138bd79a18e794381694f02bc0'] = 'Codice transazione Braintree:';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialprocesslogger_0661efbf745de9c9cd6823c509b68e87'] = 'Messaggio (risposta API Braintree)';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialmigration_51a9f5fc2e4d9b1c8aa4a60a7c725243'] = 'Errore durante la creazione della tua esperienza web. Controlla le credenziali.';
+$_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0'] = 'Impossibile accedere all\'API tramite l\'account Braintree?';
+$_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Impossibile accedere all\'API tramite l\'account Braintree?';
