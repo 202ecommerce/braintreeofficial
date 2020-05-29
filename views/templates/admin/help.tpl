@@ -55,6 +55,24 @@
 				<p class="action_response"></p>
 			</p>
 		</li>
+
+		<li>
+			<p class="h4">
+				{l s='Impossible to access to API via Braintree account?' mod='braintreeofficial'}
+			</p>
+
+			<div>
+				<button class="btn btn-default" type="button" data-role-collapse data-collapsed="#apiHelpMessage">
+					{l s='Discover more details' mod='braintreeofficial'}
+				</button>
+
+				<div id="apiHelpMessage" class="alert alert-info bt__mt-2" style="display: none">
+					{include './_partials/apiHelpMessage.tpl'}
+				</div>
+			</div>
+
+		</li>
+
 		<li>
 			<p class="h4">
 				{l s='Do you still have any questions?' mod='braintreeofficial'}

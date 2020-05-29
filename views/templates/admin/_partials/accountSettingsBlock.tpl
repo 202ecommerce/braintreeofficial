@@ -44,11 +44,18 @@
 				{/if}
 			</strong>
 
+			<span class="btn btn-default ml-20" data-toggle="modal" data-target="#credentialBlock">
+				<i class="icon-edit"></i>
+				{l s='Edit' mod='braintreeofficial'}
+			</span>
+
 			<span class="btn btn-default ml-20" data-bt-logout>
+				<i class="icon-signout"></i>
 				{l s='Logout' mod='braintreeofficial'}
 			</span>
 		{else}
 			<span class="btn btn-default" data-toggle="modal" data-target="#credentialBlock">
+				<i class="icon-signin"></i>
 				{l s='Connect or create Braintree account' mod='braintreeofficial'}
 			</span>
 		{/if}
@@ -75,6 +82,7 @@
 						<p>
 							{{l s='If you do not have a Braintree account, you can create by following this [a @href1@]link[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {'https://signups.braintreepayments.com/'}, '@target@' => {'target="blank"'}]}
 						</p>
+
 						{include './formAccount.tpl'}
 					</div>
 				</div>

@@ -13,6 +13,7 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+import './utils';
 
 var HelpAdmin = {
   init() {

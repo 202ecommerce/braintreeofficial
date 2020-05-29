@@ -15,6 +15,7 @@
 
 // Import functions for scrolling effect to necessary block on click
 import {hoverConfig, hoverTabConfig} from './functions.js';
+import './utils';
 
 const setupAdmin = {
   init() {
