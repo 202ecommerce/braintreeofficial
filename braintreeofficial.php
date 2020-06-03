@@ -1707,6 +1707,30 @@ class BraintreeOfficial extends \PaymentModule
     }
 
     /**
+     * Add radio currency restrictions for a new module.
+     *
+     * @param array $shops
+     *
+     * @return bool
+     */
+    public function addRadioCurrencyRestrictionsForModule(array $shops = array())
+    {
+        if (!$shops) {
+            $shops = Shop::getShops(true, null, true);
+        }
+
+        $query = 'INSERT INTO `' . _DB_PREFIX_ . 'module_currency` (`id_module`, `id_shop`, `id_currency`) VALUES (%d, %d, %d)';
+
+        foreach ($shops as $s) {
+            if (!Db::getInstance()->execute(sprintf($query, $this->id, $s, BRAINTREE_PAYMENT_CUSTOMER_CURRENCY))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Return choosed mode of currency restriction
      * @return int|null
      */
