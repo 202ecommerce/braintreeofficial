@@ -1839,7 +1839,7 @@ class BraintreeOfficial extends \PaymentModule
 
     public function hookDisplayProductAdditionalInfo($params)
     {
-        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART') == false) {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT') == false) {
             return false;
         }
 
