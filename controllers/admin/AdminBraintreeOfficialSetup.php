@@ -237,7 +237,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             'tlsVersion' => $this->_checkTLSVersion(),
             'accountConfigured' => $methodBraintree->isConfigured(),
             'sslActivated' => $this->module->isSslActive(),
-            'merchantAccountIdConfigured' => $this->showWarningCurrency() == false
+            'merchantAccountIdConfigured' => $this->showWarningCurrency() == false,
+            'paymentCustomerCurrency' => $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY
         );
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
