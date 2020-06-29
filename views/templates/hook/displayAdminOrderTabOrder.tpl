@@ -24,8 +24,8 @@
 *}
 
 
-<li>
-	<a href="#braintree">
+<li class="nav-item">
+	<a href="#braintree" class="nav-link" data-toggle="tab" role="tab">
 		{l s='Braintree' mod='braintreeofficial'}
 		<span class="badge">{if isset($logs)}{$logs|@count}{else}0{/if}</span>
 	</a>

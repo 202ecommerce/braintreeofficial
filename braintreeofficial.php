@@ -161,7 +161,10 @@ class BraintreeOfficial extends \PaymentModule
         'displayAdminCartsView',
         'displayProductAdditionalInfo',
         'displayShoppingCartFooter',
-        'actionBeforeCartUpdateQty'
+        'actionBeforeCartUpdateQty',
+        'displayAdminOrderTop',
+        'displayAdminOrderTabLink',
+        'displayAdminOrderTabContent'
     );
 
     /**
@@ -891,50 +894,68 @@ class BraintreeOfficial extends \PaymentModule
         }
     }
 
+    public function hookDisplayAdminOrderTop($params)
+    {
+        return $this->getAdminOrderPageMessages($params);
+    }
+
     public function hookDisplayAdminOrder($params)
+    {
+        // Since Ps 1.7.7 this hook is displayed at bottom of a page and we should use a hook DisplayAdminOrderTop
+        if (version_compare(_PS_VERSION_, '1.7.7', '>=')) {
+            return false;
+        }
+
+        return $this->getAdminOrderPageMessages($params);
+    }
+
+    public function getAdminOrderPageMessages($params)
     {
         $id_order = $params['id_order'];
         $order = new Order((int)$id_order);
         $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId($id_order);
+        $return = '';
 
         if (Validate::isLoadedObject($braintreeOrder) == false) {
-            return;
+            return $return;
         }
 
         $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($braintreeOrder->id);
 
         if (Validate::isLoadedObject($braintreeOrder) == false) {
-            return false;
+            return $return;
         }
         if ($braintreeOrder->sandbox) {
-            $this->context->controller->warnings[] = $this->l('[SANDBOX] Please pay attention that payment for this order was made via Braintree Sandbox mode.');
+            $return .= $this->displayWarning($this->l('[SANDBOX] Please pay attention that payment for this order was made via Braintree Sandbox mode.'));
         }
         if (Tools::getValue('not_payed_capture')) {
-            $this->context->controller->errors[] = $this->l('You couldn\'t refund order, it\'s not payed yet.');
+            $return .= $this->displayError($this->l('You couldn\'t refund order, it\'s not payed yet.'));
         }
         if (Tools::getValue('error_refund')) {
-            $this->context->controller->errors[] = $this->l('We have an unexpected problem during refund operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
+            $return .= $this->displayError($this->l('We have an unexpected problem during refund operation. For more details please see the Braintree tab in the order details or Braintree Logs.'));
         }
         if (Tools::getValue('cancel_failed')) {
-            $this->context->controller->errors[] = $this->l('We have an unexpected problem during cancel operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
+            $return .= $this->displayError($this->l('We have an unexpected problem during cancel operation. For more details please see the Braintree tab in the order details or Braintree Logs.'));
         }
         if ($order->current_state == Configuration::get('PS_OS_REFUND') &&  $braintreeOrder->payment_status == 'refunded') {
-            $this->adminDisplayInformation($this->l('Your order is fully refunded by Braintree.'));
+            $return .= $this->displayInformation($this->l('Your order is fully refunded by Braintree.'));
         }
 
         if ($order->getCurrentOrderState()->paid == 1 && Validate::isLoadedObject($braintreeCapture) && $braintreeCapture->id_capture) {
-            $this->adminDisplayInformation($this->l('Your order is fully captured by Braintree.'));
+            $return .= $this->displayInformation($this->l('Your order is fully captured by Braintree.'));
         }
         if (Tools::getValue('error_capture')) {
-            $this->context->controller->errors[] = $this->l('We have an unexpected problem during capture operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
+            $return .= $this->displayError($this->l('We have an unexpected problem during capture operation. For more details please see the Braintree tab in the order details or Braintree Logs.'));
         }
 
         if ($braintreeOrder->total_paid != $braintreeOrder->total_prestashop) {
             $preferences = $this->context->link->getAdminLink('AdminPreferences', true);
-            $this->adminDisplayWarning($this->l('Product pricing has been modified as your rounding settings aren\'t compliant with Braintree.').' '.
+            $return .= $this->displayWarning($this->l('Product pricing has been modified as your rounding settings aren\'t compliant with Braintree.').' '.
                 $this->l('To avoid automatic rounding to customer for Braintree payments, please update your rounding settings.').' '.
                 '<a target="_blank" href="'.$preferences.'">'.$this->l('Reed more.').'</a>');
         }
+
+        return $return;
     }
 
     public function hookDisplayBackOfficeHeader()
@@ -943,7 +964,7 @@ class BraintreeOfficial extends \PaymentModule
         if ($diff_cron_time->d > 0 || $diff_cron_time->h > 1 || Configuration::get('BRAINTREEOFFICIAL_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREEOFFICIAL_CRON_TIME', date('Y-m-d H:i:s'));
             $bt_orders = $this->serviceBraintreeOfficialOrder->getBraintreeOrdersForValidation();
-            
+
             if ($bt_orders) {
                 $transactions = $this->methodBraintreeOfficial->searchTransactions($bt_orders);
 
@@ -1054,7 +1075,7 @@ class BraintreeOfficial extends \PaymentModule
                 Media::addJsDefL('scPaypalCheckedMsg', $messageForCustomer);
                 $this->context->controller->registerJavascript($this->name . '-shortcut-payment', 'modules/' . $this->name . '/views/js/shortcutPayment.js');
             }
-        } elseif (Tools::getValue('controller') == "cart") {            
+        } elseif (Tools::getValue('controller') == "cart") {
             if (!$this->checkActiveModule()) {
                 return;
             }
@@ -1098,7 +1119,7 @@ class BraintreeOfficial extends \PaymentModule
         }
     }
 
-    public function checkActiveModule() 
+    public function checkActiveModule()
     {
         $active = false;
         $modules = Hook::getHookModuleExecList('paymentOptions');
@@ -1137,11 +1158,28 @@ class BraintreeOfficial extends \PaymentModule
 
     public function hookDisplayAdminOrderTabOrder($params)
     {
+        $params['class_logger'] = BraintreeOfficialLog::class;
         if ($result = $this->handleExtensionsHook(__FUNCTION__, $params)) {
             if (!is_null($result)) {
                 return $result;
             }
         }
+    }
+
+    public function hookDisplayAdminOrderTabLink($params)
+    {
+        $order = new Order((int)$params['id_order']);
+        $params['order'] = $order;
+        $return = $this->hookDisplayAdminOrderTabOrder($params);
+
+        return $return;
+    }
+
+    public function hookDisplayAdminOrderTabContent($params)
+    {
+        $order = new Order((int)$params['id_order']);
+        $params['order'] = $order;
+        return $this->hookDisplayAdminOrderContentOrder($params);
     }
 
     public function hookDisplayAdminOrderContentOrder($params)
