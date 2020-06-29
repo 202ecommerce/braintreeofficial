@@ -95,9 +95,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
             return false;
         }
 
-        $this->context->cart->id_address_delivery = $address->id;
-        $this->context->cart->id_address_invoice = $address->id;
-        $this->context->cart->save();
+        $this->context->cart->updateAddressId($this->context->cart->id_address_delivery, $address->id);
 
         return true;
     }
