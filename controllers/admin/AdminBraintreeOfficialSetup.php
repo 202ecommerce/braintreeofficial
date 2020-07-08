@@ -375,7 +375,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function showWarningCurrency()
     {
+        /* @var $methodBraintree MethodBraintreeOfficial*/
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
         return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
-            $this->module->merchantAccountForCurrencyConfigured() == false;
+            $this->module->merchantAccountForCurrencyConfigured() == false &&
+            $methodBraintree->isConfigured();
     }
 }
