@@ -424,17 +424,6 @@ class BraintreeOfficial extends \PaymentModule
         Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeOfficialSetup', true));
     }
 
-    public function hookActionAdminControllerSetMedia()
-    {
-        if (Tools::getValue('controller') == "AdminOrders" && Tools::getValue('id_order')) {
-            $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId(Tools::getValue('id_order'));
-            if (Validate::isLoadedObject($braintreeOrder)) {
-                Media::addJsDefL('chb_braintree_refund', $this->l('Refund Braintree'));
-                $this->context->controller->addJS(_PS_MODULE_DIR_ . $this->name . '/views/js/bo_order.js');
-            }
-        }
-    }
-
     public function hookActionObjectCurrencyAddAfter($params)
     {
         $this->methodBraintreeOfficial->createForCurrency($params['object']->iso_code);
@@ -495,7 +484,7 @@ class BraintreeOfficial extends \PaymentModule
                 ProcessLoggerHandler::closeLogger();
                 return true;
             }
-            $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder->id_transaction);
+            $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder);
 
             if ($status == "submitted_for_settlement") {
                 ProcessLoggerHandler::openLogger();
@@ -896,7 +885,16 @@ class BraintreeOfficial extends \PaymentModule
 
     public function hookDisplayAdminOrderTop($params)
     {
-        return $this->getAdminOrderPageMessages($params);
+        $return = $this->getAdminOrderPageMessages($params);
+        $return .= $this->getPartialRefund();
+
+        return $return;
+    }
+
+    protected function getPartialRefund()
+    {
+        $this->context->smarty->assign('chb_braintree_refund', $this->l('Refund Braintree'));
+        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/partialRefund.tpl');
     }
 
     public function hookDisplayAdminOrder($params)
@@ -906,7 +904,10 @@ class BraintreeOfficial extends \PaymentModule
             return false;
         }
 
-        return $this->getAdminOrderPageMessages($params);
+        $return = $this->getAdminOrderPageMessages($params);
+        $return .= $this->getPartialRefund();
+
+        return $return;
     }
 
     public function getAdminOrderPageMessages($params)

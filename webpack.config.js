@@ -38,7 +38,6 @@ const plugins = [
 
 const config = {
 	entry: {
-		'js/bo_order': './_dev/js/bo_order.js',
 		'js/customizeCheckoutAdmin': './_dev/js/customizeCheckoutAdmin.js',
 		'js/helpAdmin': './_dev/js/helpAdmin.js',
 		'js/setupAdmin': './_dev/js/setupAdmin.js',
