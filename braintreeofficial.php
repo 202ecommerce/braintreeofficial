@@ -302,7 +302,7 @@ class BraintreeOfficial extends \PaymentModule
         $this->name = 'braintreeofficial';
         $this->tab = 'payments_gateways';
         $this->version = '@version@';
-        $this->author = 'PrestaShop';
+        $this->author = '202 ecommerce';
         $this->display = 'view';
         $this->module_key = '155f56797c33f1d34fcba757d3269a35';
         $this->is_eu_compatible = 1;
