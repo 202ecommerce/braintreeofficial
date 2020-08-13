@@ -1,4 +1,5 @@
-/*
+<?php
+/**
  * 2007-2020 PayPal
  *
  *  NOTICE OF LICENSE
@@ -23,7 +24,24 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
-//  Add transaction id in order detail's list 
-$(document).ready(() => {
-  $('.page-order-confirmation #order-details ul').append($('#braintree_transaction_id'));
-});
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+use BraintreeofficialPPBTlib\Install\ModuleInstaller;
+
+/**
+ * @param $module BraintreeOfficial
+ * @return bool
+ */
+function upgrade_module_1_2_3($module)
+{
+    // Since Ps 1.7.7 we use a hook DisplayAdminOrderTop
+    $return = $module->registerHook('displayAdminOrderTop');
+
+    // Since Ps 1.7.7 we must use the hooks displayAdminOrderTabLink and displayAdminOrderTabContent
+    $return &= $module->registerHook('displayAdminOrderTabLink');
+    $return &= $module->registerHook('displayAdminOrderTabContent');
+
+    return $return;
+}

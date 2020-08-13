@@ -1,26 +1,27 @@
 <?php
 /**
- * NOTICE OF LICENSE
+ * 2007-2020 PayPal
  *
- * This source file is subject to a commercial license from SARL 202 ecommerce
- * Use, copy, modification or distribution of this source file without written
- * license agreement from the SARL 202 ecommerce is strictly forbidden.
- * In order to obtain a license, please contact us: tech@202-ecommerce.com
- * ...........................................................................
- * INFORMATION SUR LA LICENCE D'UTILISATION
+ *  NOTICE OF LICENSE
  *
- * L'utilisation de ce fichier source est soumise a une licence commerciale
- * concedee par la societe 202 ecommerce
- * Toute utilisation, reproduction, modification ou distribution du present
- * fichier source sans contrat de licence ecrit de la part de la SARL 202 ecommerce est
- * expressement interdite.
- * Pour obtenir une licence, veuillez contacter 202-ecommerce <tech@202-ecommerce.com>
- * ...........................................................................
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
  *
- * @author    202-ecommerce <tech@202-ecommerce.com>
- * @copyright Copyright (c) 202-ecommerce
- * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @version   develop
+ *  DISCLAIMER
+ *
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author 2007-2020 PayPal
+ *  @author 202 ecommerce <tech@202-ecommerce.com>
+ *  @copyright PayPal
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
 require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
@@ -237,7 +238,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             'tlsVersion' => $this->_checkTLSVersion(),
             'accountConfigured' => $methodBraintree->isConfigured(),
             'sslActivated' => $this->module->isSslActive(),
-            'merchantAccountIdConfigured' => $this->showWarningCurrency() == false
+            'merchantAccountIdConfigured' => $this->showWarningCurrency() == false,
+            'paymentCustomerCurrency' => $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY
         );
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
@@ -373,7 +375,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function showWarningCurrency()
     {
+        /* @var $methodBraintree MethodBraintreeOfficial*/
+        $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
         return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
-            $this->module->merchantAccountForCurrencyConfigured() == false;
+            $this->module->merchantAccountForCurrencyConfigured() == false &&
+            $methodBraintree->isConfigured();
     }
 }

@@ -1,5 +1,5 @@
 {*
-* 2007-2019 PrestaShop
+* 2007-2020 PayPal
 *
 * NOTICE OF LICENSE
 *
@@ -17,16 +17,22 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author 202-ecommerce <tech@202-ecommerce.com>
-*  @copyright Copyright (c) 202-ecommerce
+*  @author 2007-2020 PayPal
+*  @author 202 ecommerce <tech@202-ecommerce.com>
+
+*  @copyright PayPal
 *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
 
-<li>
-	<a href="#braintree">
+<li class="nav-item">
+	<a href="#braintree" class="nav-link" data-toggle="tab" role="tab">
 		{l s='Braintree' mod='braintreeofficial'}
-		<span class="badge">{if isset($logs)}{$logs|@count}{else}0{/if}</span>
+      {if version_compare($psVersion, '1.7.7', '>=')}
+        ({if isset($logs)}{$logs|@count}{else}0{/if})
+      {else}
+        <span class="badge">{if isset($logs)}{$logs|@count}{else}0{/if}</span>
+      {/if}
 	</a>
 </li>

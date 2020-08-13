@@ -1,27 +1,27 @@
 <?php
 /**
- * 2007-2019 PrestaShop
+ * 2007-2020 PayPal
  *
- * NOTICE OF LICENSE
+ *  NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
+ *  DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 202-ecommerce <tech@202-ecommerce.com>
- *  @copyright Copyright (c) 202-ecommerce
+ *  @author 2007-2020 PayPal
+ *  @author 202 ecommerce <tech@202-ecommerce.com>
+ *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
  */
 
 require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
@@ -161,7 +161,10 @@ class BraintreeOfficial extends \PaymentModule
         'displayAdminCartsView',
         'displayProductAdditionalInfo',
         'displayShoppingCartFooter',
-        'actionBeforeCartUpdateQty'
+        'actionBeforeCartUpdateQty',
+        'displayAdminOrderTop',
+        'displayAdminOrderTabLink',
+        'displayAdminOrderTabContent'
     );
 
     /**
@@ -299,7 +302,7 @@ class BraintreeOfficial extends \PaymentModule
         $this->name = 'braintreeofficial';
         $this->tab = 'payments_gateways';
         $this->version = '@version@';
-        $this->author = 'PrestaShop';
+        $this->author = '202 ecommerce';
         $this->display = 'view';
         $this->module_key = '155f56797c33f1d34fcba757d3269a35';
         $this->is_eu_compatible = 1;
@@ -421,17 +424,6 @@ class BraintreeOfficial extends \PaymentModule
         Tools::redirectAdmin($this->context->link->getAdminLink('AdminBraintreeOfficialSetup', true));
     }
 
-    public function hookActionAdminControllerSetMedia()
-    {
-        if (Tools::getValue('controller') == "AdminOrders" && Tools::getValue('id_order')) {
-            $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId(Tools::getValue('id_order'));
-            if (Validate::isLoadedObject($braintreeOrder)) {
-                Media::addJsDefL('chb_braintree_refund', $this->l('Refund Braintree'));
-                $this->context->controller->addJS(_PS_MODULE_DIR_ . $this->name . '/views/js/bo_order.js');
-            }
-        }
-    }
-
     public function hookActionObjectCurrencyAddAfter($params)
     {
         $this->methodBraintreeOfficial->createForCurrency($params['object']->iso_code);
@@ -492,7 +484,7 @@ class BraintreeOfficial extends \PaymentModule
                 ProcessLoggerHandler::closeLogger();
                 return true;
             }
-            $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder->id_transaction);
+            $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder);
 
             if ($status == "submitted_for_settlement") {
                 ProcessLoggerHandler::openLogger();
@@ -891,50 +883,80 @@ class BraintreeOfficial extends \PaymentModule
         }
     }
 
+    public function hookDisplayAdminOrderTop($params)
+    {
+        $return = $this->getAdminOrderPageMessages($params);
+        $return .= $this->getPartialRefund();
+
+        return $return;
+    }
+
+    protected function getPartialRefund()
+    {
+        $this->context->smarty->assign('chb_braintree_refund', $this->l('Refund Braintree'));
+        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/partialRefund.tpl');
+    }
+
     public function hookDisplayAdminOrder($params)
+    {
+        // Since Ps 1.7.7 this hook is displayed at bottom of a page and we should use a hook DisplayAdminOrderTop
+        if (version_compare(_PS_VERSION_, '1.7.7', '>=')) {
+            return false;
+        }
+
+        $return = $this->getAdminOrderPageMessages($params);
+        $return .= $this->getPartialRefund();
+
+        return $return;
+    }
+
+    public function getAdminOrderPageMessages($params)
     {
         $id_order = $params['id_order'];
         $order = new Order((int)$id_order);
         $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId($id_order);
+        $return = '';
 
         if (Validate::isLoadedObject($braintreeOrder) == false) {
-            return;
+            return $return;
         }
 
         $braintreeCapture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($braintreeOrder->id);
 
         if (Validate::isLoadedObject($braintreeOrder) == false) {
-            return false;
+            return $return;
         }
         if ($braintreeOrder->sandbox) {
-            $this->context->controller->warnings[] = $this->l('[SANDBOX] Please pay attention that payment for this order was made via Braintree Sandbox mode.');
+            $return .= $this->displayWarning($this->l('[SANDBOX] Please pay attention that payment for this order was made via Braintree Sandbox mode.'));
         }
         if (Tools::getValue('not_payed_capture')) {
-            $this->context->controller->errors[] = $this->l('You couldn\'t refund order, it\'s not payed yet.');
+            $return .= $this->displayError($this->l('You couldn\'t refund order, it\'s not payed yet.'));
         }
         if (Tools::getValue('error_refund')) {
-            $this->context->controller->errors[] = $this->l('We have an unexpected problem during refund operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
+            $return .= $this->displayError($this->l('We have an unexpected problem during refund operation. For more details please see the Braintree tab in the order details or Braintree Logs.'));
         }
         if (Tools::getValue('cancel_failed')) {
-            $this->context->controller->errors[] = $this->l('We have an unexpected problem during cancel operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
+            $return .= $this->displayError($this->l('We have an unexpected problem during cancel operation. For more details please see the Braintree tab in the order details or Braintree Logs.'));
         }
         if ($order->current_state == Configuration::get('PS_OS_REFUND') &&  $braintreeOrder->payment_status == 'refunded') {
-            $this->adminDisplayInformation($this->l('Your order is fully refunded by Braintree.'));
+            $return .= $this->displayInformation($this->l('Your order is fully refunded by Braintree.'));
         }
 
         if ($order->getCurrentOrderState()->paid == 1 && Validate::isLoadedObject($braintreeCapture) && $braintreeCapture->id_capture) {
-            $this->adminDisplayInformation($this->l('Your order is fully captured by Braintree.'));
+            $return .= $this->displayInformation($this->l('Your order is fully captured by Braintree.'));
         }
         if (Tools::getValue('error_capture')) {
-            $this->context->controller->errors[] = $this->l('We have an unexpected problem during capture operation. For more details please see the Braintree tab in the order details or Braintree Logs.');
+            $return .= $this->displayError($this->l('We have an unexpected problem during capture operation. For more details please see the Braintree tab in the order details or Braintree Logs.'));
         }
 
         if ($braintreeOrder->total_paid != $braintreeOrder->total_prestashop) {
             $preferences = $this->context->link->getAdminLink('AdminPreferences', true);
-            $this->adminDisplayWarning($this->l('Product pricing has been modified as your rounding settings aren\'t compliant with Braintree.').' '.
+            $return .= $this->displayWarning($this->l('Product pricing has been modified as your rounding settings aren\'t compliant with Braintree.').' '.
                 $this->l('To avoid automatic rounding to customer for Braintree payments, please update your rounding settings.').' '.
                 '<a target="_blank" href="'.$preferences.'">'.$this->l('Reed more.').'</a>');
         }
+
+        return $return;
     }
 
     public function hookDisplayBackOfficeHeader()
@@ -943,7 +965,7 @@ class BraintreeOfficial extends \PaymentModule
         if ($diff_cron_time->d > 0 || $diff_cron_time->h > 1 || Configuration::get('BRAINTREEOFFICIAL_CRON_TIME') == false) {
             Configuration::updateValue('BRAINTREEOFFICIAL_CRON_TIME', date('Y-m-d H:i:s'));
             $bt_orders = $this->serviceBraintreeOfficialOrder->getBraintreeOrdersForValidation();
-            
+
             if ($bt_orders) {
                 $transactions = $this->methodBraintreeOfficial->searchTransactions($bt_orders);
 
@@ -1054,7 +1076,7 @@ class BraintreeOfficial extends \PaymentModule
                 Media::addJsDefL('scPaypalCheckedMsg', $messageForCustomer);
                 $this->context->controller->registerJavascript($this->name . '-shortcut-payment', 'modules/' . $this->name . '/views/js/shortcutPayment.js');
             }
-        } elseif (Tools::getValue('controller') == "cart") {            
+        } elseif (Tools::getValue('controller') == "cart") {
             if (!$this->checkActiveModule()) {
                 return;
             }
@@ -1098,7 +1120,7 @@ class BraintreeOfficial extends \PaymentModule
         }
     }
 
-    public function checkActiveModule() 
+    public function checkActiveModule()
     {
         $active = false;
         $modules = Hook::getHookModuleExecList('paymentOptions');
@@ -1137,11 +1159,28 @@ class BraintreeOfficial extends \PaymentModule
 
     public function hookDisplayAdminOrderTabOrder($params)
     {
+        $params['class_logger'] = BraintreeOfficialLog::class;
         if ($result = $this->handleExtensionsHook(__FUNCTION__, $params)) {
             if (!is_null($result)) {
                 return $result;
             }
         }
+    }
+
+    public function hookDisplayAdminOrderTabLink($params)
+    {
+        $order = new Order((int)$params['id_order']);
+        $params['order'] = $order;
+        $return = $this->hookDisplayAdminOrderTabOrder($params);
+
+        return $return;
+    }
+
+    public function hookDisplayAdminOrderTabContent($params)
+    {
+        $order = new Order((int)$params['id_order']);
+        $params['order'] = $order;
+        return $this->hookDisplayAdminOrderContentOrder($params);
     }
 
     public function hookDisplayAdminOrderContentOrder($params)
@@ -1707,6 +1746,30 @@ class BraintreeOfficial extends \PaymentModule
     }
 
     /**
+     * Add radio currency restrictions for a new module.
+     *
+     * @param array $shops
+     *
+     * @return bool
+     */
+    public function addRadioCurrencyRestrictionsForModule(array $shops = array())
+    {
+        if (!$shops) {
+            $shops = Shop::getShops(true, null, true);
+        }
+
+        $query = 'INSERT INTO `' . _DB_PREFIX_ . 'module_currency` (`id_module`, `id_shop`, `id_currency`) VALUES (%d, %d, %d)';
+
+        foreach ($shops as $s) {
+            if (!Db::getInstance()->execute(sprintf($query, $this->id, $s, BRAINTREE_PAYMENT_CUSTOMER_CURRENCY))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Return choosed mode of currency restriction
      * @return int|null
      */
@@ -1839,7 +1902,7 @@ class BraintreeOfficial extends \PaymentModule
 
     public function hookDisplayProductAdditionalInfo($params)
     {
-        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART') == false) {
+        if ((int)Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') == false || (int)Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT') == false) {
             return false;
         }
 
