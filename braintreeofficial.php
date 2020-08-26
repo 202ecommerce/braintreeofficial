@@ -482,7 +482,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
-                return true;
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
             }
             $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder);
 
@@ -498,7 +498,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
-                return true;
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
             } else {
                 try {
                     $refund_response = $this->methodBraintreeOfficial->partialRefund($params);
@@ -537,6 +537,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&error_refund=1');
             }
             if ($ex_detailed_message) {
                 ProcessLoggerHandler::openLogger();
@@ -550,6 +551,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&error_refund=1');
             }
         }
     }
