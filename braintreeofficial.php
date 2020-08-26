@@ -986,8 +986,8 @@ class BraintreeOfficial extends \PaymentModule
 
                     foreach ($ps_order_details as $order_detail) {
                         // Switch to back order if needed
-                        $product_stock = StockAvailable::getQuantityAvailableByProduct($order_detail['product_id'], $order_detail['product_attribute_id']);
-                        if (Configuration::get('PS_STOCK_MANAGEMENT') && $product_stock <= 0) {
+                        if (Configuration::get('PS_STOCK_MANAGEMENT') &&
+                            (int)$order_detail['product_quantity'] > (int)$order_detail['product_quantity_in_stock']) {
                             $paid_state  = Configuration::get('PS_OS_OUTOFSTOCK_PAID');
                         }
                     }
