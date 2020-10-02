@@ -470,6 +470,7 @@ class BraintreeOfficial extends \PaymentModule
             $message = '';
             $ex_detailed_message = '';
             $capture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($braintreeOrder->id);
+
             if (Validate::isLoadedObject($capture) && !$capture->id_capture) {
                 ProcessLoggerHandler::openLogger();
                 ProcessLoggerHandler::logError(
@@ -484,6 +485,7 @@ class BraintreeOfficial extends \PaymentModule
                 ProcessLoggerHandler::closeLogger();
                 Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
             }
+
             $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder);
 
             if ($status == "submitted_for_settlement") {
@@ -896,7 +898,7 @@ class BraintreeOfficial extends \PaymentModule
     protected function getPartialRefund()
     {
         $this->context->smarty->assign('chb_braintree_refund', $this->l('Refund Braintree'));
-        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/partialRefund.tpl');
+        return $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'braintreeofficial/views/templates/hook/partialRefund.tpl');
     }
 
     public function hookDisplayAdminOrder($params)

@@ -35,7 +35,7 @@
             // Create checkbox and insert for Braintree refund
             if ($('#doPartialRefundBraintree').length == 0) {
                 let newCheckBox = `<p class="checkbox"><label for="doPartialRefundBraintree">
-                        <input type="checkbox" id="doPartialRefundPaypal" name="doPartialRefundBraintree" value="1">
+                        <input type="checkbox" id="doPartialRefundBraintree" name="doPartialRefundBraintree" value="1">
                           ${chb_braintree_refund}</label></p>`;
                 $('button[name=partialRefund]').parent('.partial_refund_fields').prepend(newCheckBox);
             }
@@ -49,7 +49,7 @@
                                 <div class="checkbox">
                                     <div class="md-checkbox md-checkbox-inline">
                                       <label>
-                                          <input type="checkbox" id="doPartialRefundPaypal" name="doPartialRefundBraintree" material_design="material_design" value="1">
+                                          <input type="checkbox" id="doPartialRefundBraintree" name="doPartialRefundBraintree" material_design="material_design" value="1">
                                           <i class="md-checkbox-control"></i>
                                             ${chb_braintree_refund}
                                         </label>
