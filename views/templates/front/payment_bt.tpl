@@ -25,6 +25,11 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{if isset($isSandbox) && $isSandbox}
+	<div class="row">
+		{include 'module:braintreeofficial/views/templates/front/_partials/messageSandbox.tpl'}
+	</div>
+{/if}
 
 {*Displaying a button or the iframe*}
 <div class="row">

@@ -1071,9 +1071,12 @@ class BraintreeOfficial extends \PaymentModule
                 $carrierFees = $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
 
                 if ($carrierFees == 0) {
-                    $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
+                    $messageForCustomer = $this->context->smarty
+                        ->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox())
+                        ->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
                 } else {
                     $this->context->smarty->assign('carrierFees', Tools::displayPrice($carrierFees));
+                    $this->context->smarty->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox());
                     $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerTwo.tpl');
                 }
 
@@ -1256,7 +1259,8 @@ class BraintreeOfficial extends \PaymentModule
             'path' => $this->_path,
             'bt_method' => BRAINTREE_PAYPAL_PAYMENT,
             'active_vaulting'=> Configuration::get('BRAINTREEOFFICIAL_VAULTING'),
-            'show_paypal_benefits' => Configuration::get('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS')
+            'show_paypal_benefits' => Configuration::get('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS'),
+            'isSandbox' => $this->methodBraintreeOfficial->isSandbox()
         ));
         if (Configuration::get('BRAINTREEOFFICIAL_VAULTING')) {
             $payment_methods = $this->serviceBraintreeOfficialVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
@@ -1310,6 +1314,7 @@ class BraintreeOfficial extends \PaymentModule
             'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
             'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
             'method_bt' => BRAINTREE_CARD_PAYMENT,
+            'isSandbox' => $this->methodBraintreeOfficial->isSandbox()
         ));
 
         return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/payment_bt.tpl');

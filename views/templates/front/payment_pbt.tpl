@@ -25,6 +25,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{if isset($isSandbox) && $isSandbox}
+	<div class="row">
+		{include 'module:braintreeofficial/views/templates/front/_partials/messageSandbox.tpl'}
+	</div>
+{/if}
+
 {if isset($show_paypal_benefits) && $show_paypal_benefits}
 	{include file='module:braintreeofficial/views/templates/front/paypal_info.tpl'}
 {/if}
