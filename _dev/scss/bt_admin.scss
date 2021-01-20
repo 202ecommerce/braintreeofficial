@@ -113,6 +113,10 @@
   margin-right: 20px;
 }
 
+.icon-lightbulb::before {
+  content: '\f0eb' !important;
+}
+
 @media (max-width: 768px) {
   .container-fluid .flex {
     flex-direction: column;

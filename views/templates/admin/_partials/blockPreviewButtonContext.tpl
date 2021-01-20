@@ -73,7 +73,7 @@
 	</div>
 </div>
 
-<div class="alert alert-info">
+<div class="alert alert-info icon-lightbulb">
 	<button type="button" class="close" data-dismiss="alert">×</button>
     {l s='Shortcut converts best when activated on both product pages & cart page' mod='braintreeofficial'}
 </div>
