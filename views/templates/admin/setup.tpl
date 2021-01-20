@@ -18,10 +18,10 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author 202-ecommerce <tech@202-ecommerce.com>
-	* @copyright PayPal
-	* @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
-	* International Registered Trademark & Property of PrestaShop SA
-	*}
+* @copyright PayPal
+* @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+* International Registered Trademark & Property of PrestaShop SA
+*}
 
 {extends file='./admin.tpl'}
 
@@ -34,30 +34,27 @@
 
 	<div class="container-fluid bt__p-0">
 		<div class="row flex">
-			<div class="col-lg-8 stretchHeightForm">
+			<div class="col-lg-8 col-sm-12 stretchHeightForm">
 				{if isset($formAccountSettings)}
 					{$formAccountSettings nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
 			</div>
-			<div class="col-lg-4">
-				{if isset($formEnvironmentSettings)}
-					{$formEnvironmentSettings nofilter} {*can not escape a variable. Variable contains html code*}
+			<div class="col-lg-4 col-sm-12">
+				{if isset($formStatus)}
+					{$formStatus nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
 			</div>
 		</div>
 
 		<div class="row flex">
-			<div class="col-lg-8">
-				{if isset($formPaymentSettings)}
-					{$formPaymentSettings nofilter} {*can not escape a variable. Variable contains html code*}
-				{/if}
+			<div class="col-lg-8 col-sm-12">
 				{if isset($formMerchantAccounts)}
 					{$formMerchantAccounts nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
 			</div>
-			<div class="col-lg-4 stretchHeightForm" id="status-block">
-				{if isset($formStatus)}
-					{$formStatus nofilter} {*can not escape a variable. Variable contains html code*}
+			<div class="col-lg-4 col-sm-12 stretchHeightForm" id="status-block">
+				{if isset($formPaymentSettings)}
+					{$formPaymentSettings nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
 			</div>
 		</div>

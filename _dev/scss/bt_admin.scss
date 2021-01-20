@@ -37,6 +37,10 @@
   display: flex !important;
 }
 
+.bt__flex-wrap {
+  flex-wrap: wrap;
+}
+
 .stretchHeightForm form {
   height: 100%;
 }
@@ -107,6 +111,12 @@
 
 .mr-20 {
   margin-right: 20px;
+}
+
+@media (max-width: 768px) {
+  .container-fluid .flex {
+    flex-direction: column;
+  }
 }
 
 
