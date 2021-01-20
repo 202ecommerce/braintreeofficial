@@ -1,5 +1,5 @@
 {*
-* 2007-2020 PayPal
+* 2007-2021 PayPal
 *
 * NOTICE OF LICENSE
 *
@@ -17,26 +17,45 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author 2007-2020 PayPal
-*  @author 202 ecommerce <tech@202-ecommerce.com>
-
+*  @author 2007-2021 PayPal
 *  @copyright PayPal
 *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*
 *}
 
-{extends file='./admin.tpl'}
+{if isset($isModeSandbox) && $isModeSandbox}
+  <style>
+    .page-head {
+      background-color: #2D489A !important;
+    }
 
-{block name='content'}
-    {include './_partials/headerLogo.tpl'}
+    .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn i {
+      color: #fff !important;
+    }
 
-    {if isset($form)}
-        {$form nofilter}   {*can not escape a variable. Variable contains html code*}
-    {/if}
+    .bootstrap .page-head ul.breadcrumb {
+      color: #fff !important;
+    }
 
-    {if isset($advancedForm)}
-        {$advancedForm nofilter}    {*can not escape a variable. Variable contains html code*}
-    {/if}
-{/block}
+    .bootstrap .page-head ul.page-breadcrumb li:before {
+      color: #fff !important;
+    }
 
+    .bootstrap .page-head ul.page-breadcrumb li a {
+      color: #fff !important;
+    }
+
+    .page-head .wrapper h1 {
+      color: #fff !important;
+    }
+
+    .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn {
+      color: #fff !important;
+    }
+
+
+  </style>
+{/if}
+
+{block name='content'}{/block}
 

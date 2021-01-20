@@ -23,39 +23,43 @@
 	* International Registered Trademark & Property of PrestaShop SA
 	*}
 
-{if isset($showMessageAboutStateName) && $showMessageAboutStateName}
-    {include './_partials/messageAboutStateName.tpl'}
-{/if}
+{extends file='./admin.tpl'}
 
-{include './_partials/headerLogo.tpl'}
+{block name='content'}
+	{if isset($showMessageAboutStateName) && $showMessageAboutStateName}
+		{include './_partials/messageAboutStateName.tpl'}
+	{/if}
 
-<div class="container-fluid bt__p-0">
-	<div class="row flex">
-		<div class="col-lg-8 stretchHeightForm">
-			{if isset($formAccountSettings)}
-				{$formAccountSettings nofilter} {*can not escape a variable. Variable contains html code*}
-			{/if}
+	{include './_partials/headerLogo.tpl'}
+
+	<div class="container-fluid bt__p-0">
+		<div class="row flex">
+			<div class="col-lg-8 stretchHeightForm">
+				{if isset($formAccountSettings)}
+					{$formAccountSettings nofilter} {*can not escape a variable. Variable contains html code*}
+				{/if}
+			</div>
+			<div class="col-lg-4">
+				{if isset($formEnvironmentSettings)}
+					{$formEnvironmentSettings nofilter} {*can not escape a variable. Variable contains html code*}
+				{/if}
+			</div>
 		</div>
-		<div class="col-lg-4">
-			{if isset($formEnvironmentSettings)}
-				{$formEnvironmentSettings nofilter} {*can not escape a variable. Variable contains html code*}
-			{/if}
+
+		<div class="row flex">
+			<div class="col-lg-8">
+				{if isset($formPaymentSettings)}
+					{$formPaymentSettings nofilter} {*can not escape a variable. Variable contains html code*}
+				{/if}
+				{if isset($formMerchantAccounts)}
+					{$formMerchantAccounts nofilter} {*can not escape a variable. Variable contains html code*}
+				{/if}
+			</div>
+			<div class="col-lg-4 stretchHeightForm" id="status-block">
+				{if isset($formStatus)}
+					{$formStatus nofilter} {*can not escape a variable. Variable contains html code*}
+				{/if}
+			</div>
 		</div>
 	</div>
-
-	<div class="row flex">
-		<div class="col-lg-8">
-			{if isset($formPaymentSettings)}
-				{$formPaymentSettings nofilter} {*can not escape a variable. Variable contains html code*}
-			{/if}
-			{if isset($formMerchantAccounts)}
-				{$formMerchantAccounts nofilter} {*can not escape a variable. Variable contains html code*}
-			{/if}
-		</div>
-		<div class="col-lg-4 stretchHeightForm" id="status-block">
-			{if isset($formStatus)}
-				{$formStatus nofilter} {*can not escape a variable. Variable contains html code*}
-			{/if}
-		</div>
-	</div>
-</div>
+{/block}

@@ -38,6 +38,10 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
     public function init()
     {
+        if (\Tools::getValue('action') === 'set_sandbox_mode') {
+            \Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', (int)\Tools::getValue('sandbox_mode'));
+        }
+
         parent::init();
 
         if ((int)\Configuration::get('BRAINTREEOFFICIAL_MIGRATION_FAILED') == 1) {
@@ -49,6 +53,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
         }
 
         $this->context->smarty->assign('moduleDir', _MODULE_DIR_);
+        $this->context->smarty->assign('isModeSandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
     }
 
     public function renderForm($fields_form = null)
@@ -200,5 +205,23 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         $this->context->smarty->assign('hooks', $hooks);
         return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/unregisteredHooksMessage.tpl');
+    }
+
+    public function initPageHeaderToolbar()
+    {
+        $query = [
+            'token' => $this->token,
+            'action' => 'set_sandbox_mode',
+            'sandbox_mode' => \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1
+        ];
+        $this->page_header_toolbar_btn['switch_sandbox'] = [
+            'desc' => $this->l('Sandbox mode'),
+            'icon' => 'process-icon-toggle-' . (\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
+            'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
+            'href' => self::$currentIndex . '?' . http_build_query($query)
+        ];
+
+        parent::initPageHeaderToolbar();
+        $this->context->smarty->clearAssign('help_link');
     }
 }
