@@ -25,13 +25,18 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{include './_partials/headerLogo.tpl'}
+{extends file='./admin.tpl'}
 
-{if isset($form)}
-    {$form nofilter}   {*can not escape a variable. Variable contains html code*}
-{/if}
+{block name='content'}
+    {include './_partials/headerLogo.tpl'}
 
-{if isset($advancedForm)}
-    {$advancedForm nofilter}    {*can not escape a variable. Variable contains html code*}
-{/if}
+    {if isset($form)}
+        {$form nofilter}   {*can not escape a variable. Variable contains html code*}
+    {/if}
+
+    {if isset($advancedForm)}
+        {$advancedForm nofilter}    {*can not escape a variable. Variable contains html code*}
+    {/if}
+{/block}
+
 

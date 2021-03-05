@@ -48,7 +48,7 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
      */
     public function initContent()
     {
-        $need_rounding = (Configuration::get('PS_ROUND_TYPE') != Order::ROUND_ITEM) || (Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_DOWN);
+        $need_rounding = (Configuration::get('PS_ROUND_TYPE') != Order::ROUND_ITEM) || (Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP);
         $tpl_vars = array(
             'need_rounding' => $need_rounding,
         );

@@ -63,10 +63,6 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         $formMerchantAccounts = $this->renderForm();
         $this->clearFieldsForm();
 
-        $this->initEnvironmentSettings();
-        $formEnvironmentSettings = $this->renderForm();
-        $this->clearFieldsForm();
-
         $this->initStatusBlock();
         $formStatus = $this->renderForm();
         $this->clearFieldsForm();
@@ -75,7 +71,6 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             'formAccountSettings' => $formAccountSettings,
             'formPaymentSettings' => $formPaymentSettings,
             'formMerchantAccounts' => $formMerchantAccounts,
-            'formEnvironmentSettings' => $formEnvironmentSettings,
             'formStatus' => $formStatus,
             'showMessageAboutStateName' => (int)Configuration::get('BRAINTREEOFFICIAL_SHOW_MESSAGE_ABOUT_STATE_NAME')
 

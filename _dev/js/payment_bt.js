@@ -241,7 +241,9 @@ const BraintreeSubmitPayment = () => {
                     client: bt_client_instance,
                 }, (ThreeDSecureerror, threeDSecure) => {
                     if (ThreeDSecureerror) {
+                        let popup_message = '';
                         btnConfirmation.prop('disabled', false);
+
                         switch (ThreeDSecureerror.code) {
                             case 'THREEDS_HTTPS_REQUIRED':
                                 popup_message =  bt_translations_https;

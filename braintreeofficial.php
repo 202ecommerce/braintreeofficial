@@ -470,6 +470,7 @@ class BraintreeOfficial extends \PaymentModule
             $message = '';
             $ex_detailed_message = '';
             $capture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($braintreeOrder->id);
+
             if (Validate::isLoadedObject($capture) && !$capture->id_capture) {
                 ProcessLoggerHandler::openLogger();
                 ProcessLoggerHandler::logError(
@@ -482,8 +483,9 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
-                return true;
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
             }
+
             $status = $this->methodBraintreeOfficial->getTransactionStatus($braintreeOrder);
 
             if ($status == "submitted_for_settlement") {
@@ -498,7 +500,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
-                return true;
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&not_payed_capture=1');
             } else {
                 try {
                     $refund_response = $this->methodBraintreeOfficial->partialRefund($params);
@@ -537,6 +539,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&error_refund=1');
             }
             if ($ex_detailed_message) {
                 ProcessLoggerHandler::openLogger();
@@ -550,6 +553,7 @@ class BraintreeOfficial extends \PaymentModule
                     $braintreeOrder->sandbox
                 );
                 ProcessLoggerHandler::closeLogger();
+                Tools::redirect($_SERVER['HTTP_REFERER'].'&error_refund=1');
             }
         }
     }
@@ -894,7 +898,7 @@ class BraintreeOfficial extends \PaymentModule
     protected function getPartialRefund()
     {
         $this->context->smarty->assign('chb_braintree_refund', $this->l('Refund Braintree'));
-        return $this->context->smarty->fetch('module:braintreeofficial/views/templates/hook/partialRefund.tpl');
+        return $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'braintreeofficial/views/templates/hook/partialRefund.tpl');
     }
 
     public function hookDisplayAdminOrder($params)
@@ -986,8 +990,8 @@ class BraintreeOfficial extends \PaymentModule
 
                     foreach ($ps_order_details as $order_detail) {
                         // Switch to back order if needed
-                        $product_stock = StockAvailable::getQuantityAvailableByProduct($order_detail['product_id'], $order_detail['product_attribute_id']);
-                        if (Configuration::get('PS_STOCK_MANAGEMENT') && $product_stock <= 0) {
+                        if (Configuration::get('PS_STOCK_MANAGEMENT') &&
+                            (int)$order_detail['product_quantity'] > (int)$order_detail['product_quantity_in_stock']) {
                             $paid_state  = Configuration::get('PS_OS_OUTOFSTOCK_PAID');
                         }
                     }
@@ -1067,9 +1071,12 @@ class BraintreeOfficial extends \PaymentModule
                 $carrierFees = $this->context->cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
 
                 if ($carrierFees == 0) {
-                    $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
+                    $messageForCustomer = $this->context->smarty
+                        ->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox())
+                        ->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
                 } else {
                     $this->context->smarty->assign('carrierFees', Tools::displayPrice($carrierFees));
+                    $this->context->smarty->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox());
                     $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerTwo.tpl');
                 }
 
@@ -1252,7 +1259,8 @@ class BraintreeOfficial extends \PaymentModule
             'path' => $this->_path,
             'bt_method' => BRAINTREE_PAYPAL_PAYMENT,
             'active_vaulting'=> Configuration::get('BRAINTREEOFFICIAL_VAULTING'),
-            'show_paypal_benefits' => Configuration::get('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS')
+            'show_paypal_benefits' => Configuration::get('BRAINTREEOFFICIAL_SHOW_PAYPAL_BENEFITS'),
+            'isSandbox' => $this->methodBraintreeOfficial->isSandbox()
         ));
         if (Configuration::get('BRAINTREEOFFICIAL_VAULTING')) {
             $payment_methods = $this->serviceBraintreeOfficialVaulting->getCustomerMethods($this->context->customer->id, BRAINTREE_PAYPAL_PAYMENT);
@@ -1306,6 +1314,7 @@ class BraintreeOfficial extends \PaymentModule
             'braintreeSubmitUrl'=> $this->context->link->getModuleLink($this->name, 'validation', array(), true),
             'baseDir' => $this->context->link->getBaseLink($this->context->shop->id, true),
             'method_bt' => BRAINTREE_CARD_PAYMENT,
+            'isSandbox' => $this->methodBraintreeOfficial->isSandbox()
         ));
 
         return $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/payment_bt.tpl');

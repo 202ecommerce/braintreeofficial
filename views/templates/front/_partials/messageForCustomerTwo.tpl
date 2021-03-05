@@ -25,6 +25,10 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{if isset($isSandbox) && $isSandbox}
+    {include 'module:braintreeofficial/views/templates/front/_partials/messageSandbox.tpl'}
+{/if}
+
 <div class="alert alert-info">
     <div>
         {{l s='You have to [b]finish your payment[/b] done with your PayPal account ' mod='braintreeofficial'}|braintreereplace nofilter} {if isset($payerEmail)}{$payerEmail|escape:'htmlall':'utf-8'}{/if}

@@ -1,5 +1,5 @@
 {*
-* 2007-2020 PayPal
+* 2007-2021 PayPal
 *
 * NOTICE OF LICENSE
 *
@@ -17,24 +17,45 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author 2007-2020 PayPal
-*  @author 202 ecommerce <tech@202-ecommerce.com>
-
-*  @copyright 202-ecommerce
+*  @author 2007-2021 PayPal
+*  @copyright PayPal
 *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*
 *}
 
-{if isset($isSandbox) && $isSandbox}
-    {include 'module:braintreeofficial/views/templates/front/_partials/messageSandbox.tpl'}
+{if isset($isModeSandbox) && $isModeSandbox}
+  <style>
+    .page-head {
+      background-color: #2D489A !important;
+    }
+
+    .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn i {
+      color: #fff !important;
+    }
+
+    .bootstrap .page-head ul.breadcrumb {
+      color: #fff !important;
+    }
+
+    .bootstrap .page-head ul.page-breadcrumb li:before {
+      color: #fff !important;
+    }
+
+    .bootstrap .page-head ul.page-breadcrumb li a {
+      color: #fff !important;
+    }
+
+    .page-head .wrapper h1 {
+      color: #fff !important;
+    }
+
+    .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn {
+      color: #fff !important;
+    }
+
+
+  </style>
 {/if}
 
-<div class="alert alert-info">
-    <div>
-        {{l s='You have to [b]finish your payment[/b] done with your PayPal account ' mod='braintreeofficial'}|braintreereplace nofilter} {if isset($payerEmail)}{$payerEmail|escape:'htmlall':'utf-8'}{/if}
-    </div>
+{block name='content'}{/block}
 
-    <div>
-        {l s='by accepting the terms of service and clicking on the order validation button below.' mod='braintreeofficial'}
-    </div>
-</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * 2007-2021 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author 2007-2021 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -250,3 +250,5 @@ $_MODULE['<{braintreeofficial}prestashop>tablelogs_80fd982231bd8a721f79b5cf09735
 $_MODULE['<{braintreeofficial}prestashop>tablelogs_88427ec035734b45aae9f7d8859a5008'] = 'Transaction ID:';
 $_MODULE['<{braintreeofficial}prestashop>tablelogs_7761b2ef39506fa88f2a02bb18f00d29'] = 'Payment tools';
 $_MODULE['<{braintreeofficial}prestashop>tablelogs_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
+$_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Sandbox mode : all transactions will be fictitious';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Sandbox mode : is the test environment where you will not be able to collect any real payments';

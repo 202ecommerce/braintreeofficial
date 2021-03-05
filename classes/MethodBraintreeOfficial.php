@@ -1035,4 +1035,12 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 
         return $tplVars;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSandbox()
+    {
+        return (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+    }
 }
