@@ -30,6 +30,19 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
 {
     public function initContent()
     {
+        $isWriteCookie = false;
+
+        foreach ($this->getDefaultFilters() as $key => $value) {
+            if ($this->context->cookie->__isset($key) === false) {
+                $this->context->cookie->__set($key, $value);
+                $isWriteCookie = true;
+            }
+        }
+
+        if ($isWriteCookie) {
+            $this->context->cookie->write();
+        }
+
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
         $this->content .= parent::initContent();
         $this->context->smarty->assign('content', $this->content);
@@ -39,5 +52,12 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
     {
         parent::setMedia($isNewTheme);
         $this->addCSS(_PS_MODULE_DIR_ . $this->module->name . '/views/css/bt_admin.css');
+    }
+
+    protected function getDefaultFilters()
+    {
+        return [
+            $this->getCookieFilterPrefix() . $this->list_id . 'Filter_a!sandbox' => Configuration::get('BRAINTREEOFFICIAL_SANDBOX')
+        ];
     }
 }
