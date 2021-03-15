@@ -56,7 +56,12 @@
 		{else}
 			<span class="btn btn-default" data-toggle="modal" data-target="#credentialBlock">
 				<i class="icon-signin"></i>
-				{l s='Connect or create Braintree account' mod='braintreeofficial'}
+				{if isset($isModeSandbox) && $isModeSandbox}
+					{l s='Connect or create Sandbox Braintree account' mod='braintreeofficial'}
+				{else}
+					{l s='Connect or create Live Braintree account' mod='braintreeofficial'}
+				{/if}
+
 			</span>
 		{/if}
 
