@@ -30,6 +30,10 @@
 		{include './_partials/messageAboutStateName.tpl'}
 	{/if}
 
+	{if isset($need_rounding) && $need_rounding}
+		{include './_partials/roundingSettingsMessage.tpl'}
+	{/if}
+
 	{include './_partials/headerLogo.tpl'}
 
 	<div class="container-fluid bt__p-0">
