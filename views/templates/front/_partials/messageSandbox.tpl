@@ -25,6 +25,4 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div class="alert alert-info">
-    {l s='Sandbox mode: all transactions will be fictitious.' mod='braintreeofficial'}
-</div>
+{l s='Sandbox mode: all transactions will be fictitious.' mod='braintreeofficial'}

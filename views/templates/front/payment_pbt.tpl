@@ -27,7 +27,9 @@
 
 {if isset($isSandbox) && $isSandbox}
 	<div class="row">
-		{include 'module:braintreeofficial/views/templates/front/_partials/messageSandbox.tpl'}
+		<div class="alert alert-info">
+			{include 'module:braintreeofficial/views/templates/front/_partials/messageSandbox.tpl'}
+		</div>
 	</div>
 {/if}
 
