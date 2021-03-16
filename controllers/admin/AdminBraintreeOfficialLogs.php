@@ -28,12 +28,14 @@ require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/admin/AdminBraintr
 
 class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcessLoggerController
 {
-    public function initContent()
+    public function init()
     {
+        parent::init();
+
         $isWriteCookie = false;
 
         foreach ($this->getDefaultFilters() as $key => $value) {
-            if ($this->context->cookie->__isset($key) === false) {
+            if (Tools::isSubmit('submitFilter' . $this->list_id) === false) {
                 $this->context->cookie->__set($key, $value);
                 $isWriteCookie = true;
             }
@@ -42,7 +44,10 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
         if ($isWriteCookie) {
             $this->context->cookie->write();
         }
+    }
 
+    public function initContent()
+    {
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
         $this->content .= parent::initContent();
         $this->context->smarty->assign('content', $this->content);
