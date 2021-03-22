@@ -29,3 +29,4 @@ $_MODULE = array();
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Modo Sandbox: todas las transacciones serán ficticias';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Modo Sandbox: es el entorno de prueba en el que no podrás cobrar ningún pago real';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'La configuración de redondeo no es totalmente compatible con los requisitos de PayPal. Para evitar que algunas de las transacciones fallen, cambie el modo de redondeo de PrestaShop en [a @href1@] Preferencias > General[/a] a:';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Ajustes actualizados. Su configuración de redondeo es compatible con PayPal!';
