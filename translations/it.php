@@ -277,3 +277,7 @@ $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833f
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Modalità Sandbox: è l\'ambiente di prova dove non sarete in grado di raccogliere alcun pagamento reale';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Le vostre impostazioni di arrotondamento non sono completamente compatibili con i requisiti di PayPal. Per evitare il fallimento di alcune transazioni, cambia la modalità di arrotondamento di PrestaShop in [a @href1@] Preferenze > Generale[/a] a:';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Impostazioni aggiornate. Le tue impostazioni di arrotondamento sono compatibili con PayPal!';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Modalità circolare: \"Arrotondare lontano da zero, quando è a metà strada (consigliato) \"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Tipo tondo: \"Rotondo su ogni articolo\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Controllare i requisiti';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Modifica automatica delle impostazioni di arrotondamento';

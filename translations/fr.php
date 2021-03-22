@@ -278,3 +278,7 @@ $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833f
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Mode Sanbox:  est un environement de test sur lequel vous ne collecterez pas de paiements réels';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Vos paramètres d\'arrondi ne sont pas entièrement compatibles avec les exigences de PayPal. Afin d\'éviter que certaines transactions échouent, veuillez changer le mode d\'arrondi de PrestaShop dans [a @href1@] Préférences > Général [/a] en :';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Paramètres mis à jour. Vos paramètres d\'arrondi sont compatibles avec PayPal !';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Mode arrondi : \"Arrondir à partir de zéro, quand il est à mi-chemin (recommandé)\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Type d\'arrondi : \"Round sur chaque point\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Changement automatique des paramètres d\'arrondi';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Vérifier les exigences';

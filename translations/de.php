@@ -265,3 +265,7 @@ $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833f
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Sandbox-Modus: dies ist die Testumgebung, in der Sie keine echten Zahlungen veranlassen können';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Ihre Rundungseinstellungen sind nicht vollständig kompatibel mit den PayPal-Anforderungen. Um zu vermeiden, dass einige der Transaktionen fehlschlagen, ändern Sie bitte den PrestaShop-Rundungsmodus in [a @href1@] Einstellungen > Allgemein[/a] auf:';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Einstellungen aktualisiert. Ihre Rundungseinstellungen sind mit PayPal kompatibel!';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Runden-Modus: \"Von Null weg aufrunden, wenn es auf halbem Weg ist (empfohlen) \"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Runder Typ: \"Runde für jeden Artikel\".';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Anforderungen prüfen';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Rundungseinstellungen automatisch ändern';

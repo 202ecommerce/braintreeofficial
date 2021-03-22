@@ -259,3 +259,7 @@ $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833f
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Tryb Sandbox: jest środowiskiem testowym, w którym nie można przyjąć prawdziwych płatności';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Twoje ustawienia zaokrąglania nie są w pełni zgodne z wymaganiami PayPal. Aby uniknąć niepowodzenia niektórych transakcji, proszę zmienić tryb zaokrąglania PrestaShop w [a @href1@] Preferencje > Ogólne[/a]';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Aktualizacja ustawień. Twoje ustawienia zaokrąglania są kompatybilne z systemem PayPal!';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Tryb okrągły: \"Zaokrąglij się od zera, gdy jest w połowie drogi (zalecane)\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Okrągły typ: \"Okrągła na każdej pozycji\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Wymagania dotyczące kontroli';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Automatyczna zmiana ustawień zaokrąglania';

@@ -265,3 +265,7 @@ $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833f
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Sandbox modus: is de testomgeving waar u niet in staat zult zijn om echte betalingen te innen';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Uw afrondingsinstellingen zijn niet volledig compatibel met de PayPal-vereisten. Om te voorkomen dat sommige transacties mislukken, kunt u de PrestaShop-afrondingsmodus in [a @href1@] Voorkeuren > Algemeen[/a] wijzigen in:';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Instellingen bijgewerkt. Uw afrondingsinstellingen zijn compatibel met PayPal!';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Ronde modus: \"Rond af naar boven, weg van nul, als het halverwege is (aanbevolen)\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Rond type: \"Ronde op elk item\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Vereisten voor controle';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Automatisch afrondingsinstellingen wijzigen';

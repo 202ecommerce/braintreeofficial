@@ -30,3 +30,7 @@ $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833f
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Modo Sandbox: es el entorno de prueba en el que no podrás cobrar ningún pago real';
 $_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'La configuración de redondeo no es totalmente compatible con los requisitos de PayPal. Para evitar que algunas de las transacciones fallen, cambie el modo de redondeo de PrestaShop en [a @href1@] Preferencias > General[/a] a:';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Ajustes actualizados. Su configuración de redondeo es compatible con PayPal!';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Modo redondo: \"Redondear hacia arriba desde cero, cuando esté a mitad de camino (recomendado)\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Tipo redondo: \"Redondo en cada artículo\"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Requisitos de verificación';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Cambiar los ajustes de redondeo automáticamente';
