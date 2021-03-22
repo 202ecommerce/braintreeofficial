@@ -30,6 +30,10 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
 {
     public function init()
     {
+        if (\Tools::getValue('action') === 'set_sandbox_mode') {
+            \Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', (int)\Tools::getValue('sandbox_mode'));
+        }
+
         parent::init();
 
         $isWriteCookie = false;
@@ -50,6 +54,10 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
     {
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
         $this->content .= parent::initContent();
+        $this->content = $this->context->smarty
+            ->assign('content', $this->content)
+            ->assign('isModeSandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'))
+            ->fetch($this->getTemplatePath() . 'admin.tpl');
         $this->context->smarty->assign('content', $this->content);
     }
 
@@ -64,5 +72,23 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
         return [
             $this->getCookieFilterPrefix() . $this->list_id . 'Filter_a!sandbox' => Configuration::get('BRAINTREEOFFICIAL_SANDBOX')
         ];
+    }
+
+    public function initPageHeaderToolbar()
+    {
+        $query = [
+            'token' => $this->token,
+            'action' => 'set_sandbox_mode',
+            'sandbox_mode' => \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1
+        ];
+        $this->page_header_toolbar_btn['switch_sandbox'] = [
+            'desc' => $this->l('Sandbox mode'),
+            'icon' => 'process-icon-toggle-' . (\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
+            'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
+            'href' => self::$currentIndex . '?' . http_build_query($query)
+        ];
+
+        parent::initPageHeaderToolbar();
+        $this->context->smarty->clearAssign('help_link');
     }
 }
