@@ -263,3 +263,4 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Onmogelijk om toegang te krijgen tot API via Braintree-account?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Sandbox modus: alle transacties zijn fictief';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Sandbox modus: is de testomgeving waar u niet in staat zult zijn om echte betalingen te innen';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Uw afrondingsinstellingen zijn niet volledig compatibel met de PayPal-vereisten. Om te voorkomen dat sommige transacties mislukken, kunt u de PrestaShop-afrondingsmodus in [a @href1@] Voorkeuren > Algemeen[/a] wijzigen in:';

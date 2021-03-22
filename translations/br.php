@@ -28,3 +28,4 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Modo Sandbox : todas as transações serão fictícias';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Modo Sandbox : é o ambiente de teste onde você não será capaz de coletar nenhum pagamento real';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'As suas configurações de arredondamento não são totalmente compatíveis com os requisitos do PayPal. A fim de evitar que algumas das transacções falhem, por favor mude o modo de arredondamento PrestaShop em [a @href1@] Preferências > Geral[/a] para:';

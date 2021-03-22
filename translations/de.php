@@ -263,3 +263,4 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Der Zugriff auf die API über ein Braintree-Konto ist nicht möglich?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Sandbox-Modus: Alle Transaktionen sind rein fiktiv';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Sandbox-Modus: dies ist die Testumgebung, in der Sie keine echten Zahlungen veranlassen können';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Ihre Rundungseinstellungen sind nicht vollständig kompatibel mit den PayPal-Anforderungen. Um zu vermeiden, dass einige der Transaktionen fehlschlagen, ändern Sie bitte den PrestaShop-Rundungsmodus in [a @href1@] Einstellungen > Allgemein[/a] auf:';

@@ -276,3 +276,4 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Impossible d\'accéder à l\'API via le compte Braintree?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Mode Sanbox: Toutes les transactions seront fictives';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Mode Sanbox:  est un environement de test sur lequel vous ne collecterez pas de paiements réels';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Vos paramètres d\'arrondi ne sont pas entièrement compatibles avec les exigences de PayPal. Afin d\'éviter que certaines transactions échouent, veuillez changer le mode d\'arrondi de PrestaShop dans [a @href1@] Préférences > Général [/a] en :';

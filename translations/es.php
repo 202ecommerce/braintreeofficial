@@ -275,3 +275,4 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = '¿Es imposible acceder a la API a través de la cuenta Braintree?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Modo Sandbox: todas las transacciones serán ficticias';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Modo Sandbox: es el entorno de prueba en el que no podrás cobrar ningún pago real';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'La configuración de redondeo no es totalmente compatible con los requisitos de PayPal. Para evitar que algunas de las transacciones fallen, cambie el modo de redondeo de PrestaShop en [a @href1@] Preferencias > General[/a] a:';

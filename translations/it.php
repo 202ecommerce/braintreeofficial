@@ -275,3 +275,4 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Impossibile accedere all\'API tramite l\'account Braintree?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Modalità Sandbox: tutte le transazioni saranno fittizie';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Modalità Sandbox: è l\'ambiente di prova dove non sarete in grado di raccogliere alcun pagamento reale';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Le vostre impostazioni di arrotondamento non sono completamente compatibili con i requisiti di PayPal. Per evitare il fallimento di alcune transazioni, cambia la modalità di arrotondamento di PrestaShop in [a @href1@] Preferenze > Generale[/a] a:';

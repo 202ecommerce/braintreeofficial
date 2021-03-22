@@ -257,3 +257,4 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Nie można uzyskać dostępu do interfejsu API za pośrednictwem konta Braintree?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Tryb Sandbox: wszystkie transakcje będą fikcyjne';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Tryb Sandbox: jest środowiskiem testowym, w którym nie można przyjąć prawdziwych płatności';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Twoje ustawienia zaokrąglania nie są w pełni zgodne z wymaganiami PayPal. Aby uniknąć niepowodzenia niektórych transakcji, proszę zmienić tryb zaokrąglania PrestaShop w [a @href1@] Preferencje > Ogólne[/a]';
