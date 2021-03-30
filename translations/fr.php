@@ -17,7 +17,7 @@
  *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
- *
+ *  
  *  @author 2007-2021 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
@@ -298,3 +298,29 @@ $_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_0fcaf0531dd6d
 $_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_4f927595c36cb935133b3315e35c7cf8'] = 'Il est recommandé d\'utiliser le raccourci \"Paiement express\" à l\'étape \"S\'inscrire\" de la commande pour permettre à votre client de sauter le formulaire \"S\'inscrire\" sur votre site web. Toutes les informations, y compris l\'adresse de livraison, seront fournies par PayPal';
 $_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_b29281296165d65c9c816c2ed17e5109'] = 'Étape d\'inscription au checkout';
 $_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_e028b0667d313a0f1f687ca774141c4e'] = 'Les raccourcis PayPal permettent à vos acheteurs de passer plus rapidement à la caisse. PayPal vous fournit automatiquement les informations d\'expédition et de facturation du client.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_1c1c788e139b8d1574de72746183ed0f'] = 'Mode Avancé';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialhelp_09a74d0b7e593735e8f2ed964e25bc52'] = 'Hooks enregistrés avec succès';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficiallogs_b38308023e216ac4faf73789566556c2'] = 'Mode Sandbox:  est un environement de test sur lequel vous ne collecterez pas de paiements réels';
+$_MODULE['<{braintreeofficial}prestashop>shortcut_7ff5bcd1a7dd3e2dc15e69b90babcfde'] = 'L\'État est nécessaire pour traiter le paiement. Veuillez remplir le champ \"État\".';
+$_MODULE['<{braintreeofficial}prestashop>shortcut_7afff0211446b3c00496c44b41bd634b'] = 'Country is not active';
+$_MODULE['<{braintreeofficial}prestashop>adminprocessloggercontroller_53c6a96a3df980c3270d6ed82b6f174b'] = 'Souhaitez-vous supprimer les objets sélectionnés ?';
+$_MODULE['<{braintreeofficial}prestashop>adminprocessloggercontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Mise à jour réussie.';
+$_MODULE['<{braintreeofficial}prestashop>accountsettingsblock_8e9b716ad968b216a76bb7df754a1bf4'] = 'Connexion ou ouverture d\'un compte Braintree Sandbox';
+$_MODULE['<{braintreeofficial}prestashop>accountsettingsblock_d2a4f40bdb5a355bd8ea72551f6098b2'] = 'Connexion ou ouverture d\'un compte Braintree Live';
+$_MODULE['<{braintreeofficial}prestashop>unregisteredhooksmessage_8855bfb68164e4dfb070572ac3bf62d5'] = 'Le module ne dispose pas des hooks suivants :';
+$_MODULE['<{braintreeofficial}prestashop>unregisteredhooksmessage_84bb5767918a71a8d7451f116c681857'] = 'Installez automatiquement les hooks requis';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_4a7c47c43f11a84f00ea356680340c92'] = 'Protection';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_222db556d9db248f0406ec5695717eb8'] = 'Protection des Achats et Frais de retour remboursés sur les achats éligibles.';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_8024391592accadb8810eaade5005a3f'] = 'Simplicité et commodité';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_e2573418ae8a569caa6bede5e34f8b51'] = 'Payez rapidement depuis n\'importe quel appareil sans renseigner vos coordonnées bancaires.';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f2259814'] = 'Sécurité';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Plus besoin de saisir vos coordonnées bancaires. PayPal sécurise vos données.';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Achats à l\'international';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_00c7db87517f39cbfdd3ca757e547bc8'] = 'Utilisez votre compte pour vos achats partout dans le monde.';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Vous devez [b]finaliser votre paiement[/b] effectué avec votre compte PayPal ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_b3e985da8b5a176abfb74c4c1ca960f9'] = 'en acceptant les conditions d\'utilisation et en cliquant sur le bouton de validation de commande ci-dessous.';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Vous devez [b]finaliser votre paiement[/b] effectué avec votre compte PayPal ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176abfb74c4c1ca960f9'] = 'en acceptant les conditions d\'utilisation et en cliquant sur le bouton de validation de commande ci-dessous.';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Des frais de livraison supplémentaires (%1s) ont été appliqués. Pour en savoir plus, consultez le récapitulatif de votre commande.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Payer avec PayPal Express Checkout';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0463c4b558f28024f257915c2c0d4057'] = 'Raccourci PayPal Option+ activé';
