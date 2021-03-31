@@ -34,6 +34,8 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
             \Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', (int)\Tools::getValue('sandbox_mode'));
         }
 
+        $this->page_header_toolbar_title = $this->l('Logs');
+
         parent::init();
     }
 
