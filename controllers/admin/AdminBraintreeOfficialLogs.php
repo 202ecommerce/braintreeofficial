@@ -35,6 +35,13 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
         }
 
         parent::init();
+    }
+
+    public function processFilter()
+    {
+        if (Tools::isSubmit('submitFilter' . $this->list_id)) {
+           return parent::processFilter();
+        }
 
         $isWriteCookie = false;
 
@@ -48,6 +55,8 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
         if ($isWriteCookie) {
             $this->context->cookie->write();
         }
+
+        $this->_filter = sprintf(' AND a.`sandbox` = %d ', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
     }
 
     public function initContent()
