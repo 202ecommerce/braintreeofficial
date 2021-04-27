@@ -153,7 +153,7 @@ $_MODULE['<{braintreeofficial}prestashop>formaccount_6eb9040e470e8018db394832a52
 $_MODULE['<{braintreeofficial}prestashop>formaccount_229a7ec501323b94db7ff3157a7623c9'] = 'Klucz prywatny';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] = 'Centrum testowe';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Uaktywnij moduł Braintree, aby uzyskać lepszą konwersję na urządzeniach mobilnych i wszystkich platformach w ponad 45 krajach';
-$_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Activate it in 4 easy steps';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Uaktywnij w 4 prostych krokach';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Powiąż istniejące konto Braintree lub utwórz nowe';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Włącz funkcję płatności kartą kredytową lub za pomocą portfela PayPal';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_dfe4283340c6369e764585c747cbd74a'] = 'Dostosuj ustawienia płatności, aby błyskawicznie pobierać płatności (Sprzedaż) lub po potwierdzeniu zamówienia (Autoryzacja)';
