@@ -61,6 +61,30 @@ const setupAdmin = {
     $('.defaultForm').on('mouseleave', (e) => {
       $(e.currentTarget).removeClass('bt-settings-link-on');
     });
+
+    $('[data-update-rounding-settings]').on('click', (e) => {
+      setupAdmin.updateRoundingSettings(e);
+    });
+  },
+
+  updateRoundingSettings(el) {
+    $.ajax({
+      url: controllerUrl,
+      type: 'POST',
+      data: {
+        ajax: true,
+        action: 'UpdateRoundingSettings',
+      },
+
+      success(response) {
+        let $alert = $(el.currentTarget).closest('[data-rounding-alert]');
+        if ($alert.length > 0) {
+          $alert.removeClass('alert-warning').addClass('alert-success');
+          $alert.html(response);
+          setTimeout(() => $alert.remove(), 5000);
+        }
+      },
+    });
   },
 
   logoutAccount(element) {

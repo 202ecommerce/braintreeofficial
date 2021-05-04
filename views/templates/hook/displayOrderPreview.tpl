@@ -1,5 +1,5 @@
 {*
-* 2007-2020 PayPal
+* 2007-2019 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -17,12 +17,18 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author 2007-2020 PayPal
-*  @author 202 ecommerce <tech@202-ecommerce.com>
-
-*  @copyright 202-ecommerce
+*  @author 2007-2019 Braintreeofficial
+ *  @author 202 ecommerce <tech@202-ecommerce.com>
+*  @copyright Braintreeofficial
 *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*
 *}
 
-{l s='Sandbox mode: all transactions will be fictitious.' mod='braintreeofficial'}
+
+<div>
+  <b>{l s='Braintreeofficial Transaction ID' mod='braintreeofficial'}:</b> {if isset($log)}{$log->id_transaction|escape:'html':'utf-8'}{/if}
+</div>
+
+<div>
+  <b>{l s='Last Logs Details' mod='braintreeofficial'}:</b> {if isset($log)}{$log->log|escape:'html':'utf-8'}{/if}
+</div>

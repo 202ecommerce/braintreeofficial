@@ -52,8 +52,48 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             $this->warnings[] = $message;
         }
 
+        $need_rounding = false;
+
+        if (\Configuration::get('PS_ROUND_TYPE') != \Order::ROUND_ITEM
+            || \Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP
+            || \Configuration::get('PS_PRICE_DISPLAY_PRECISION') != 2) {
+            $need_rounding = true;
+        }
+
+        $this->context->smarty->assign('need_rounding', $need_rounding);
         $this->context->smarty->assign('moduleDir', _MODULE_DIR_);
         $this->context->smarty->assign('isModeSandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+    }
+
+    public function displayAjaxUpdateRoundingSettings()
+    {
+        \Configuration::updateValue(
+            'PS_ROUND_TYPE',
+            '1',
+            false,
+            null,
+            (int) $this->context->shop->id
+        );
+
+        \Configuration::updateValue(
+            'PS_PRICE_ROUND_MODE',
+            '2',
+            false,
+            null,
+            (int) $this->context->shop->id
+        );
+
+        \Configuration::updateValue(
+            'PS_PRICE_DISPLAY_PRECISION',
+            '2',
+            false,
+            null,
+            (int) $this->context->shop->id
+        );
+
+        $message = $this->module->l('Settings updated. Your rounding settings are compatible with PayPal!', 'AdminBraintreeOfficialController');
+
+        $this->ajaxDie($message);
     }
 
     public function renderForm($fields_form = null)

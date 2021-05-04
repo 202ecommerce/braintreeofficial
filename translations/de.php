@@ -17,7 +17,7 @@
  *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
- *
+ *  
  *  @author 2007-2021 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
@@ -263,3 +263,51 @@ $_MODULE['<{braintreeofficial}prestashop>help_5c4a03273ee4e687ae2547a2416f59c0']
 $_MODULE['<{braintreeofficial}prestashop>formaccount_5c4a03273ee4e687ae2547a2416f59c0'] = 'Der Zugriff auf die API über ein Braintree-Konto ist nicht möglich?';
 $_MODULE['<{braintreeofficial}prestashop>messagesandbox_e8fdd95502f3d9eef321833fe60aed0c'] = 'Sandbox-Modus: Alle Transaktionen sind rein fiktiv';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_b38308023e216ac4faf73789566556c2'] = 'Sandbox-Modus: dies ist die Testumgebung, in der Sie keine echten Zahlungen veranlassen können';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettingsmessage_89cf2180690c10af20c8ebc29a1da518'] = 'Ihre Rundungseinstellungen sind nicht vollständig kompatibel mit den PayPal-Anforderungen. Um zu vermeiden, dass einige der Transaktionen fehlschlagen, ändern Sie bitte den PrestaShop-Rundungsmodus in [a @href1@] Einstellungen > Allgemein[/a] auf:';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_31fa93f80722eee634318801ffb7ee07'] = 'Einstellungen aktualisiert. Ihre Rundungseinstellungen sind mit PayPal kompatibel!';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_e287d4ed564774c343fdaf3bd1494ad6'] = 'Runden-Modus: \"Von Null weg aufrunden, wenn es auf halbem Weg ist (empfohlen) \"';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_27a3066cd34cd1e683f1c2d04483163a'] = 'Runder Typ: \"Runde für jeden Artikel\".';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Anforderungen prüfen';
+$_MODULE['<{braintreeofficial}prestashop>roundingsettings_f1aea93e3ab1791e7f651b86c1448797'] = 'Rundungseinstellungen automatisch ändern';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_3aebc542a79474bc605a817e922f5bca'] = 'Die Konversionsrate ist höher, wenn die Verknüpfung auf den Produkt- und Warenkorbseiten aktiviert ist.';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_9ea7203ee664db16559a83527d34603d'] = 'Das Aktivieren von Express Checkout Shortcut auf der Cart-Seite wird nur in bestimmten Fällen empfohlen:';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_e43b383bac9da2ce22d16d1c84837fe3'] = 'Multi-Produkte-Websites';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_b976e0d487633ff9cc2db29c8efdaff4'] = 'Das Aktivieren der Express Checkout Shortcut auf Produktseiten wird nur in bestimmten Fällen empfohlen:';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_ba4e9bd62a4353178099c21e91bc1a97'] = '- Mono-Produkt';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_3ca1de1bdbb069e15f2e6b2da081ca32'] = 'Digitale Güter';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_81eeab9506186e2dca8faefa78d54067'] = 'beispiel:';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_9b225b71f142b09f7955060e23d9f3ed'] = 'Parkplatzvermietung';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_81325ec58e0ddf0c0687678c8980622e'] = 'Flucht Spielreservierung';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_bb755380e0e58acace05c472c60b7991'] = 'Buchungsservice';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_b401397858880fcfe0c8da19133356cd'] = 'Einzelproduktverkauf';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_468a21d1076328f1b4cd946b72e2d5cd'] = 'Cart Page';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_0fcaf0531dd6d6a53f7bde67adafd035'] = 'Produktseiten';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_4f927595c36cb935133b3315e35c7cf8'] = 'Die Express-Kassenabkürzung beim Schritt \"Anmelden\" in der Kasse wird empfohlen, damit Ihr Kunde das \"Anmelden\"-Formular auf Ihrer Website überspringen kann. Alle Informationen, einschließlich der Lieferadresse, werden von PayPal zur Verfügung gestellt.';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_b29281296165d65c9c816c2ed17e5109'] = 'Anmelden Schritt in der Kasse';
+$_MODULE['<{braintreeofficial}prestashop>blockpreviewbuttoncontext_e028b0667d313a0f1f687ca774141c4e'] = 'PayPal-Abkürzungen ermöglichen eine schnellere Kaufabwicklung für Ihre Käufer. PayPal stellt Ihnen automatisch die Versand- und Rechnungsinformationen des Kunden zur Verfügung.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_1c1c788e139b8d1574de72746183ed0f'] = 'Erweiterter Modus';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialhelp_09a74d0b7e593735e8f2ed964e25bc52'] = 'Hooks erfolgreich registriert';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficiallogs_b38308023e216ac4faf73789566556c2'] = 'Sandbox-Modus: dies ist die Testumgebung, in der Sie keine echten Zahlungen veranlassen können';
+$_MODULE['<{braintreeofficial}prestashop>shortcut_7ff5bcd1a7dd3e2dc15e69b90babcfde'] = 'Der Staat ist für die Abwicklung der Zahlung erforderlich. Bitte Staatsfeld ausfüllen.';
+$_MODULE['<{braintreeofficial}prestashop>shortcut_7afff0211446b3c00496c44b41bd634b'] = 'El país no está activo';
+$_MODULE['<{braintreeofficial}prestashop>adminprocessloggercontroller_53c6a96a3df980c3270d6ed82b6f174b'] = 'Möchten Sie die ausgewählten Artikel löschen?';
+$_MODULE['<{braintreeofficial}prestashop>adminprocessloggercontroller_b4a34d3f58b039e7685c2e39b5413757'] = 'Erfolgreich aktualisiert.';
+$_MODULE['<{braintreeofficial}prestashop>accountsettingsblock_8e9b716ad968b216a76bb7df754a1bf4'] = 'Braintree-Konto Sandbox verknüpfen oder erstellen';
+$_MODULE['<{braintreeofficial}prestashop>accountsettingsblock_d2a4f40bdb5a355bd8ea72551f6098b2'] = 'Braintree-Konto Live verknüpfen oder erstellen';
+$_MODULE['<{braintreeofficial}prestashop>unregisteredhooksmessage_8855bfb68164e4dfb070572ac3bf62d5'] = 'Das Modul ist nicht mit den folgenden Hooks registriert:';
+$_MODULE['<{braintreeofficial}prestashop>unregisteredhooksmessage_84bb5767918a71a8d7451f116c681857'] = 'Die erforderlichen Hooks automatisch installieren';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_4a7c47c43f11a84f00ea356680340c92'] = 'Schutz';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_222db556d9db248f0406ec5695717eb8'] = 'Berechtigte Käufe sind durch unseren Käuferschutz und Kostenlose Retouren abgedeckt. ';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_8024391592accadb8810eaade5005a3f'] = 'Benutzerfreundlichkeit und Komfort';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_e2573418ae8a569caa6bede5e34f8b51'] = 'Bezahlen Sie schnell auf einem beliebigen Gerät – ohne Eingabe von Zahlungsdaten.';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f2259814'] = 'Sicherheit';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Bei PayPal bleiben Ihre Zahlungsdaten geschützt.';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Weltweit shoppen';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_00c7db87517f39cbfdd3ca757e547bc8'] = 'Bezahlen Sie für Ihre Einkäufe in der ganzen Welt mit einem einzigen Konto.';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Sie müssen die mit Ihrem PayPal-Konto getätigte [b]Zahlung abschließen[/b]';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_b3e985da8b5a176abfb74c4c1ca960f9'] = 'indem Sie die Nutzungsbedingungen akzeptieren und auf den nachstehenden Button zur Bestätigung der Bestellung klicken.';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Sie müssen die mit Ihrem PayPal-Konto getätigte [b]Zahlung abschließen[/b]';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176abfb74c4c1ca960f9'] = 'indem Sie die Nutzungsbedingungen akzeptieren und auf den nachstehenden Button zur Bestätigung der Bestellung klicken.';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Beachten Sie, dass die zusätzlichen Versandkosten (%1s) berücksichtigt wurden. Weitere Informationen finden Sie in der Bestellübersicht.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Mit PayPal Express Checkout zahlen';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0463c4b558f28024f257915c2c0d4057'] = 'Verknüpfung von PayPal Express-Checkout auf';

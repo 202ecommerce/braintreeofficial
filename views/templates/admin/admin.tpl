@@ -57,5 +57,9 @@
   </style>
 {/if}
 
-{block name='content'}{/block}
+{block name='content'}
+  {if isset($content)}
+    {$content nofilter}
+  {/if}
+{/block}
 

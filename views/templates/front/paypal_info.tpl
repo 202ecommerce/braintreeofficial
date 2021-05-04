@@ -35,20 +35,20 @@
 		</div>
 		<div class="col-md-6 item bt__mb-3">
 			{include file='module:braintreeofficial/views/templates/front/_partials/language.tpl'}
-			<div class="header bt__pt-1">{l s='Simple and convenient' mod='braintreeofficial'}</div>
-			<div class="desc bt__pt-1">{l s='Skip entering your financial info and prefered address to pay even faster.' mod='braintreeofficial'}</div>
+			<div class="header bt__pt-1">{l s='No additional fees' mod='braintreeofficial'}</div>
+			<div class="desc bt__pt-1">{l s='Free to open account and only conversion fees.' mod='braintreeofficial'}</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6 item bt__mb-3">
 			{include file='module:braintreeofficial/views/templates/front/_partials/offline_bolt.tpl'}
-			<div class="header bt__pt-1">{l s='Wherever you are' mod='braintreeofficial'}</div>
-			<div class="desc bt__pt-1">{l s='Local Payment Methods according to your country and purchase.' mod='braintreeofficial'}</div>
+			<div class="header bt__pt-1">{l s='Simple and convenient' mod='braintreeofficial'}</div>
+			<div class="desc bt__pt-1">{l s='Skip entering your financial info and prefered address to pay even faster.' mod='braintreeofficial'}</div>
 		</div>
 		<div class="col-md-6 item bt__mb-3">
-			{include file='module:braintreeofficial/views/templates/front/_partials/monetization.tpl'}
-			<div class="header bt__pt-1">{l s='No additional fees' mod='braintreeofficial'}</div>
-			<div class="desc bt__pt-1">{l s='Free to open account and only conversion fees.' mod='braintreeofficial'}</div>
+			<div><img src="{$urls.base_url}modules/braintreeofficial/views/img/advantage-logos/verified_user.png" alt=""></div>
+			<div class="header bt__pt-1">{l s='Wherever you are' mod='braintreeofficial'}</div>
+			<div class="desc bt__pt-1">{l s='Local Payment Methods according to your country and purchase.' mod='braintreeofficial'}</div>
 		</div>
 	</div>
 </div>
