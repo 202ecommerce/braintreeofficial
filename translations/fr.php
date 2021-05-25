@@ -17,7 +17,7 @@
  *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
- *  
+ *
  *  @author 2007-2021 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
@@ -100,7 +100,7 @@ $_MODULE['<{braintreeofficial}prestashop>payment_bt_3577373cfda5984b72cf6f2600c1
 $_MODULE['<{braintreeofficial}prestashop>help_36fa766632c19d12daab0318a5378569'] = 'Consultez la documentation sur le module avant la configuration.';
 $_MODULE['<{braintreeofficial}prestashop>help_75c6032cb79c126cd7ad4aaa2469f421'] = 'Accédez à la documentation utilisateur pour configurer un module.';
 $_MODULE['<{braintreeofficial}prestashop>help_9625801606eda3de0ebae69af5a228c9'] = 'Vérifiez les conditions avant l\'installation.';
-$_MODULE['<{braintreeofficial}prestashop>help_f35d8b1b4d456f4f4951b537257b76de'] = 'Utilisez-vous la version TLS requise ? Avez-vous sélectionné un pays par défaut ? Cliquez sur le bouton ci-dessous et vérifiez que toutes les conditions sont remplies.';
+$_MODULE['<{braintreeofficial}prestashop>help_f35d8b1b4d456f4f4951b537257b76de'] = 'Utilisez-vous la version TLS requise ? Avez-vous sélectionné un pays par défaut ? Cliquez sur le bouton ci-dessous et vérifiez si toutes les conditions sont remplies !';
 $_MODULE['<{braintreeofficial}prestashop>help_432d66b8d9f1c4c595ab6089c5603f8a'] = 'Vérifier les conditions';
 $_MODULE['<{braintreeofficial}prestashop>help_65e1cf4f647dd88b686d86bbaee3a792'] = 'Découvrez plus de détails';
 $_MODULE['<{braintreeofficial}prestashop>help_1424e5d76b0e3801869d7a836bd0665f'] = 'Avez-vous d\'autres questions ?';
@@ -150,16 +150,16 @@ $_MODULE['<{braintreeofficial}prestashop>formaccount_9ff77bd3d61cd4ed209293283ef
 $_MODULE['<{braintreeofficial}prestashop>formaccount_8258080b2001c14b75014329dbb07ed4'] = 'Cliquez sur API.';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_ce98ec2f851e8f9d5ee87f124326a3a3'] = 'Cliquez sur Générer une nouvelle clé API.';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_b322bce65e09c6719fbe8c0f0b2a30c2'] = 'Cliquez sur Afficher dans la colonne Clé privée.';
-$_MODULE['<{braintreeofficial}prestashop>formaccount_b019ab576a27965f2ecf7ed2129ea0a6'] = 'Copiez vos Clé privée, Clé publique et Identifiant marchand, puis collez-les ci-dessous :';
+$_MODULE['<{braintreeofficial}prestashop>formaccount_b019ab576a27965f2ecf7ed2129ea0a6'] = 'Copiez votre \"Private Key\", \"Public Key\" et \"Merchant ID\" et collez-les ci-dessous :';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_d69368e9f10df3cdfab518814ee99ccd'] = 'Pour récupérer les clés API d\'environnement de test, répétez les étapes en vous connectant au [a @href1@]compte d\'environnement de test[/a] ou en en ouvrant [a @href2@]un[/a] nouveau.';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_955ad3298db330b5ee880c2c9e6f23a0'] = 'Production';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_ed6445336472aef39084720adcf903b9'] = 'Clé publique';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_6eb9040e470e8018db394832a528f56a'] = 'Clé privée';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_229a7ec501323b94db7ff3157a7623c9'] = 'Identifiant marchand';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] = 'Environnement de test';
-$_MODULE['<{braintreeofficial}prestashop>headerlogo_7837b4f9a9d71dad679da95a4b6acc68'] = 'Remarque : dans le cadre de la réglementation européenne PSD2 et de l\'application de la SCA (authentification client forte) prévue le 14 septembre 2019, toutes les transactions devront passer par une SCA (3DS 2.0) dans le but de réduire la friction (moins de « challenges clients ») tout en augmentant la conversion et la protection des marchands (davantage de transferts de responsabilités du marchand à la banque en cas d\'impayés).';
-$_MODULE['<{braintreeofficial}prestashop>headerlogo_5d1d0421b5327a04398f44c8e21689c0'] = 'Il est donc recommandé d\'activer le 3D Secure afin d\'éviter le refus des banques et l\'impact sur votre activité. (Allez dans \"Customize Experience Checkout\")';
-$_MODULE['<{braintreeofficial}prestashop>headerlogo_f5931ff1a89c64d01f26943e3eb09ce2'] = 'Plus d\'informations dans l\'article de notre blog [b]pour connaitre les dernières mises à jour :[/b]';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_7837b4f9a9d71dad679da95a4b6acc68'] = 'Note : Dans le cadre du règlement européen PSD2 et de la SCA (Strong Customer Authentication) prévue le 14 septembre 2019, toutes les transactions devront passer par la SCA (3DS 2.0) dans le but de réduire les frictions (moins de \" défis clients \") tout en augmentant la conversion et la protection (plus de responsabilités transférées du commerçant à la banque).';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_5d1d0421b5327a04398f44c8e21689c0'] = 'Il est donc recommandé d\'activer 3D Secure afin d\'éviter les refus des banques et l\'impact sur votre activité. (Aller à \"Personnaliser l\'expérience de paiement\")';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_f5931ff1a89c64d01f26943e3eb09ce2'] = 'Plus d\'informations dans notre blog [b]pour obtenir les dernières mises à jour :[/b]';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Activer le module Braintree pour augmenter le taux de conversion sur mobile et sur toutes les plateformes dans plus de 45 pays';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Activation en 4 étapes simples';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Connectez-vous à votre compte Braintree existant ou ouvrez-en un nouveau';
@@ -324,3 +324,47 @@ $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176ab
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Des frais de livraison supplémentaires (%1s) ont été appliqués. Pour en savoir plus, consultez le récapitulatif de votre commande.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Payer avec PayPal Express Checkout';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0463c4b558f28024f257915c2c0d4057'] = 'Raccourci PayPal Option+ activé';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_4022b37ecfd048665e5e9ad9970fa480'] = 'L\'authentification n\'a pas abouti pour cette transaction. Veuillez essayer une autre carte ou un autre mode de paiement.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_7c77412d0974cacfd9242eeb61d4aea8'] = 'Authentification manquante pour cette transaction.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e2ce09f82546271b7b2d63f9a4afd8cf'] = 'Paiement autorisé : en attente de la validation du paiement par l\'administrateur';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_875bc752dba4f654dfd38fa938eac745'] = 'Paiement autorisé : Règlement';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_eb56e5649f7b0b442965c0a466079c11'] = 'Traitement du paiement (autorisé)';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_9b9cf9f8778f69b4c6cf37e66f886be8'] = 'Choisir le statut';
+$_MODULE['<{braintreeofficial}prestashop>methodbraintreeofficial_e2c2115f715f55eed84f02ad2d59ce6e'] = 'Échec de la vérification de la carte.';
+$_MODULE['<{braintreeofficial}prestashop>methodbraintreeofficial_5c4b3cb9f38b6b3fefc1474013aef10c'] = 'La vérification de la carte a échoué. ';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_3af189380b08a0a9253eab40bda1255f'] = 'Le raccourci PayPal s\'affiche directement sur votre panier ou sur vos pages de produits, permettant ainsi un règlement plus rapide pour vos acheteurs. PayPal vous fournit les informations d\'expédition et de facturation du client afin que vous n\'ayez pas à les collecter vous-même.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_4527171fdf857e51b69b704f3738ad8c'] = 'Vous pouvez personnaliser le statut de vos commandes pour chaque action possible dans le module Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_18eaca809be3d20e366fbdf5c0d7be8d'] = 'Personnaliser le statut de votre commande';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_f4ea2662bb04c2cb311b512c45445800'] = 'Veuillez utiliser cette option uniquement si vous souhaitez modifier le statut Braintree attribué par défaut sur les statuts de commande PrestaShop.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_2ce328247e31561d8aa166935f96d52e'] = 'Statut de commande pour déclencher le remboursement sur Braintree';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_06d07ae08ca4b3322b3d451d1dfc0b29'] = 'Vous pouvez rembourser les commandes payées via Braintree directement via votre BackOffice PrestaShop. Ici, vous pouvez choisir le statut de commande qui déclenche le remboursement sur Braintree. Choisissez l\'option \" aucune action \" si vous souhaitez modifier le statut de la commande sans déclencher le remboursement automatique sur Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0f9907c62d585faaab3efaf95a3406ac'] = 'Statut par défaut : Remboursé';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_d4fd947f41ad532e2aed97227a6d3c8d'] = 'Statut de la commande pour déclencher l\'annulation sur Braintree';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_aa3640c3f45917224dd43927babde10d'] = 'Vous pouvez annuler les commandes payées via Braintree directement via votre BackOffice PrestaShop. Ici, vous pouvez choisir le statut de commande qui déclenche l\'annulation sur Braintree d\'une transaction autorisée sur Braintree. Choisissez l\'option \" aucune action \" si vous souhaitez modifier le statut de la commande sans déclencher l\'annulation automatique sur Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_afe70387e87a03e074c3181a5b7ecb36'] = 'Statut par défaut : Annulé';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_ec4cac4c0bacfd35e3d43612313ae182'] = 'Paiement accepté via BO (appelez Braintree pour obtenir le paiement)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_36500501ab89967d20b1beb686880d44'] = 'Vous utilisez actuellement le mode Authorize. Cela signifie que vous séparez l\'autorisation de paiement de la capture du paiement autorisé. Pour capturer le paiement autorisé, vous devez changer le statut de la commande en \"paiement accepté\" (ou en un statut personnalisé ayant la même signification). Vous pouvez choisir ici un statut de commande personnalisé pour accepter la commande et valider la transaction en mode Autorisation.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_c6a9094c053f62817cf82c904082378e'] = 'Statut par défaut : Paiement accepté';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_59e368bdd40762ae549cd4f03632ac17'] = 'Paiement annulé via BO (appelez Braintree pour annuler la capture)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_06a4ae63012b5b989e7a3f0fd114633f'] = 'Vous utilisez actuellement le mode Authorize. Cela signifie que vous séparez l\'autorisation de paiement de la capture du paiement autorisé. Pour annuler le paiement autorisé, vous devez changer le statut de l\'ordre en \"annulé\" (ou en un statut personnalisé ayant la même signification). Vous pouvez choisir ici un statut de commande pour annuler la commande et annuler la transaction en mode autorisation.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_5981855556d6acfd044f87984094e280'] = 'Paiement accepté et transaction terminée';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0b7c5cc010e7c726fa125810260867e6'] = 'Traitement du paiement (paiements par PayPal)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_4e1a6b58fc408346e6876e3a1d2af523'] = 'La transaction payée par carte peut être dans le statut en attente. Si le paiement est en cours de traitement, la commande sera créée dans le statut temporaire.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_fa9a988a9cdebe7623df9ff15e6b05cc'] = 'Statut par défaut : Paiement en cours de traitement (autorisé)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_eb2f62cdeec105b063736e28ceab803e'] = 'Paiement en attente (autorisé)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_e7bd38ae75a2636fd50d1c01521e39fe'] = 'Vous utilisez actuellement le mode Autorisation. Cela signifie que vous séparez l\'autorisation du paiement de la capture du paiement autorisé. Par défaut, les commandes seront créées dans le statut \"Paiement en attente (autorisé)\" mais vous pouvez le personnaliser si nécessaire.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_73da52ef2c981727c0b7b1e509bef3b2'] = 'Statut par défaut : Paiement en attente (autorisé)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialsetup_73c04cacf3c7c4c7b910fa0cf60284b3'] = 'ID de compte marchand invalide. Veuillez vérifier l\'identité de votre compte marchand pour ';
+$_MODULE['<{braintreeofficial}prestashop>validation_3e48dc3333a33baac2d50a41f0ff761c'] = 'Votre paiement a été refusé : veuillez réessayer ou utiliser une autre méthode de paiement.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelpone_f414f3bfb8e35611b826e79c330ff15d'] = 'Vous trouverez ci-dessous la liste des statuts des commandes pour le déclenchement d\'actions sur Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelpone_84e201d65b580243e5dde39a9fb51361'] = 'Certaines actions manuelles déclenchent des événements du côté de Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelpone_658bc31b9d8e2107b78eb4057df02721'] = 'Ex : Vous mettez à jour le statut de la commande en \"remboursé\". Cette action déclenche un remboursement automatique sur Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelptwo_8455ff28f7ca73a59e990749a7f4b1d6'] = 'Il est également possible de personnaliser le statut par défaut des commandes créées via Braintree. Vous trouverez ci-dessous la liste des différents cas et le statut de commande correspondant.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelptwo_06393d7bb6f3fb29efee8938c7cd2f6d'] = 'Ex : Si la transaction est terminée, une commande sera créée sur PrestaShop. Par défaut, le statut de commande \"Paiement accepté\" est appliqué pour toutes les transactions terminées.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelptwo_5a5a6c0531d6207c84a2ce8d0f99b74f'] = 'Vous pouvez gérer le statut de la commande ci-dessous :';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_795c499e9f55a65060a3362962dc5a6a'] = 'Veuillez noter que certains statuts de commande ont été renommés pour améliorer l\'expérience utilisateur de vos clients :';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_66f878505a7b8018544ae58721dd3769'] = 'Ancien nom de statut : \"En attente du paiement Braintree\" -> Nouveau nom de statut de commande : [b]\"Paiement en attente (autorisé)\"[/b] - Ce statut est utilisé si vous utilisez l\'action de paiement \"Authorize\".';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_9bb4c85a45bcd86e70bac5a3761f850d'] = 'Il signifie que le processeur a autorisé la transaction. Votre client peut voir un débit en attente sur son compte. Toutefois, avant que le client ne soit effectivement débité et avant que vous ne receviez les fonds, vous devez soumettre la transaction pour règlement (c\'est-à-dire que vous devez modifier le statut de la commande pour accepter ou annuler le paiement)[/i].';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_9d9e894fc49407f8699085569185c8f3'] = 'Ancien statut : \"En attente de validation par Braintree\" -> Nouveau statut de commande : [b]\"Traitement du paiement (autorisé)\"[/b]';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_1a11d592cd92769b7cee59a64a9297c4'] = '[i]Ce statut de commande signifie que la transaction est en cours de règlement. Il s\'agit d\'un état transitoire.[/i]';
+$_MODULE['<{braintreeofficial}prestashop>displayorderpreview_00aee8ea5d368378f1fa9a1638ae0238'] = 'Détails des derniers logs';
