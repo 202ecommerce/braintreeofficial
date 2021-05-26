@@ -63,6 +63,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
         $this->context->smarty->assign('need_rounding', $need_rounding);
         $this->context->smarty->assign('moduleDir', _MODULE_DIR_);
         $this->context->smarty->assign('isModeSandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $this->context->smarty->assign('isNotShowSCAMessage', (int)\Configuration::get(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE));
     }
 
     public function displayAjaxUpdateRoundingSettings()
@@ -263,5 +264,10 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         parent::initPageHeaderToolbar();
         $this->context->smarty->clearAssign('help_link');
+    }
+
+    public function displayAjaxDisableSCAmessage()
+    {
+        \Configuration::updateValue(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE, 1);
     }
 }

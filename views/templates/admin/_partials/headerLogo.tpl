@@ -25,22 +25,35 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div class="alert alert-info">
-	<p>
-        {l s='Note : As part of European Regulation PSD2 and related SCA (Strong Customer Authentication) planned on September 14th 2019, all transactions will have to go through SCA (3DS 2.0) with the aim to reduce friction (fewer “client challenges”) while raise conversion and protection (more liability shifts from merchant to bank).' mod='braintreeofficial'}
-	</p>
+{if false == isset($isNotShowSCAMessage) || $isNotShowSCAMessage == false}
+	<div class="alert alert-info">
+		<button id="closeSCAmessage" type="button" class="close" data-dismiss="alert">×</button>
+		<p>
+			{l s='Note : As part of European Regulation PSD2 and related SCA (Strong Customer Authentication) planned on September 14th 2019, all transactions will have to go through SCA (3DS 2.0) with the aim to reduce friction (fewer “client challenges”) while raise conversion and protection (more liability shifts from merchant to bank).' mod='braintreeofficial'}
+		</p>
 
-	<p>
-        {l s='It is thus recommended to enable 3D Secure in order to avoid bank declines and impact to your business. (Go to "Customize Experience Checkout")' mod='braintreeofficial'}
-	</p>
+		<p>
+			{l s='It is thus recommended to enable 3D Secure in order to avoid bank declines and impact to your business. (Go to "Customize Experience Checkout")' mod='braintreeofficial'}
+		</p>
 
-	<p>
-        {{l s='More info in our blog post [b]to get the last updates:[/b]' mod='braintreeofficial'}|braintreereplace}
-		<a href="https://www.braintreepayments.com/ie/features/3d-secure">
-			https://www.braintreepayments.com/ie/features/3d-secure
-		</a>
-	</p>
-</div>
+		<p>
+			{{l s='More info in our blog post [b]to get the last updates:[/b]' mod='braintreeofficial'}|braintreereplace}
+			<a href="https://www.braintreepayments.com/ie/features/3d-secure">
+				https://www.braintreepayments.com/ie/features/3d-secure
+			</a>
+		</p>
+	</div>
+
+	<script>
+		document.getElementById('closeSCAmessage').addEventListener('click', function () {
+			var url = new URL(window.location.href);
+
+			url.searchParams.append('ajax', 1);
+			url.searchParams.append('action', 'disableSCAmessage');
+			fetch(url.toString());
+		})
+	</script>
+{/if}
 
 <div class="panel active-panel bt__flex bt__align-items-center">
 	<div class="bt__pr-4">
