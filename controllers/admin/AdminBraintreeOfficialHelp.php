@@ -82,4 +82,9 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
 
         return $result;
     }
+
+    public function isNotShowSCAMessage()
+    {
+        return false;
+    }
 }
