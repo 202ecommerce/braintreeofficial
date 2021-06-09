@@ -1387,7 +1387,7 @@ class BraintreeOfficial extends \PaymentModule
         $amount_paid = Tools::ps_round($amount_paid, 2);
 
         $cart = new Cart((int) $id_cart);
-        $total_ps = (float)$cart->getOrderTotal(true, Cart::BOTH);
+        $total_ps = Tools::ps_round($cart->getOrderTotal(true, Cart::BOTH), 2);
         if ($amount_paid_curr > $total_ps+0.10 || $amount_paid_curr < $total_ps-0.10) {
             $total_ps = $amount_paid_curr;
         }
@@ -1474,9 +1474,9 @@ class BraintreeOfficial extends \PaymentModule
         $braintree_order->id_payment = $transaction['id_payment'];
         $braintree_order->payment_method = $transaction['payment_method'];
         $braintree_order->currency = $transaction['currency'];
-        $braintree_order->total_paid = (float) $amount_paid;
+        $braintree_order->total_paid = $amount_paid;
         $braintree_order->payment_status = $transaction['payment_status'];
-        $braintree_order->total_prestashop = (float) $total_ps;
+        $braintree_order->total_prestashop = $total_ps;
         $braintree_order->payment_tool = isset($transaction['payment_tool']) ? $transaction['payment_tool'] : 'Braintree';
         $braintree_order->sandbox = (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
         $braintree_order->save();
