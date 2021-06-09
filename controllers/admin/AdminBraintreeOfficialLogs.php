@@ -64,7 +64,9 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
 
     public function initContent()
     {
-        $this->content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
+        $this->content = $this->context->smarty
+            ->assign('isNotShowSCAMessage', $this->isNotShowSCAMessage())
+            ->fetch($this->getTemplatePath() . '_partials/headerLogo.tpl');
         $this->content .= parent::initContent();
         $this->content = $this->context->smarty
             ->assign('content', $this->content)
@@ -102,5 +104,18 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
 
         parent::initPageHeaderToolbar();
         $this->context->smarty->clearAssign('help_link');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotShowSCAMessage()
+    {
+        return (bool)\Configuration::get(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE);
+    }
+
+    public function displayAjaxDisableSCAmessage()
+    {
+        \Configuration::updateValue(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE, 1);
     }
 }
