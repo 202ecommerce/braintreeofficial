@@ -521,7 +521,13 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     public function partialRefund($params)
     {
         try {
-            $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId(Tools::getValue('id_order'));
+            if (isset($params['order']) && Validate::isLoadedObject($params['order'])) {
+                $idOrder = $params['order']->id;
+            } else {
+                $idOrder = (int)Tools::getValue('id_order');
+            }
+
+            $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByOrderId($idOrder);
             $this->initConfig($braintreeOrder->sandbox);
             $capture = $this->serviceBraintreeOfficialCapture->loadByOrderBraintreeId($braintreeOrder->id);
             $id_transaction = Validate::isLoadedObject($capture) ? $capture->id_capture : $braintreeOrder->id_transaction;
