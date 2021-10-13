@@ -26,7 +26,7 @@
 {if isset($isModeSandbox) && $isModeSandbox}
   <style>
     .page-head {
-      background-color: #2D489A !important;
+      background-color: #585757 !important;
     }
 
     .bootstrap .page-head .toolbarBox .btn-toolbar .toolbar_btn i {
