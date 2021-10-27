@@ -543,13 +543,13 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             if ($result->success) {
                 $response =  array(
                     'success' => true,
-                    'refundedTransactionId' => $result->transaction->refundedTransactionId,
-                    'refund_id' => $result->transaction->id,
-                    'status' => $result->transaction->status,
-                    'amount' => $result->transaction->amount,
-                    'currency' => $result->transaction->currencyIsoCode,
-                    'payment_type' => $result->transaction->payment_type,
-                    'merchantAccountId' => $result->transaction->merchantAccountId,
+                    'refundedTransactionId' => empty($result->transaction->refundedTransactionId) ? '' : $result->transaction->refundedTransactionId,
+                    'refund_id' => empty($result->transaction->id) ? '' : $result->transaction->id,
+                    'status' => empty($result->transaction->status) ? '' : $result->transaction->status,
+                    'amount' => empty($result->transaction->amount) ? '' : $result->transaction->amount,
+                    'currency' => empty($result->transaction->currencyIsoCode) ? '' : $result->transaction->currencyIsoCode,
+                    'payment_type' => empty($result->transaction->payment_type) ? '' : $result->transaction->payment_type,
+                    'merchantAccountId' => empty($result->transaction->merchantAccountId) ? '' : $result->transaction->merchantAccountId,
                 );
                 $braintreeOrder->total_paid -= $amount;
                 if ($braintreeOrder->total_paid == 0) {
