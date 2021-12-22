@@ -552,6 +552,8 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     'merchantAccountId' => empty($result->transaction->merchantAccountId) ? '' : $result->transaction->merchantAccountId,
                 );
                 $braintreeOrder->total_paid -= $amount;
+                $braintreeOrder->total_prestashop -= $amount;
+
                 if ($braintreeOrder->total_paid == 0) {
                     $braintreeOrder->payment_status = 'refunded';
                 }
