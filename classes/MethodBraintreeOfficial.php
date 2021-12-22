@@ -481,7 +481,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     'status' => $result->transaction->status,
                     'amount' => $result->transaction->amount,
                     'currency' => $result->transaction->currencyIsoCode,
-                    'payment_type' => $result->transaction->payment_type,
+                    'payment_type' => empty($result->transaction->payment_type) ? '' : $result->transaction->payment_type,
                     'merchantAccountId' => $result->transaction->merchantAccountId,
                     'date_transaction' => $this->getDateTransaction($result->transaction)
                 );
