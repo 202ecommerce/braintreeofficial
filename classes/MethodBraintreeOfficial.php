@@ -687,7 +687,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
             $options = array(
                 'submitForSettlement' => Configuration::get('BRAINTREEOFFICIAL_API_INTENT') == "sale" ? true : false,
                 'threeDSecure' => array(
-                    'required' => $use3dVerification
+                    'required' => (bool) $use3dVerification
                 )
             );
         } else {
