@@ -111,6 +111,9 @@
         <echo>Installing dependencies</echo>
         <exec executable="composer" failonerror="true">
             <arg value="install" />
+            <arg value="--no-dev" />
+            <arg value="--optimize-autoloader" />
+            <arg value="--ignore-platform-reqs" />
         </exec>
     </target>
     <target name="composer-update" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Updating dependencies">
