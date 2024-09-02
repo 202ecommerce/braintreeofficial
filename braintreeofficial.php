@@ -351,9 +351,14 @@ class BraintreeOfficial extends \PaymentModule
             $this->_errors[] = Tools::displayError($e->getMessage());
         }
 
-        if (($isPhpVersionCompliant && parent::install() && $installer->install()) == false) {
+        if (($isPhpVersionCompliant && parent::install()) === false) {
             return false;
         }
+
+        $installer->installObjectModels();
+        $installer->installAdminControllers();
+        $installer->installExtensions();
+        $this->registerHooks();
 
         if ($this->installOrderState() == false) {
             return false;
@@ -1816,6 +1821,22 @@ class BraintreeOfficial extends \PaymentModule
     public function setMethodBraitree(AbstractMethodBraintreeOfficial $method)
     {
         $this->methodBraintreeOfficial = $method;
+    }
+
+    public function registerHooks()
+    {
+        $result = true;
+        $hooksUnregistered = $this->getHooksUnregistered();
+
+        if (empty($hooksUnregistered)) {
+            return $result;
+        }
+
+        foreach ($hooksUnregistered as $hookName) {
+            $result &= $this->registerHook($hookName);
+        }
+
+        return $result;
     }
 
     /**
