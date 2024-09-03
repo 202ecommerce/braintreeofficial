@@ -731,7 +731,7 @@ class BraintreeOfficial extends \PaymentModule
                 } catch (PayPal\Exception\PPConfigurationException $e) {
                     $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
                 } catch (PayPal\Exception\PayPalConnectionException $e) {
-                    $decoded_message = Tools::jsonDecode($e->getData());
+                    $decoded_message = json_decode($e->getData());
                     $ex_detailed_message = $decoded_message->message;
                 } catch (PayPal\Exception\PayPalInvalidCredentialException $e) {
                     $ex_detailed_message = $e->errorMessage();

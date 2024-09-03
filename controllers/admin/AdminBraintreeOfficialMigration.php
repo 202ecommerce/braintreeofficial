@@ -142,7 +142,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     public function displayAjaxStartMigration()
     {
         $this->doMigration();
-        $content = Tools::jsonEncode(array(
+        $content = json_encode(array(
             'status' => true,
             'content' => $this->getStepTwo(),
         ));
@@ -153,7 +153,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
     public function displayAjaxSkipMigration()
     {
-        $content = Tools::jsonEncode(array(
+        $content = json_encode(array(
             'status' => Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_SKIP', 1),
             'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeOfficialSetup', true),
         ));
@@ -176,7 +176,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
             $paypalModule->disable();
         }
 
-        $content = Tools::jsonEncode(array(
+        $content = json_encode(array(
             'status' => $isConfigured,
             'content' => $isConfigured == false ? $this->l('An error occurred while creating your web experience. Check your credentials.') : $this->getStepThree(),
         ));
@@ -198,8 +198,8 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE', null, null, $idShop), false, null, $idShop);
         Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT', null, null, $idShop), false, null, $idShop);
 
-        $merchant_account_id_currency_sandbox = Tools::jsonDecode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
-        $merchant_account_id_currency_live = Tools::jsonDecode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
+        $merchant_account_id_currency_sandbox = json_decode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
+        $merchant_account_id_currency_live = json_decode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
 
         if ($merchant_account_id_currency_sandbox) {
             $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_sandbox, 1, $idShop);
