@@ -24,13 +24,13 @@
  */
 
 const path = require('path');
-const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+const RemoveEmptyScripts = require('webpack-remove-empty-scripts');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const minimizers = [];
 const plugins = [
-	new FixStyleOnlyEntriesPlugin(),
+  new RemoveEmptyScripts(),
 	new MiniCssExtractPlugin({
 		filename: '[name].css',
 	}),
@@ -57,33 +57,36 @@ const config = {
 	},
 
 	module: {
-		rules: [{
+    rules: [
+      {
 				test: /\.js$/,
 				exclude: /node_modules/,
-				use: [{
+        use: [
+          {
 					loader: 'babel-loader',
 					options: {
 						presets: ['@babel/preset-env'],
 					},
-				}, ],
+          },
+        ],
 			},
 
 			{
 				test: /\.(s)?css$/,
-				use: [{
-						loader: MiniCssExtractPlugin.loader
+        use: [
+          {loader: MiniCssExtractPlugin.loader},
+          {loader: 'css-loader'},
+          {loader: 'postcss-loader'},
+          {loader: 'sass-loader'},
+        ],
 					},
 					{
-						loader: 'css-loader'
+        test: /.(woff(2)?|eot|ttf)(\?[a-z0-9=.]+)?$/,
+        type:'asset/resource',
+        generator: {
+          filename: "fonts/[name][ext]"
 					},
-					{
-						loader: 'postcss-loader'
-					},
-					{
-						loader: 'sass-loader'
-					},
-				],
-			},
+      }
 
 		],
 	},
@@ -112,11 +115,14 @@ module.exports = (env, argv) => {
 	// Production specific settings
 	if (argv.mode === 'production') {
 		const terserPlugin = new TerserPlugin({
-			cache: true,
 			extractComments: /^\**!|@preserve|@license|@cc_on/i, // Remove comments except those containing @preserve|@license|@cc_on
 			parallel: true,
 			terserOptions: {
-				drop_console: true,
+        compress: {
+          pure_funcs: [
+            'console.log'
+          ]
+        }
 			},
 		});
 
