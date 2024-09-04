@@ -23,68 +23,27 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  *}
 
-<!-- Header part menu -->
-<head>
-    {block name='head'}
-        {include file='_partials/head.tpl'}
-    {/block}
-</head>
+{extends 'page.tpl'}
 
-<body>
-{hook h='displayAfterBodyOpeningTag'}
-<main>
-    <!-- Menu part-->
-    <header id="header">
-        {block name='header'}
-            {include file='_partials/header.tpl'}
-        {/block}
-    </header>
+{block name='page_content'}
+    <h2>{l s='An error occurred' mod='braintreeofficial'}</h2>
 
-    <!-- Header part ends -->
-
-    <section id="wrapper">
-        <div class="container">
-
-            <section id="main">
-                <section id="content" class="page-content card card-block">
-                    {include file='_partials/breadcrumb.tpl'}
-                    <h2>{l s='An error occurred' mod='braintreeofficial'}</h2>
-
-                    <div class="table-responsive-row clearfix">
-                        <p class="braintree_error_msg">
-                            {if $error_msg == '' && $msg_long == ''}
-                                {if $error_code}<span class="code">[{$error_code|escape:'htmlall':'UTF-8'}]</span>{/if}
-                                {l s='Unexpected error occurred.' mod='braintreeofficial'}
-                            {else}
-                                {if $error_code}<span class="code">[{$error_code|escape:'htmlall':'UTF-8'}]</span>{/if}
-                                {if $error_msg}<span class="short">{$error_msg|escape:'htmlall':'UTF-8'}</span>{/if}
-                                <br>
-                                {if $msg_long && $msg_long != $error_msg}
-                                    <span class="long">{l s='Additional error message : ' mod='braintreeofficial'}{$msg_long|escape:'htmlall':'UTF-8'}</span>
-                                {/if}
-                            {/if}
-                        </p>
-                        {if $show_retry}
-                            <a class="btn btn-secondary" href="{$link->getPageLink('order', true)}">{l s='Try to pay again' mod='braintreeofficial'}</a>
-                        {/if}
-                    </div>
-                </section>
-            </section>
-        </div>
-    </section>
-    <!-- Footer starts -->
-
-    <footer id="footer">
-        {block name="footer"}
-            {include file="_partials/footer.tpl"}
-        {/block}
-    </footer>
-    <!-- Footer Ends -->
-    {block name='javascript_bottom'}
-        {include file="_partials/javascript.tpl" javascript=$javascript.bottom}
-    {/block}
-    {hook h='displayBeforeBodyClosingTag'}
-</main>
-
-</body>
-
+    <div class="table-responsive-row clearfix">
+        <p class="paypal_error_msg">
+            {if $error_msg == '' && $msg_long == ''}
+                {if $error_code}<span class="code">[{$error_code|escape:'htmlall':'UTF-8'}]</span>{/if}
+                {l s='Unexpected error occurred.' mod='braintreeofficial'}
+            {else}
+                {if $error_code}<span class="code">[{$error_code|escape:'htmlall':'UTF-8'}]</span>{/if}
+                {if $error_msg}<span class="short">{$error_msg|escape:'htmlall':'UTF-8'}</span>{/if}
+                <br>
+                {if $msg_long && $msg_long != $error_msg}
+                    <span class="long">{l s='Additional error message : ' mod='braintreeofficial'}{$msg_long|escape:'htmlall':'UTF-8'}</span>
+                {/if}
+            {/if}
+        </p>
+        {if $show_retry}
+            <a class="btn btn-secondary" href="{$link->getPageLink('order', true)}">{l s='Try to pay again' mod='braintreeofficial'}</a>
+        {/if}
+    </div>
+{/block}

@@ -351,9 +351,14 @@ class BraintreeOfficial extends \PaymentModule
             $this->_errors[] = Tools::displayError($e->getMessage());
         }
 
-        if (($isPhpVersionCompliant && parent::install() && $installer->install()) == false) {
+        if (($isPhpVersionCompliant && parent::install()) === false) {
             return false;
         }
+
+        $installer->installObjectModels();
+        $installer->installAdminControllers();
+        $installer->installExtensions();
+        $this->registerHooks();
 
         if ($this->installOrderState() == false) {
             return false;
@@ -731,7 +736,7 @@ class BraintreeOfficial extends \PaymentModule
                 } catch (PayPal\Exception\PPConfigurationException $e) {
                     $ex_detailed_message = $this->l('Invalid configuration. Please check your configuration file');
                 } catch (PayPal\Exception\PayPalConnectionException $e) {
-                    $decoded_message = Tools::jsonDecode($e->getData());
+                    $decoded_message = json_decode($e->getData());
                     $ex_detailed_message = $decoded_message->message;
                 } catch (PayPal\Exception\PayPalInvalidCredentialException $e) {
                     $ex_detailed_message = $e->errorMessage();
@@ -1818,14 +1823,39 @@ class BraintreeOfficial extends \PaymentModule
         $this->methodBraintreeOfficial = $method;
     }
 
+    public function registerHooks()
+    {
+        $result = true;
+        $hooksUnregistered = $this->getHooksUnregistered();
+
+        if (empty($hooksUnregistered)) {
+            return $result;
+        }
+
+        foreach ($hooksUnregistered as $hookName) {
+            $result &= $this->registerHook($hookName);
+        }
+
+        return $result;
+    }
+
     /**
      * @return array return the unregistered hooks
      */
     public function getHooksUnregistered()
     {
-        $hooksUnregistered = array();
+        $hooksUnregistered = [];
 
         foreach ($this->hooks as $hookName) {
+            $alias = '';
+
+            try {
+                $alias = Hook::getNameById(Hook::getIdByName($hookName));
+            } catch (Exception $e) {
+            }
+
+            $hookName = empty($alias) ? $hookName : $alias;
+
             if (Hook::isModuleRegisteredOnHook($this, $hookName, $this->context->shop->id)) {
                 continue;
             }

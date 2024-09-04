@@ -41,7 +41,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     public function init()
     {
         parent::init();
-        $this->setPaymentData(Tools::jsonDecode(Tools::getValue('paymentData')));
+        $this->setPaymentData(json_decode(Tools::getValue('paymentData')));
         $this->setCheckoutInfo(Tools::getAllValues());
     }
 
