@@ -122,8 +122,10 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
                         'countryCodeAlpha2' => $country->iso_code,
                         'region' => $iso,
                         'postalCode' => $address->postcode
-                    )
-                )
+                    ),
+                    'ipAddress' => Tools::getRemoteAddr(),
+                ),
+                'collectDeviceData' => true,
             )
         );
         $this->jsonValues = $responseContent;
