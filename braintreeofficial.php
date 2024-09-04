@@ -351,9 +351,14 @@ class BraintreeOfficial extends \PaymentModule
             $this->_errors[] = Tools::displayError($e->getMessage());
         }
 
-        if (($isPhpVersionCompliant && parent::install() && $installer->install()) == false) {
+        if (($isPhpVersionCompliant && parent::install()) === false) {
             return false;
         }
+
+        $installer->installObjectModels();
+        $installer->installAdminControllers();
+        $installer->installExtensions();
+        $this->registerHooks();
 
         if ($this->installOrderState() == false) {
             return false;
@@ -1818,14 +1823,39 @@ class BraintreeOfficial extends \PaymentModule
         $this->methodBraintreeOfficial = $method;
     }
 
+    public function registerHooks()
+    {
+        $result = true;
+        $hooksUnregistered = $this->getHooksUnregistered();
+
+        if (empty($hooksUnregistered)) {
+            return $result;
+        }
+
+        foreach ($hooksUnregistered as $hookName) {
+            $result &= $this->registerHook($hookName);
+        }
+
+        return $result;
+    }
+
     /**
      * @return array return the unregistered hooks
      */
     public function getHooksUnregistered()
     {
-        $hooksUnregistered = array();
+        $hooksUnregistered = [];
 
         foreach ($this->hooks as $hookName) {
+            $alias = '';
+
+            try {
+                $alias = Hook::getNameById(Hook::getIdByName($hookName));
+            } catch (Exception $e) {
+            }
+
+            $hookName = empty($alias) ? $hookName : $alias;
+
             if (Hook::isModuleRegisteredOnHook($this, $hookName, $this->context->shop->id)) {
                 continue;
             }
