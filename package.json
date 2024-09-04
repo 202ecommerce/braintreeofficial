@@ -1,29 +1,29 @@
 {
-  "name": "braintreeofficial",
-  "version": "1.0.0",
-  "description": "Braintree official module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --mode development --devtool source-map -w",
-    "build": "webpack --mode production --devtool source-map --progress",
-    "doc-build": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml",
-    "doc-watch": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml -w -b",
-    "lint-css": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache",
-    "lint-css-fix": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache --fix",
-    "lint-js": "eslint --cache --cache-location .cache/.eslintcache _dev/js/",
-    "lint-js-fix": "eslint --cache --cache-location .cache/.eslintcache _dev/js/ --fix"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/202-ecommerce/braintree.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/202-ecommerce/braintree/issues"
-  },
-  "homepage": "https://github.com/202-ecommerce/braintree#readme",
-  "devDependencies": {
+    "name": "braintreeofficial",
+    "version": "1.0.0",
+    "description": "Braintree official module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "watch": "webpack --mode development --devtool source-map -w",
+        "build": "webpack --mode production --devtool source-map --progress",
+        "doc-build": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml",
+        "doc-watch": "stylemark -i 202/doc -o 202/build/doc -c 202/doc/config.yml -w -b",
+        "lint-css": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache",
+        "lint-css-fix": "stylelint \"_dev/scss/**/*.scss\" --cache --cache-location .cache/.stylelintcache --fix",
+        "lint-js": "eslint --cache --cache-location .cache/.eslintcache _dev/js/",
+        "lint-js-fix": "eslint --cache --cache-location .cache/.eslintcache _dev/js/ --fix"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/202-ecommerce/braintree.git"
+    },
+    "author": "PrestaShop",
+    "license": "OSL-3.0",
+    "bugs": {
+        "url": "https://github.com/202-ecommerce/braintree/issues"
+    },
+    "homepage": "https://github.com/202-ecommerce/braintree#readme",
+    "devDependencies": {
         "@babel/core": "^7.20.12",
         "@babel/preset-env": "^7.20.2",
         "ajv": "^8.12.0",
@@ -58,8 +58,8 @@
         "webpack": "^5.75.0",
         "webpack-cli": "^5.0.1",
         "webpack-dev-server": "^4.11.1",
-    "webpack-remove-empty-scripts": "^1.0.4"
-  },
+        "webpack-remove-empty-scripts": "^1.0.4"
+    },
     "dependencies": {
         "axios": "^1.6.0",
         "babel-polyfill": "^6.26.0",
