@@ -44,7 +44,7 @@ abstract class CommonAbstarctModuleFrontController extends ModuleFrontController
     public $redirectUrl;
 
     /** @var  array An array of error information : error_msg, error_code, msg_long. */
-    public $errors;
+    public $errors = [];
 
     /** @var  array An array of transaction information : method, currency, transaction_id, payment_status, payment_method, id_payment, capture, payment_tool, date_transaction. */
     public $transaction_detail = array();
