@@ -26,6 +26,10 @@
 
 namespace BraintreeOfficialAddons\classes;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class BraintreeOfficialCustomer.
  */

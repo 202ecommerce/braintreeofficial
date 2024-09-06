@@ -28,6 +28,10 @@ namespace BraintreeOfficialAddons\classes;
 
 use BraintreeofficialPPBTlib\AbstractMethod;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class AbstractMethodBraintreeOfficial extends AbstractMethod
 {
 

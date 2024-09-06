@@ -28,6 +28,9 @@ require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 class AdminBraintreeofficialProcessLoggerController extends AdminProcessLoggerController
 {
     public function __construct()

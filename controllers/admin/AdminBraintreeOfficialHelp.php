@@ -29,6 +29,10 @@ require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialController
 {
     public function init()

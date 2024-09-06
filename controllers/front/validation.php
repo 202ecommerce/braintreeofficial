@@ -27,6 +27,10 @@
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/front/abstract.php';
 
 /**

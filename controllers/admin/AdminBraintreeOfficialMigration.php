@@ -34,6 +34,10 @@ use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSetupController
 {
     public function initContent()

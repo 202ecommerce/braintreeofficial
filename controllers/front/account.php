@@ -29,6 +29,10 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class BraintreeOfficialAccountModuleFrontController extends ModuleFrontController
 {
     /* @var ServiceBraintreeOfficialVaulting*/

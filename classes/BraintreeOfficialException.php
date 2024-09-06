@@ -28,6 +28,10 @@ namespace BraintreeOfficialAddons\classes;
 
 use Exception;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class BraintreeOfficialException
  * Custom exception with additional long message parameter

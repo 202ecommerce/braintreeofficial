@@ -30,6 +30,10 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServiceBraintreeOfficialVaulting
 {
     /**

@@ -26,6 +26,10 @@
 
 require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/admin/AdminBraintreeofficialProcessLogger.php';
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcessLoggerController
 {
     public function init()

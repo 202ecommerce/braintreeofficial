@@ -26,6 +26,10 @@
 
 use BraintreeofficialPPBTlib\CommonAbstarctModuleFrontController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class BraintreeOfficialAbstarctModuleFrontController
  */

@@ -30,6 +30,10 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialCapture;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServiceBraintreeOfficialCapture
 {
     /**

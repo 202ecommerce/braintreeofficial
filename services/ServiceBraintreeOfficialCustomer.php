@@ -30,6 +30,10 @@ use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServiceBraintreeOfficialCustomer
 {
     /**

@@ -26,7 +26,9 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use Symfony\Component\VarDumper\VarDumper;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class AdminBraintreeOfficialController extends \ModuleAdminController
 {

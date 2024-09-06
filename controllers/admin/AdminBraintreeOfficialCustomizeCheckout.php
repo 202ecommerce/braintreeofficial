@@ -28,6 +28,10 @@ require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
 
 use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminBraintreeOfficialCustomizeCheckoutController extends AdminBraintreeOfficialController
 {
     public $parameters = array();

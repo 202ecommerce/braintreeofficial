@@ -31,6 +31,10 @@ use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialController
 {
     protected $serviceBraintreeOfficialOrder;

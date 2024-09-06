@@ -29,6 +29,10 @@ namespace BraintreeOfficialAddons\classes;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class BraintreeOfficialLog.
  */

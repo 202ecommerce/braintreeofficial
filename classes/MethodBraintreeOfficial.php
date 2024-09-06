@@ -34,6 +34,10 @@ use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class MethodBT
  * @see https://developers.braintreepayments.com/guides/overview BT developper documentation
