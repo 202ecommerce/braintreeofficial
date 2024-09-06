@@ -46,12 +46,24 @@ use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 use BraintreeofficialPPBTlib\Install\ModuleInstaller;
 use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
 
-const BRAINTREE_CARD_PAYMENT = 'card-braintree';
-const BRAINTREE_PAYPAL_PAYMENT = 'paypal-braintree';
-const BRAINTREE_PAYMENT_CUSTOMER_CURRENCY = -1;
-const BRAINTREE_CART_PAGE = 1;
-const BRAINTREE_PRODUCT_PAGE = 2;
-const BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE = 'BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE';
+if (!defined('BRAINTREE_CARD_PAYMENT')) {
+    define('BRAINTREE_CARD_PAYMENT', 'card-braintree');
+}
+if (!defined('BRAINTREE_PAYPAL_PAYMENT')) {
+    define('BRAINTREE_PAYPAL_PAYMENT', 'paypal-braintree');
+}
+if (!defined('BRAINTREE_PAYMENT_CUSTOMER_CURRENCY')) {
+    define('BRAINTREE_PAYMENT_CUSTOMER_CURRENCY', -1);
+}
+if (!defined('BRAINTREE_CART_PAGE')) {
+    define('BRAINTREE_CART_PAGE', 1);
+}
+if (!defined('BRAINTREE_PRODUCT_PAGE')) {
+    define('BRAINTREE_PRODUCT_PAGE', 2);
+}
+if (!defined('BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE')) {
+    define('BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE', 'BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE');
+}
 
 class BraintreeOfficial extends \PaymentModule
 {
@@ -344,23 +356,34 @@ class BraintreeOfficial extends \PaymentModule
     {
         $installer = new ModuleInstaller($this);
 
-        $isPhpVersionCompliant = false;
         try {
             $isPhpVersionCompliant = $installer->checkPhpVersion();
         } catch (\Exception $e) {
-            $this->_errors[] = Tools::displayError($e->getMessage());
+            $this->_errors[] = $e->getMessage();
+            return false;
         }
 
         if (($isPhpVersionCompliant && parent::install()) === false) {
             return false;
         }
 
-        $installer->installObjectModels();
-        $installer->installAdminControllers();
-        $installer->installExtensions();
+        if (!$installer->installObjectModels()) {
+            $this->_errors[] = $this->l('Fail registering object models');
+            return false;
+        }
+        if (!$installer->installAdminControllers()) {
+            $this->_errors[] = $this->l('Fail registering admin tabs');
+            return false;
+        }
+        if (!$installer->installExtensions()) {
+            $this->_errors[] = $this->l('Fail installing extensions');
+            return false;
+        }
+
         $this->registerHooks();
 
         if ($this->installOrderState() == false) {
+            $this->_errors[] = $this->l('Fail registering order states');
             return false;
         }
 
@@ -371,14 +394,10 @@ class BraintreeOfficial extends \PaymentModule
         foreach ($this->moduleConfigs as $key => $value) {
             if (Shop::isFeatureActive()) {
                 foreach ($shops as $shop) {
-                    if (!Configuration::updateValue($key, $value, false, null, (int)$shop['id_shop'])) {
-                        return false;
-                    }
+                    Configuration::updateValue($key, $value, false, null, (int)$shop['id_shop']);
                 }
             } else {
-                if (!Configuration::updateValue($key, $value)) {
-                    return false;
-                }
+                Configuration::updateValue($key, $value);
             }
         }
 
