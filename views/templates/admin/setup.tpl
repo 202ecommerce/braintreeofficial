@@ -43,7 +43,7 @@
 					{$formAccountSettings nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
 			</div>
-			<div class="col-lg-4 col-sm-12">
+			<div class="col-lg-4 col-sm-12" id="status-block">
 				{if isset($formStatus)}
 					{$formStatus nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
@@ -56,7 +56,7 @@
 					{$formMerchantAccounts nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
 			</div>
-			<div class="col-lg-4 col-sm-12 stretchHeightForm" id="status-block">
+			<div class="col-lg-4 col-sm-12 stretchHeightForm">
 				{if isset($formPaymentSettings)}
 					{$formPaymentSettings nofilter} {*can not escape a variable. Variable contains html code*}
 				{/if}
