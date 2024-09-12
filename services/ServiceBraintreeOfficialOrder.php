@@ -54,9 +54,7 @@ class ServiceBraintreeOfficialOrder
     public function getBraintreeOrdersForValidation()
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
-        $collection->where('payment_method', '=', 'sale');
-        $collection->where('payment_tool', 'in', array('paypal_account', 'PayPal'));
-        $collection->where('payment_status', 'in', array('settling', 'submitted_for_settlement'));
+        $collection->where('payment_status', 'in', ['settling', 'submitted_for_settlement', 'settlement_pending']);
         return $collection->getResults();
     }
 
