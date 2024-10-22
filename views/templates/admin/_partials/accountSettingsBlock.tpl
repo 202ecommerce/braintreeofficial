@@ -38,9 +38,9 @@
 
 			<strong>
 				{if isset($sandboxEnvironment) && $sandboxEnvironment && isset($braintreeofficial_merchant_id_sandbox)}
-					{$braintreeofficial_merchant_id_sandbox|escape:'htmlall':'utf-8'}
+					{$braintreeofficial_merchant_id_sandbox|escape:'htmlall':'UTF-8'}
 				{elseif isset($braintreeofficial_merchant_id_live)}
-					{$braintreeofficial_merchant_id_live|escape:'htmlall':'utf-8'}
+					{$braintreeofficial_merchant_id_live|escape:'htmlall':'UTF-8'}
 				{/if}
 			</strong>
 

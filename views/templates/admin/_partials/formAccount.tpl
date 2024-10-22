@@ -76,7 +76,7 @@
 			<div class="col-lg-9">
 				<input type="text"
 					   name="braintreeofficial_public_key_sandbox"
-					   {if isset($braintreeofficial_public_key_sandbox)}value='{$braintreeofficial_public_key_sandbox|escape:'htmlall':'utf-8'}'{/if}>
+					   {if isset($braintreeofficial_public_key_sandbox)}value='{$braintreeofficial_public_key_sandbox|escape:'htmlall':'UTF-8'}'{/if}>
 			</div>
 		</div>
 
@@ -87,7 +87,7 @@
 			<div class="col-lg-9">
 				<input type="text"
 					   name="braintreeofficial_private_key_sandbox"
-					   {if isset($braintreeofficial_private_key_sandbox)}value='{$braintreeofficial_private_key_sandbox|escape:'htmlall':'utf-8'}'{/if}>
+					   {if isset($braintreeofficial_private_key_sandbox)}value='{$braintreeofficial_private_key_sandbox|escape:'htmlall':'UTF-8'}'{/if}>
 			</div>
 		</div>
 
@@ -98,7 +98,7 @@
 			<div class="col-lg-9">
 				<input type="text"
 					   name="braintreeofficial_merchant_id_sandbox"
-					   {if isset($braintreeofficial_merchant_id_sandbox)}value='{$braintreeofficial_merchant_id_sandbox|escape:'htmlall':'utf-8'}'{/if}>
+					   {if isset($braintreeofficial_merchant_id_sandbox)}value='{$braintreeofficial_merchant_id_sandbox|escape:'htmlall':'UTF-8'}'{/if}>
 			</div>
 		</div>
 	</div>
@@ -114,7 +114,7 @@
 			<div class="col-lg-9">
 				<input type="text"
 					   name="braintreeofficial_public_key_live"
-					   {if isset($braintreeofficial_public_key_live)}value='{$braintreeofficial_public_key_live|escape:'htmlall':'utf-8'}'{/if}>
+					   {if isset($braintreeofficial_public_key_live)}value='{$braintreeofficial_public_key_live|escape:'htmlall':'UTF-8'}'{/if}>
 			</div>
 		</div>
 
@@ -125,7 +125,7 @@
 			<div class="col-lg-9">
 				<input type="text"
 					   name="braintreeofficial_private_key_live"
-					   {if isset($braintreeofficial_private_key_live)}value='{$braintreeofficial_private_key_live|escape:'htmlall':'utf-8'}'{/if}>
+					   {if isset($braintreeofficial_private_key_live)}value='{$braintreeofficial_private_key_live|escape:'htmlall':'UTF-8'}'{/if}>
 			</div>
 		</div>
 
@@ -136,7 +136,7 @@
 			<div class="col-lg-9">
 				<input type="text"
 					   name="braintreeofficial_merchant_id_live"
-					   {if isset($braintreeofficial_merchant_id_live)}value='{$braintreeofficial_merchant_id_live|escape:'htmlall':'utf-8'}'{/if}>
+					   {if isset($braintreeofficial_merchant_id_live)}value='{$braintreeofficial_merchant_id_live|escape:'htmlall':'UTF-8'}'{/if}>
 			</div>
 		</div>
 	</div>

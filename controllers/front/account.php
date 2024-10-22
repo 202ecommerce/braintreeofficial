@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
 
 class BraintreeOfficialAccountModuleFrontController extends ModuleFrontController
 {
-    /* @var ServiceBraintreeOfficialVaulting*/
+    /** @var ServiceBraintreeOfficialVaulting */
     protected $serviceBraintreeOfficialVaulting;
 
     public function __construct()
@@ -50,7 +50,7 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
      */
     public function postProcess()
     {
-        /* @var $method MethodBraintreeOfficial*/
+        /* @var $method MethodBraintreeOfficial */
         if (Tools::getValue('process') == 'delete') {
             $id = (int) Tools::getValue('id_method');
             $payment_method = new BraintreeOfficialVaulting($id);

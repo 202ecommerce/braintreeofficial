@@ -26,8 +26,6 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use Exception;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -36,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
  * Class BraintreeOfficialException
  * Custom exception with additional long message parameter
  */
-class BraintreeOfficialException extends Exception
+class BraintreeOfficialException extends \Exception
 {
     /** @var string Long detailed error message */
     private $message_long;

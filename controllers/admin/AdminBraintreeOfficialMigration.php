@@ -104,7 +104,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     }
 
     /**
-     *  @param array $tables the names of tables
+     * @param array $tables the names of tables
      * */
     protected function doBackupTables($tables)
     {
@@ -121,7 +121,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
                 DB::getInstance()->execute(sprintf($queryCreatingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
                 DB::getInstance()->execute(sprintf($queryFillingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
             } catch (Exception $e) {
-                \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
+                Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                 $message = 'Error while do backup of the tables. ';
                 $message .= 'File: ' . $e->getFile() . '. ';
                 $message .= 'Line: ' . $e->getLine() . '. ';
@@ -172,7 +172,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
     public function displayAjaxSaveAccount()
     {
-        /* @var $method MethodBraintreeOfficial*/
+        /* @var $method MethodBraintreeOfficial */
         $this->saveForm();
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial'); // mehtod load exists in class BraintreeofficialPPBTlib\AbstractMethod
         $isConfigured = $method->isConfigured();

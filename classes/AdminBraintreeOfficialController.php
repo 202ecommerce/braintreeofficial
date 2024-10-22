@@ -248,9 +248,9 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
     }
 
     /**
-     *  @param array $hooks array of the hooks name
+     * @param array $hooks array of the hooks name
      *
-     *  @return string
+     * @return string
      */
     public function getHooksUnregisteredMessage($hooks)
     {

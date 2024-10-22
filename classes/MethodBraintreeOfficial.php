@@ -71,19 +71,19 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 
     protected $payment_method = 'Braintree Official';
 
-    /* @var Braintree_Gateway*/
+    /** @var Braintree_Gateway */
     public $gateway;
 
-    /* @var ServiceBraintreeOfficialCapture */
+    /** @var ServiceBraintreeOfficialCapture */
     protected $serviceBraintreeOfficialCapture;
 
-    /* @var ServiceBraintreeOfficialCustomer*/
+    /** @var ServiceBraintreeOfficialCustomer */
     protected $serviceBraintreeOfficialCustomer;
 
-    /* @var ServiceBraintreeOfficialVaulting*/
+    /** @var ServiceBraintreeOfficialVaulting */
     protected $serviceBraintreeOfficialVaulting;
 
-    /* @var ServiceBraintreeOfficialOrder*/
+    /** @var ServiceBraintreeOfficialOrder */
     protected $serviceBraintreeOfficialOrder;
 
     protected $cvv_field;
@@ -99,7 +99,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     protected function getPaymentMethod()
     {
         $transactionDetails = $this->getDetailsTransaction();
-        if ((int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX')) {
+        if ((int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX')) {
             return $transactionDetails['payment_tool'] . ' - SANDBOX';
         } else {
             return $transactionDetails['payment_tool'];
@@ -266,7 +266,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
      */
     public function validation()
     {
-        /* @var $module BraintreeOfficial*/
+        /** @var $module BraintreeOfficial */
         $module = Module::getInstanceByName('braintreeofficial');
         $transaction = $this->sale(context::getContext()->cart, $this->payment_method_nonce);
 
@@ -710,7 +710,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
      */
     public function sale($cart, $token_payment)
     {
-        /* @var $module BraintreeOfficial*/
+        /* @var $module BraintreeOfficial */
         $this->initConfig();
         $bt_method = $this->payment_method_bt;
         $vault_token = '';
@@ -807,8 +807,8 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                         ];
                         $payment_method = $this->gateway->paymentMethod()->update($vault_token, $params);
 
-                        if ((isset($payment_method->verification) && $payment_method->verification == null) ||
-                            (isset($payment_method->verification) && $payment_method->verification->status != 'verified')) {
+                        if ((isset($payment_method->verification) && $payment_method->verification == null)
+                            || (isset($payment_method->verification) && $payment_method->verification->status != 'verified')) {
                             $error_msg = $module->l('Card verification failed.', get_class($this));
                             $error_msg .= $module->l('The reason : ', get_class($this)) . ' ' . $payment_method->message;
 
@@ -827,8 +827,8 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                             'options' => ['verifyCard' => true],
                         ]);
 
-                        if (isset($payment_method->verification) && $payment_method->verification != null &&
-                            isset($payment_method->verification->status) && $payment_method->verification->status != 'verified') {
+                        if (isset($payment_method->verification) && $payment_method->verification != null
+                            && isset($payment_method->verification->status) && $payment_method->verification->status != 'verified') {
                             $error_msg = $module->l('Card verification respond with status', get_class($this)) . ' ' . $payment_method->verification->status . '. ';
                             $error_msg .= $module->l('The reason : ', get_class($this)) . ' ' . $payment_method->verification->processorResponseText . '. ';
 
@@ -895,7 +895,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
 
     public function formatPrice($price)
     {
-        /* @var $module BraintreeOfficial*/
+        /* @var $module BraintreeOfficial */
         if (is_float($price) == false) {
             $price = (float) $price;
         }
@@ -926,7 +926,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
     /**
      * Create new customer on BT and PS
      *
-     * @return object BraintreeOfficialCustomer
+     * @return BraintreeOfficialCustomer
      */
     public function createCustomer()
     {

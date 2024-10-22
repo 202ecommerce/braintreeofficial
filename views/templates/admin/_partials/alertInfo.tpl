@@ -25,5 +25,5 @@
 
 <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">×</button>
-    {$message|escape:'htmlall':'utf-8'}
+    {$message|escape:'htmlall':'UTF-8'}
 </div>

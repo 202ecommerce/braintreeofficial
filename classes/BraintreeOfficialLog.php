@@ -38,7 +38,7 @@ if (!defined('_PS_VERSION_')) {
  */
 class BraintreeOfficialLog extends ProcessLoggerObjectModel
 {
-    /* @var ServiceBraintreeOfficialLog object service*/
+    /** @var ServiceBraintreeOfficialLog */
     protected $serviceLog;
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)

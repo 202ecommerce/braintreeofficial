@@ -25,7 +25,7 @@
 
 <div>
 	<p>
-		{l s='Merchant Country:' mod='braintreeofficial'} <b>{$merchantCountry|escape:'htmlall':'utf-8'}</b>
+		{l s='Merchant Country:' mod='braintreeofficial'} <b>{$merchantCountry|escape:'htmlall':'UTF-8'}</b>
 	</p>
 	<p>
     {{l s='To  modify country: [a @href1@]International > Localization[/a]' mod='braintreeofficial'}|braintreereplace:['@href1@' => {$link->getAdminLink('AdminLocalization', true)}, '@target@' => {'target="blank"'}]}

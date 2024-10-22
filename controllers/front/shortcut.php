@@ -142,8 +142,8 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
             ) {
                 return new Address((int) $address['id_address']);
             } else {
-                if ((strrpos($address['alias'], 'Paypal_Address')) !== false) {
-                    $count = (int) (Tools::substr($address['alias'], -1)) + 1;
+                if (strrpos($address['alias'], 'Paypal_Address') !== false) {
+                    $count = (int) Tools::substr($address['alias'], -1) + 1;
                 }
             }
         }
@@ -170,7 +170,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
         $orderAddress->postcode = $paypalAddress->postalCode;
         $orderAddress->id_customer = $customer->id;
-        $orderAddress->alias = 'Paypal_Address ' . ($count);
+        $orderAddress->alias = 'Paypal_Address ' . $count;
         $validationMessage = $orderAddress->validateFields(false, true);
 
         if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {

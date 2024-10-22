@@ -37,7 +37,7 @@ require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/front/abstract.php
  */
 class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficialAbstarctModuleFrontController
 {
-    /* @var $method MethodBraintreeOfficial*/
+    /** @var MethodBraintreeOfficial */
     protected $method;
 
     public function init()

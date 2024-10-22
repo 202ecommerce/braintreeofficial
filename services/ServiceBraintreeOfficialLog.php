@@ -44,7 +44,7 @@ class ServiceBraintreeOfficialLog
      */
     public function getLinkToTransaction($log)
     {
-        /* @var $method \MethodBraintreeOfficial*/
+        /* @var $method \MethodBraintreeOfficial */
         if ($log->id_transaction == false || $log->id_order == false) {
             return '';
         }
@@ -77,7 +77,7 @@ class ServiceBraintreeOfficialLog
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalLog \PaypalLog*/
+            /** @var $paypalLog \PaypalLog */
             foreach ($collection->getResults() as $paypalLog) {
                 $braintreeLog = new BraintreeOfficialLog();
                 $braintreeLog->id_cart = $paypalLog->id_cart;

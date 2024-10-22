@@ -91,7 +91,7 @@ class ServiceBraintreeOfficialOrder
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalOrder \PaypalOrder*/
+            /** @var $paypalOrder \PaypalOrder */
             foreach ($collection->getResults() as $paypalOrder) {
                 $braintreeOrder = new BraintreeOfficialOrder();
                 $braintreeOrder->id = $paypalOrder->id;

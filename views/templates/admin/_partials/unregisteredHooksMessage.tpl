@@ -33,7 +33,7 @@
 
             {foreach from=$hooks item=hookName}
                 <li class="pp__mb-0">
-                    {$hookName|escape:'htmlall':'utf-8'}
+                    {$hookName|escape:'htmlall':'UTF-8'}
                 </li>
             {/foreach}
 

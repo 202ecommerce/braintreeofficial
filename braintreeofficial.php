@@ -63,7 +63,7 @@ if (!defined('BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE')) {
     define('BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE', 'BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE');
 }
 
-class BraintreeOfficial extends \PaymentModule
+class BraintreeOfficial extends PaymentModule
 {
     public static $state_iso_code_matrix = [
         'MX' => [
@@ -294,16 +294,16 @@ class BraintreeOfficial extends \PaymentModule
         ],
     ];
 
-    /* @var ServiceBraintreeOfficialOrder*/
+    /** @var ServiceBraintreeOfficialOrder */
     protected $serviceBraintreeOfficialOrder;
 
-    /* @var ServiceBraintreeOfficialCapture*/
+    /** @var ServiceBraintreeOfficialCapture */
     protected $serviceBraintreeOfficialCapture;
 
-    /* @var ServiceBraintreeOfficialVaulting*/
+    /** @var ServiceBraintreeOfficialVaulting */
     protected $serviceBraintreeOfficialVaulting;
 
-    /* @var MethodBraintreeOfficial*/
+    /** @var MethodBraintreeOfficial */
     protected $methodBraintreeOfficial;
 
     public function __construct()
@@ -356,7 +356,7 @@ class BraintreeOfficial extends \PaymentModule
 
         try {
             $isPhpVersionCompliant = $installer->checkPhpVersion();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_errors[] = $e->getMessage();
 
             return false;
@@ -429,7 +429,7 @@ class BraintreeOfficial extends \PaymentModule
      */
     public function uninstallOrderStates()
     {
-        /* @var $orderState OrderState*/
+        /** @var $orderState OrderState */
         $result = true;
         $collection = new PrestaShopCollection('OrderState');
         $collection->where('module_name', '=', $this->name);
@@ -1020,8 +1020,8 @@ class BraintreeOfficial extends \PaymentModule
 
                     foreach ($ps_order_details as $order_detail) {
                         // Switch to back order if needed
-                        if (Configuration::get('PS_STOCK_MANAGEMENT') &&
-                            (int) $order_detail['product_quantity'] > (int) $order_detail['product_quantity_in_stock']) {
+                        if (Configuration::get('PS_STOCK_MANAGEMENT')
+                            && (int) $order_detail['product_quantity'] > (int) $order_detail['product_quantity_in_stock']) {
                             $paid_state = Configuration::get('PS_OS_OUTOFSTOCK_PAID');
                         }
                     }
@@ -1045,7 +1045,7 @@ class BraintreeOfficial extends \PaymentModule
                         case 'settling': // waiting
                             // do nothing and check later one more time
                             break;
-                        case 'submit_for_settlement': //waiting
+                        case 'submit_for_settlement': // waiting
                             // do nothing and check later one more time
                             break;
                         default:
@@ -1235,15 +1235,14 @@ class BraintreeOfficial extends \PaymentModule
     public function hookPaymentOptions($params)
     {
         $payments_options = [];
-        /* for avoiding the connection exception need to verify if module configured correct*/
+        /* for avoiding the connection exception need to verify if module configured correct */
         if ($this->methodBraintreeOfficial->isConfigured() == false) {
             return $payments_options;
         }
 
-        /* for avoiding the exception of authorization need to verify mode of payment currency and merchant account*/
-        if ($this->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
-            $this->merchantAccountForCurrencyConfigured() == false
-        ) {
+        /* for avoiding the exception of authorization need to verify mode of payment currency and merchant account */
+        if ($this->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY
+            && $this->merchantAccountForCurrencyConfigured() == false) {
             return $payments_options;
         }
 
@@ -1411,7 +1410,7 @@ class BraintreeOfficial extends \PaymentModule
         return $currency->iso_code;
     }
 
-    public function validateOrder($id_cart, $id_order_state, $amount_paid, $payment_method = 'Unknown', $message = null, $transaction = [], $currency_special = null, $dont_touch_amount = false, $secure_key = false, Shop $shop = null, $order_reference = null)
+    public function validateOrder($id_cart, $id_order_state, $amount_paid, $payment_method = 'Unknown', $message = null, $transaction = [], $currency_special = null, $dont_touch_amount = false, $secure_key = false, ?Shop $shop = null, $order_reference = null)
     {
         if ($this->needConvert()) {
             $amount_paid_curr = Tools::ps_round(Tools::convertPrice($amount_paid, new Currency($currency_special), true), 2);
@@ -1685,7 +1684,7 @@ class BraintreeOfficial extends \PaymentModule
 
     public function isSslActive()
     {
-        return \Configuration::get('PS_SSL_ENABLED') && \Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
+        return Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
     }
 
     /**
@@ -1694,8 +1693,8 @@ class BraintreeOfficial extends \PaymentModule
      *
      * @return bool
      *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function reset()
     {
@@ -1739,7 +1738,7 @@ class BraintreeOfficial extends \PaymentModule
      *
      * @return bool
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function handleWidget($action, $method, $hookName, $configuration)
     {
@@ -1776,10 +1775,10 @@ class BraintreeOfficial extends \PaymentModule
     public function addCheckboxCarrierRestrictionsForModule(array $shops = [])
     {
         if (!$shops) {
-            $shops = \Shop::getShops(true, null, true);
+            $shops = Shop::getShops(true, null, true);
         }
 
-        $carriers = \Carrier::getCarriers($this->context->language->id, false, false, false, null, \Carrier::ALL_CARRIERS);
+        $carriers = Carrier::getCarriers($this->context->language->id, false, false, false, null, Carrier::ALL_CARRIERS);
         $carrier_ids = [];
         foreach ($carriers as $carrier) {
             $carrier_ids[] = $carrier['id_reference'];
@@ -1787,7 +1786,7 @@ class BraintreeOfficial extends \PaymentModule
 
         foreach ($shops as $s) {
             foreach ($carrier_ids as $id_carrier) {
-                if (!\Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'module_carrier` (`id_module`, `id_shop`, `id_reference`)
+                if (!Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'module_carrier` (`id_module`, `id_shop`, `id_reference`)
 				VALUES (' . (int) $this->id . ', "' . (int) $s . '", ' . (int) $id_carrier . ')')) {
                     return false;
                 }

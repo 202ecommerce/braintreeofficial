@@ -71,7 +71,7 @@ class ServiceBraintreeOfficialCustomer
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalCustomer \PaypalCustomer*/
+            /** @var $paypalCustomer \PaypalCustomer */
             foreach ($collection->getResults() as $paypalCustomer) {
                 $braintreeCustomer = new BraintreeOfficialCustomer();
                 $braintreeCustomer->id = $paypalCustomer->id;
@@ -115,7 +115,7 @@ class ServiceBraintreeOfficialCustomer
         return $result;
     }
 
-    public function setProfileKeyForCustomer(BraintreeOfficialCustomer $braintreeCustomer, \MethodBraintreeOfficial $method = null)
+    public function setProfileKeyForCustomer(BraintreeOfficialCustomer $braintreeCustomer, ?\MethodBraintreeOfficial $method = null)
     {
         if ($method === null) {
             $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');

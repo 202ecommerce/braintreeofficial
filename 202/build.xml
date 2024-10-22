@@ -134,6 +134,7 @@
     </target>
     <target name="clean-npm-after" description="Remove NPM JSON">
         <delete dir="${basedir}/202/node_modules" />
+        <delete dir="${basedir}/${TARGETNAME}/_dev" />
         <delete file="${basedir}/package-lock.json" />
         <delete file="${basedir}/package.json" />
     </target>

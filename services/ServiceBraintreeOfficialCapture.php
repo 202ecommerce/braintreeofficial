@@ -112,7 +112,7 @@ class ServiceBraintreeOfficialCapture
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalCapture \PaypalCapture*/
+            /** @var $paypalCapture \PaypalCapture */
             foreach ($collection->getResults() as $paypalCapture) {
                 $braintreeCapture = new BraintreeOfficialCapture();
                 $braintreeCapture->id = $paypalCapture->id;

@@ -121,7 +121,7 @@ class ServiceBraintreeOfficialVaulting
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalVaulting \PaypalVaulting*/
+            /** @var $paypalVaulting \PaypalVaulting */
             foreach ($collection->getResults() as $paypalVaulting) {
                 $braintreeVaulting = new BraintreeOfficialVaulting();
                 $braintreeVaulting->id = $paypalVaulting->id;

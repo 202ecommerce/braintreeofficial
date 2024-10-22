@@ -30,7 +30,7 @@
         </h6>
     {/if}
     <div>
-        {{l s='You have to [b]finish your payment[/b] done with your PayPal account ' mod='braintreeofficial'}|braintreereplace nofilter} {if isset($payerEmail)}{$payerEmail|escape:'htmlall':'utf-8'}{/if}
+        {{l s='You have to [b]finish your payment[/b] done with your PayPal account ' mod='braintreeofficial'}|braintreereplace nofilter} {if isset($payerEmail)}{$payerEmail|escape:'htmlall':'UTF-8'}{/if}
     </div>
 
     <div>

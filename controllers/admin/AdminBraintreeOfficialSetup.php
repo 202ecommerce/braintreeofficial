@@ -129,7 +129,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function getCredentialsTplVars()
     {
-        /* @var $methodBraintree MethodBraintreeOfficial*/
+        /** @var $methodBraintree MethodBraintreeOfficial */
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         $tpl_vars = [
@@ -196,7 +196,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function initEnvironmentSettings()
     {
-        $this->context->smarty->assign('sandbox', (int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $this->context->smarty->assign('sandbox', (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
         $this->fields_form['form']['form'] = [
             'legend' => [
@@ -228,8 +228,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function initStatusBlock()
     {
-        /* @var $methodBraintree MethodBraintreeOfficial*/
-        $countryDefault = new \Country((int) \Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
+        /** @var $methodBraintree MethodBraintreeOfficial */
+        $countryDefault = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         $tpl_vars = [
@@ -352,7 +352,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
      */
     public function importMerchantAccountForCurrency($mode = null)
     {
-        /* @var $method MethodBraintreeOfficial*/
+        /** @var $method MethodBraintreeOfficial */
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         if ($mode === null) {
@@ -375,11 +375,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function showWarningCurrency()
     {
-        /* @var $methodBraintree MethodBraintreeOfficial*/
+        /** @var $methodBraintree MethodBraintreeOfficial */
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
-        return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
-            $this->module->merchantAccountForCurrencyConfigured() == false &&
-            $methodBraintree->isConfigured();
+        return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY
+            && $this->module->merchantAccountForCurrencyConfigured() == false
+            && $methodBraintree->isConfigured();
     }
 }

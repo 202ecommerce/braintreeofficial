@@ -25,9 +25,9 @@
 
 
 <div>
-  <b>{l s='Braintreeofficial Transaction ID' mod='braintreeofficial'}:</b> {if isset($log)}{$log->id_transaction|escape:'html':'utf-8'}{/if}
+  <b>{l s='Braintreeofficial Transaction ID' mod='braintreeofficial'}:</b> {if isset($log)}{$log->id_transaction|escape:'html':'UTF-8'}{/if}
 </div>
 
 <div>
-  <b>{l s='Last Logs Details' mod='braintreeofficial'}:</b> {if isset($log)}{$log->log|escape:'html':'utf-8'}{/if}
+  <b>{l s='Last Logs Details' mod='braintreeofficial'}:</b> {if isset($log)}{$log->log|escape:'html':'UTF-8'}{/if}
 </div>
