@@ -23,9 +23,8 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_da56bd27822c4be66ceefd6feab0de0c'] = 'Braintree';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_66c245d7e66a000a953af446968fadea'] = 'Steigern Sie Ihre Umsätze mit dem mobilen Braintree-Modul für höhere Konversionsraten in über 45 Ländern und um die neuesten Zahlungsquellen nutzen zu können.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Wollen Sie Ihre Daten wirklich löschen?';
@@ -299,7 +298,7 @@ $_MODULE['<{braintreeofficial}prestashop>unregisteredhooksmessage_84bb5767918a71
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_4a7c47c43f11a84f00ea356680340c92'] = 'Schutz';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_222db556d9db248f0406ec5695717eb8'] = 'Berechtigte Käufe sind durch unseren Käuferschutz und Kostenlose Retouren abgedeckt. ';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_8024391592accadb8810eaade5005a3f'] = 'Benutzerfreundlichkeit und Komfort';
-$_MODULE['<{braintreeofficial}prestashop>paypal_info_e2573418ae8a569caa6bede5e34f8b51'] = 'Bezahlen Sie schnell auf einem beliebigen Gerät – ohne Eingabe von Zahlungsdaten.';
+$_MODULE['<{braintreeofficial}prestashop>paypal_info_e2573418ae8a569caa6bede5e34f8b51'] = 'Bezahlen Sie schnell auf einem beliebigen Gerät – ohne Eingabe von Zahlungsdaten.';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f2259814'] = 'Sicherheit';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Bei PayPal bleiben Ihre Zahlungsdaten geschützt.';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Weltweit shoppen';

@@ -26,9 +26,9 @@
 
 namespace BraintreeOfficialAddons\services;
 
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
-use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -38,25 +38,30 @@ class ServiceBraintreeOfficialVaulting
 {
     /**
      * Checking if vault was created already for this card/pp account
-     * @return boolean
+     *
+     * @return bool
      */
     public function vaultingExist($token, $customer)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialVaulting::class);
         $collection->where('token', '=', pSQL($token));
-        $collection->where('id_braintreeofficial_customer', '=', (int)$customer);
+        $collection->where('id_braintreeofficial_customer', '=', (int) $customer);
         $braintreeVaulting = $collection->getFirst();
+
         return \Validate::isLoadedObject($braintreeVaulting) ? true : false;
     }
+
     /**
      * Get all vaulted methods (cards, accounts) for this customer
-     * @param integer $customer PrestaShop Customer ID
+     *
+     * @param int $customer PrestaShop Customer ID
      * @param string $method payment tool (card or paypal account)
+     *
      * @return array BraintreeOfficialVaulting
      */
     public function getCustomerMethods($customer, $method)
     {
-        /** @var $methodBraintree \MethodBraintreeOfficial*/
+        /** @var $methodBraintree \MethodBraintreeOfficial */
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         $db = \Db::getInstance();
@@ -64,37 +69,41 @@ class ServiceBraintreeOfficialVaulting
         $query->select('*');
         $query->from('braintreeofficial_vaulting', 'bv');
         $query->leftJoin('braintreeofficial_customer', 'bc', 'bv.id_braintreeofficial_customer = bc.id_braintreeofficial_customer');
-        $query->where('bc.id_customer = '.(int)$customer);
-        $query->where('bv.payment_tool = "'.pSQL($method).'"');
-        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $query->where('bc.id_customer = ' . (int) $customer);
+        $query->where('bv.payment_tool = "' . pSQL($method) . '"');
+        $query->where('bc.sandbox = ' . (int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $query->where('bc.profile_key = "' . pSQL($methodBraintree->getProfileKey()) . '"');
         $result = $db->executeS($query);
+
         return $result;
     }
 
     /**
      * Get vaulted methods grouped by tools (card or paypal account)
-     * @param integer $customer PrestaShop Customer ID
+     *
+     * @param int $customer PrestaShop Customer ID
+     *
      * @return array BraintreeOfficialVaulting
      */
     public function getCustomerGroupedMethods($customer)
     {
-        /** @var $method \MethodBraintreeOfficial*/
+        /** @var $method \MethodBraintreeOfficial */
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         $db = \Db::getInstance();
-        $methods = array();
+        $methods = [];
         $query = new \DbQuery();
         $query->select('*');
         $query->from('braintreeofficial_vaulting', 'bv');
         $query->leftJoin('braintreeofficial_customer', 'bc', 'bv.id_braintreeofficial_customer = bc.id_braintreeofficial_customer');
-        $query->where('bc.id_customer = '.(int)$customer);
-        $query->where('bc.sandbox = ' . (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $query->where('bc.id_customer = ' . (int) $customer);
+        $query->where('bc.sandbox = ' . (int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $query->where('bc.profile_key = "' . pSQL($method->getProfileKey()) . '"');
         $results = $db->query($query);
         while ($result = $db->nextRow($results)) {
             $methods[$result['payment_tool']][] = $result;
         }
+
         return $methods;
     }
 

@@ -34,5 +34,4 @@ if (!defined('_PS_VERSION_')) {
 
 abstract class AbstractMethodBraintreeOfficial extends AbstractMethod
 {
-
 }

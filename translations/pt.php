@@ -23,11 +23,10 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_da56bd27822c4be66ceefd6feab0de0c'] = 'Braintree';
-$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_66c245d7e66a000a953af446968fadea'] = 'Aumente as receitas com o módulo Braintree nativo para dispositivos móveis, potenciando mais conversão em mais de 45 países e aceitando os meios de pagamento mais recentes.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_66c245d7e66a000a953af446968fadea'] = 'Aumente as receitas com o módulo Braintree nativo para dispositivos móveis, potenciando mais conversão em mais de 45 países e aceitando os meios de pagamento mais recentes.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Quer mesmo eliminar os seus detalhes?';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_aef7ac0c90af99c4f94f59518b8a82c5'] = 'Executar reembolso no Braintree';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_965d7c94abc0d204072e8c33906e8d51'] = 'Não conseguiu reembolsar o pedido; ainda não está pago.';
@@ -152,8 +151,8 @@ $_MODULE['<{braintreeofficial}prestashop>formaccount_ed6445336472aef39084720adcf
 $_MODULE['<{braintreeofficial}prestashop>formaccount_6eb9040e470e8018db394832a528f56a'] = 'Chave privada';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_229a7ec501323b94db7ff3157a7623c9'] = 'ID de vendedor';
 $_MODULE['<{braintreeofficial}prestashop>formaccount_2652eec977dcb2a5aea85f5bec235b05'] = 'Sandbox';
-$_MODULE['<{braintreeofficial}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Ativar módulo Braintree para iniciar melhor conversão em dispositivos móveis e em todas as plataformas em mais de 45 países';
-$_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Ativar em 4 passos simples';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_07a30db0b738bfc793d425b468ca4f5f'] = 'Ativar módulo Braintree para iniciar melhor conversão em dispositivos móveis e em todas as plataformas em mais de 45 países';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_a5c8b70ec4534f2dc64aac1606b9bdd2'] = 'Ativar em 4 passos simples';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_7f129d6c42616c5ec7fd4d6d8e457f96'] = 'Ligar à sua conta Braintree existente (abaixo) ou criar nova conta';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_3d409686378a06ab86a109527bfb728f'] = 'Ativar cartão de crédito e/ou carteira PayPal como meios de pagamento';
 $_MODULE['<{braintreeofficial}prestashop>headerlogo_dfe4283340c6369e764585c747cbd74a'] = 'Ajustar definição do PayPal para capturar pagamentos de imediato (Venda) ou depois de confirmar o pedido (Autorização)';
@@ -186,7 +185,7 @@ $_MODULE['<{braintreeofficial}prestashop>migrationstepone_fac568f580fc7bd55a5342
 $_MODULE['<{braintreeofficial}prestashop>migrationstepone_eb631b70ae7c721773f91b506c815082'] = 'Configurações';
 $_MODULE['<{braintreeofficial}prestashop>migrationstepone_1d443cb73c347dd1e51a03d24ff10c7d'] = 'Aguarde... Estamos a migrar as suas definições do Braintree';
 $_MODULE['<{braintreeofficial}prestashop>migrationstepone_3705abdb7a671d330b6cc80bf9e5fd8a'] = 'Mantenha esta página aberta.';
-$_MODULE['<{braintreeofficial}prestashop>migrationstepone_ddbb34a322ef4151b7f77875210de9e5'] = 'A migração demora cerca de 5 minutos. Se não estiver concluída após 10 minutos, contacte o [a @href1 @]Serviço de Apoio ao Cliente[/a].';
+$_MODULE['<{braintreeofficial}prestashop>migrationstepone_ddbb34a322ef4151b7f77875210de9e5'] = 'A migração demora cerca de 5 minutos. Se não estiver concluída após 10 minutos, contacte o [a @href1 @]Serviço de Apoio ao Cliente[/a].';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_3dac48b561442386bc4f82499f157275'] = 'A migração das suas definições do módulo PayPal foi concluída com erros.';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_3fee1227f1b7e441476ccb45278a5f22'] = 'Contacte';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcontroller_05b320c3ea42546cbbbe50f45b5bbd9f'] = 'o Serviço de Apoio ao Cliente.';
@@ -304,9 +303,9 @@ $_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f22
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Não precisa de introduzir os seus dados bancários, o PayPal mantém a sua informação em segurança.';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Faça compras em todo o mundo';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_00c7db87517f39cbfdd3ca757e547bc8'] = 'Utilize a sua conta em qualquer ponto do globo onde queira fazer compras.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Tem de [b]concluir o pagamento[/b] feito com a sua conta PayPal ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Tem de [b]concluir o pagamento[/b] feito com a sua conta PayPal ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_b3e985da8b5a176abfb74c4c1ca960f9'] = 'ao aceitar os Termos de Serviço e clicando no botão de validação do pedido abaixo.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Tem de [b]concluir o pagamento[/b] feito com a sua conta PayPal ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Tem de [b]concluir o pagamento[/b] feito com a sua conta PayPal ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176abfb74c4c1ca960f9'] = 'ao aceitar os Termos de Serviço e clicando no botão de validação do pedido abaixo.';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Tenha em atenção que as comissões de entrega adicionais (%1s) foram aplicadas. Para obter mais detalhes, consulte o resumo do pedido.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Pagar com PayPal Express Checkout';

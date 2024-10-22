@@ -23,17 +23,17 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use BraintreeofficialPPBTlib\Install\ModuleInstaller;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
+use BraintreeofficialPPBTlib\Install\ModuleInstaller;
 
 /**
  * @param $module BraintreeOfficial
+ *
  * @return bool
  */
 function upgrade_module_1_1_1($module)

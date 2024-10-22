@@ -24,7 +24,7 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
-/**
+/*
  * Smarty modifier to replace HTML tags in translations.
  * @usage {{l='test'}|braintreereplace}
  * @param.value string
@@ -32,9 +32,9 @@
  */
 
 if (!function_exists('smarty_modifier_braintreereplace')) {
-    function smarty_modifier_braintreereplace($string, $replaces = array())
+    function smarty_modifier_braintreereplace($string, $replaces = [])
     {
-        $search = array(
+        $search = [
             '[b]',
             '[/b]',
             '[br]',
@@ -48,9 +48,9 @@ if (!function_exists('smarty_modifier_braintreereplace')) {
             '[strong]',
             '[/strong]',
             '[i]',
-            '[/i]'
-        );
-        $replace = array(
+            '[/i]',
+        ];
+        $replace = [
             '<b>',
             '</b>',
             '<br>',
@@ -64,8 +64,8 @@ if (!function_exists('smarty_modifier_braintreereplace')) {
             '<strong>',
             '</strong>',
             '<i>',
-            '</i>'
-        );
+            '</i>',
+        ];
         $string = str_replace($search, $replace, $string);
         foreach ($replaces as $k => $v) {
             $string = str_replace($k, $v, $string);

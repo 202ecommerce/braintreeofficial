@@ -38,24 +38,27 @@ class ServiceBraintreeOfficialCustomer
 {
     /**
      * Load customer object by ID
-     * @param integer $id_customer PrestaShop Customer ID
+     *
+     * @param int $id_customer PrestaShop Customer ID
      * @param bool $sandbox mode of customer
+     *
      * @return object BraintreeOfficialCustomer
      */
     public function loadCustomerByMethod($id_customer, $sandbox)
     {
-        /** @var $method \MethodBraintreeOfficial*/
+        /** @var $method \MethodBraintreeOfficial */
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
-        $collection->where('id_customer', '=', (int)$id_customer);
-        $collection->where('sandbox', '=', (int)$sandbox);
-        $collection->where('profile_key', '=', pSQL($method->getProfileKey((int)$sandbox)));
+        $collection->where('id_customer', '=', (int) $id_customer);
+        $collection->where('sandbox', '=', (int) $sandbox);
+        $collection->where('profile_key', '=', pSQL($method->getProfileKey((int) $sandbox)));
+
         return $collection->getFirst();
     }
 
     /**
-    *   Migration of the customers from the module "paypal" to the module "braintree"
-    */
+     *   Migration of the customers from the module "paypal" to the module "braintree"
+     */
     public function doMigration()
     {
         if (\Module::isInstalled('paypal')) {
@@ -98,7 +101,7 @@ class ServiceBraintreeOfficialCustomer
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
         $collection->where('profile_key', '=', '');
-        $collection->where('sandbox', '=', (int)$sandbox);
+        $collection->where('sandbox', '=', (int) $sandbox);
         $braintreeCustomers = $collection->getResults();
 
         if (empty($braintreeCustomers)) {

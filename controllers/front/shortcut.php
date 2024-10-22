@@ -23,10 +23,6 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
-use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -52,7 +48,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     public function postProcess()
     {
         try {
-            $this->redirectUrl = $this->context->link->getPageLink('order', null, null, array('step'=>2));
+            $this->redirectUrl = $this->context->link->getPageLink('order', null, null, ['step' => 2]);
 
             if ($this->getCheckoutInfo()['page'] == BRAINTREE_PRODUCT_PAGE) {
                 $this->updateCart();
@@ -71,7 +67,6 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         if (!empty($this->errors)) {
             $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $this->errors);
         }
-
     }
 
     public function prepareOrder()
@@ -84,7 +79,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         $this->context->cart->id_customer = $customer->id;
         $this->context->cart->update();
 
-        Hook::exec('actionAuthentication', array('customer' => $this->context->customer));
+        Hook::exec('actionAuthentication', ['customer' => $this->context->customer]);
         // Login information have changed, so we check if the cart rules still apply
         CartRule::autoRemoveFromCart($this->context);
         CartRule::autoAddToCart($this->context);
@@ -126,6 +121,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
     /**
      * @param $customer Customer object
+     *
      * @return Address
      * */
     protected function getAddress(Customer $customer)
@@ -136,7 +132,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         $id_state = $this->module->getIdStateByPaypalCode($paypalAddress->state, $paypalAddress->countryCode);
 
         foreach ($addresses as $address) {
-            if ($address['firstname'].' '.$address['lastname'] == $paypalAddress->recipientName
+            if ($address['firstname'] . ' ' . $address['lastname'] == $paypalAddress->recipientName
                 && $address['address1'] == $paypalAddress->line1
                 && (empty($paypalAddress->line2) || $address['address2'] == $paypalAddress->line2)
                 && $address['id_country'] == Country::getByIso($paypalAddress->countryCode)
@@ -144,16 +140,16 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
                 && (empty($paypalAddress->state) || $address['id_state'] == $id_state)
                 && $address['postcode'] == $paypalAddress->postalCode
             ) {
-                return new Address((int)$address['id_address']);
+                return new Address((int) $address['id_address']);
             } else {
                 if ((strrpos($address['alias'], 'Paypal_Address')) !== false) {
-                    $count = (int)(Tools::substr($address['alias'], -1)) + 1;
+                    $count = (int) (Tools::substr($address['alias'], -1)) + 1;
                 }
             }
         }
 
         $orderAddress = new Address();
-        $nameArray = explode(" ", $paypalAddress->recipientName);
+        $nameArray = explode(' ', $paypalAddress->recipientName);
         $firstName = implode(' ', array_slice($nameArray, 0, count($nameArray) - 1));
         $lastName = $nameArray[count($nameArray) - 1];
 
@@ -174,7 +170,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
         $orderAddress->postcode = $paypalAddress->postalCode;
         $orderAddress->id_customer = $customer->id;
-        $orderAddress->alias = 'Paypal_Address '.($count);
+        $orderAddress->alias = 'Paypal_Address ' . ($count);
         $validationMessage = $orderAddress->validateFields(false, true);
 
         if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {
@@ -188,7 +184,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         }
 
         if (is_string($validationMessage)) {
-            $vars = array(
+            $vars = [
                 'newAddress' => 'delivery',
                 'address1' => $orderAddress->address1,
                 'firstname' => $orderAddress->firstname,
@@ -198,16 +194,18 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
                 'city' => $orderAddress->city,
                 'phone' => $orderAddress->phone,
                 'address2' => $orderAddress->address2,
-                'id_state' => $orderAddress->id_state
-            );
+                'id_state' => $orderAddress->id_state,
+            ];
 
             $this->errors[] = $validationMessage;
             $url = Context::getContext()->link->getPageLink('order', null, null, $vars);
             $this->redirectUrl = $url;
+
             return false;
         }
 
         $orderAddress->save();
+
         return $orderAddress;
     }
 
@@ -223,26 +221,27 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
     public function displayAjaxGetCartAmount()
     {
-        $response = array(
+        $response = [
             'success' => true,
-            'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH)
-        );
+            'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
+        ];
         $this->jsonValues = $response;
     }
 
     public function displayAjaxGetProductAmount()
     {
-        $product = new Product((int)Tools::getValue('idProduct'));
+        $product = new Product((int) Tools::getValue('idProduct'));
 
         if (Validate::isLoadedObject($product) == false) {
-            $response = array(
-                'success' => false
-            );
+            $response = [
+                'success' => false,
+            ];
+
             return $this->jsonValues = $response;
         }
 
-        $idProductAttribute = (int)Tools::getValue('idProductAttribute');
-        $quantity = (int)Tools::getValue('quantity');
+        $idProductAttribute = (int) Tools::getValue('idProductAttribute');
+        $quantity = (int) Tools::getValue('quantity');
 
         // we don't pass quantity because in version Prestashop 1.7.6 this method does not take in account quantity
         $amount = $product->getPrice(
@@ -256,34 +255,35 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
         $available = $this->isProductAvailable($product, $idProductAttribute, $quantity);
 
-        $response = array(
+        $response = [
             'success' => true,
             'amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_) * $quantity,
-            'available' => $available
-        );
+            'available' => $available,
+        ];
 
         $this->jsonValues = $response;
     }
 
     public function displayAjaxCheckProductAvailability()
     {
-        $product = new Product((int)Tools::getValue('idProduct'));
-        $idProductAttribute = (int)Tools::getValue('idProductAttribute');
-        $quantity = (int)Tools::getValue('quantity');
+        $product = new Product((int) Tools::getValue('idProduct'));
+        $idProductAttribute = (int) Tools::getValue('idProductAttribute');
+        $quantity = (int) Tools::getValue('quantity');
 
         if (Validate::isLoadedObject($product) == false) {
-            $response = array(
-                'success' => false
-            );
+            $response = [
+                'success' => false,
+            ];
+
             return $this->jsonValues = $response;
         }
 
         $available = $this->isProductAvailable($product, $idProductAttribute, $quantity);
 
-        $response = array(
+        $response = [
             'success' => true,
-            'available' => $available
-        );
+            'available' => $available,
+        ];
 
         $this->jsonValues = $response;
     }
@@ -300,12 +300,12 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
     public function setCheckoutInfo($data)
     {
-        $vars = array(
-            'idProduct' => isset($data['idProduct']) ? (int)$data['idProduct'] : null,
-            'idProductAttribute' => isset($data['idProductAttribute']) ? (int)$data['idProductAttribute'] : null,
-            'page' => isset($data['page']) ? (int)$data['page'] : null,
-            'quantity' => isset($data['quantity']) ? (int)$data['quantity'] : null,
-        );
+        $vars = [
+            'idProduct' => isset($data['idProduct']) ? (int) $data['idProduct'] : null,
+            'idProductAttribute' => isset($data['idProductAttribute']) ? (int) $data['idProductAttribute'] : null,
+            'page' => isset($data['page']) ? (int) $data['page'] : null,
+            'quantity' => isset($data['quantity']) ? (int) $data['quantity'] : null,
+        ];
 
         $this->checkoutInfo = $vars;
     }

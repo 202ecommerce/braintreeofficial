@@ -35,7 +35,7 @@ if (!defined('_PS_VERSION_')) {
  */
 class BraintreeOfficialCustomer extends \ObjectModel
 {
-    /** @var integer PrestaShop Customer ID */
+    /** @var int PrestaShop Customer ID */
     public $id_customer;
 
     /** @var string Paypal customer reference number */
@@ -56,17 +56,17 @@ class BraintreeOfficialCustomer extends \ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'braintreeofficial_customer',
         'primary' => 'id_braintreeofficial_customer',
         'multilang' => false,
-        'fields' => array(
-            'id_customer' => array('type' => self::TYPE_INT),
-            'reference' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
-            'profile_key' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-        )
-    );
+        'fields' => [
+            'id_customer' => ['type' => self::TYPE_INT],
+            'reference' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'sandbox' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
+            'profile_key' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+        ],
+    ];
 }

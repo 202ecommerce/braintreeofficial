@@ -35,7 +35,6 @@ if (!defined('_PS_VERSION_')) {
 /**
  * Class BraintreeOfficialException
  * Custom exception with additional long message parameter
- * @package BraintreeOfficialAddons\classes
  */
 class BraintreeOfficialException extends Exception
 {
@@ -45,6 +44,7 @@ class BraintreeOfficialException extends Exception
     /**
      * BraintreeOfficialException constructor.
      * Redefine the exception construct so add long message
+     *
      * @param int $code
      * @param string $message not required
      * @param string $message_long not required

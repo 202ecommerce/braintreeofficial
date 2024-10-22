@@ -23,9 +23,8 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_da56bd27822c4be66ceefd6feab0de0c'] = 'Braintree';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_66c245d7e66a000a953af446968fadea'] = 'Vergroot uw omzet door de mobiele Braintree-module te gebruiken om conversie te verhogen in meer dan 45 landen en de nieuwste betaalmethoden te accepteren.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Weet u zeker dat u uw gegevens wilt verwijderen?';
@@ -304,9 +303,9 @@ $_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f22
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Sla het invullen van je gegevens over. PayPal slaat je data veilig voor je op.';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Shop wereldwijd';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_00c7db87517f39cbfdd3ca757e547bc8'] = 'Gebruik je rekening om overal online te betalen.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_b3e985da8b5a176abfb74c4c1ca960f9'] = 'door de servicevoorwaarden te accepteren en hieronder op Bestelvalidatie te klikken.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176abfb74c4c1ca960f9'] = 'door de servicevoorwaarden te accepteren en hieronder op Bestelvalidatie te klikken.';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Houd er rekening mee dat er extra bezorgkosten (%1s) van toepassing zijn. Raadpleeg het besteloverzicht voor meer informatie.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Betalen met PayPal Express Checkout';

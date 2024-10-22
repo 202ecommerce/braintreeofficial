@@ -59,18 +59,18 @@ class BraintreeOfficialVaulting extends \ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'braintreeofficial_vaulting',
         'primary' => 'id_braintreeofficial_vaulting',
         'multilang' => false,
-        'fields' => array(
-            'token' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'id_braintreeofficial_customer' => array('type' => self::TYPE_INT),
-            'name' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'info' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'payment_tool' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-        )
-    );
+        'fields' => [
+            'token' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'id_braintreeofficial_customer' => ['type' => self::TYPE_INT],
+            'name' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'info' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'payment_tool' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+        ],
+    ];
 }

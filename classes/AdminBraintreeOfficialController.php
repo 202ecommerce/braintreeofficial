@@ -41,16 +41,16 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
     public function init()
     {
         if (\Tools::getValue('action') === 'set_sandbox_mode') {
-            \Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', (int)\Tools::getValue('sandbox_mode'));
+            \Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', (int) \Tools::getValue('sandbox_mode'));
         }
 
         parent::init();
 
-        if ((int)\Configuration::get('BRAINTREEOFFICIAL_MIGRATION_FAILED') == 1) {
+        if ((int) \Configuration::get('BRAINTREEOFFICIAL_MIGRATION_FAILED') == 1) {
             $message = $this->module->l('The migration of your settings from PayPal module has been completed with errors.', 'AdminBraintreeOfficialController');
             $message .= $this->l('Please contact our');
             $message .= " <a href='https://addons.prestashop.com/fr/contactez-nous?id_product=1748' target='_blank'>";
-            $message .= $this->module->l('support team.', 'AdminBraintreeOfficialController') . "</a>";
+            $message .= $this->module->l('support team.', 'AdminBraintreeOfficialController') . '</a>';
             $this->warnings[] = $message;
         }
 
@@ -64,7 +64,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         $this->context->smarty->assign('need_rounding', $need_rounding);
         $this->context->smarty->assign('moduleDir', _MODULE_DIR_);
-        $this->context->smarty->assign('isModeSandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $this->context->smarty->assign('isModeSandbox', (int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $this->context->smarty->assign('isNotShowSCAMessage', $this->isNotShowSCAMessage());
     }
 
@@ -73,7 +73,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
      */
     public function isNotShowSCAMessage()
     {
-        return (bool)\Configuration::get(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE);
+        return (bool) \Configuration::get(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE);
     }
 
     public function displayAjaxUpdateRoundingSettings()
@@ -117,13 +117,14 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
         $helper->token = \Tools::getAdminTokenLite($this->controller_name);
         $helper->currentIndex = \AdminController::$currentIndex;
         $helper->submit_action = $this->controller_name . '_config';
-        $default_lang = (int)\Configuration::get('PS_LANG_DEFAULT');
+        $default_lang = (int) \Configuration::get('PS_LANG_DEFAULT');
         $helper->default_form_language = $default_lang;
         $helper->allow_employee_form_lang = $default_lang;
-        $helper->tpl_vars = array(
+        $helper->tpl_vars = [
             'fields_value' => $this->tpl_form_vars,
             'id_language' => $this->context->language->id,
-        );
+        ];
+
         return $helper->generateForm($fields_form);
     }
 
@@ -136,7 +137,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             }
         }
 
-        if ((int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') == 1) {
+        if ((int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') == 1) {
             $message = $this->module->l('Your Braintree account is currently configured to accept payments on the Sandbox', 'AdminBraintreeOfficialController');
             $message .= ' (<b>' . $this->module->l('test environment', 'AdminBraintreeOfficialController') . '</b>). ';
             $message .= $this->module->l('Any transaction will be fictitious. Disable the option, to accept actual payments (production environment) and log in with your Braintree credentials', 'AdminBraintreeOfficialController');
@@ -161,8 +162,8 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
     public function clearFieldsForm()
     {
-        $this->fields_form = array();
-        $this->tpl_form_vars = array();
+        $this->fields_form = [];
+        $this->tpl_form_vars = [];
     }
 
     public function setMedia($isNewTheme = false)
@@ -173,10 +174,10 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
     protected function _checkRequirements()
     {
-        $response = array(
+        $response = [
             'success' => true,
-            'message' => array()
-        );
+            'message' => [],
+        ];
         $hooksUnregistered = $this->module->getHooksUnregistered();
 
         if (empty($hooksUnregistered) == false) {
@@ -184,7 +185,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             $response['message'][] = $this->getHooksUnregisteredMessage($hooksUnregistered);
         }
 
-        if ((int)\Configuration::get('PS_COUNTRY_DEFAULT') == false) {
+        if ((int) \Configuration::get('PS_COUNTRY_DEFAULT') == false) {
             $response['success'] = false;
             $response['message'][] = $this->module->l('To activate a payment solution, please select your default country.', 'AdminBraintreeOfficialController');
         }
@@ -197,11 +198,12 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
         $tls_check = $this->_checkTLSVersion();
         if ($tls_check['status'] == false) {
             $response['success'] = false;
-            $response['message'][] = $this->module->l('Tls verification failed.', 'AdminBraintreeOfficialController').' '.$tls_check['error_message'];
+            $response['message'][] = $this->module->l('Tls verification failed.', 'AdminBraintreeOfficialController') . ' ' . $tls_check['error_message'];
         }
         if ($response['success']) {
             $response['message'][] = $this->module->l('Your shop configuration is OK. You can start to configure the Braintree module.', 'AdminBraintreeOfficialController');
         }
+
         return $response;
     }
 
@@ -210,10 +212,10 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
      */
     protected function _checkTLSVersion()
     {
-        $return = array(
+        $return = [
             'status' => false,
-            'error_message' => ''
-        );
+            'error_message' => '',
+        ];
         if (defined('CURL_SSLVERSION_TLSv1_2')) {
             $tls_server = $this->context->link->getModuleLink($this->module->name, 'tlscurltestserver');
             $curl = curl_init($tls_server);
@@ -241,11 +243,13 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
                 $return['error_message'] = $this->module->l('TLS version is not compatible', 'AdminBraintreeOfficialController');
             }
         }
+
         return $return;
     }
 
     /**
      *  @param array $hooks array of the hooks name
+     *
      *  @return string
      */
     public function getHooksUnregisteredMessage($hooks)
@@ -255,6 +259,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
         }
 
         $this->context->smarty->assign('hooks', $hooks);
+
         return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/unregisteredHooksMessage.tpl');
     }
 
@@ -263,13 +268,13 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
         $query = [
             'token' => $this->token,
             'action' => 'set_sandbox_mode',
-            'sandbox_mode' => \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1
+            'sandbox_mode' => \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1,
         ];
         $this->page_header_toolbar_btn['switch_sandbox'] = [
             'desc' => $this->l('Sandbox mode'),
             'icon' => 'process-icon-toggle-' . (\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
             'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
-            'href' => self::$currentIndex . '?' . http_build_query($query)
+            'href' => self::$currentIndex . '?' . http_build_query($query),
         ];
 
         parent::initPageHeaderToolbar();

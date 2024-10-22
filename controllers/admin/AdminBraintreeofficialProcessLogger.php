@@ -23,8 +23,7 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
-require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php';
 
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
 
@@ -39,16 +38,16 @@ class AdminBraintreeofficialProcessLoggerController extends AdminProcessLoggerCo
         $this->className = 'BraintreeOfficialAddons\classes\BraintreeOfficialLog';
 
         if (isset($this->fields_list['id_transaction'])) {
-            $this->fields_list['id_transaction'] = array(
-                'title'    => $this->module->l('Braintree Transaction ID', 'AdminProcessLoggerController'),
+            $this->fields_list['id_transaction'] = [
+                'title' => $this->module->l('Braintree Transaction ID', 'AdminProcessLoggerController'),
                 'callback' => 'getLinkToTransaction',
-            );
+            ];
         }
 
         if (isset($this->fields_list['log'])) {
-            $this->fields_list['log'] = array(
+            $this->fields_list['log'] = [
                 'title' => $this->module->l('Message (Braintree API response)', 'AdminProcessLoggerController'),
-            );
+            ];
         }
     }
 }

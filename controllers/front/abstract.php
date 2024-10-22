@@ -35,5 +35,4 @@ if (!defined('_PS_VERSION_')) {
  */
 abstract class BraintreeOfficialAbstarctModuleFrontController extends CommonAbstarctModuleFrontController
 {
-
 }

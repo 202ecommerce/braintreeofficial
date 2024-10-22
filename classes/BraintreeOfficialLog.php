@@ -26,8 +26,8 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -65,6 +65,7 @@ class BraintreeOfficialLog extends ProcessLoggerObjectModel
 
         $dateTimeZone = new \DateTimeZone('GMT');
         $date = new \DateTime($this->date_transaction, $dateTimeZone);
+
         return $date->format('Y-m-d H:i:s T');
     }
 }

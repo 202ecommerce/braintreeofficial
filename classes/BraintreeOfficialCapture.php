@@ -38,7 +38,7 @@ class BraintreeOfficialCapture extends \ObjectModel
     /** @var string Capture ID */
     public $id_capture;
 
-    /** @var integer BraintreeOfficialOrder ID */
+    /** @var int BraintreeOfficialOrder ID */
     public $id_braintreeofficial_order;
 
     /** @var float Captured amount */
@@ -56,17 +56,17 @@ class BraintreeOfficialCapture extends \ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'braintreeofficial_capture',
         'primary' => 'id_braintreeofficial_capture',
         'multilang' => false,
-        'fields' => array(
-            'id_capture' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'id_braintreeofficial_order' => array('type' => self::TYPE_INT),
-            'capture_amount' => array('type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2),
-            'result' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-        )
-    );
+        'fields' => [
+            'id_capture' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'id_braintreeofficial_order' => ['type' => self::TYPE_INT],
+            'capture_amount' => ['type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2],
+            'result' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+        ],
+    ];
 }

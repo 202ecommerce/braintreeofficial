@@ -37,35 +37,42 @@ class ServiceBraintreeOfficialOrder
 {
     /**
      * Load BraintreeOfficialOrder object by PrestaShop order ID
-     * @param integer $id_order Order ID
+     *
+     * @param int $id_order Order ID
+     *
      * @return BraintreeOfficialOrder
      */
     public function loadByOrderId($id_order)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
-        $collection->where('id_order', '=', (int)$id_order);
+        $collection->where('id_order', '=', (int) $id_order);
+
         return $collection->getFirst();
     }
 
     /**
      * Get BT records
+     *
      * @return array all BT transaction IDs
      */
     public function getBraintreeOrdersForValidation()
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('payment_status', 'in', ['settling', 'submitted_for_settlement', 'settlement_pending']);
+
         return $collection->getResults();
     }
 
     /**
      * @param string $id_transaction Transaction ID
+     *
      * @return BraintreeOfficialOrder Order id
      */
     public function loadByTransactionId($id_transaction)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('id_transaction', '=', pSQL($id_transaction));
+
         return $collection->getFirst();
     }
 
@@ -122,6 +129,7 @@ class ServiceBraintreeOfficialOrder
     public function getCountOrders()
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
+
         return $collection->count();
     }
 

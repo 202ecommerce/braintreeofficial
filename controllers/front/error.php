@@ -23,7 +23,6 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -44,6 +43,7 @@ class BraintreeOfficialErrorModuleFrontController extends ModuleFrontController
         $this->values['error_code'] = Tools::getvalue('error_code');
         $this->values['no_retry'] = Tools::getvalue('no_retry');
     }
+
     /**
      * @see FrontController::initContent()
      */
@@ -51,12 +51,12 @@ class BraintreeOfficialErrorModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
 
-        Context::getContext()->smarty->assign(array(
+        Context::getContext()->smarty->assign([
             'error_msg' => $this->values['error_msg'],
             'msg_long' => $this->values['msg_long'],
             'error_code' => $this->values['error_code'],
             'show_retry' => (Context::getContext()->cart->nbProducts() > 0 && !$this->values['no_retry']) ? true : false,
-        ));
+        ]);
 
         $this->setTemplate('module:braintreeofficial/views/templates/front/payment_error.tpl');
     }

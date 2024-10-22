@@ -35,10 +35,10 @@ if (!defined('_PS_VERSION_')) {
  */
 class BraintreeOfficialOrder extends \ObjectModel
 {
-    /** @var integer Prestashop Order generated ID */
+    /** @var int Prestashop Order generated ID */
     public $id_order;
 
-    /** @var integer Prestashop Cart generated ID */
+    /** @var int Prestashop Cart generated ID */
     public $id_cart;
 
     /** @var string Transaction ID */
@@ -77,24 +77,24 @@ class BraintreeOfficialOrder extends \ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'braintreeofficial_order',
         'primary' => 'id_braintreeofficial_order',
         'multilang' => false,
-        'fields' => array(
-            'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
-            'id_cart' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId'),
-            'id_transaction' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'id_payment' => array('type' => self::TYPE_STRING),
-            'payment_method' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'currency' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'total_paid' => array('type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2),
-            'payment_status' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'total_prestashop' => array('type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2),
-            'payment_tool' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-        )
-    );
+        'fields' => [
+            'id_order' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
+            'id_cart' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedId'],
+            'id_transaction' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'id_payment' => ['type' => self::TYPE_STRING],
+            'payment_method' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'currency' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'total_paid' => ['type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2],
+            'payment_status' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'total_prestashop' => ['type' => self::TYPE_FLOAT, 'size' => 10, 'scale' => 2],
+            'payment_tool' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'sandbox' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+        ],
+    ];
 }

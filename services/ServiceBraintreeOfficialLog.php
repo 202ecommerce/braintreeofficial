@@ -26,8 +26,8 @@
 
 namespace BraintreeOfficialAddons\services;
 
-use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
@@ -39,6 +39,7 @@ class ServiceBraintreeOfficialLog
 {
     /**
      * @param $log BraintreeOfficialLog
+     *
      * @return url
      */
     public function getLinkToTransaction($log)
@@ -49,6 +50,7 @@ class ServiceBraintreeOfficialLog
         }
 
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
         return $method->getLinkToTransaction($log);
     }
 
@@ -108,7 +110,7 @@ class ServiceBraintreeOfficialLog
      */
     public function getCartBtId()
     {
-        $cartBtIds = array();
+        $cartBtIds = [];
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $moduleManager = $moduleManagerBuilder->build();
 

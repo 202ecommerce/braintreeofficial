@@ -38,22 +38,26 @@ class ServiceBraintreeOfficialCapture
 {
     /**
      * Load BraintreeOfficialCapture object by BraintreeOfficialOrder ID
-     * @param integer $id_braintreeofficial_order BraintreeOfficialOrder ID
+     *
+     * @param int $id_braintreeofficial_order BraintreeOfficialOrder ID
+     *
      * @return BraintreeOfficialCapture
      */
     public function loadByOrderBraintreeId($id_braintree_order)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialCapture::class);
-        $collection->where('id_braintreeofficial_order', '=', (int)$id_braintree_order);
+        $collection->where('id_braintreeofficial_order', '=', (int) $id_braintree_order);
+
         return $collection->getFirst();
     }
 
     /**
      * Update BraintreeOfficialCapture
+     *
      * @param string $transaction_id New transaction ID that correspond to capture
      * @param float $amount Captured amount
      * @param string $status new payment status
-     * @param integer $id_braintreeofficial_order BraintreeOfficialOrder ID
+     * @param int $id_braintreeofficial_order BraintreeOfficialOrder ID
      */
     public function updateCapture($transaction_id, $amount, $status, $id_braintree_order)
     {
@@ -63,14 +67,17 @@ class ServiceBraintreeOfficialCapture
             return false;
         }
         $braintreeCapture->id_capture = pSQL($transaction_id);
-        $braintreeCapture->capture_amount = (float)$amount;
+        $braintreeCapture->capture_amount = (float) $amount;
         $braintreeCapture->result = pSQL($status);
+
         return $braintreeCapture->save();
     }
 
     /**
      * Get all datas from BraintreeOfficialOrder and BraintreeOfficialCapture
-     * @param integer $id_order PrestaShop order ID
+     *
+     * @param int $id_order PrestaShop order ID
+     *
      * @return array BraintreeOfficialCapture
      */
     public function getByOrderId($id_order)
@@ -79,7 +86,8 @@ class ServiceBraintreeOfficialCapture
         $sql->select('*');
         $sql->from('braintreeofficial_order', 'bo');
         $sql->innerJoin('braintreeofficial_capture', 'bc', 'bo.`id_braintreeofficial_order` = bc.`id_braintreeofficial_order`');
-        $sql->where('bo.id_order = '.(int)$id_order);
+        $sql->where('bo.id_order = ' . (int) $id_order);
+
         return \Db::getInstance()->getRow($sql);
     }
 
@@ -135,7 +143,7 @@ class ServiceBraintreeOfficialCapture
      */
     public function getPayPalOrderBtId()
     {
-        $paypalOrderBtIds = array();
+        $paypalOrderBtIds = [];
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $moduleManager = $moduleManagerBuilder->build();
 

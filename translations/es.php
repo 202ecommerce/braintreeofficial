@@ -23,9 +23,8 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_da56bd27822c4be66ceefd6feab0de0c'] = 'Braintree';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_66c245d7e66a000a953af446968fadea'] = 'Incrementa tus ingresos con el módulo móvil nativo de Braintree, que te ayuda a incrementar la tasa de conversión en más de 45 países y acepta las formas de pago más recientes.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Seguro que quieres eliminar tus datos?';
@@ -51,10 +50,10 @@ $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_8ae0cb74f9724518e1ce6
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_729cd05e50606aca11e38918222fdd82'] = 'Error de tokenización del lado del servidor. ¿Es válida la tarjeta?';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_1519bda079ebc7a0352e12d5a218daef'] = 'Se ha producido un error de red durante la tokenización.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_23d1e945d89f99ddf838f0b7921098c5'] = 'Error de tokenización';
-$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_4415d0f48a48bbe04bb7b0ea9dc88284'] = '3D Secure requiere HTTPS.';
-$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_b81f50c07c8d23bbd7b2107b36d83704'] = 'Error al cargar 3D Secure';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_4415d0f48a48bbe04bb7b0ea9dc88284'] = '3D Secure requiere HTTPS.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_b81f50c07c8d23bbd7b2107b36d83704'] = 'Error al cargar 3D Secure';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_b999ae7b750a6857e6bea1618fb223c3'] = 'Ha habido un problema con la solicitud.';
-$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_64a0a5788729fd5ba37db816f5a32f38'] = 'Error de 3D Secure';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_64a0a5788729fd5ba37db816f5a32f38'] = 'Error de 3D Secure';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_b989faae3e70a711f45b304dcc9558b7'] = 'está vacío.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_57df0c4ce0afcf14943001d27728822a'] = 'Esta fecha de vencimiento ';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_659c680257206020ca455271b8e016c0'] = 'Este número de tarjeta ';
@@ -316,9 +315,9 @@ $_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f22
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Olvídate de tener que introducir tu información financiera; PayPal mantiene tus datos seguros.';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Compra en todo el mundo';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_00c7db87517f39cbfdd3ca757e547bc8'] = 'Usa tu cuenta para comprar en tiendas de todo el mundo.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Para [b]completar el pago[/b] realizado con su cuenta PayPal, debe ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Para [b]completar el pago[/b] realizado con su cuenta PayPal, debe ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_b3e985da8b5a176abfb74c4c1ca960f9'] = 'aceptar las condiciones de servicio y hacer clic en el botón de validación del pedido más abajo.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Para [b]completar el pago[/b] realizado con su cuenta PayPal, debe ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'Para [b]completar el pago[/b] realizado con su cuenta PayPal, debe ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176abfb74c4c1ca960f9'] = 'aceptar las condiciones de servicio y hacer clic en el botón de validación del pedido más abajo.';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Tenga en cuenta que se aplican las tarifas de entrega adicionales (%1s). Para obtener más información, consulte el resumen del pedido.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Pagar con PayPal Express Checkout';
