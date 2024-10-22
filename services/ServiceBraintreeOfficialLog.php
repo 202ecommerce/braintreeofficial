@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -26,25 +26,31 @@
 
 namespace BraintreeOfficialAddons\services;
 
-use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\classes\BraintreeOfficialLog;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class ServiceBraintreeOfficialLog
 {
     /**
      * @param $log BraintreeOfficialLog
+     *
      * @return url
      */
     public function getLinkToTransaction($log)
     {
-        /* @var $method \MethodBraintreeOfficial*/
+        /* @var $method \MethodBraintreeOfficial */
         if ($log->id_transaction == false || $log->id_order == false) {
             return '';
         }
 
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+
         return $method->getLinkToTransaction($log);
     }
 
@@ -71,7 +77,7 @@ class ServiceBraintreeOfficialLog
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalLog \PaypalLog*/
+            /** @var $paypalLog \PaypalLog */
             foreach ($collection->getResults() as $paypalLog) {
                 $braintreeLog = new BraintreeOfficialLog();
                 $braintreeLog->id_cart = $paypalLog->id_cart;
@@ -104,7 +110,7 @@ class ServiceBraintreeOfficialLog
      */
     public function getCartBtId()
     {
-        $cartBtIds = array();
+        $cartBtIds = [];
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $moduleManager = $moduleManagerBuilder->build();
 

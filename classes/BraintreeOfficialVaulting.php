@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,13 +18,17 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
 namespace BraintreeOfficialAddons\classes;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Class BraintreeOfficialVaulting.
@@ -55,18 +59,18 @@ class BraintreeOfficialVaulting extends \ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'braintreeofficial_vaulting',
         'primary' => 'id_braintreeofficial_vaulting',
         'multilang' => false,
-        'fields' => array(
-            'token' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'id_braintreeofficial_customer' => array('type' => self::TYPE_INT),
-            'name' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'info' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'payment_tool' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-        )
-    );
+        'fields' => [
+            'token' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'id_braintreeofficial_customer' => ['type' => self::TYPE_INT],
+            'name' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'info' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'payment_tool' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+        ],
+    ];
 }

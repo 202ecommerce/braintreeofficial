@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -26,14 +26,15 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use Exception;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Class BraintreeOfficialException
  * Custom exception with additional long message parameter
- * @package BraintreeOfficialAddons\classes
  */
-class BraintreeOfficialException extends Exception
+class BraintreeOfficialException extends \Exception
 {
     /** @var string Long detailed error message */
     private $message_long;
@@ -41,6 +42,7 @@ class BraintreeOfficialException extends Exception
     /**
      * BraintreeOfficialException constructor.
      * Redefine the exception construct so add long message
+     *
      * @param int $code
      * @param string $message not required
      * @param string $message_long not required

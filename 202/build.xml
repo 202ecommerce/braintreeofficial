@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ 2007-2020 PayPal
+  ~ 2007-2021 PayPal
   ~
   ~  NOTICE OF LICENSE
   ~
@@ -18,7 +18,7 @@
   ~  versions in the future. If you wish to customize PrestaShop for your
   ~  needs please refer to http://www.prestashop.com for more information.
   ~
-  ~  @author 2007-2020 PayPal
+  ~  @author 2007-2021 PayPal
   ~  @author 202 ecommerce <tech@202-ecommerce.com>
   ~  @copyright PayPal
   ~  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -30,9 +30,9 @@
     <property name="src-dir" value="${basedir}" />
     <property name="TARGETNAME" value="braintreeofficial" />
     <property name="TARGETBRANCH" value="${env.GIT_BRANCH}" />
-    <property name="TARGETVERSION" value="1.2.5" />
+    <property name="TARGETVERSION" value="1.2.6" />
     <property name="PHPVERSION" value="5.6" />
-    <property name="PSVERSION" value="1.7.5.x" />
+    <property name="PSVERSION" value="1.7.8.x" />
 
     <target name="build" depends="build-common,package-zip,psvalidator,tot-testing" />
 
@@ -111,6 +111,9 @@
         <echo>Installing dependencies</echo>
         <exec executable="composer" failonerror="true">
             <arg value="install" />
+            <arg value="--no-dev" />
+            <arg value="--optimize-autoloader" />
+            <arg value="--ignore-platform-reqs" />
         </exec>
     </target>
     <target name="composer-update" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Updating dependencies">
@@ -121,14 +124,19 @@
     </target>
     <!-- end composer -->
     <!-- start documentation -->
-    <target name="npm" depends="clean-npm,npm-install" description="Install or update node dependencies" />
+    <target name="npm" depends="clean-npm,npm-install,clean-npm-after" description="Install or update node dependencies" />
     <target name="clean-npm" description="Empty node_modules folder">
         <delete dir="${basedir}/202/node_modules" />
+        <delete file="${basedir}/package-lock.json" />
     </target>
     <target name="npm-install" description="Installing node deps">
-        <exec executable="npm">
-            <arg value="install" />
-        </exec>
+        <exec executable="./202/run_npm.sh"></exec>
+    </target>
+    <target name="clean-npm-after" description="Remove NPM JSON">
+        <delete dir="${basedir}/202/node_modules" />
+        <delete dir="${basedir}/${TARGETNAME}/_dev" />
+        <delete file="${basedir}/package-lock.json" />
+        <delete file="${basedir}/package.json" />
     </target>
     <target name="doc.check">
         <condition property="doc.directory.exist">

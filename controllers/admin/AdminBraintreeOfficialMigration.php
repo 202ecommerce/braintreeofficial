@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,21 +18,24 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/admin/AdminBraintreeOfficialSetup.php';
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
-use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
-use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
+use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSetupController
 {
@@ -40,9 +43,9 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     {
         $this->content = $this->getStepOne();
         $this->context->smarty->assign('content', $this->content);
-        Media::addJsDef(array(
-            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
-        ));
+        Media::addJsDef([
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name),
+        ]);
         $this->addCSS('https://fonts.googleapis.com/icon?family=Material+Icons');
         $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/migrationAdmin.js');
     }
@@ -57,6 +60,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         $tpl_vars = $this->getCredentialsTplVars();
         $tpl_vars['isMultishop'] = Shop::isFeatureActive();
         $this->context->smarty->assign($tpl_vars);
+
         return $this->context->smarty->fetch($this->getTemplatePath() . '_partials/migrationStepTwo.tpl');
     }
 
@@ -70,8 +74,8 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         if (Shop::isFeatureActive()) {
             $shops = Shop::getShops();
             foreach ($shops as $shop) {
-                Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1, false, null, (int)$shop['id_shop']);
-                $this->doMigrateConfigurations((int)$shop['id_shop']);
+                Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1, false, null, (int) $shop['id_shop']);
+                $this->doMigrateConfigurations((int) $shop['id_shop']);
             }
         } else {
             Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_DONE', 1);
@@ -82,13 +86,13 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         $serviceBraintreeOrder = new ServiceBraintreeOfficialOrder();
         $serviceBraintreeCapture = new ServiceBraintreeOfficialCapture();
         $serviceBraintreeLog = new ServiceBraintreeOfficialLog();
-        $tablesForBackup = array(
+        $tablesForBackup = [
             'paypal_order',
             'paypal_customer',
             'paypal_capture',
             'paypal_processlogger',
-            'paypal_vaulting'
-        );
+            'paypal_vaulting',
+        ];
         $this->doBackupTables($tablesForBackup);
 
         $serviceBraintreeCustomer->doMigration();
@@ -100,7 +104,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     }
 
     /**
-     *  @param array $tables the names of tables
+     * @param array $tables the names of tables
      * */
     protected function doBackupTables($tables)
     {
@@ -111,13 +115,13 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         foreach ($tables as $table) {
             $nameTableCurrent = _DB_PREFIX_ . $table;
             $nameTableBackup = $nameTableCurrent . '_old';
-            $queryCreatingTableBackup = "CREATE TABLE IF NOT EXISTS %s LIKE %s;";
-            $queryFillingTableBackup = "REPLACE %s SELECT * FROM %s;";
+            $queryCreatingTableBackup = 'CREATE TABLE IF NOT EXISTS %s LIKE %s;';
+            $queryFillingTableBackup = 'REPLACE %s SELECT * FROM %s;';
             try {
                 DB::getInstance()->execute(sprintf($queryCreatingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
                 DB::getInstance()->execute(sprintf($queryFillingTableBackup, pSQL($nameTableBackup), pSQL($nameTableCurrent)));
             } catch (Exception $e) {
-                \Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
+                Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_FAILED', 1);
                 $message = 'Error while do backup of the tables. ';
                 $message .= 'File: ' . $e->getFile() . '. ';
                 $message .= 'Line: ' . $e->getLine() . '. ';
@@ -128,7 +132,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         ProcessLoggerHandler::closeLogger();
     }
 
-    protected function doMigrateMerchantAccountIdCurrency($merchantAccountIdCurrency, $sandbox, $idShop=null)
+    protected function doMigrateMerchantAccountIdCurrency($merchantAccountIdCurrency, $sandbox, $idShop = null)
     {
         if (is_array($merchantAccountIdCurrency) == false) {
             return;
@@ -142,31 +146,33 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
     public function displayAjaxStartMigration()
     {
         $this->doMigration();
-        $content = Tools::jsonEncode(array(
+        $content = json_encode([
             'status' => true,
             'content' => $this->getStepTwo(),
-        ));
+        ]);
         $response = new JsonResponse();
         $response->setContent($content);
+
         return $response->send();
     }
 
     public function displayAjaxSkipMigration()
     {
-        $content = Tools::jsonEncode(array(
+        $content = json_encode([
             'status' => Configuration::updateValue('BRAINTREEOFFICIAL_MIGRATION_SKIP', 1),
             'urlRedirect' => $this->context->link->getAdminLink('AdminBraintreeOfficialSetup', true),
-        ));
+        ]);
         $paypalModule = Module::getInstanceByName('paypal');
         $paypalModule->disable();
         $response = new JsonResponse();
         $response->setContent($content);
+
         return $response->send();
     }
 
     public function displayAjaxSaveAccount()
     {
-        /* @var $method MethodBraintreeOfficial*/
+        /* @var $method MethodBraintreeOfficial */
         $this->saveForm();
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial'); // mehtod load exists in class BraintreeofficialPPBTlib\AbstractMethod
         $isConfigured = $method->isConfigured();
@@ -176,17 +182,18 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
             $paypalModule->disable();
         }
 
-        $content = Tools::jsonEncode(array(
+        $content = json_encode([
             'status' => $isConfigured,
             'content' => $isConfigured == false ? $this->l('An error occurred while creating your web experience. Check your credentials.') : $this->getStepThree(),
-        ));
+        ]);
 
         $response = new JsonResponse();
         $response->setContent($content);
+
         return $response->send();
     }
 
-    protected function doMigrateConfigurations($idShop=null)
+    protected function doMigrateConfigurations($idShop = null)
     {
         Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX', Configuration::get('PAYPAL_SANDBOX_BRAINTREE_MERCHANT_ID', null, null, $idShop), false, null, $idShop);
         Configuration::updateValue('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE', Configuration::get('PAYPAL_LIVE_BRAINTREE_MERCHANT_ID', null, null, $idShop), false, null, $idShop);
@@ -198,15 +205,15 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
         Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE', Configuration::get('PAYPAL_USE_3D_SECURE', null, null, $idShop), false, null, $idShop);
         Configuration::updateValue('BRAINTREEOFFICIAL_3DSECURE_AMOUNT', Configuration::get('PAYPAL_3D_SECURE_AMOUNT', null, null, $idShop), false, null, $idShop);
 
-        $merchant_account_id_currency_sandbox = Tools::jsonDecode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
-        $merchant_account_id_currency_live = Tools::jsonDecode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
+        $merchant_account_id_currency_sandbox = json_decode(Configuration::get('PAYPAL_SANDBOX_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
+        $merchant_account_id_currency_live = json_decode(Configuration::get('PAYPAL_LIVE_BRAINTREE_ACCOUNT_ID', null, null, $idShop));
 
         if ($merchant_account_id_currency_sandbox) {
-            $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_sandbox, 1, $idShop);
+            $this->doMigrateMerchantAccountIdCurrency((array) $merchant_account_id_currency_sandbox, 1, $idShop);
         }
 
         if ($merchant_account_id_currency_live) {
-            $this->doMigrateMerchantAccountIdCurrency((array)$merchant_account_id_currency_live, 0, $idShop);
+            $this->doMigrateMerchantAccountIdCurrency((array) $merchant_account_id_currency_live, 0, $idShop);
         }
     }
 }

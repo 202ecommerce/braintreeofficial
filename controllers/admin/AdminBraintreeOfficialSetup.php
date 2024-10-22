@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,18 +18,21 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php';
 
-require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
-
-use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialController
 {
@@ -67,20 +70,19 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         $formStatus = $this->renderForm();
         $this->clearFieldsForm();
 
-        $tpl_vars = array(
+        $tpl_vars = [
             'formAccountSettings' => $formAccountSettings,
             'formPaymentSettings' => $formPaymentSettings,
             'formMerchantAccounts' => $formMerchantAccounts,
             'formStatus' => $formStatus,
-            'showMessageAboutStateName' => (int)Configuration::get('BRAINTREEOFFICIAL_SHOW_MESSAGE_ABOUT_STATE_NAME')
-
-        );
+            'showMessageAboutStateName' => (int) Configuration::get('BRAINTREEOFFICIAL_SHOW_MESSAGE_ABOUT_STATE_NAME'),
+        ];
         $this->context->smarty->assign($tpl_vars);
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'setup.tpl');
         $this->context->smarty->assign('content', $this->content);
-        Media::addJsDef(array(
-            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
-        ));
+        Media::addJsDef([
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name),
+        ]);
         $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/setupAdmin.js');
     }
 
@@ -91,6 +93,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         $offerMigration &= Configuration::get('PAYPAL_BRAINTREE_ENABLED') == '1';
         $offerMigration &= Configuration::get('PAYPAL_METHOD') == 'BT';
         $offerMigration &= $this->serviceBraintreeOfficialOrder->getCountOrders() == 0;
+
         return $offerMigration;
     }
 
@@ -100,36 +103,36 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/accountSettingsBlock.tpl');
 
-        $this->fields_form['form']['form'] = array(
-            'legend' => array(
+        $this->fields_form['form']['form'] = [
+            'legend' => [
                 'title' => $this->l('Account settings'),
                 'icon' => 'icon-cogs',
-            ),
-            'input' => array(
-                array(
+            ],
+            'input' => [
+                [
                     'type' => 'hidden',
-                    'name' => 'SaveAccountSettingsBlock'
-                ),
-                array(
+                    'name' => 'SaveAccountSettingsBlock',
+                ],
+                [
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
                     'col' => 12,
                     'label' => '',
-                )
-            ),
-            'id_form' => 'bt_config_account'
-        );
+                ],
+            ],
+            'id_form' => 'bt_config_account',
+        ];
 
-        $this->tpl_form_vars = array_merge($this->tpl_form_vars, array('SaveAccountSettingsBlock' => 1));
+        $this->tpl_form_vars = array_merge($this->tpl_form_vars, ['SaveAccountSettingsBlock' => 1]);
     }
 
     public function getCredentialsTplVars()
     {
-        /* @var $methodBraintree MethodBraintreeOfficial*/
+        /** @var $methodBraintree MethodBraintreeOfficial */
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
-        $tpl_vars = array(
+        $tpl_vars = [
             'braintreeofficial_public_key_live' => Configuration::get('BRAINTREEOFFICIAL_PUBLIC_KEY_LIVE'),
             'braintreeofficial_public_key_sandbox' => Configuration::get('BRAINTREEOFFICIAL_PUBLIC_KEY_SANDBOX'),
             'braintreeofficial_private_key_live' => Configuration::get('BRAINTREEOFFICIAL_PRIVATE_KEY_LIVE'),
@@ -137,162 +140,164 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             'braintreeofficial_merchant_id_live' => Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_LIVE'),
             'braintreeofficial_merchant_id_sandbox' => Configuration::get('BRAINTREEOFFICIAL_MERCHANT_ID_SANDBOX'),
             'accountConfigured' => $methodBraintree->isConfigured(),
-            'sandboxEnvironment' => (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX'),
-            'showMigrationBtn' => $this->offreMigration()
-        );
+            'sandboxEnvironment' => (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX'),
+            'showMigrationBtn' => $this->offreMigration(),
+        ];
+
         return $tpl_vars;
     }
 
     public function initPaymentSettingsBlock()
     {
-        $this->fields_form['form']['form'] = array(
-            'legend' => array(
+        $this->fields_form['form']['form'] = [
+            'legend' => [
                 'title' => $this->l('Payment settings'),
                 'icon' => 'icon-cogs',
-            ),
-            'input' => array(
-                array(
+            ],
+            'input' => [
+                [
                     'type' => 'select',
                     'label' => $this->l('Payment action'),
                     'name' => 'braintreeofficial_api_intent',
-                    'options' => array(
-                        'query' => array(
-                            array(
+                    'options' => [
+                        'query' => [
+                            [
                                 'id' => 'sale',
-                                'name' => $this->l('Sale')
-                            ),
-                            array(
+                                'name' => $this->l('Sale'),
+                            ],
+                            [
                                 'id' => 'authorization',
-                                'name' => $this->l('Authorize')
-                            )
-                        ),
+                                'name' => $this->l('Authorize'),
+                            ],
+                        ],
                         'id' => 'id',
-                        'name' => 'name'
-                    ),
-                ),
-                array(
+                        'name' => 'name',
+                    ],
+                ],
+                [
                     'type' => 'html',
                     'name' => '',
-                    'html_content' => $this->module->displayInformation($this->l('We recommend Authorize process only for lean manufacturers and craft products sellers.'))
-                )
-            ),
-            'submit' => array(
+                    'html_content' => $this->module->displayInformation($this->l('We recommend Authorize process only for lean manufacturers and craft products sellers.')),
+                ],
+            ],
+            'submit' => [
                 'title' => $this->l('Save'),
                 'class' => 'btn btn-default pull-right button',
-            ),
-            'id_form' => 'bt_config_payment'
-        );
+            ],
+            'id_form' => 'bt_config_payment',
+        ];
 
-        $values = array(
+        $values = [
             'braintreeofficial_api_intent' => Configuration::get('BRAINTREEOFFICIAL_API_INTENT'),
-            'braintreeofficial_sandbox' => (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX')
-        );
+            'braintreeofficial_sandbox' => (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX'),
+        ];
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     public function initEnvironmentSettings()
     {
-        $this->context->smarty->assign('sandbox', (int)\Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
+        $this->context->smarty->assign('sandbox', (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX'));
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
-        $this->fields_form['form']['form'] = array(
-            'legend' => array(
+        $this->fields_form['form']['form'] = [
+            'legend' => [
                 'title' => $this->l('Environment Settings'),
                 'icon' => 'icon-cogs',
-            ),
-            'input' => array(
-                array(
+            ],
+            'input' => [
+                [
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
                     'col' => 12,
                     'label' => '',
-                ),
-                array(
+                ],
+                [
                     'type' => 'hidden',
                     'name' => 'braintreeofficial_sandbox',
                     'col' => 12,
                     'label' => '',
-                )
-            ),
-            'id_form' => 'bt_config_environment'
-        );
-        $values = array(
-            'braintreeofficial_sandbox' => !(int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX')
-        );
+                ],
+            ],
+            'id_form' => 'bt_config_environment',
+        ];
+        $values = [
+            'braintreeofficial_sandbox' => !(int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX'),
+        ];
         $this->tpl_form_vars = array_merge($this->tpl_form_vars, $values);
     }
 
     public function initStatusBlock()
     {
-        /* @var $methodBraintree MethodBraintreeOfficial*/
-        $countryDefault = new \Country((int)\Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
+        /** @var $methodBraintree MethodBraintreeOfficial */
+        $countryDefault = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'), $this->context->language->id);
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
-        $tpl_vars = array(
+        $tpl_vars = [
             'merchantCountry' => $countryDefault->name,
             'tlsVersion' => $this->_checkTLSVersion(),
             'accountConfigured' => $methodBraintree->isConfigured(),
             'sslActivated' => $this->module->isSslActive(),
             'merchantAccountIdConfigured' => $this->showWarningCurrency() == false,
-            'paymentCustomerCurrency' => $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY
-        );
+            'paymentCustomerCurrency' => $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY,
+        ];
         $this->context->smarty->assign($tpl_vars);
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
-        $this->fields_form[]['form'] = array(
-            'legend' => array(
+        $this->fields_form[]['form'] = [
+            'legend' => [
                 'title' => $this->l('Status'),
                 'icon' => 'icon-cogs',
-            ),
-            'input' => array(
-                array(
+            ],
+            'input' => [
+                [
                     'type' => 'html',
                     'html_content' => $html_content,
                     'name' => '',
                     'col' => 12,
                     'label' => '',
-                )
-            )
-        );
+                ],
+            ],
+        ];
     }
 
     public function displayAjaxCheckCredentials()
     {
         $this->initStatusBlock();
         $response = new JsonResponse($this->renderForm());
+
         return $response->send();
     }
 
     public function initMerchantAccountForm()
     {
-        $inputs = array(
-            array(
+        $inputs = [
+            [
                 'type' => 'hidden',
-                'name' => 'SaveMerchantAccountForm'
-            )
-        );
+                'name' => 'SaveMerchantAccountForm',
+            ],
+        ];
 
         foreach (Currency::getCurrencies() as $currency) {
-            $inputs[] = array(
+            $inputs[] = [
                 'type' => 'text',
                 'label' => $this->l('Merchant account Id for ') . $currency['iso_code'],
-                'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']))
-            );
+                'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code'])),
+            ];
         }
 
-        $this->fields_form[]['form'] = array(
-            'legend' => array(
+        $this->fields_form[]['form'] = [
+            'legend' => [
                 'title' => $this->l('Braintree Merchant Accounts'),
                 'icon' => 'icon-cogs',
-            ),
+            ],
             'description' => $this->context->smarty->fetch($this->getTemplatePath() . '_partials/infoForMerchantAccount.tpl'),
             'input' => $inputs,
-            'submit' => array(
+            'submit' => [
                 'title' => $this->l('Save'),
                 'class' => 'btn btn-default pull-right button',
-            ),
-        );
+            ],
+        ];
 
-        $values =  array();
+        $values = [];
         foreach ($inputs as $input) {
             $values[$input['name']] = Configuration::get(Tools::strtoupper($input['name']));
         }
@@ -304,8 +309,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
     {
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
-        if (Tools::isSubmit("SaveMerchantAccountForm")) {
-            $merchantAccounts = array();
+        if (Tools::isSubmit('SaveMerchantAccountForm')) {
+            $merchantAccounts = [];
 
             foreach (Currency::getCurrencies() as $currency) {
                 $nameMerchantAccont = Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code']));
@@ -315,7 +320,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             $wrongMerchantAccounts = $methodBraintree->validateMerchantAccounts($merchantAccounts);
 
             if (empty($wrongMerchantAccounts) == false) {
-                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(", ", array_keys($wrongMerchantAccounts));
+                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(', ', array_keys($wrongMerchantAccounts));
+
                 return false;
             }
         }
@@ -331,9 +337,8 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             if (Tools::isSubmit('braintreeofficial_sandbox') == false) {
                 $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
             }
-
         } else {
-            if (Module::isEnabled('paypal') && (int)Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {
+            if (Module::isEnabled('paypal') && (int) Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {
                 $paypalModule = Module::getInstanceByName('paypal');
                 $paypalModule->disable();
             }
@@ -347,11 +352,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
      */
     public function importMerchantAccountForCurrency($mode = null)
     {
-        /* @var $method MethodBraintreeOfficial*/
+        /** @var $method MethodBraintreeOfficial */
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
         if ($mode === null) {
-            $mode = (int)Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
+            $mode = (int) Configuration::get('BRAINTREEOFFICIAL_SANDBOX');
         }
 
         // Delete merchant accounts if they exists
@@ -370,11 +375,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
     public function showWarningCurrency()
     {
-        /* @var $methodBraintree MethodBraintreeOfficial*/
+        /** @var $methodBraintree MethodBraintreeOfficial */
         $methodBraintree = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
 
-        return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY &&
-            $this->module->merchantAccountForCurrencyConfigured() == false &&
-            $methodBraintree->isConfigured();
+        return $this->module->getCurrentModePaymentCurrency() == BRAINTREE_PAYMENT_CUSTOMER_CURRENCY
+            && $this->module->merchantAccountForCurrencyConfigured() == false
+            && $methodBraintree->isConfigured();
     }
 }

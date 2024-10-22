@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,16 +18,19 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
-require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php';
 
 use BraintreeOfficialAddons\classes\AdminBraintreeOfficialController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialController
 {
@@ -36,7 +39,7 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
         parent::init();
 
         if (Tools::isSubmit('registerHooks')) {
-            if ($this->registerHooks()) {
+            if ($this->module->registerHooks()) {
                 $this->confirmations[] = $this->l('Hooks successfully registered');
             }
         }
@@ -49,37 +52,27 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
     public function initContent()
     {
         $need_rounding = (Configuration::get('PS_ROUND_TYPE') != Order::ROUND_ITEM) || (Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP);
-        $tpl_vars = array(
+        $tpl_vars = [
             'need_rounding' => $need_rounding,
-        );
+        ];
         $this->context->smarty->assign($tpl_vars);
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'help.tpl');
         $this->context->smarty->assign('content', $this->content);
-        Media::addJsDef(array(
-            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name)
-        ));
+        Media::addJsDef([
+            'controllerUrl' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite($this->controller_name),
+        ]);
         $this->addJS(_MODULE_DIR_ . $this->module->name . '/views/js/helpAdmin.js');
     }
 
     public function displayAjaxCheckCredentials()
     {
         $response = new JsonResponse($this->_checkRequirements());
+
         return $response->send();
     }
 
-    public function registerHooks()
+    public function isNotShowSCAMessage()
     {
-        $result = true;
-        $hooksUnregistered = $this->module->getHooksUnregistered();
-
-        if (empty($hooksUnregistered)) {
-            return $result;
-        }
-
-        foreach ($hooksUnregistered as $hookName) {
-            $result &= $this->module->registerHook($hookName);
-        }
-
-        return $result;
+        return false;
     }
 }
