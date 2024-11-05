@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -30,26 +30,34 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialCapture;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServiceBraintreeOfficialCapture
 {
     /**
      * Load BraintreeOfficialCapture object by BraintreeOfficialOrder ID
-     * @param integer $id_braintreeofficial_order BraintreeOfficialOrder ID
+     *
+     * @param int $id_braintreeofficial_order BraintreeOfficialOrder ID
+     *
      * @return BraintreeOfficialCapture
      */
     public function loadByOrderBraintreeId($id_braintree_order)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialCapture::class);
-        $collection->where('id_braintreeofficial_order', '=', (int)$id_braintree_order);
+        $collection->where('id_braintreeofficial_order', '=', (int) $id_braintree_order);
+
         return $collection->getFirst();
     }
 
     /**
      * Update BraintreeOfficialCapture
+     *
      * @param string $transaction_id New transaction ID that correspond to capture
      * @param float $amount Captured amount
      * @param string $status new payment status
-     * @param integer $id_braintreeofficial_order BraintreeOfficialOrder ID
+     * @param int $id_braintreeofficial_order BraintreeOfficialOrder ID
      */
     public function updateCapture($transaction_id, $amount, $status, $id_braintree_order)
     {
@@ -59,14 +67,17 @@ class ServiceBraintreeOfficialCapture
             return false;
         }
         $braintreeCapture->id_capture = pSQL($transaction_id);
-        $braintreeCapture->capture_amount = (float)$amount;
+        $braintreeCapture->capture_amount = (float) $amount;
         $braintreeCapture->result = pSQL($status);
+
         return $braintreeCapture->save();
     }
 
     /**
      * Get all datas from BraintreeOfficialOrder and BraintreeOfficialCapture
-     * @param integer $id_order PrestaShop order ID
+     *
+     * @param int $id_order PrestaShop order ID
+     *
      * @return array BraintreeOfficialCapture
      */
     public function getByOrderId($id_order)
@@ -75,7 +86,8 @@ class ServiceBraintreeOfficialCapture
         $sql->select('*');
         $sql->from('braintreeofficial_order', 'bo');
         $sql->innerJoin('braintreeofficial_capture', 'bc', 'bo.`id_braintreeofficial_order` = bc.`id_braintreeofficial_order`');
-        $sql->where('bo.id_order = '.(int)$id_order);
+        $sql->where('bo.id_order = ' . (int) $id_order);
+
         return \Db::getInstance()->getRow($sql);
     }
 
@@ -100,7 +112,7 @@ class ServiceBraintreeOfficialCapture
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalCapture \PaypalCapture*/
+            /** @var $paypalCapture \PaypalCapture */
             foreach ($collection->getResults() as $paypalCapture) {
                 $braintreeCapture = new BraintreeOfficialCapture();
                 $braintreeCapture->id = $paypalCapture->id;
@@ -131,7 +143,7 @@ class ServiceBraintreeOfficialCapture
      */
     public function getPayPalOrderBtId()
     {
-        $paypalOrderBtIds = array();
+        $paypalOrderBtIds = [];
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         $moduleManager = $moduleManagerBuilder->build();
 

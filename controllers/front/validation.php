@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,14 +18,17 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/front/abstract.php';
 
@@ -34,7 +37,7 @@ require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/front/abstract.php
  */
 class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficialAbstarctModuleFrontController
 {
-    /* @var $method MethodBraintreeOfficial*/
+    /** @var MethodBraintreeOfficial */
     protected $method;
 
     public function init()
@@ -58,7 +61,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
             $cart = Context::getContext()->cart;
             $customer = new Customer($cart->id_customer);
             $module = Module::getInstanceByName($this->name);
-            $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id .'&id_module=' . $module->id .'&key='.$customer->secure_key;
+            $this->redirectUrl = 'index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $module->id . '&key=' . $customer->secure_key;
         } catch (BraintreeOfficialAddons\classes\BraintreeOfficialException $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['logger_msg'] = $e->getMessage();
@@ -71,9 +74,9 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         }
 
         if (!empty($this->errors)) {
-            $params = array(
-                'error_msg' => $this->errors['error_msg']
-            );
+            $params = [
+                'error_msg' => $this->errors['error_msg'],
+            ];
             $this->redirectUrl = Context::getContext()->link->getModuleLink($this->name, 'error', $params);
         }
     }
@@ -96,36 +99,38 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
             $iso = $state->iso_code;
         }
 
-        $responseContent = array(
+        $responseContent = [
             'success' => true,
             'use3dVerification' => $use3dVerification,
-            'orderInformation' => array(
+            'orderInformation' => [
                 'amount' => $this->context->cart->getOrderTotal(true, Cart::BOTH),
                 'email' => $customer->email,
-                'billingAddress' => array(
-                    'givenName' => iconv("utf-8", "ascii//TRANSLIT", $customer->firstname),
+                'billingAddress' => [
+                    'givenName' => iconv('utf-8', 'ascii//TRANSLIT', $customer->firstname),
                     'surneme' => $customer->lastname,
                     'phoneNumber' => $address->phone,
                     'streetAddress' => $address->address1,
                     'locality' => $address->city,
                     'countryCodeAlpha2' => $country->iso_code,
                     'region' => $iso,
-                    'postalCode' => $address->postcode
-                ),
-                'additionalInformation' => array(
+                    'postalCode' => $address->postcode,
+                ],
+                'additionalInformation' => [
                     'shippingGivenName' => $address->firstname,
                     'shippingSurname' => $address->lastname,
                     'shippingPhone' => $address->phone,
-                    'shippingAddress' => array(
+                    'shippingAddress' => [
                         'streetAddress' => $address->address1,
                         'locality' => $address->city,
                         'countryCodeAlpha2' => $country->iso_code,
                         'region' => $iso,
-                        'postalCode' => $address->postcode
-                    )
-                )
-            )
-        );
+                        'postalCode' => $address->postcode,
+                    ],
+                    'ipAddress' => Tools::getRemoteAddr(),
+                ],
+                'collectDeviceData' => true,
+            ],
+        ];
         $this->jsonValues = $responseContent;
     }
 }

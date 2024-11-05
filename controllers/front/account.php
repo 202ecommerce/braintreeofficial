@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,20 +18,23 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
-use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
-use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class BraintreeOfficialAccountModuleFrontController extends ModuleFrontController
 {
-    /* @var ServiceBraintreeOfficialVaulting*/
+    /** @var ServiceBraintreeOfficialVaulting */
     protected $serviceBraintreeOfficialVaulting;
 
     public function __construct()
@@ -47,9 +50,9 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
      */
     public function postProcess()
     {
-        /* @var $method MethodBraintreeOfficial*/
+        /* @var $method MethodBraintreeOfficial */
         if (Tools::getValue('process') == 'delete') {
-            $id = (int)Tools::getValue('id_method');
+            $id = (int) Tools::getValue('id_method');
             $payment_method = new BraintreeOfficialVaulting($id);
             $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
             $method->deleteVaultedMethod($payment_method);
@@ -79,12 +82,11 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
     {
         parent::initContent();
         $methods = $this->serviceBraintreeOfficialVaulting->getCustomerGroupedMethods($this->context->customer->id);
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'payment_methods' => $methods,
-        ));
+        ]);
         $this->setTemplate('module:braintreeofficial/views/templates/front/payment_methods.tpl');
     }
-
 
     /**
      * Set my account breadcrumb links.

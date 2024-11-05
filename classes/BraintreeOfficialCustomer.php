@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -26,12 +26,16 @@
 
 namespace BraintreeOfficialAddons\classes;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Class BraintreeOfficialCustomer.
  */
 class BraintreeOfficialCustomer extends \ObjectModel
 {
-    /** @var integer PrestaShop Customer ID */
+    /** @var int PrestaShop Customer ID */
     public $id_customer;
 
     /** @var string Paypal customer reference number */
@@ -52,17 +56,17 @@ class BraintreeOfficialCustomer extends \ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'braintreeofficial_customer',
         'primary' => 'id_braintreeofficial_customer',
         'multilang' => false,
-        'fields' => array(
-            'id_customer' => array('type' => self::TYPE_INT),
-            'reference' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'sandbox' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
-            'profile_key' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => self::TYPE_DATE, 'validate' => 'isDateFormat'),
-        )
-    );
+        'fields' => [
+            'id_customer' => ['type' => self::TYPE_INT],
+            'reference' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'sandbox' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
+            'profile_key' => ['type' => self::TYPE_STRING, 'validate' => 'isString'],
+            'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+            'date_upd' => ['type' => self::TYPE_DATE, 'validate' => 'isDateFormat'],
+        ],
+    ];
 }

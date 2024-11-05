@@ -1,46 +1,57 @@
-{*
-* 2007-2020 PayPal
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author 2007-2020 PayPal
-*  @author 202 ecommerce <tech@202-ecommerce.com>
+{**
+ * since 2007 PayPal
+ *
+ *  NOTICE OF LICENSE
+ *
+ *  This source file is subject to the Academic Free License (AFL 3.0)
+ *  that is bundled with this package in the file LICENSE.txt.
+ *  It is also available through the world-wide-web at this URL:
+ *  http://opensource.org/licenses/afl-3.0.php
+ *  If you did not receive a copy of the license and are unable to
+ *  obtain it through the world-wide-web, please send an email
+ *  to license@prestashop.com so we can send you a copy immediately.
+ *
+ *  DISCLAIMER
+ *
+ *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ *  versions in the future. If you wish to customize PrestaShop for your
+ *  needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author since 2007 PayPal
+ *  @author 202 ecommerce <tech@202-ecommerce.com>
+ *  @copyright PayPal
+ *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ *}
 
-*  @copyright PayPal
-*  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*}
+{if false == isset($isNotShowSCAMessage) || $isNotShowSCAMessage == false}
+	<div class="alert alert-info">
+		<button id="closeSCAmessage" type="button" class="close" data-dismiss="alert">×</button>
+		<p>
+			{l s='Note : As part of European Regulation PSD2 and related SCA (Strong Customer Authentication) planned on September 14th 2019, all transactions will have to go through SCA (3DS 2.0) with the aim to reduce friction (fewer “client challenges”) while raise conversion and protection (more liability shifts from merchant to bank).' mod='braintreeofficial'}
+		</p>
 
-<div class="alert alert-info">
-	<p>
-        {l s='Note : As part of European Regulation PSD2 and related SCA (Strong Customer Authentication) planned on September 14th 2019, all transactions will have to go through SCA (3DS 2.0) with the aim to reduce friction (fewer “client challenges”) while raise conversion and protection (more liability shifts from merchant to bank).' mod='braintreeofficial'}
-	</p>
+		<p>
+			{l s='It is thus recommended to enable 3D Secure in order to avoid bank declines and impact to your business. (Go to "Customize Experience Checkout")' mod='braintreeofficial'}
+		</p>
 
-	<p>
-        {l s='It is thus recommended to enable 3D Secure in order to avoid bank declines and impact to your business. (Go to "Customize Experience Checkout")' mod='braintreeofficial'}
-	</p>
+		<p>
+			{{l s='More info in our blog post [b]to get the last updates:[/b]' mod='braintreeofficial'}|braintreereplace}
+			<a href="https://www.braintreepayments.com/ie/features/3d-secure">
+				https://www.braintreepayments.com/ie/features/3d-secure
+			</a>
+		</p>
+	</div>
 
-	<p>
-        {{l s='More info in our blog post [b]to get the last updates:[/b]' mod='braintreeofficial'}|braintreereplace}
-		<a href="https://www.braintreepayments.com/ie/features/3d-secure">
-			https://www.braintreepayments.com/ie/features/3d-secure
-		</a>
-	</p>
-</div>
+	<script>
+		document.getElementById('closeSCAmessage').addEventListener('click', function () {
+			var url = new URL(window.location.href);
+
+			url.searchParams.append('ajax', 1);
+			url.searchParams.append('action', 'disableSCAmessage');
+			fetch(url.toString());
+		})
+	</script>
+{/if}
 
 <div class="panel active-panel bt__flex bt__align-items-center">
 	<div class="bt__pr-4">

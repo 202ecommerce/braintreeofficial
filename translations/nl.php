@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2021 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -17,15 +17,14 @@
  *  Do not edit or add to this file if you wish to upgrade PrestaShop to newer
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
- *  
- *  @author 2007-2021 PayPal
+ *
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_da56bd27822c4be66ceefd6feab0de0c'] = 'Braintree';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_66c245d7e66a000a953af446968fadea'] = 'Vergroot uw omzet door de mobiele Braintree-module te gebruiken om conversie te verhogen in meer dan 45 landen en de nieuwste betaalmethoden te accepteren.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Weet u zeker dat u uw gegevens wilt verwijderen?';
@@ -304,10 +303,59 @@ $_MODULE['<{braintreeofficial}prestashop>paypal_info_99f4fa3f580d5e6590296af9f22
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_28f313a05650c0bb493f0bcca4956a31'] = 'Sla het invullen van je gegevens over. PayPal slaat je data veilig voor je op.';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_327fa12a62a444f0b451df44c3a2aaf5'] = 'Shop wereldwijd';
 $_MODULE['<{braintreeofficial}prestashop>paypal_info_00c7db87517f39cbfdd3ca757e547bc8'] = 'Gebruik je rekening om overal online te betalen.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomerone_b3e985da8b5a176abfb74c4c1ca960f9'] = 'door de servicevoorwaarden te accepteren en hieronder op Bestelvalidatie te klikken.';
-$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
+$_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_952f622b6cbe191f3d9abb6d6f34b71d'] = 'U moet de [b]betaling voltooien[/b] die u met uw PayPal-rekening heeft verricht ';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_b3e985da8b5a176abfb74c4c1ca960f9'] = 'door de servicevoorwaarden te accepteren en hieronder op Bestelvalidatie te klikken.';
 $_MODULE['<{braintreeofficial}prestashop>messageforcustomertwo_768073dd22a31e3489fad6543b7301b1'] = 'Houd er rekening mee dat er extra bezorgkosten (%1s) van toepassing zijn. Raadpleeg het besteloverzicht voor meer informatie.';
 $_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e02a9cef1018f4c3ff5345af151c0bdf'] = 'Betalen met PayPal Express Checkout';
 $_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0463c4b558f28024f257915c2c0d4057'] = 'Knop voor PayPal Express Checkout ingeschakeld';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_4022b37ecfd048665e5e9ad9970fa480'] = 'Authenticatie mislukt voor deze transactie. Probeer een andere kaart of betaalmethode.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_7c77412d0974cacfd9242eeb61d4aea8'] = 'Authenticatie ontbreekt voor deze transactie.';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_e2ce09f82546271b7b2d63f9a4afd8cf'] = 'Betaling toegestaan : wacht op bevestiging van de betaling door de admin';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_875bc752dba4f654dfd38fa938eac745'] = 'Betaling toegestaan : Afwikkeling';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_eb56e5649f7b0b442965c0a466079c11'] = 'Verwerking van de betaling (toegestaan)';
+$_MODULE['<{braintreeofficial}prestashop>braintreeofficial_9b9cf9f8778f69b4c6cf37e66f886be8'] = 'Kies status';
+$_MODULE['<{braintreeofficial}prestashop>methodbraintreeofficial_e2c2115f715f55eed84f02ad2d59ce6e'] = 'Kaartverificatie mislukt.';
+$_MODULE['<{braintreeofficial}prestashop>methodbraintreeofficial_5c4b3cb9f38b6b3fefc1474013aef10c'] = 'Kaartverificatie is mislukt. ';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_3af189380b08a0a9253eab40bda1255f'] = 'De PayPal-snelkoppeling wordt direct in uw winkelwagen of op uw productpagina\'s weergegeven, zodat uw kopers sneller kunnen afrekenen. PayPal voorziet u van de verzend- en factureringsgegevens van de klant, zodat u die niet zelf hoeft te verzamelen.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_4527171fdf857e51b69b704f3738ad8c'] = 'U kunt de status van uw bestellingen aanpassen voor elke mogelijke actie in de Braintree module.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_18eaca809be3d20e366fbdf5c0d7be8d'] = 'Pas de status van uw bestelling aan';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_f4ea2662bb04c2cb311b512c45445800'] = 'Gebruik deze optie alleen als u de toegewezen standaard Braintree status wilt wijzigen op PrestaShop Bestelstatussen.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_2ce328247e31561d8aa166935f96d52e'] = 'Bestelstatus voor het triggeren van de terugbetaling op Braintree';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_06d07ae08ca4b3322b3d451d1dfc0b29'] = 'U kunt de via Braintree betaalde bestellingen direct via uw PrestaShop BackOffice terugbetalen. Hier kunt u de bestelstatus kiezen die de terugbetaling op Braintree triggert. Kies de optie \"geen acties\" als u de status van de bestelling wilt wijzigen zonder de automatische terugbetaling op Braintree te triggeren.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0f9907c62d585faaab3efaf95a3406ac'] = 'Standaard status : Terugbetaald';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_d4fd947f41ad532e2aed97227a6d3c8d'] = 'Orderstatus voor het triggeren van de annulering op Braintree';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_aa3640c3f45917224dd43927babde10d'] = 'U kunt bestellingen die betaald zijn via Braintree direct annuleren via uw PrestaShop BackOffice. Hier kunt u de bestelstatus kiezen die de Braintree annulering van een toegestane transactie op Braintree triggert. Kies de optie \"geen acties\" als u de status van de bestelling wenst te wijzigen zonder de automatische annulering op Braintree te triggeren.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_afe70387e87a03e074c3181a5b7ecb36'] = 'Standaard status : Geannuleerd';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_ec4cac4c0bacfd35e3d43612313ae182'] = 'Betaling aanvaard via BO (bel Braintree om de betaling te krijgen)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_36500501ab89967d20b1beb686880d44'] = 'U gebruikt momenteel de Autoriseer modus. Dit betekent dat u de betalingsautorisatie scheidt van het vastleggen van de geautoriseerde betaling. Voor het vastleggen van de geautoriseerde betaling moet u de orderstatus veranderen in \"betaling geaccepteerd\" (of in een aangepaste status met dezelfde betekenis). Hier kunt u een aangepaste orderstatus kiezen voor het accepteren van de order en het valideren van de transactie in de Autoriseer modus.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_c6a9094c053f62817cf82c904082378e'] = 'Standaard status : Betaling geaccepteerd';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_59e368bdd40762ae549cd4f03632ac17'] = 'Betaling geannuleerd via BO (bel Braintree om de vastlegging te annuleren)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_06a4ae63012b5b989e7a3f0fd114633f'] = 'U gebruikt momenteel de Autoriseer modus. Dit betekent dat u de betalingsautorisatie scheidt van de vastlegging van de geautoriseerde betaling. Om de geautoriseerde betaling te annuleren moet u de orderstatus wijzigen naar \"geannuleerd\" (of naar een aangepaste status met dezelfde betekenis). Hier kunt u een orderstatus kiezen voor het annuleren van de order en het ongedaan maken van de transactie in de Autoriseer modus.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_5981855556d6acfd044f87984094e280'] = 'Betaling geaccepteerd en transactie voltooid';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_0b7c5cc010e7c726fa125810260867e6'] = 'Verwerking van de betaling (betalingen door PayPal)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_4e1a6b58fc408346e6876e3a1d2af523'] = 'De transactie betaald met een kaart kan in de status in behandeling zijn. Als de betaling wordt verwerkt de bestelling zal worden gemaakt in de tijdelijke status.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_fa9a988a9cdebe7623df9ff15e6b05cc'] = 'Standaardstatus : Betaling in behandeling (gemachtigd)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_eb2f62cdeec105b063736e28ceab803e'] = 'Betaling in afwachting van (gemachtigd)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_e7bd38ae75a2636fd50d1c01521e39fe'] = 'U gebruikt momenteel de Autoriseer modus. Dit betekent dat u de autorisatie van de betaling scheidt van het vastleggen van de geautoriseerde betaling. Standaard worden de orders aangemaakt in de status \"In afwachting van betaling (gemachtigd)\", maar u kunt dit aanpassen indien nodig.';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialcustomizecheckout_73da52ef2c981727c0b7b1e509bef3b2'] = 'Standaard status : Betaling in afwachting van (geautoriseerde)';
+$_MODULE['<{braintreeofficial}prestashop>adminbraintreeofficialsetup_73c04cacf3c7c4c7b910fa0cf60284b3'] = 'Ongeldige Merchant Account ID. Controleer uw merchant account id voor ';
+$_MODULE['<{braintreeofficial}prestashop>validation_3e48dc3333a33baac2d50a41f0ff761c'] = 'Uw betaling is geweigerd: probeer het opnieuw of met een andere betaalmethode.';
+$_MODULE['<{braintreeofficial}prestashop>help_f35d8b1b4d456f4f4951b537257b76de'] = 'Gebruikt u de vereiste TLS versie? Heeft u een standaard land geselecteerd? Klik op de knop hieronder en controleer of aan alle eisen is voldaan!';
+$_MODULE['<{braintreeofficial}prestashop>formaccount_b019ab576a27965f2ecf7ed2129ea0a6'] = 'Kopieer uw \"Private Key\", \"Public Key\" en \"Merchant ID\" en plak ze hieronder:';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelpone_f414f3bfb8e35611b826e79c330ff15d'] = 'Hieronder vindt u de lijst met de orderstatus voor het triggeren van acties op Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelpone_84e201d65b580243e5dde39a9fb51361'] = 'Sommige manuele acties triggeren sommige gebeurtenissen aan Braintree zijde.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelpone_658bc31b9d8e2107b78eb4057df02721'] = 'Voorbeeld: U werkt de status van de bestelling bij naar \"terugbetaald\". Deze actie triggert een automatische terugbetaling op Braintree.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelptwo_8455ff28f7ca73a59e990749a7f4b1d6'] = 'Het is ook mogelijk om de standaard status aan te passen voor de bestellingen aangemaakt via Braintree. Hieronder vindt u een lijst met de verschillende gevallen en de bijhorende orderstatus.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelptwo_06393d7bb6f3fb29efee8938c7cd2f6d'] = 'Voorbeeld: Als de transactie voltooid is, zal er een bestelling aangemaakt worden op de PrestaShop. Standaard wordt de bestelstatus \"Betaling aanvaard\" toegepast voor alle voltooide transacties.';
+$_MODULE['<{braintreeofficial}prestashop>formadvancedhelptwo_5a5a6c0531d6207c84a2ce8d0f99b74f'] = 'U kunt de orderstatus hieronder beheren:';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_7837b4f9a9d71dad679da95a4b6acc68'] = 'Opmerking : Als onderdeel van de Europese Verordening PSD2 en bijbehorende SCA (Strong Customer Authentication) gepland op 14 september 2019, zullen alle transacties via SCA (3DS 2.0) moeten gaan met als doel de frictie te verminderen (minder \"klantuitdagingen\") terwijl de conversie en bescherming wordt verhoogd (meer aansprakelijkheid verschuift van merchant naar bank).';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_5d1d0421b5327a04398f44c8e21689c0'] = 'Het is dus aan te raden om 3D Secure in te schakelen om bankweigeringen en gevolgen voor uw bedrijf te voorkomen. (Ga naar \"Customize Experience Checkout\")';
+$_MODULE['<{braintreeofficial}prestashop>headerlogo_f5931ff1a89c64d01f26943e3eb09ce2'] = 'Meer info in onze blog post [b]om de laatste updates te krijgen:[/b]';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_795c499e9f55a65060a3362962dc5a6a'] = 'Let op dat sommige orderstatussen een andere naam hebben gekregen om de gebruikerservaring van uw klanten te verbeteren:';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_66f878505a7b8018544ae58721dd3769'] = 'Oude status naam : \"In afwachting van Braintree betaling\" -> Nieuwe order status naam : [b]\"Betaling in behandeling (geautoriseerd)\"[/b] - Deze status wordt gebruikt als u gebruik maakt van de \"Authoriseren\" betaling actie.';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_9bb4c85a45bcd86e70bac5a3761f850d'] = '[i]Het betekent dat de verwerker de transactie heeft geautoriseerd. Uw klant kan een bedrag in afwachting van betaling op zijn of haar rekening zien. Echter, voordat de klant daadwerkelijk wordt belast en voordat u het geld ontvangt, moet u de transactie indienen voor afwikkeling (d.w.z. u moet de orderstatus wijzigen voor het accepteren of annuleren van de betaling).[/i]';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_9d9e894fc49407f8699085569185c8f3'] = 'Oude status naam : \"In afwachting van Braintree validatie\" -> Nieuwe order status naam : [b]\"Payment processing (authorized)\"[/b]';
+$_MODULE['<{braintreeofficial}prestashop>messageaboutstatename_1a11d592cd92769b7cee59a64a9297c4'] = '[i]Deze orderstatus betekent dat de transactie wordt afgewikkeld. Dit is een tijdelijke status.[/i]';
+$_MODULE['<{braintreeofficial}prestashop>displayorderpreview_00aee8ea5d368378f1fa9a1638ae0238'] = 'Laatste logboek details';

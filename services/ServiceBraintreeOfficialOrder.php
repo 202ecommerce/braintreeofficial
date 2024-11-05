@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -29,41 +29,50 @@ namespace BraintreeOfficialAddons\services;
 use BraintreeOfficialAddons\classes\BraintreeOfficialOrder;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServiceBraintreeOfficialOrder
 {
     /**
      * Load BraintreeOfficialOrder object by PrestaShop order ID
-     * @param integer $id_order Order ID
+     *
+     * @param int $id_order Order ID
+     *
      * @return BraintreeOfficialOrder
      */
     public function loadByOrderId($id_order)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
-        $collection->where('id_order', '=', (int)$id_order);
+        $collection->where('id_order', '=', (int) $id_order);
+
         return $collection->getFirst();
     }
 
     /**
      * Get BT records
+     *
      * @return array all BT transaction IDs
      */
     public function getBraintreeOrdersForValidation()
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
-        $collection->where('payment_method', '=', 'sale');
-        $collection->where('payment_tool', 'in', array('paypal_account', 'PayPal'));
-        $collection->where('payment_status', 'in', array('settling', 'submitted_for_settlement'));
+        $collection->where('payment_status', 'in', ['settling', 'submitted_for_settlement', 'settlement_pending']);
+
         return $collection->getResults();
     }
 
     /**
      * @param string $id_transaction Transaction ID
+     *
      * @return BraintreeOfficialOrder Order id
      */
     public function loadByTransactionId($id_transaction)
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
         $collection->where('id_transaction', '=', pSQL($id_transaction));
+
         return $collection->getFirst();
     }
 
@@ -82,7 +91,7 @@ class ServiceBraintreeOfficialOrder
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalOrder \PaypalOrder*/
+            /** @var $paypalOrder \PaypalOrder */
             foreach ($collection->getResults() as $paypalOrder) {
                 $braintreeOrder = new BraintreeOfficialOrder();
                 $braintreeOrder->id = $paypalOrder->id;
@@ -120,6 +129,7 @@ class ServiceBraintreeOfficialOrder
     public function getCountOrders()
     {
         $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
+
         return $collection->count();
     }
 

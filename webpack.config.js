@@ -1,5 +1,5 @@
-/*
- * 2007-2020 PayPal
+/**
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -17,20 +17,20 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
 const path = require('path');
-const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+const RemoveEmptyScripts = require('webpack-remove-empty-scripts');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const minimizers = [];
 const plugins = [
-	new FixStyleOnlyEntriesPlugin(),
+  new RemoveEmptyScripts(),
 	new MiniCssExtractPlugin({
 		filename: '[name].css',
 	}),
@@ -57,33 +57,36 @@ const config = {
 	},
 
 	module: {
-		rules: [{
+    rules: [
+      {
 				test: /\.js$/,
 				exclude: /node_modules/,
-				use: [{
+        use: [
+          {
 					loader: 'babel-loader',
 					options: {
 						presets: ['@babel/preset-env'],
 					},
-				}, ],
+          },
+        ],
 			},
 
 			{
 				test: /\.(s)?css$/,
-				use: [{
-						loader: MiniCssExtractPlugin.loader
+        use: [
+          {loader: MiniCssExtractPlugin.loader},
+          {loader: 'css-loader'},
+          {loader: 'postcss-loader'},
+          {loader: 'sass-loader'},
+        ],
 					},
 					{
-						loader: 'css-loader'
+        test: /.(woff(2)?|eot|ttf)(\?[a-z0-9=.]+)?$/,
+        type:'asset/resource',
+        generator: {
+          filename: "fonts/[name][ext]"
 					},
-					{
-						loader: 'postcss-loader'
-					},
-					{
-						loader: 'sass-loader'
-					},
-				],
-			},
+      }
 
 		],
 	},
@@ -112,11 +115,14 @@ module.exports = (env, argv) => {
 	// Production specific settings
 	if (argv.mode === 'production') {
 		const terserPlugin = new TerserPlugin({
-			cache: true,
 			extractComments: /^\**!|@preserve|@license|@cc_on/i, // Remove comments except those containing @preserve|@license|@cc_on
 			parallel: true,
 			terserOptions: {
-				drop_console: true,
+        compress: {
+          pure_funcs: [
+            'console.log'
+          ]
+        }
 			},
 		});
 

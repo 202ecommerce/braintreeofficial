@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -30,28 +30,35 @@ use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ServiceBraintreeOfficialCustomer
 {
     /**
      * Load customer object by ID
-     * @param integer $id_customer PrestaShop Customer ID
+     *
+     * @param int $id_customer PrestaShop Customer ID
      * @param bool $sandbox mode of customer
+     *
      * @return object BraintreeOfficialCustomer
      */
     public function loadCustomerByMethod($id_customer, $sandbox)
     {
-        /** @var $method \MethodBraintreeOfficial*/
+        /** @var $method \MethodBraintreeOfficial */
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
-        $collection->where('id_customer', '=', (int)$id_customer);
-        $collection->where('sandbox', '=', (int)$sandbox);
-        $collection->where('profile_key', '=', pSQL($method->getProfileKey((int)$sandbox)));
+        $collection->where('id_customer', '=', (int) $id_customer);
+        $collection->where('sandbox', '=', (int) $sandbox);
+        $collection->where('profile_key', '=', pSQL($method->getProfileKey((int) $sandbox)));
+
         return $collection->getFirst();
     }
 
     /**
-    *   Migration of the customers from the module "paypal" to the module "braintree"
-    */
+     *   Migration of the customers from the module "paypal" to the module "braintree"
+     */
     public function doMigration()
     {
         if (\Module::isInstalled('paypal')) {
@@ -64,7 +71,7 @@ class ServiceBraintreeOfficialCustomer
             }
 
             ProcessLoggerHandler::openLogger();
-            /* @var $paypalCustomer \PaypalCustomer*/
+            /** @var $paypalCustomer \PaypalCustomer */
             foreach ($collection->getResults() as $paypalCustomer) {
                 $braintreeCustomer = new BraintreeOfficialCustomer();
                 $braintreeCustomer->id = $paypalCustomer->id;
@@ -94,7 +101,7 @@ class ServiceBraintreeOfficialCustomer
         $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $collection = new \PrestaShopCollection(BraintreeOfficialCustomer::class);
         $collection->where('profile_key', '=', '');
-        $collection->where('sandbox', '=', (int)$sandbox);
+        $collection->where('sandbox', '=', (int) $sandbox);
         $braintreeCustomers = $collection->getResults();
 
         if (empty($braintreeCustomers)) {
@@ -108,7 +115,7 @@ class ServiceBraintreeOfficialCustomer
         return $result;
     }
 
-    public function setProfileKeyForCustomer(BraintreeOfficialCustomer $braintreeCustomer, \MethodBraintreeOfficial $method = null)
+    public function setProfileKeyForCustomer(BraintreeOfficialCustomer $braintreeCustomer, ?\MethodBraintreeOfficial $method = null)
     {
         if ($method === null) {
             $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');

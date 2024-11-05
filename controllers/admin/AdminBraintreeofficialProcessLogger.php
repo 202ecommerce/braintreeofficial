@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,16 +18,18 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
-require_once(_PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php');
+require_once _PS_MODULE_DIR_ . 'braintreeofficial/vendor/autoload.php';
 
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Controllers\Admin\AdminProcessLoggerController;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 class AdminBraintreeofficialProcessLoggerController extends AdminProcessLoggerController
 {
     public function __construct()
@@ -36,16 +38,16 @@ class AdminBraintreeofficialProcessLoggerController extends AdminProcessLoggerCo
         $this->className = 'BraintreeOfficialAddons\classes\BraintreeOfficialLog';
 
         if (isset($this->fields_list['id_transaction'])) {
-            $this->fields_list['id_transaction'] = array(
-                'title'    => $this->module->l('Braintree Transaction ID', 'AdminProcessLoggerController'),
+            $this->fields_list['id_transaction'] = [
+                'title' => $this->module->l('Braintree Transaction ID', 'AdminProcessLoggerController'),
                 'callback' => 'getLinkToTransaction',
-            );
+            ];
         }
 
         if (isset($this->fields_list['log'])) {
-            $this->fields_list['log'] = array(
+            $this->fields_list['log'] = [
                 'title' => $this->module->l('Message (Braintree API response)', 'AdminProcessLoggerController'),
-            );
+            ];
         }
     }
 }

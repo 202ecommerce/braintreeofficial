@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PayPal
+ * since 2007 PayPal
  *
  *  NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  *  versions in the future. If you wish to customize PrestaShop for your
  *  needs please refer to http://www.prestashop.com for more information.
  *
- *  @author 2007-2020 PayPal
+ *  @author since 2007 PayPal
  *  @author 202 ecommerce <tech@202-ecommerce.com>
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -26,15 +26,19 @@
 
 namespace BraintreeOfficialAddons\classes;
 
-use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialLog;
+use BraintreeofficialPPBTlib\Extensions\ProcessLogger\Classes\ProcessLoggerObjectModel;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Class BraintreeOfficialLog.
  */
 class BraintreeOfficialLog extends ProcessLoggerObjectModel
 {
-    /* @var ServiceBraintreeOfficialLog object service*/
+    /** @var ServiceBraintreeOfficialLog */
     protected $serviceLog;
 
     public function __construct($id = null, $id_lang = null, $id_shop = null)
@@ -61,6 +65,7 @@ class BraintreeOfficialLog extends ProcessLoggerObjectModel
 
         $dateTimeZone = new \DateTimeZone('GMT');
         $date = new \DateTime($this->date_transaction, $dateTimeZone);
+
         return $date->format('Y-m-d H:i:s T');
     }
 }
