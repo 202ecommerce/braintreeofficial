@@ -699,6 +699,17 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         return $nonce->paymentMethodNonce->nonce;
     }
 
+    public function getPaymentMethodNonce($nonce)
+    {
+        $this->initConfig();
+
+        try {
+            return $this->gateway->paymentMethodNonce()->find($nonce);
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
     /**
      * @param $cart Cart
      * @param $token_payment
