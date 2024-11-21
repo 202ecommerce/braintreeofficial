@@ -25,5 +25,5 @@
 
 $(document).on('click', '[data-role-collapse]', function (e) {
     let collapsedElId = $(e.target).attr('data-collapsed');
-    $(collapsedElId).slideToggle();
+    $.find(collapsedElId).slideToggle();
 });
