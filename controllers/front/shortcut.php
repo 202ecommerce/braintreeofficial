@@ -23,6 +23,10 @@
  *  @copyright PayPal
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
+
+use Braintree\PaymentMethodNonce;
+use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -34,13 +38,16 @@ require_once _PS_MODULE_DIR_ . 'braintreeofficial/controllers/front/abstract.php
  */
 class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAbstarctModuleFrontController
 {
-    protected $paymentData;
+    protected $paymentData = null;
 
     protected $checkoutInfo;
+    /** @var MethodBraintreeOfficial */
+    protected $method;
 
     public function init()
     {
         parent::init();
+        $this->method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
         $this->setPaymentData(json_decode(Tools::getValue('paymentData')));
         $this->setCheckoutInfo(Tools::getAllValues());
     }
@@ -71,8 +78,13 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
     public function prepareOrder()
     {
-        $customer = $this->getCustomer();
+        if (!$this->paymentData) {
+            $this->errors[] = $this->l('Invalid payment data');
 
+            return false;
+        }
+
+        $customer = $this->getCustomer();
         $id_cart = $this->context->cart->id; // save id cart
         $this->context->updateCustomer($customer);
         $this->context->cart = new Cart($id_cart); // Reload cart
@@ -211,7 +223,22 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
     public function setPaymentData($paymentData)
     {
-        $this->paymentData = $paymentData;
+        if (empty($paymentData->nonce)) {
+            return;
+        }
+
+        $paymentMethodNonce = $this->method->getPaymentMethodNonce($paymentData->nonce);
+
+        if ($paymentMethodNonce instanceof PaymentMethodNonce) {
+            $this->paymentData = json_decode(
+                json_encode([
+                    'nonce' => $paymentMethodNonce->nonce,
+                    'type' => $paymentMethodNonce->type,
+                    'details' => empty($paymentMethodNonce->details['payerInfo']) ? [] : $paymentMethodNonce->details['payerInfo'],
+                ]),
+                false
+            );
+        }
     }
 
     public function getPaymentData()
