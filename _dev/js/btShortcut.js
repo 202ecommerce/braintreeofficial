@@ -84,6 +84,7 @@ const BtCheckout = {
                 if (("success" in response) && (response["success"] == true)) {
                     BtCheckout.data.amount = response["amount"];
                     BtCheckout.data.quantity = quantity;
+                    BtCheckout.data.idProductAttribute = idProductAttribute;
                 }
 
                 if (BtCheckout.data.amount == 0) {

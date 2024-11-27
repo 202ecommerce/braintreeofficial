@@ -25,6 +25,7 @@
  */
 
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
 
@@ -54,10 +55,16 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
         if (Tools::getValue('process') == 'delete') {
             $id = (int) Tools::getValue('id_method');
             $payment_method = new BraintreeOfficialVaulting($id);
-            $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
-            $method->deleteVaultedMethod($payment_method);
-            if ($payment_method->delete()) {
-                $this->success[] = $this->l('Successfully deleted!');
+            $braintreeCustomer = new BraintreeOfficialCustomer($payment_method->id_braintreeofficial_customer);
+
+            if (Validate::isLoadedObject($payment_method) && Validate::isLoadedObject($braintreeCustomer)) {
+                if ($braintreeCustomer->id_customer && $braintreeCustomer->id_customer == $this->context->customer->id) {
+                    $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+                    $method->deleteVaultedMethod($payment_method);
+                    if ($payment_method->delete()) {
+                        $this->success[] = $this->l('Successfully deleted!');
+                    }
+                }
             }
         }
         if (Tools::getValue('process') == 'save') {
@@ -66,9 +73,15 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
                 $val_arr = explode('_', $key);
                 if ($val_arr[0] == 'name') {
                     $payment_method = new BraintreeOfficialVaulting($val_arr[1]);
-                    $payment_method->name = $value;
-                    if ($payment_method->save()) {
-                        $this->success[] = $this->l('Successfully updated!');
+                    $braintreeCustomer = new BraintreeOfficialCustomer($payment_method->id_braintreeofficial_customer);
+
+                    if (Validate::isLoadedObject($payment_method) && Validate::isLoadedObject($braintreeCustomer)) {
+                        if ($braintreeCustomer->id_customer && $braintreeCustomer->id_customer == $this->context->customer->id) {
+                            $payment_method->name = $value;
+                            if ($payment_method->save()) {
+                                $this->success[] = $this->l('Successfully updated!');
+                            }
+                        }
                     }
                 }
             }
