@@ -55,12 +55,28 @@ class ServiceBraintreeOfficialOrder
      *
      * @return array all BT transaction IDs
      */
-    public function getBraintreeOrdersForValidation()
+    public function getBraintreeOrdersForValidation($limit = 50)
     {
-        $collection = new \PrestaShopCollection(BraintreeOfficialOrder::class);
-        $collection->where('payment_status', 'in', ['settling', 'submitted_for_settlement', 'settlement_pending']);
+        $braintreeOrders = [];
+        $result = \Db::getInstance()->executeS(
+            (new \DbQuery())
+                ->from('braintreeofficial_order')
+                ->where('payment_status in ("settling", "submitted_for_settlement", "settlement_pending")')
+                ->limit($limit)
+                ->orderBy('id_braintreeofficial_order DESC')
+        );
 
-        return $collection->getResults();
+        if (empty($result)) {
+            return $braintreeOrders;
+        }
+
+        foreach ($result as $data) {
+            $object = new BraintreeOfficialOrder();
+            $object->hydrate($data);
+            $braintreeOrders[] = $object;
+        }
+
+        return $braintreeOrders;
     }
 
     /**
