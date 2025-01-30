@@ -1006,6 +1006,19 @@ class BraintreeOfficial extends PaymentModule
                 if (empty($transactions)) {
                     return;
                 }
+                if ((int) Configuration::get('BRAINTREEOFFICIAL_CUSTOMIZE_ORDER_STATUS')) {
+                    $expectedStates = [
+                        (int) Configuration::get('BRAINTREEOFFICIAL_OS_PENDING'),
+                        (int) Configuration::get('BRAINTREEOFFICIAL_OS_ACCEPTED_TWO'),
+                        (int) Configuration::get('BRAINTREEOFFICIAL_OS_PROCESSING'),
+                    ];
+                } else {
+                    $expectedStates = [
+                        (int) Configuration::get('PS_OS_PAYMENT'),
+                        (int) Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING'),
+                        (int) Configuration::get('BRAINTREEOFFICIAL_OS_AWAITING_VALIDATION'),
+                    ];
+                }
 
                 foreach ($transactions as $transaction) {
                     $braintreeOrder = $this->serviceBraintreeOfficialOrder->loadByTransactionId($transaction->id);
@@ -1031,15 +1044,21 @@ class BraintreeOfficial extends PaymentModule
                             if ($braintreeOrder->payment_status != 'declined') {
                                 $braintreeOrder->payment_status = $transaction->status;
                                 $braintreeOrder->update();
-                                $ps_order->setCurrentState(Configuration::get('PS_OS_ERROR'));
+
+                                if (false === in_array($ps_order->getCurrentState(), $expectedStates)) {
+                                    $ps_order->setCurrentState(Configuration::get('PS_OS_ERROR'));
+                                }
                             }
                             break;
                         case 'settled':
                             if ($braintreeOrder->payment_status != 'settled') {
                                 $braintreeOrder->payment_status = $transaction->status;
                                 $braintreeOrder->update();
-                                $ps_order->setCurrentState($paid_state);
-                                $this->setTransactionId($ps_order, $transaction->id);
+
+                                if (false === in_array($ps_order->getCurrentState(), $expectedStates)) {
+                                    $ps_order->setCurrentState($paid_state);
+                                    $this->setTransactionId($ps_order, $transaction->id);
+                                }
                             }
                             break;
                         case 'settling': // waiting
