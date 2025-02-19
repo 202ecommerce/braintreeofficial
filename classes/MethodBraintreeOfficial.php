@@ -33,6 +33,10 @@ use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
+use Braintree\Error\Codes as Braintree_Error_Codes;
+use Braintree\Gateway as Braintree_Gateway;
+use Braintree\Result\Successful as Braintree_Result_Successful;
+use Braintree\Transaction as Braintree_Transaction;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -510,7 +514,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 $order->setCurrentState(Configuration::get('PS_OS_ERROR'));
                 $response = [
                     'transaction_id' => $result->params['id'],
-                    'error_message' => $result->message,
+                    'error_message' => $result->__isset('message') ? $result->__get('message') : '' ,
                 ];
             } else {
                 $errors = $result->errors->deepAll();
