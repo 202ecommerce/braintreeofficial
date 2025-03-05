@@ -1045,7 +1045,7 @@ class BraintreeOfficial extends PaymentModule
                                 $braintreeOrder->payment_status = $transaction->status;
                                 $braintreeOrder->update();
 
-                                if (false === in_array($ps_order->getCurrentState(), $expectedStates)) {
+                                if (in_array($ps_order->getCurrentState(), $expectedStates)) {
                                     $ps_order->setCurrentState(Configuration::get('PS_OS_ERROR'));
                                 }
                             }
@@ -1055,7 +1055,7 @@ class BraintreeOfficial extends PaymentModule
                                 $braintreeOrder->payment_status = $transaction->status;
                                 $braintreeOrder->update();
 
-                                if (false === in_array($ps_order->getCurrentState(), $expectedStates)) {
+                                if (in_array($ps_order->getCurrentState(), $expectedStates)) {
                                     $ps_order->setCurrentState($paid_state);
                                     $this->setTransactionId($ps_order, $transaction->id);
                                 }
