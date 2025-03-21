@@ -1098,17 +1098,17 @@ class BraintreeOfficial extends PaymentModule
             }
 
             $this->context->controller->addJqueryPlugin('fancybox');
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.57.0/js/client.min.js', ['server' => 'remote']);
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.57.0/js/hosted-fields.min.js', ['server' => 'remote']);
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-data', 'https://js.braintreegateway.com/web/3.57.0/js/data-collector.min.js', ['server' => 'remote']);
-            $this->context->controller->registerJavascript($this->name . '-braintreegateway-3ds', 'https://js.braintreegateway.com/web/3.57.0/js/three-d-secure.min.js', ['server' => 'remote']);
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-client', 'https://js.braintreegateway.com/web/3.115.2/js/client.min.js', ['server' => 'remote']);
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-hosted', 'https://js.braintreegateway.com/web/3.115.2/js/hosted-fields.min.js', ['server' => 'remote']);
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-data', 'https://js.braintreegateway.com/web/3.115.2/js/data-collector.min.js', ['server' => 'remote']);
+            $this->context->controller->registerJavascript($this->name . '-braintreegateway-3ds', 'https://js.braintreegateway.com/web/3.115.2/js/three-d-secure.min.js', ['server' => 'remote']);
             $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
             $this->addJsVarsLangBT();
             $this->addJsVarsBT();
             $this->context->controller->registerJavascript($this->name . '-braintreejs', 'modules/' . $this->name . '/views/js/payment_bt.js');
 
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
-                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.57.0/js/paypal-checkout.min.js', ['server' => 'remote']);
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.115.2/js/paypal-checkout.min.js', ['server' => 'remote']);
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', ['server' => 'remote']);
                 Media::addJsDefL('empty_nonce', $this->l('Please click on the PayPal Pay button first'));
                 $this->addJsVarsPB();
@@ -1138,24 +1138,24 @@ class BraintreeOfficial extends PaymentModule
             }
 
             $resources = [
-                'https://js.braintreegateway.com/web/3.57.0/js/client.min.js',
-                'https://js.braintreegateway.com/web/3.57.0/js/hosted-fields.min.js',
-                'https://js.braintreegateway.com/web/3.57.0/js/data-collector.min.js',
-                'https://js.braintreegateway.com/web/3.57.0/js/three-d-secure.min.js',
+                'https://js.braintreegateway.com/web/3.115.2/js/client.min.js',
+                'https://js.braintreegateway.com/web/3.115.2/js/hosted-fields.min.js',
+                'https://js.braintreegateway.com/web/3.115.2/js/data-collector.min.js',
+                'https://js.braintreegateway.com/web/3.115.2/js/three-d-secure.min.js',
             ];
             $this->context->controller->registerStylesheet($this->name . '-braintreecss', 'modules/' . $this->name . '/views/css/braintree.css');
 
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL')) {
                 $resources_paypal = [
-                    'https://js.braintreegateway.com/web/3.57.0/js/paypal-checkout.min.js',
+                    'https://js.braintreegateway.com/web/3.115.2/js/paypal-checkout.min.js',
                 ];
 
                 if (Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT_CART')) {
                     Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars(BRAINTREE_CART_PAGE));
                     $this->context->controller->registerJavascript($this->name . '-braintreeShortcut', 'modules/' . $this->name . '/views/js/btShortcut.js');
-                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.57.0/js/paypal-checkout.min.js', ['server' => 'remote']);
+                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.115.2/js/paypal-checkout.min.js', ['server' => 'remote']);
                     $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', ['server' => 'remote']);
-                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.57.0/js/client.min.js', ['server' => 'remote']);
+                    $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.115.2/js/client.min.js', ['server' => 'remote']);
                 }
 
                 $resources = array_merge($resources, $resources_paypal);
@@ -1169,9 +1169,9 @@ class BraintreeOfficial extends PaymentModule
             if (Configuration::get('BRAINTREEOFFICIAL_ACTIVATE_PAYPAL') && Configuration::get('BRAINTREEOFFICIAL_EXPRESS_CHECKOUT_SHORTCUT')) {
                 Media::addJsDef($this->methodBraintreeOfficial->getShortcutJsVars(BRAINTREE_PRODUCT_PAGE));
                 $this->context->controller->registerJavascript($this->name . '-braintreeShortcut', 'modules/' . $this->name . '/views/js/btShortcut.js');
-                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.57.0/js/paypal-checkout.min.js', ['server' => 'remote']);
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout-min', 'https://js.braintreegateway.com/web/3.115.2/js/paypal-checkout.min.js', ['server' => 'remote']);
                 $this->context->controller->registerJavascript($this->name . '-pp-braintree-checkout', 'https://www.paypalobjects.com/api/checkout.js', ['server' => 'remote']);
-                $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.57.0/js/client.min.js', ['server' => 'remote']);
+                $this->context->controller->registerJavascript($this->name . '-pp-braintree-client', 'https://js.braintreegateway.com/web/3.115.2/js/client.min.js', ['server' => 'remote']);
             }
         }
     }

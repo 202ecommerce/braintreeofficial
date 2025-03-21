@@ -15,7 +15,7 @@
         ]
     },
     "require": {
-        "braintree/braintree_php": "~3.40"
+        "braintree/braintree_php": "~6.23.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5",
