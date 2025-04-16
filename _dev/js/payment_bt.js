@@ -204,22 +204,29 @@ const removeErrorMsg = (el) => {
 }
 
 const setErrorMsg = (el, field) => {
-  let popup_message = '';
-  const $el = $(`#${field.container.id}`);
-  const $msgBlock = $el.parent().find('[data-bt-error-msg]');
-  if (field.isEmpty) { 
-    popup_message = `${eval(`bt_translations_${el}`)} ${field.container.id !== 'cvv' ? `${ bt_translations_empty_field}` : ''}`;
-  } else if (!field.isValid) {
-    popup_message = `${eval(`bt_translations_${el}`)} ${ bt_translations_invalid}`;
-  }
-  if (popup_message) {  
-    $el.addClass('braintree-hosted-fields-invalid'); 
-    $msgBlock.show();       
-    $msgBlock.html(popup_message);
-  } else {             
-    $el.removeClass('braintree-hosted-fields-invalid'); 
-    $msgBlock.hide();
-  }
+    let popup_message = '';
+
+    const $el = $(`#${field.container.id}`);
+    const $msgBlock = $el.parent().find('[data-bt-error-msg]');
+
+    const translation = window[`bt_translations_${el}`];
+    const emptyMsg = window.bt_translations_empty_field;
+    const invalidMsg = window.bt_translations_invalid;
+
+    if (field.isEmpty) {
+        popup_message = `${translation}${field.container.id !== 'cvv' ? ` ${emptyMsg}` : ''}`;
+    } else if (!field.isValid) {
+        popup_message = `${translation} ${invalidMsg}`;
+    }
+
+    if (popup_message) {
+        $el.addClass('braintree-hosted-fields-invalid');
+        $msgBlock.show();
+        $msgBlock.html(popup_message);
+    } else {
+        $el.removeClass('braintree-hosted-fields-invalid');
+        $msgBlock.hide();
+    }
 }
 
 
