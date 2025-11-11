@@ -40,7 +40,7 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
 
         if (Tools::isSubmit('registerHooks')) {
             if ($this->module->registerHooks()) {
-                $this->confirmations[] = $this->l('Hooks successfully registered');
+                $this->confirmations[] = $this->module->l('Hooks successfully registered');
             }
         }
     }

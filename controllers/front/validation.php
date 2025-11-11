@@ -65,7 +65,7 @@ class BraintreeOfficialValidationModuleFrontController extends BraintreeOfficial
         } catch (BraintreeOfficialAddons\classes\BraintreeOfficialException $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['logger_msg'] = $e->getMessage();
-            $this->errors['error_msg'] = $this->l('Your payment has been declined : please try again or with another payment method.');
+            $this->errors['error_msg'] = $this->module->l('Your payment has been declined : please try again or with another payment method.');
         } catch (Exception $e) {
             $this->errors['error_code'] = $e->getCode();
             $this->errors['error_msg'] = $e->getMessage();

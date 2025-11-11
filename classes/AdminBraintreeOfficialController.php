@@ -48,7 +48,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         if ((int) \Configuration::get('BRAINTREEOFFICIAL_MIGRATION_FAILED') == 1) {
             $message = $this->module->l('The migration of your settings from PayPal module has been completed with errors.', 'AdminBraintreeOfficialController');
-            $message .= $this->l('Please contact our');
+            $message .= $this->module->l('Please contact our');
             $message .= " <a href='https://addons.prestashop.com/fr/contactez-nous?id_product=1748' target='_blank'>";
             $message .= $this->module->l('support team.', 'AdminBraintreeOfficialController') . '</a>';
             $this->warnings[] = $message;
@@ -261,9 +261,9 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             'sandbox_mode' => \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1,
         ];
         $this->page_header_toolbar_btn['switch_sandbox'] = [
-            'desc' => $this->l('Sandbox mode'),
+            'desc' => $this->module->l('Sandbox mode'),
             'icon' => 'process-icon-toggle-' . (\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
-            'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
+            'help' => $this->module->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
             'href' => self::$currentIndex . '?' . http_build_query($query),
         ];
 

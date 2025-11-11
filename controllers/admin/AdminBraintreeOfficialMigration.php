@@ -184,7 +184,7 @@ class AdminBraintreeOfficialMigrationController extends AdminBraintreeOfficialSe
 
         $content = json_encode([
             'status' => $isConfigured,
-            'content' => $isConfigured == false ? $this->l('An error occurred while creating your web experience. Check your credentials.') : $this->getStepThree(),
+            'content' => $isConfigured == false ? $this->module->l('An error occurred while creating your web experience. Check your credentials.') : $this->getStepThree(),
         ]);
 
         $response = new JsonResponse();

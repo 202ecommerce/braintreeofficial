@@ -37,7 +37,7 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
             Configuration::updateValue('BRAINTREEOFFICIAL_SANDBOX', (int) Tools::getValue('sandbox_mode'));
         }
 
-        $this->page_header_toolbar_title = $this->l('Logs');
+        $this->page_header_toolbar_title = $this->module->l('Logs');
         $this->filter = true;
 
         parent::init();
@@ -99,9 +99,9 @@ class AdminBraintreeOfficialLogsController extends AdminBraintreeofficialProcess
             'sandbox_mode' => Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1,
         ];
         $this->page_header_toolbar_btn['switch_sandbox'] = [
-            'desc' => $this->l('Sandbox mode'),
+            'desc' => $this->module->l('Sandbox mode'),
             'icon' => 'process-icon-toggle-' . (Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
-            'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
+            'help' => $this->module->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
             'href' => self::$currentIndex . '?' . http_build_query($query),
         ];
 

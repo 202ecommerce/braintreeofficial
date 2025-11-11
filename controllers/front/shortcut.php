@@ -79,7 +79,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     public function prepareOrder()
     {
         if (!$this->paymentData) {
-            $this->errors[] = $this->l('Invalid payment data');
+            $this->errors[] = $this->module->l('Invalid payment data');
 
             return false;
         }
@@ -186,13 +186,13 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         $validationMessage = $orderAddress->validateFields(false, true);
 
         if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {
-            $validationMessage = $this->l('State is required in order to process payment. Please fill in state field.');
+            $validationMessage = $this->module->l('State is required in order to process payment. Please fill in state field.');
         }
 
         $country = new Country($orderAddress->id_country);
 
         if ($country->active == false) {
-            $validationMessage = $this->l('Country is not active');
+            $validationMessage = $this->module->l('Country is not active');
         }
 
         if (is_string($validationMessage)) {
