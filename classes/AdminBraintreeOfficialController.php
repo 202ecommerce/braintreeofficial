@@ -275,4 +275,16 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
     {
         \Configuration::updateValue(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE, 1);
     }
+
+    protected function ajaxDie($value = null, $controller = null, $method = null)
+    {
+        if (version_compare(_PS_VERSION_, '1.7.5', '<')) {
+            /* @phpstan-ignore-next-line */
+            parent::ajaxDie($value, $controller, $method);
+        } else {
+            /* @phpstan-ignore-next-line */
+            parent::ajaxRender($value, $controller, $method);
+        }
+        exit;
+    }
 }
