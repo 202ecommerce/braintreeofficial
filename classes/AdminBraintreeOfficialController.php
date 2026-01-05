@@ -264,7 +264,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             'desc' => $this->module->l('Sandbox mode'),
             'icon' => 'process-icon-toggle-' . (\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
             'help' => $this->module->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
-            'href' => self::$currentIndex . '?' . http_build_query($query),
+            'href' => self::$currentIndex . '&' . http_build_query($query),
         ];
 
         parent::initPageHeaderToolbar();
