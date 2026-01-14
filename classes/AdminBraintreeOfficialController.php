@@ -139,7 +139,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         if ((int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') == 1) {
             $message = $this->module->l('Your Braintree account is currently configured to accept payments on the Sandbox', 'AdminBraintreeOfficialController');
-            $message .= ' (<b>' . $this->module->l('test environment', 'AdminBraintreeOfficialController') . '</b>). ';
+            $message .= ' (' . $this->module->l('test environment', 'AdminBraintreeOfficialController') . '). ';
             $message .= $this->module->l('Any transaction will be fictitious. Disable the option, to accept actual payments (production environment) and log in with your Braintree credentials', 'AdminBraintreeOfficialController');
             $this->warnings[] = $message;
         }
