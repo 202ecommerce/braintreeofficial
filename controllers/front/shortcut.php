@@ -284,7 +284,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
         $response = [
             'success' => true,
-            'amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_) * $quantity,
+            'amount' => Tools::ps_round($amount, $this->module->getDecimal()) * $quantity,
             'available' => $available,
         ];
 
