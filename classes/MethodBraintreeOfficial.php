@@ -832,6 +832,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     }
 
                     $data['paymentMethodNonce'] = $token_payment;
+                    $data['paymentMethodToken'] = $vault_token;
                 }
             } else {
                 if ($this->save_card_in_vault || $this->save_account_in_vault) {
