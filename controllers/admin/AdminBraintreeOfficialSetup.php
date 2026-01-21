@@ -289,7 +289,12 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
                 'title' => $this->module->l('Braintree Merchant Accounts'),
                 'icon' => 'icon-cogs',
             ],
-            'description' => $this->context->smarty->fetch($this->getTemplatePath() . '_partials/infoForMerchantAccount.tpl'),
+            'description' => $this->context->smarty
+                ->assign(
+                    'videoTutorialLink',
+                    (strtolower($this->context->language->iso_code) === 'fr' ? 'https://desk.202-ecommerce.com/portal/fr/kb/articles/comment-configurer-l-identifiant-de-compte-marchand-dans-braintree-pour-chaque-devise-15-6-2022' : 'https://desk.202-ecommerce.com/portal/en/kb/articles/set-up-merchant-account-id-in-braintree')
+                )
+                ->fetch($this->getTemplatePath() . '_partials/infoForMerchantAccount.tpl'),
             'input' => $inputs,
             'submit' => [
                 'title' => $this->module->l('Save'),

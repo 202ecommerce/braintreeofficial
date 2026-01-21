@@ -26,7 +26,7 @@
 <div>
 
     <div>
-        {{l s='Please see our [a @href1@]video tutorial[/a] to find your merchant account id for each currency quickly.' mod='braintreeofficial'}|braintreereplace:['@href1@' => 'https://help.202-ecommerce.com/paypal-for-prestashop/set-merchant-account-id-braintree-currency/', '@target@' => {'target="blank"'}]}
+        {{l s='Please see our [a @href1@]video tutorial[/a] to find your merchant account id for each currency quickly.' mod='braintreeofficial'}|braintreereplace:['@href1@' => $videoTutorialLink|default:'#', '@target@' => {'target="blank"'}]}
     </div>
 
     <div>
