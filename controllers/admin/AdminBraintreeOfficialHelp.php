@@ -54,6 +54,7 @@ class AdminBraintreeOfficialHelpController extends AdminBraintreeOfficialControl
         $need_rounding = (Configuration::get('PS_ROUND_TYPE') != Order::ROUND_ITEM) || (Configuration::get('PS_PRICE_ROUND_MODE') != PS_ROUND_HALF_UP);
         $tpl_vars = [
             'need_rounding' => $need_rounding,
+            'accessDocumentationLink' => (strtolower($this->context->language->iso_code) === 'fr' ? 'https://desk.202-ecommerce.com/portal/fr/kb/articles/documentation-utilisateur-du-module-braintree-prestashop' : 'https://desk.202-ecommerce.com/portal/en/kb/articles/user-documentation-for-the-braintree-prestashop-module')
         ];
         $this->context->smarty->assign($tpl_vars);
         $this->content = $this->context->smarty->fetch($this->getTemplatePath() . 'help.tpl');
