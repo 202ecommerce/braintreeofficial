@@ -38,6 +38,7 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
+use BraintreeOfficialAddons\services\ToolKit;
 use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use BraintreeofficialPPBTlib\Install\ModuleInstaller;
@@ -305,6 +306,8 @@ class BraintreeOfficial extends PaymentModule
 
     /** @var MethodBraintreeOfficial */
     protected $methodBraintreeOfficial;
+    /** @var ToolKit */
+    protected $toolkit;
 
     public function __construct()
     {
@@ -331,6 +334,7 @@ class BraintreeOfficial extends PaymentModule
         $this->module_link = $this->context->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
 
         $this->errors = '';
+        $this->toolkit = new ToolKit();
         $this->serviceBraintreeOfficialOrder = new ServiceBraintreeOfficialOrder();
         $this->serviceBraintreeOfficialCapture = new ServiceBraintreeOfficialCapture();
         $this->serviceBraintreeOfficialVaulting = new ServiceBraintreeOfficialVaulting();
@@ -1124,7 +1128,7 @@ class BraintreeOfficial extends PaymentModule
                         ->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox())
                         ->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
                 } else {
-                    $this->context->smarty->assign('carrierFees', Tools::displayPrice($carrierFees));
+                    $this->context->smarty->assign('carrierFees', $this->toolkit->displayPrice($carrierFees));
                     $this->context->smarty->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox());
                     $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerTwo.tpl');
                 }

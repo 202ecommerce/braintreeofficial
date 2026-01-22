@@ -26,6 +26,7 @@
 
 use Braintree\PaymentMethodNonce;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\services\ToolKit;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,11 +44,14 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     protected $checkoutInfo;
     /** @var MethodBraintreeOfficial */
     protected $method;
+    /** @var ToolKit */
+    protected $toolkit;
 
     public function init()
     {
         parent::init();
         $this->method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+        $this->toolkit = new ToolKit();
         $this->setPaymentData(json_decode(Tools::getValue('paymentData')));
         $this->setCheckoutInfo(Tools::getAllValues());
     }
@@ -125,7 +129,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         $customer->firstname = $this->getPaymentData()->details->firstName;
         $customer->lastname = $this->getPaymentData()->details->lastName;
         $customer->email = $this->getPaymentData()->details->email;
-        $customer->passwd = Tools::encrypt(Tools::passwdGen());
+        $customer->passwd = $this->toolkit->hash(Tools::passwdGen());
         $customer->save();
 
         return $customer;
