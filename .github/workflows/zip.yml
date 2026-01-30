@@ -1,0 +1,105 @@
+name: Create module zip
+on: [ push ]
+
+env:
+  PROJECT_NAME: braintreeofficial
+  PROJECT_VERSION: ${{ contains(github.ref_name, 'develop16') && '16-to-175' || '176-8-9' }}
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install PHP 5.6
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '5.6'
+
+      - name: Setup node env
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install node dependencies
+        working-directory: ./
+        run: npm i
+
+      - name: Build assets
+        working-directory: ./
+        run: npm run build
+
+      - name: Package zip
+        
+        run: |
+          set -e  # Arrêter le script si une commande échoue
+
+          PROJECT_DIR=$(pwd)
+          PACKAGES_DIR="$PROJECT_DIR/../packages"
+          MODULE_NAME="braintreeofficial"
+
+          mkdir -p "$PACKAGES_DIR/$MODULE_NAME"
+
+          sudo apt-get update && sudo apt-get install xmlstarlet -y
+          MODULE_VERSION=$(xmlstarlet sel -t -v '/project/property[@name="TARGETVERSION"]/@value' 202/build.xml)
+          echo "MODULE_VERSION=$MODULE_VERSION" >> $GITHUB_ENV
+          echo "MODULE_DATE=$(date +%Y-%m-%d_%H-%M)" >> $GITHUB_ENV
+          echo "Date for package : ${{ env.MODULE_DATE }}"
+
+          find ./ -type f -exec sed -i "s/@version@/$MODULE_VERSION/g" {} +
+          
+          composer global require prestashop/autoindex
+          [ -f "./index.php" ] && [ -f "$HOME/.composer/vendor/prestashop/autoindex/assets/index.php" ] && cat index.php > ~/.composer/vendor/prestashop/autoindex/assets/index.php
+          ~/.composer/vendor/bin/autoindex --exclude=202
+          rm -f composer.lock
+          [ -d "./vendor" ] && find ./vendor -mindepth 1 ! -regex '^./vendor/totpsclasslib\(/.*\)?' -delete
+          composer remove phpstan/phpstan phpunit/phpunit prestashop/php-dev-tools prestashop/header-stamp --no-progress --dev --no-install --no-update
+          composer install --no-dev --optimize-autoloader --classmap-authoritative
+          rm 202 node_modules composer.* node_modules _dev .git tests var views/_dev .php_cs.dist -Rf
+          rm docker-compose.yml browserlist .stylelintignore .editorconfig babel.config.js webpack.config.js postcss.config.js cache.properties sonar-project.properties config_fr.xml composer.json composer.lock composer.phar .gitignore .browserlistrc .eslintrc.js .postcssrc.js babel.config.js vue.config.js package.json package-lock.json .php-cs-fixer.dist.php .php_cs.cache .php-cs-fixer.cache .gitlab-ci.yml before_autoload.sh Makefile -Rf
+
+          cd "$PACKAGES_DIR/$MODULE_NAME"
+          cp -R "$PROJECT_DIR" "$MODULE_NAME"
+
+          echo "Creating build"
+          zip -9 -r -q \
+            --symlinks \
+            --exclude=\*.DS_Store\* \
+            --exclude=\*._.DS_Store\* \
+            --exclude=\*__MACOSX\* \
+            --exclude=\*.buildpath\* \
+            --exclude=\*.dropbox\* \
+            --exclude=\*.git\* \
+            --exclude=\*.idea\* \
+            --exclude=\*.project\* \
+            --exclude=\*.sass-cache\* \
+            --exclude=\*.settings\* \
+            --exclude=\*config_dev.php\* \
+            --exclude=\*.svn\* \
+            --exclude=\*config.codekit\* \
+            --exclude=\*desktop.ini\* \
+            --exclude=\*nbproject\* \
+            --exclude=\*.log \
+            --exclude="$MODULE_NAME/config.xml" \
+            --exclude="$MODULE_NAME/config_\*.xml" \
+            "$MODULE_NAME.zip" \
+            "$MODULE_NAME"
+
+          unzip -l "$MODULE_NAME.zip"
+
+          find "./$MODULE_NAME" -type f -exec md5sum "{}" + > "$MODULE_NAME.md5"
+
+          cp "$MODULE_NAME.zip" "$PROJECT_DIR/$MODULE_NAME-$MODULE_VERSION-prod.zip"
+          cp "$MODULE_NAME.md5" "$PROJECT_DIR/$MODULE_NAME-$MODULE_VERSION-prod.md5"
+
+          cd "$PROJECT_DIR"
+          find . -type f ! \( -name "*.zip" -o -name "*.md5" \) -delete
+          find . -type d -empty -delete
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PROJECT_NAME }}-${{ env.MODULE_VERSION }}-${{ env.MODULE_DATE }}
+          path: |
+            .
