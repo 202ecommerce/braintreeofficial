@@ -26,6 +26,10 @@
 
 namespace BraintreeOfficialAddons\services;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ToolKit
 {
     public function displayPrice($price, $currency = null, $no_utf8 = false, \Context $context = null)
