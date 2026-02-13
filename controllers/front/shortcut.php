@@ -26,6 +26,7 @@
 
 use Braintree\PaymentMethodNonce;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
+use BraintreeOfficialAddons\services\ToolKit;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,11 +44,14 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     protected $checkoutInfo;
     /** @var MethodBraintreeOfficial */
     protected $method;
+    /** @var ToolKit */
+    protected $toolkit;
 
     public function init()
     {
         parent::init();
         $this->method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
+        $this->toolkit = new ToolKit();
         $this->setPaymentData(json_decode(Tools::getValue('paymentData')));
         $this->setCheckoutInfo(Tools::getAllValues());
     }
@@ -79,7 +83,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
     public function prepareOrder()
     {
         if (!$this->paymentData) {
-            $this->errors[] = $this->l('Invalid payment data');
+            $this->errors[] = $this->module->l('Invalid payment data');
 
             return false;
         }
@@ -125,7 +129,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         $customer->firstname = $this->getPaymentData()->details->firstName;
         $customer->lastname = $this->getPaymentData()->details->lastName;
         $customer->email = $this->getPaymentData()->details->email;
-        $customer->passwd = Tools::encrypt(Tools::passwdGen());
+        $customer->passwd = $this->toolkit->hash(Tools::passwdGen());
         $customer->save();
 
         return $customer;
@@ -186,13 +190,13 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
         $validationMessage = $orderAddress->validateFields(false, true);
 
         if (Country::containsStates($orderAddress->id_country) && $orderAddress->id_state == false) {
-            $validationMessage = $this->l('State is required in order to process payment. Please fill in state field.');
+            $validationMessage = $this->module->l('State is required in order to process payment. Please fill in state field.');
         }
 
         $country = new Country($orderAddress->id_country);
 
         if ($country->active == false) {
-            $validationMessage = $this->l('Country is not active');
+            $validationMessage = $this->module->l('Country is not active');
         }
 
         if (is_string($validationMessage)) {
@@ -284,7 +288,7 @@ class BraintreeOfficialShortcutModuleFrontController extends BraintreeOfficialAb
 
         $response = [
             'success' => true,
-            'amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_) * $quantity,
+            'amount' => Tools::ps_round($amount, $this->module->getDecimal()) * $quantity,
             'available' => $available,
         ];
 

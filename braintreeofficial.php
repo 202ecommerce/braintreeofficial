@@ -38,6 +38,7 @@ use BraintreeOfficialAddons\classes\BraintreeOfficialVaulting;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
+use BraintreeOfficialAddons\services\ToolKit;
 use BraintreeofficialPPBTlib\Extensions\AbstractModuleExtension;
 use BraintreeofficialPPBTlib\Extensions\ProcessLogger\ProcessLoggerHandler;
 use BraintreeofficialPPBTlib\Install\ModuleInstaller;
@@ -305,6 +306,8 @@ class BraintreeOfficial extends PaymentModule
 
     /** @var MethodBraintreeOfficial */
     protected $methodBraintreeOfficial;
+    /** @var ToolKit */
+    protected $toolkit;
 
     public function __construct()
     {
@@ -331,6 +334,7 @@ class BraintreeOfficial extends PaymentModule
         $this->module_link = $this->context->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
 
         $this->errors = '';
+        $this->toolkit = new ToolKit();
         $this->serviceBraintreeOfficialOrder = new ServiceBraintreeOfficialOrder();
         $this->serviceBraintreeOfficialCapture = new ServiceBraintreeOfficialCapture();
         $this->serviceBraintreeOfficialVaulting = new ServiceBraintreeOfficialVaulting();
@@ -1124,7 +1128,7 @@ class BraintreeOfficial extends PaymentModule
                         ->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox())
                         ->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerOne.tpl');
                 } else {
-                    $this->context->smarty->assign('carrierFees', Tools::displayPrice($carrierFees));
+                    $this->context->smarty->assign('carrierFees', $this->toolkit->displayPrice($carrierFees));
                     $this->context->smarty->assign('isSandbox', $this->methodBraintreeOfficial->isSandbox());
                     $messageForCustomer = $this->context->smarty->fetch('module:braintreeofficial/views/templates/front/_partials/messageForCustomerTwo.tpl');
                 }
@@ -2056,5 +2060,40 @@ class BraintreeOfficial extends PaymentModule
         }
 
         return $orderStatuses;
+    }
+
+    public function getDecimal($isoCurrency = null)
+    {
+        $currency_wt_decimal = ['HUF', 'JPY', 'TWD'];
+
+        if ($isoCurrency === null || Currency::exists($isoCurrency) === false) {
+            $isoCurrency = $this->getPaymentCurrencyIso();
+        }
+        /* @phpstan-ignore-next-line */
+        $precision = $this->getPrecision(new Currency(Currency::getIdByIsoCode($isoCurrency)));
+
+        if (in_array(strtoupper($isoCurrency), $currency_wt_decimal) || ($precision == 0)) {
+            return 0;
+        } else {
+            return 2;
+        }
+    }
+
+    public function getPrecision($currency = null)
+    {
+        if (version_compare(_PS_VERSION_, '1.7.7', '<')) {
+            return _PS_PRICE_DISPLAY_PRECISION_;
+        }
+
+        if ($currency instanceof Currency && Validate::isLoadedObject($currency)) {
+            $context = Context::getContext()->cloneContext();
+            $context->currency = $currency;
+            $precision = call_user_func([$context, 'getComputingPrecision']);
+            unset($context);
+
+            return $precision;
+        } else {
+            return call_user_func([Context::getContext(), 'getComputingPrecision']);
+        }
     }
 }

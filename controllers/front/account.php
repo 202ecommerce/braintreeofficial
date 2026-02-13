@@ -62,7 +62,7 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
                     $method = AbstractMethodBraintreeOfficial::load('BraintreeOfficial');
                     $method->deleteVaultedMethod($payment_method);
                     if ($payment_method->delete()) {
-                        $this->success[] = $this->l('Successfully deleted!');
+                        $this->success[] = $this->module->l('Successfully deleted!');
                     }
                 }
             }
@@ -79,7 +79,7 @@ class BraintreeOfficialAccountModuleFrontController extends ModuleFrontControlle
                         if ($braintreeCustomer->id_customer && $braintreeCustomer->id_customer == $this->context->customer->id) {
                             $payment_method->name = $value;
                             if ($payment_method->save()) {
-                                $this->success[] = $this->l('Successfully updated!');
+                                $this->success[] = $this->module->l('Successfully updated!');
                             }
                         }
                     }

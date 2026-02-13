@@ -105,7 +105,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
         $this->fields_form['form']['form'] = [
             'legend' => [
-                'title' => $this->l('Account settings'),
+                'title' => $this->module->l('Account settings'),
                 'icon' => 'icon-cogs',
             ],
             'input' => [
@@ -151,23 +151,23 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
     {
         $this->fields_form['form']['form'] = [
             'legend' => [
-                'title' => $this->l('Payment settings'),
+                'title' => $this->module->l('Payment settings'),
                 'icon' => 'icon-cogs',
             ],
             'input' => [
                 [
                     'type' => 'select',
-                    'label' => $this->l('Payment action'),
+                    'label' => $this->module->l('Payment action'),
                     'name' => 'braintreeofficial_api_intent',
                     'options' => [
                         'query' => [
                             [
                                 'id' => 'sale',
-                                'name' => $this->l('Sale'),
+                                'name' => $this->module->l('Sale'),
                             ],
                             [
                                 'id' => 'authorization',
-                                'name' => $this->l('Authorize'),
+                                'name' => $this->module->l('Authorize'),
                             ],
                         ],
                         'id' => 'id',
@@ -177,11 +177,11 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
                 [
                     'type' => 'html',
                     'name' => '',
-                    'html_content' => $this->module->displayInformation($this->l('We recommend Authorize process only for lean manufacturers and craft products sellers.')),
+                    'html_content' => $this->module->displayInformation($this->module->l('We recommend Authorize process only for lean manufacturers and craft products sellers.')),
                 ],
             ],
             'submit' => [
-                'title' => $this->l('Save'),
+                'title' => $this->module->l('Save'),
                 'class' => 'btn btn-default pull-right button',
             ],
             'id_form' => 'bt_config_payment',
@@ -200,7 +200,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/switchSandboxBlock.tpl');
         $this->fields_form['form']['form'] = [
             'legend' => [
-                'title' => $this->l('Environment Settings'),
+                'title' => $this->module->l('Environment Settings'),
                 'icon' => 'icon-cogs',
             ],
             'input' => [
@@ -244,7 +244,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         $html_content = $this->context->smarty->fetch($this->getTemplatePath() . '_partials/statusBlock.tpl');
         $this->fields_form[]['form'] = [
             'legend' => [
-                'title' => $this->l('Status'),
+                'title' => $this->module->l('Status'),
                 'icon' => 'icon-cogs',
             ],
             'input' => [
@@ -279,20 +279,25 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
         foreach (Currency::getCurrencies() as $currency) {
             $inputs[] = [
                 'type' => 'text',
-                'label' => $this->l('Merchant account Id for ') . $currency['iso_code'],
+                'label' => $this->module->l('Merchant account Id for ') . $currency['iso_code'],
                 'name' => Tools::strtolower($this->module->getNameMerchantAccountForCurrency($currency['iso_code'])),
             ];
         }
 
         $this->fields_form[]['form'] = [
             'legend' => [
-                'title' => $this->l('Braintree Merchant Accounts'),
+                'title' => $this->module->l('Braintree Merchant Accounts'),
                 'icon' => 'icon-cogs',
             ],
-            'description' => $this->context->smarty->fetch($this->getTemplatePath() . '_partials/infoForMerchantAccount.tpl'),
+            'description' => $this->context->smarty
+                ->assign(
+                    'videoTutorialLink',
+                    (strtolower($this->context->language->iso_code) === 'fr' ? 'https://desk.202-ecommerce.com/portal/fr/kb/articles/comment-configurer-l-identifiant-de-compte-marchand-dans-braintree-pour-chaque-devise-15-6-2022' : 'https://desk.202-ecommerce.com/portal/en/kb/articles/set-up-merchant-account-id-in-braintree')
+                )
+                ->fetch($this->getTemplatePath() . '_partials/infoForMerchantAccount.tpl'),
             'input' => $inputs,
             'submit' => [
-                'title' => $this->l('Save'),
+                'title' => $this->module->l('Save'),
                 'class' => 'btn btn-default pull-right button',
             ],
         ];
@@ -320,7 +325,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
             $wrongMerchantAccounts = $methodBraintree->validateMerchantAccounts($merchantAccounts);
 
             if (empty($wrongMerchantAccounts) == false) {
-                $this->errors[] = $this->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(', ', array_keys($wrongMerchantAccounts));
+                $this->errors[] = $this->module->l('Invalid Merchant account ID. Please verify your merchant account id for ') . implode(', ', array_keys($wrongMerchantAccounts));
 
                 return false;
             }
@@ -335,7 +340,7 @@ class AdminBraintreeOfficialSetupController extends AdminBraintreeOfficialContro
 
         if ($methodBraintree->isConfigured() == false) {
             if (Tools::isSubmit('braintreeofficial_sandbox') == false) {
-                $this->errors[] = $this->l('An error occurred while creating your web experience. Check your credentials.');
+                $this->errors[] = $this->module->l('An error occurred while creating your web experience. Check your credentials.');
             }
         } else {
             if (Module::isEnabled('paypal') && (int) Configuration::get('PAYPAL_BRAINTREE_ENABLED')) {

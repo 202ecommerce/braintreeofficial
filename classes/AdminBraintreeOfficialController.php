@@ -48,7 +48,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         if ((int) \Configuration::get('BRAINTREEOFFICIAL_MIGRATION_FAILED') == 1) {
             $message = $this->module->l('The migration of your settings from PayPal module has been completed with errors.', 'AdminBraintreeOfficialController');
-            $message .= $this->l('Please contact our');
+            $message .= $this->module->l('Please contact our');
             $message .= " <a href='https://addons.prestashop.com/fr/contactez-nous?id_product=1748' target='_blank'>";
             $message .= $this->module->l('support team.', 'AdminBraintreeOfficialController') . '</a>';
             $this->warnings[] = $message;
@@ -139,7 +139,7 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
 
         if ((int) \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') == 1) {
             $message = $this->module->l('Your Braintree account is currently configured to accept payments on the Sandbox', 'AdminBraintreeOfficialController');
-            $message .= ' (<b>' . $this->module->l('test environment', 'AdminBraintreeOfficialController') . '</b>). ';
+            $message .= ' (' . $this->module->l('test environment', 'AdminBraintreeOfficialController') . '). ';
             $message .= $this->module->l('Any transaction will be fictitious. Disable the option, to accept actual payments (production environment) and log in with your Braintree credentials', 'AdminBraintreeOfficialController');
             $this->warnings[] = $message;
         }
@@ -261,10 +261,10 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
             'sandbox_mode' => \Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 0 : 1,
         ];
         $this->page_header_toolbar_btn['switch_sandbox'] = [
-            'desc' => $this->l('Sandbox mode'),
+            'desc' => $this->module->l('Sandbox mode'),
             'icon' => 'process-icon-toggle-' . (\Configuration::get('BRAINTREEOFFICIAL_SANDBOX') ? 'on' : 'off'),
-            'help' => $this->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
-            'href' => self::$currentIndex . '?' . http_build_query($query),
+            'help' => $this->module->l('Sandbox mode is the test environment where you\'ll be not able to collect any real payments.'),
+            'href' => self::$currentIndex . '&' . http_build_query($query),
         ];
 
         parent::initPageHeaderToolbar();
@@ -274,5 +274,17 @@ class AdminBraintreeOfficialController extends \ModuleAdminController
     public function displayAjaxDisableSCAmessage()
     {
         \Configuration::updateValue(BRAINTREEOFFICIAL_NOT_SHOW_SCA_MESSAGE, 1);
+    }
+
+    protected function ajaxDie($value = null, $controller = null, $method = null)
+    {
+        if (version_compare(_PS_VERSION_, '1.7.5', '<')) {
+            /* @phpstan-ignore-next-line */
+            parent::ajaxDie($value, $controller, $method);
+        } else {
+            /* @phpstan-ignore-next-line */
+            parent::ajaxRender($value, $controller, $method);
+        }
+        exit;
     }
 }

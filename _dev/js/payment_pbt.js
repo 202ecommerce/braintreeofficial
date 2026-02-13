@@ -23,7 +23,9 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
-import {selectOption} from './functions.js'; 
+import {selectOption} from './functions.js';
+import Tether from "tether";
+window.Tether = Tether;
 
 $(document).ready(() => {
   if ($('#checkout-payment-step').hasClass('js-current-step')) {
