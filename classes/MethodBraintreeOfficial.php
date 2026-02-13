@@ -24,6 +24,10 @@
  *  @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
+use Braintree\Error\Codes as Braintree_Error_Codes;
+use Braintree\Gateway as Braintree_Gateway;
+use Braintree\Result\Successful as Braintree_Result_Successful;
+use Braintree\Transaction as Braintree_Transaction;
 use BraintreeOfficialAddons\classes\AbstractMethodBraintreeOfficial;
 use BraintreeOfficialAddons\classes\BraintreeOfficialCustomer;
 use BraintreeOfficialAddons\classes\BraintreeOfficialException;
@@ -33,10 +37,6 @@ use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCapture;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialCustomer;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialOrder;
 use BraintreeOfficialAddons\services\ServiceBraintreeOfficialVaulting;
-use Braintree\Error\Codes as Braintree_Error_Codes;
-use Braintree\Gateway as Braintree_Gateway;
-use Braintree\Result\Successful as Braintree_Result_Successful;
-use Braintree\Transaction as Braintree_Transaction;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -514,7 +514,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                 $order->setCurrentState(Configuration::get('PS_OS_ERROR'));
                 $response = [
                     'transaction_id' => $result->params['id'],
-                    'error_message' => $result->__isset('message') ? $result->__get('message') : '' ,
+                    'error_message' => $result->__isset('message') ? $result->__get('message') : '',
                 ];
             } else {
                 $errors = $result->errors->deepAll();
@@ -832,6 +832,7 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
                     }
 
                     $data['paymentMethodNonce'] = $token_payment;
+                    $data['paymentMethodToken'] = $vault_token;
                 }
             } else {
                 if ($this->save_card_in_vault || $this->save_account_in_vault) {
@@ -1089,9 +1090,11 @@ class MethodBraintreeOfficial extends AbstractMethodBraintreeOfficial
         }
 
         $clientToken = $this->init();
+        /** @var BraintreeOfficial $module */
+        $module = \Module::getInstanceByName('braintreeofficial');
         $tplVars = [
             'paypal_braintree_authorization' => $clientToken,
-            'paypal_braintree_amount' => Tools::ps_round($amount, _PS_PRICE_DISPLAY_PRECISION_),
+            'paypal_braintree_amount' => Tools::ps_round($amount, $module->getDecimal()),
             'paypal_braintree_mode' => $this->mode == 'SANDBOX' ? 'sandbox' : 'production',
             'paypal_braintree_currency' => Context::getContext()->currency->iso_code,
             'paypal_braintree_contoller' => Context::getContext()->link->getModuleLink($this->name, 'shortcut'),

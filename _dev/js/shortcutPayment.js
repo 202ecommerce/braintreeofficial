@@ -27,10 +27,11 @@
 $(document).ready( ()=> {
   if ($('section#checkout-payment-step').hasClass('js-current-step')) {
     let el = $(`input[data-module-name="braintreeofficial-shortcut"]`);
-    $('.payment-options div').hide();
+
     if (el.length > 0) {
       el.click();
-      $('.payment-options').append(scPaypalCheckedMsg);
+      $('.payment-options div, .payment__list div, .payment-options__list div').hide();
+      $('.payment-options, .payment__list, .payment-options__list').append(scPaypalCheckedMsg);
     }
   }
 });
