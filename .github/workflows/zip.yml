@@ -1,6 +1,9 @@
 name: Create module zip
 on: [ push ]
 
+permissions:
+  contents: read
+
 env:
   PROJECT_NAME: braintreeofficial
   PROJECT_VERSION: ${{ contains(github.ref_name, 'develop16') && '16-to-175' || '176-8-9' }}
