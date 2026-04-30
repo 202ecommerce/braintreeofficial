@@ -1872,13 +1872,13 @@ class BraintreeOfficial extends PaymentModule
             return false;
         }
 
-        $result = true;
-
         foreach ($allCurrency as $currency) {
-            $result &= (bool) Configuration::get($this->getNameMerchantAccountForCurrency($currency['iso_code']));
+            if ($currency['id'] == $this->context->currency->id) {
+                return (bool) Configuration::get($this->getNameMerchantAccountForCurrency($currency['iso_code']));
+            }
         }
 
-        return (bool) $result;
+        return false;
     }
 
     public function setMethodBraitree(AbstractMethodBraintreeOfficial $method)
